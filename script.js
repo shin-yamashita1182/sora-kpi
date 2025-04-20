@@ -15,6 +15,7 @@ async function autoComplete() {
 
     if (data.result) {
       console.log("ChatGPT 応答（生データ）:", data);
+
       const mapping = {
         地域名: "region",
         人口: "population",
@@ -33,18 +34,21 @@ async function autoComplete() {
 
       const lines = data.result.split("\n");
       lines.forEach((line) => {
-        const [label, value] = line.split(/[:：]/); // ← 修正：全角・半角対応
+        if (line.startsWith("注意") || line.startsWith("備考")) return; // 注意文はスキップ
+        const [label, value] = line.split(/[:：]/);
         const id = mapping[label?.trim()];
         if (id && value) {
           document.getElementById(id).textContent = value.trim();
         }
       });
 
-      if (data.lat && data.lng) {
+      if (data.lat && data.lng && typeof showMap === "function") {
         showMap(data.lat, data.lng);
       }
 
-      document.getElementById("region").value = data.region || inputText;
+      if (data.region) {
+        document.getElementById("region").value = data.region;
+      }
     } else {
       alert("ChatGPTからの応答が不完全です");
     }
