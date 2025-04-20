@@ -4,14 +4,37 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>SORA KPI フォーム</title>
+
+  <!-- Leaflet CSS -->
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    integrity="sha256-o9N1j8Mk3F1hrX2v+DnIC5B3UxzDIF+Gk8BfD2yPo5o="
+    crossorigin=""
+  />
+
+  <!-- カスタム CSS -->
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <h1>SORA KPI 地域分析</h1>
+
   <section>
     <label for="regionName">地域名：</label>
     <input type="text" id="regionName" placeholder="例：高原町" />
-    <div id="gptResult" style="margin-top: 1em; padding: 1em; background-color: #f0f0f0;"></div>
+    <div id="gptResult"></div>
   </section>
+
+  <div id="map"></div>
+
+  <!-- Leaflet JS -->
+  <script
+    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    integrity="sha256-o9N1j8Mk3F1hrX2v+DnIC5B3UxzDIF+Gk8BfD2yPo5o="
+    crossorigin=""
+  ></script>
+
+  <!-- カスタム JS -->
   <script src="script.js"></script>
 </body>
 </html>
