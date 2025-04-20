@@ -1,3 +1,5 @@
+function completeRegionFromZip() { autoComplete(); }
+
 async function autoComplete() {
   const input = document.getElementById("zipcode").value || document.getElementById("region").value;
   if (!input) return alert("郵便番号または地域名を入力してください");
@@ -13,42 +15,9 @@ async function autoComplete() {
       body: JSON.stringify({ inputText: input })
     });
 
-    const data = await res.json();
+    const raw = await res.text(); // ← 生のレスポンスをそのまま取得
+    alert("ChatGPT 応答（生データ）:\n" + raw);
 
-    const mapping = {
-      地域名: "region",
-      人口: "population",
-      高齢化率: "aging",
-      世帯数: "households",
-      主な産業: "industry",
-      地場産品: "products",
-      観光資源: "tourism",
-      小学校数: "schools",
-      保育園数: "nurseries",
-      災害リスク: "disaster",
-      過疎度分類: "depopulation",
-      経済圏分類: "economy",
-      最寄IC・SA: "icinfo"
-    };
-
-    if (data.result) {
-      const lines = data.result.split("\n");
-      lines.forEach(line => {
-        const [label, value] = line.split("：");
-        const id = mapping[label?.trim()];
-        if (id && value) {
-          document.getElementById(id).textContent = value.trim();
-        }
-      });
-
-      if (data.lat && data.lng) {
-        showMap(data.lat, data.lng, data.region || input);
-      } else {
-        document.getElementById("map").innerHTML = "<p>座標情報が取得できませんでした。</p>";
-      }
-    } else {
-      alert("補完に失敗しました。");
-    }
   } catch (err) {
     console.error("autoComplete error:", err);
     alert("ChatGPT通信エラー");
@@ -56,11 +25,6 @@ async function autoComplete() {
     btn.disabled = false;
     btn.textContent = "⛅ 自動補完（GPT）";
   }
-}
-
-// ← ここが今回追加された関数
-function completeRegionFromZip() {
-  autoComplete();
 }
 
 async function classifyKPI() {
@@ -78,8 +42,8 @@ async function classifyKPI() {
       body: JSON.stringify({ inputText: text, classifyMode: true })
     });
 
-    const data = await res.json();
-    alert("分析結果:\n" + (data.result || "なし"));
+    const raw = await res.text();
+    alert("GPT課題分析 応答（生データ）:\n" + raw);
   } catch (err) {
     console.error("classifyKPI error:", err);
     alert("GPT通信エラー（課題分析）");
