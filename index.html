@@ -21,30 +21,30 @@
     <main class="main-content">
       <section id="form" class="section active">
         <h1>📝 フォーム入力</h1>
-        <div class="form-container">
-          <h2>地域基本情報</h2>
-          <div class="form-group"><label>地域名</label><input type="text" id="region" /></div>
-          <div class="form-group"><label>人口</label><input type="number" id="population" /></div>
-          <div class="form-group"><label>高齢化率（%）</label><input type="number" id="aging" /></div>
-          <div class="form-group"><label>世帯数</label><input type="number" id="households" /></div>
-          <div class="form-group"><label>主な産業</label><input type="text" id="industry" /></div>
-          <div class="form-group"><label>地場産品</label><input type="text" id="products" /></div>
-          <div class="form-group"><label>観光資源</label><input type="text" id="tourism" /></div>
-          <div class="form-group"><label>小学校数</label><input type="number" id="schools" /></div>
-          <div class="form-group"><label>保育園数</label><input type="number" id="nurseries" /></div>
-          <div class="form-group"><label>災害リスク</label><input type="text" id="disaster" /></div>
-          <div class="form-group"><label>過疎度分類</label><input type="text" id="depopulation" /></div>
-          <div class="form-group"><label>経済圏分類</label><input type="text" id="economy" /></div>
+        <div class="top-bar">
+          <input type="text" id="region" placeholder="例：宮崎県高原町" />
           <button onclick="autoComplete()">⛅ 自動補完（GPT）</button>
+          <input type="file" id="minutesFile" title="📝 議事録アップロード" />
         </div>
 
-        <hr />
-        <div class="form-container">
-          <h2>📝 議事録アップロード（今後の抽出処理）</h2>
-          <div class="form-group">
-            <input type="file" id="minutesFile" />
-            <p class="note">※ PDFまたはテキスト形式を選択してください（現在は仮対応）</p>
-          </div>
+        <div class="grid-container">
+          <div class="block"><label>人口</label><input type="text" id="population" /></div>
+          <div class="block"><label>高齢化率</label><input type="text" id="aging" /></div>
+          <div class="block"><label>世帯数</label><input type="text" id="households" /></div>
+          <div class="block"><label>主な産業</label><input type="text" id="industry" /></div>
+          <div class="block"><label>地場産品</label><input type="text" id="products" /></div>
+          <div class="block"><label>観光資源</label><input type="text" id="tourism" /></div>
+          <div class="block"><label>小学校数</label><input type="text" id="schools" /></div>
+          <div class="block"><label>保育園数</label><input type="text" id="nurseries" /></div>
+          <div class="block"><label>災害リスク</label><input type="text" id="disaster" /></div>
+          <div class="block"><label>過疎度分類</label><input type="text" id="depopulation" /></div>
+          <div class="block"><label>経済圏分類</label><input type="text" id="economy" /></div>
+          <div class="block"><label>最寄IC・SA</label><input type="text" id="icinfo" /></div>
+        </div>
+
+        <div class="map-block">
+          <h3>🗺 地図表示（地域中心座標）</h3>
+          <div id="map" style="height: 300px; width: 100%; background: #eee;">（地図ここに表示予定）</div>
         </div>
       </section>
 

@@ -6,5 +6,5 @@ function showSection(id) {
 }
 
 function autoComplete() {
-  alert("⛅ GPTによる補完データ（仮）を表示します。正式な連携は次回実装予定です。");
+  alert("⛅ GPT補完（仮動作）中。実データは後ほど実装されます。");
 }

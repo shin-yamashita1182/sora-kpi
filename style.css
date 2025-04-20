@@ -12,6 +12,7 @@ body {
   background: #2d3e50;
   color: white;
   padding: 20px;
+  min-height: 100vh;
 }
 .sidebar h2 {
   font-size: 18px;
@@ -40,38 +41,17 @@ body {
 .section.active {
   display: block;
 }
-.form-container {
-  background: white;
-  padding: 20px;
-  margin-bottom: 30px;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+.top-bar {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
 }
-.form-container h2 {
-  font-size: 20px;
-  margin-bottom: 15px;
-}
-.form-group {
-  margin-bottom: 15px;
-}
-.form-group label {
-  display: block;
-  font-weight: bold;
-  margin-bottom: 5px;
-}
-.form-group input {
-  width: 100%;
+.top-bar input[type="text"], .top-bar input[type="file"] {
+  flex: 1;
   padding: 8px;
   font-size: 14px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
 }
-.note {
-  font-size: 12px;
-  color: #666;
-  margin-top: 5px;
-}
-button {
+.top-bar button {
   padding: 10px 15px;
   background: #007acc;
   color: white;
@@ -79,6 +59,29 @@ button {
   border-radius: 5px;
   cursor: pointer;
 }
-button:hover {
+.top-bar button:hover {
   background: #005fa3;
+}
+.grid-container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+.block {
+  background: white;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  padding: 15px;
+}
+.block label {
+  font-weight: bold;
+  margin-bottom: 5px;
+  display: block;
+}
+.block input {
+  width: 100%;
+  padding: 6px;
+}
+.map-block {
+  margin-top: 40px;
 }
