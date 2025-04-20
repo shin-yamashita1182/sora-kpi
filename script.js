@@ -17,3 +17,17 @@ function autoComplete() {
   document.getElementById("economy").innerText = "地方圏分類B";
   document.getElementById("icinfo").innerText = "高原ICより10km、えびのPA近接";
 }
+
+document.getElementById("dropZone").addEventListener("dragover", function(e) {
+  e.preventDefault();
+  this.style.borderColor = "#007acc";
+});
+document.getElementById("dropZone").addEventListener("dragleave", function(e) {
+  e.preventDefault();
+  this.style.borderColor = "#aaa";
+});
+document.getElementById("dropZone").addEventListener("drop", function(e) {
+  e.preventDefault();
+  const files = e.dataTransfer.files;
+  alert("📄 ドロップされたファイル：" + files[0].name);
+});

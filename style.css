@@ -42,7 +42,7 @@ body {
 .top-bar {
   display: flex;
   gap: 12px;
-  margin-bottom: 25px;
+  margin-bottom: 20px;
   align-items: center;
 }
 .top-bar input[type="text"] {
@@ -57,15 +57,25 @@ body {
   border-radius: 4px;
   cursor: pointer;
 }
-.upload-label {
-  display: inline-block;
+.upload-btn {
+  background: #f0f0f0;
   padding: 10px 15px;
-  background: #e0e0e0;
-  border-radius: 4px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-weight: bold;
   cursor: pointer;
 }
-.upload-label input {
+.upload-btn input {
   display: none;
+}
+.drop-zone {
+  border: 2px dashed #aaa;
+  border-radius: 8px;
+  padding: 20px;
+  text-align: center;
+  color: #777;
+  margin-bottom: 30px;
+  background: #ffffff;
 }
 .card-grid {
   display: grid;
@@ -77,10 +87,16 @@ body {
   border-radius: 8px;
   box-shadow: 0 2px 6px rgba(0,0,0,0.05);
   padding: 16px;
+  height: auto;
+  word-wrap: break-word;
 }
 .card h3 {
   font-size: 16px;
   margin-bottom: 6px;
+}
+.card p {
+  margin: 0;
+  white-space: normal;
 }
 .map-block {
   margin-top: 40px;
