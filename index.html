@@ -46,9 +46,7 @@
           <select id="savedDataSelect"><option value="">保存データ選択</option></select>
         </div>
 
-        <div class="drop-zone" id="dropZone">
-          📥 ここに資料ファイルをドラッグ＆ドロップ
-        </div>
+        <div class="drop-zone" id="dropZone">📥 ここに資料ファイルをドラッグ＆ドロップ</div>
 
         <div class="card-grid">
           <div class="card"><h3>人口</h3><p id="population">―</p></div>
@@ -72,22 +70,13 @@
 
         <div class="map-block">
           <h3>🗺 地図表示（地域中心座標）</h3>
-          <div id="map" class="map-container" style="height: 400px; width: 100%; border-radius: 8px;"></div>
+          <div id="map" class="map-container"></div>
         </div>
       </section>
     </main>
   </div>
-  <script src="config.js"></script>
+
+  <!-- config.jsはVercelでは不要 -->
   <script src="script.js"></script>
-  <script>
-    // Leaflet map 初期化（仮の中心：高原町）
-    const map = L.map('map').setView([31.9333, 131.0667], 13);
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: '&copy; OpenStreetMap contributors'
-    }).addTo(map);
-    L.marker([31.9333, 131.0667]).addTo(map)
-      .bindPopup('宮崎県西諸県郡高原町')
-      .openPopup();
-  </script>
 </body>
 </html>
