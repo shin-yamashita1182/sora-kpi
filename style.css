@@ -12,11 +12,9 @@ body {
   background: #2d3e50;
   color: white;
   padding: 20px;
-  min-height: 100vh;
 }
 .sidebar h2 {
   font-size: 18px;
-  margin-bottom: 15px;
 }
 .sidebar ul {
   list-style: none;
@@ -43,45 +41,52 @@ body {
 }
 .top-bar {
   display: flex;
-  gap: 10px;
-  margin-bottom: 20px;
+  gap: 12px;
+  margin-bottom: 25px;
+  align-items: center;
 }
-.top-bar input[type="text"], .top-bar input[type="file"] {
-  flex: 1;
+.top-bar input[type="text"] {
+  width: 240px;
   padding: 8px;
-  font-size: 14px;
 }
 .top-bar button {
   padding: 10px 15px;
   background: #007acc;
   color: white;
   border: none;
-  border-radius: 5px;
+  border-radius: 4px;
   cursor: pointer;
 }
-.top-bar button:hover {
-  background: #005fa3;
+.upload-label {
+  display: inline-block;
+  padding: 10px 15px;
+  background: #e0e0e0;
+  border-radius: 4px;
+  cursor: pointer;
 }
-.grid-container {
+.upload-label input {
+  display: none;
+}
+.card-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 16px;
 }
-.block {
+.card {
   background: white;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+  padding: 16px;
 }
-.block label {
-  font-weight: bold;
-  margin-bottom: 5px;
-  display: block;
-}
-.block input {
-  width: 100%;
-  padding: 6px;
+.card h3 {
+  font-size: 16px;
+  margin-bottom: 6px;
 }
 .map-block {
   margin-top: 40px;
+}
+.map-container {
+  height: 300px;
+  background: #eaeaea;
+  border: 1px solid #ccc;
 }

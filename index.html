@@ -3,8 +3,8 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>SORA KPI Webフォーム</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
@@ -24,43 +24,31 @@
         <div class="top-bar">
           <input type="text" id="region" placeholder="例：宮崎県高原町" />
           <button onclick="autoComplete()">⛅ 自動補完（GPT）</button>
-          <input type="file" id="minutesFile" title="📝 議事録アップロード" />
+          <label class="upload-label">
+            📄 議事録
+            <input type="file" id="minutesFile" />
+          </label>
         </div>
 
-        <div class="grid-container">
-          <div class="block"><label>人口</label><input type="text" id="population" /></div>
-          <div class="block"><label>高齢化率</label><input type="text" id="aging" /></div>
-          <div class="block"><label>世帯数</label><input type="text" id="households" /></div>
-          <div class="block"><label>主な産業</label><input type="text" id="industry" /></div>
-          <div class="block"><label>地場産品</label><input type="text" id="products" /></div>
-          <div class="block"><label>観光資源</label><input type="text" id="tourism" /></div>
-          <div class="block"><label>小学校数</label><input type="text" id="schools" /></div>
-          <div class="block"><label>保育園数</label><input type="text" id="nurseries" /></div>
-          <div class="block"><label>災害リスク</label><input type="text" id="disaster" /></div>
-          <div class="block"><label>過疎度分類</label><input type="text" id="depopulation" /></div>
-          <div class="block"><label>経済圏分類</label><input type="text" id="economy" /></div>
-          <div class="block"><label>最寄IC・SA</label><input type="text" id="icinfo" /></div>
+        <div class="card-grid">
+          <div class="card"><h3>人口</h3><p id="population">―</p></div>
+          <div class="card"><h3>高齢化率</h3><p id="aging">―</p></div>
+          <div class="card"><h3>世帯数</h3><p id="households">―</p></div>
+          <div class="card"><h3>主な産業</h3><p id="industry">―</p></div>
+          <div class="card"><h3>地場産品</h3><p id="products">―</p></div>
+          <div class="card"><h3>観光資源</h3><p id="tourism">―</p></div>
+          <div class="card"><h3>小学校数</h3><p id="schools">―</p></div>
+          <div class="card"><h3>保育園数</h3><p id="nurseries">―</p></div>
+          <div class="card"><h3>災害リスク</h3><p id="disaster">―</p></div>
+          <div class="card"><h3>過疎度分類</h3><p id="depopulation">―</p></div>
+          <div class="card"><h3>経済圏分類</h3><p id="economy">―</p></div>
+          <div class="card"><h3>最寄IC・SA</h3><p id="icinfo">―</p></div>
         </div>
 
         <div class="map-block">
           <h3>🗺 地図表示（地域中心座標）</h3>
-          <div id="map" style="height: 300px; width: 100%; background: #eee;">（地図ここに表示予定）</div>
+          <div id="map" class="map-container">（地図ここに表示予定）</div>
         </div>
-      </section>
-
-      <section id="gpt" class="section">
-        <h1>🤖 GPT分類</h1>
-        <p>ここに議事録アップロードとGPT分類処理を入れます。</p>
-      </section>
-
-      <section id="dashboard" class="section">
-        <h1>📊 ダッシュボード</h1>
-        <p>ここにKPI表示とグラフ・チャートを表示します。</p>
-      </section>
-
-      <section id="map" class="section">
-        <h1>🗺 地図・可視化</h1>
-        <p>地図表示や地域別KPIヒートマップなどをここに。</p>
       </section>
     </main>
   </div>
