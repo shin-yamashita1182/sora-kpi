@@ -22,11 +22,13 @@
       <section id="form" class="section active">
         <h1>📝 フォーム入力</h1>
         <div class="top-bar">
+        <input type="text" id="zipcode" placeholder="郵便番号（例：8894412）" />
+        <button onclick="completeRegionFromZip()">📮 郵便番号から補完</button>
           <input type="text" id="region" placeholder="例：宮崎県高原町" />
           <button onclick="autoComplete()">⛅ 自動補完（GPT）</button>
-          <label class="upload-btn" for="minutesFile">
+          <label class="upload-btn">
             📄 資料アップロード
-            <input type="file" id="minutesFile" style="display:none;" />
+            <input type="file" id="minutesFile" />
           </label>
         </div>
 
@@ -47,12 +49,6 @@
           <div class="card"><h3>過疎度分類</h3><p id="depopulation">―</p></div>
           <div class="card"><h3>経済圏分類</h3><p id="economy">―</p></div>
           <div class="card"><h3>最寄IC・SA</h3><p id="icinfo">―</p></div>
-        </div>
-
-        
-        <div class="free-entry">
-          <h3>✏️ 自由記入欄（補足・メモなど）</h3>
-          <textarea id="freeText" placeholder="ここに自由に記述してください..."></textarea>
         </div>
 
         <div class="map-block">

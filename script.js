@@ -31,3 +31,18 @@ document.getElementById("dropZone").addEventListener("drop", function(e) {
   const files = e.dataTransfer.files;
   alert("📄 ドロップされたファイル：" + files[0].name);
 });
+
+
+// 郵便番号 → 地域名自動補完処理
+async function completeRegionFromZip() {
+  const zip = document.getElementById("zipcode").value.replace('-', '');
+  const res = await fetch("zipcode.json");
+  const data = await res.json();
+  const match = data.find(entry => entry.zipcode === zip);
+  if (match) {
+    const regionField = document.getElementById("region");
+    regionField.value = `${match.pref}${match.city}${match.town}`;
+  } else {
+    alert("該当する地域が見つかりません。");
+  }
+}
