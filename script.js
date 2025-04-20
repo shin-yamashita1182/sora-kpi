@@ -1,6 +1,26 @@
+async function completeRegionFromZip() {
+  const zip = document.getElementById("zipcode").value.trim();
+  if (!zip) return alert("郵便番号を入力してください");
+
+  try {
+    const res = await fetch(`https://zipcloud.ibsnet.co.jp/api/search?zipcode=${zip}`);
+    const json = await res.json();
+    if (json.results && json.results[0]) {
+      const result = json.results[0];
+      const fullAddress = result.address1 + result.address2 + result.address3;
+      document.getElementById("region").value = fullAddress;
+    } else {
+      alert("該当する住所が見つかりません");
+    }
+  } catch (err) {
+    console.error("郵便番号検索エラー:", err);
+    alert("郵便番号からの補完に失敗しました");
+  }
+}
+
 async function autoComplete() {
   const inputText = document.getElementById("region").value;
-  if (!inputText) return alert("地域名を入力してください。");
+  if (!inputText) return alert("地域名が空です");
 
   try {
     const response = await fetch("/api/gpt-real", {
@@ -34,7 +54,7 @@ async function autoComplete() {
 
       const lines = data.result.split("\n");
       lines.forEach((line) => {
-        if (line.startsWith("注意") || line.startsWith("備考")) return; // 注意文はスキップ
+        if (line.startsWith("注意") || line.startsWith("備考")) return;
         const [label, value] = line.split(/[:：]/);
         const id = mapping[label?.trim()];
         if (id && value) {
@@ -54,6 +74,6 @@ async function autoComplete() {
     }
   } catch (err) {
     console.error("autoComplete error:", err);
-    alert("自動補完でエラーが発生しました");
+    alert("ChatGPTとの連携でエラーが発生しました");
   }
 }
