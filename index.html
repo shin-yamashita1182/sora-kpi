@@ -1,0 +1,63 @@
+
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <title>SORA KPI Webフォーム</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="container">
+    <aside class="sidebar">
+      <h2>📋 メニュー</h2>
+      <ul>
+        <li onclick="showSection('form')">📝 フォーム入力</li>
+        <li onclick="showSection('gpt')">🤖 GPT分類</li>
+        <li onclick="showSection('dashboard')">📊 ダッシュボード</li>
+        <li onclick="showSection('map')">🗺 地図・可視化</li>
+      </ul>
+    </aside>
+    <main class="main-content">
+      <section id="form" class="section active">
+        <h1>📝 フォーム入力</h1>
+        <div class="top-bar">
+        <input type="text" id="zipcode" placeholder="郵便番号（例：8894412）" />
+        <button onclick="completeRegionFromZip()">📮 郵便番号から補完</button>
+          <input type="text" id="region" placeholder="例：宮崎県高原町" />
+          <button onclick="autoComplete()">⛅ 自動補完（GPT）</button>
+          <label class="upload-btn">
+            📄 資料アップロード
+            <input type="file" id="minutesFile" />
+          </label>
+        </div>
+
+        <div class="drop-zone" id="dropZone">
+          📥 ここに資料ファイルをドラッグ＆ドロップ
+        </div>
+
+        <div class="card-grid">
+          <div class="card"><h3>人口</h3><p id="population">―</p></div>
+          <div class="card"><h3>高齢化率</h3><p id="aging">―</p></div>
+          <div class="card"><h3>世帯数</h3><p id="households">―</p></div>
+          <div class="card"><h3>主な産業</h3><p id="industry">―</p></div>
+          <div class="card"><h3>地場産品</h3><p id="products">―</p></div>
+          <div class="card"><h3>観光資源</h3><p id="tourism">―</p></div>
+          <div class="card"><h3>小学校数</h3><p id="schools">―</p></div>
+          <div class="card"><h3>保育園数</h3><p id="nurseries">―</p></div>
+          <div class="card"><h3>災害リスク</h3><p id="disaster">―</p></div>
+          <div class="card"><h3>過疎度分類</h3><p id="depopulation">―</p></div>
+          <div class="card"><h3>経済圏分類</h3><p id="economy">―</p></div>
+          <div class="card"><h3>最寄IC・SA</h3><p id="icinfo">―</p></div>
+        </div>
+
+        <div class="map-block">
+          <h3>🗺 地図表示（地域中心座標）</h3>
+          <div id="map" class="map-container">（地図ここに表示予定）</div>
+        </div>
+      </section>
+    </main>
+  </div>
+  <script src="script.js"></script>
+</body>
+</html>
