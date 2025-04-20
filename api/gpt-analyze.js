@@ -12,8 +12,8 @@ export default async function handler(req, res) {
     return res.status(500).json({ error: "OPENAI_API_KEY is not set." });
   }
 
-  // ✅ テスト入力に対しては手動で模擬データを返す
-  if (!classifyMode && inputText === "テスト") {
+  // ✅ テスト入力に対しては手動で模擬データを返す（スペース・改行込み対応）
+  if (!classifyMode && inputText.trim() === "テスト") {
     return res.status(200).json({
       result: `地域名：宮崎県高原町
 人口：9000人
