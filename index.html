@@ -21,7 +21,23 @@
     <main class="main-content">
       <section id="form" class="section active">
         <h1>📝 フォーム入力</h1>
-        <p>ここに地域名や人口などの入力フォームが入ります。</p>
+        <div class="form-group">
+          <label for="region">地域名</label>
+          <input type="text" id="region" placeholder="例：宮崎県高原町" />
+        </div>
+        <div class="form-group">
+          <label for="population">人口（人）</label>
+          <input type="number" id="population" />
+        </div>
+        <div class="form-group">
+          <label for="aging">高齢化率（%）</label>
+          <input type="number" id="aging" />
+        </div>
+        <div class="form-group">
+          <label for="industry">主な産業</label>
+          <input type="text" id="industry" />
+        </div>
+        <button onclick="autoComplete()">⛅ 自動補完（GPT）</button>
       </section>
       <section id="gpt" class="section">
         <h1>🤖 GPT分類</h1>
