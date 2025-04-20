@@ -11,6 +11,9 @@ export default async function handler(req, res) {
 
   const { inputText, classifyMode } = req.body;
 
+  console.log("📝 inputText:", inputText);
+  console.log("🧩 classifyMode:", classifyMode);
+
   if (!inputText) {
     return res.status(400).json({ error: "Input is required." });
   }
@@ -47,7 +50,6 @@ ${inputText}`
 
     const result = response.choices[0].message.content;
 
-    // 緯度経度をオプションとして仮設定（将来：GPTに座標も生成させる）
     const dummyLatLng = {
       lat: 31.933,
       lng: 130.983,
@@ -59,7 +61,10 @@ ${inputText}`
       ...(classifyMode ? {} : dummyLatLng)
     });
   } catch (err) {
-    console.error("GPT-API Error:", err);
-    res.status(500).json({ error: "OpenAI API error" });
+    console.error("🔥 GPT-API Error:", err);
+    res.status(500).json({
+      error: "OpenAI API error",
+      detail: err?.message || "Unknown error"
+    });
   }
 }
