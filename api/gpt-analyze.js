@@ -1,8 +1,12 @@
 import { OpenAI } from "openai";
 
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY
-});
+const apiKey = process.env.OPENAI_API_KEY;
+
+if (!apiKey) {
+  throw new Error("❌ OPENAI_API_KEY is not defined. Check Vercel environment variables.");
+}
+
+const openai = new OpenAI({ apiKey });
 
 export default async function handler(req, res) {
   if (req.method !== "POST") {
@@ -37,6 +41,9 @@ export default async function handler(req, res) {
       region: inputText
     });
   } catch (err) {
-    res.status(500).json({ error: "OpenAI API error" });
+    res.status(500).json({
+      error: "OpenAI API error",
+      detail: err?.message || "Unknown error"
+    });
   }
 }
