@@ -1,39 +1,78 @@
-// 👇 この関数を完全に置き換えてください！
-async function autoComplete() {
-  const region = document.getElementById("region").value;
-  if (!region) return alert("地域名を入力してください");
 
-  const prompt = `「${region}」という地域について、以下の情報を2文ずつで簡潔に出力してください：\n- 人口\n- 高齢化率\n- 地場産業\n- 観光資源`;
+function showSection(id) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+function autoComplete() {
+  document.getElementById("population").innerText = "24,000人（2020年）";
+  document.getElementById("aging").innerText = "29.7%（2020年）";
+  document.getElementById("households").innerText = "10,000世帯";
+  document.getElementById("industry").innerText = "観光、農業、漁業";
+  document.getElementById("products").innerText = "かぼちゃ、みかん、真珠";
+  document.getElementById("tourism").innerText = "温泉、古城、自然公園";
+  document.getElementById("schools").innerText = "8校";
+  document.getElementById("nurseries").innerText = "6園";
+  document.getElementById("disaster").innerText = "地震リスク中、津波リスク低";
+  document.getElementById("depopulation").innerText = "人口減少率中位";
+  document.getElementById("economy").innerText = "地方圏分類B";
+  document.getElementById("icinfo").innerText = "高原ICより10km、えびのPA近接";
+}
+
+document.getElementById("dropZone").addEventListener("dragover", function(e) {
+  e.preventDefault();
+  this.style.borderColor = "#007acc";
+});
+document.getElementById("dropZone").addEventListener("dragleave", function(e) {
+  e.preventDefault();
+  this.style.borderColor = "#aaa";
+});
+document.getElementById("dropZone").addEventListener("drop", function(e) {
+  e.preventDefault();
+  const files = e.dataTransfer.files;
+  alert("📄 ドロップされたファイル：" + files[0].name);
+});
+
+
+// 郵便番号 → 地域名自動補完処理
+async function completeRegionFromZip() {
+  const zip = document.getElementById("zipcode").value.replace('-', '');
+  const res = await fetch("zipcode.json");
+  const data = await res.json();
+  const match = data.find(entry => entry.zipcode === zip);
+  if (match) {
+    const regionField = document.getElementById("region");
+    regionField.value = `${match.pref}${match.city}${match.town}`;
+  } else {
+    alert("該当する地域が見つかりません。");
+  }
+}
+
+async function classifyKPI() {
+  const btn = document.getElementById("classifyBtn");
+  const freeText = document.getElementById("freeText").value;
+  if (!freeText.trim()) {
+    alert("自由入力欄にテキストを入力してください。");
+    return;
+  }
+  btn.disabled = true;
+  const originalText = btn.innerText;
+  btn.innerText = "⏳ 分析中...";
 
   try {
-    const response = await fetch("https://api.openai.com/v1/chat/completions", {
+    const response = await fetch("/classify-kpi", {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${OPENAI_API_KEY}`
-      },
-      body: JSON.stringify({
-        model: "gpt-4",
-        messages: [{ role: "user", content: prompt }],
-        temperature: 0.7
-      })
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ text: freeText })
     });
-
     const data = await response.json();
 
-    if (data.choices && data.choices.length > 0) {
-      const text = data.choices[0].message.content;
-      const lines = text.split("\n").filter(line => line.trim() !== "");
-
-      document.getElementById("population").textContent = lines[0] || "―";
-      document.getElementById("aging").textContent = lines[1] || "―";
-      document.getElementById("industry").textContent = lines[2] || "―";
-      document.getElementById("tourism").textContent = lines[3] || "―";
-    } else {
-      alert("GPTの応答がありません。");
-    }
+    // 分類結果の表示（仮の処理）
+    alert("分類結果: " + JSON.stringify(data, null, 2));
   } catch (error) {
-    console.error("GPT連携エラー:", error);
-    alert("GPTとの通信に失敗しました。APIキーやネットワークを確認してください。");
+    console.error("分類エラー:", error);
+    alert("分類中にエラーが発生しました。");
+  } finally {
+    btn.disabled = false;
+    btn.innerText = originalText;
   }
 }
