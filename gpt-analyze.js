@@ -11,34 +11,14 @@ export default async function handler(req, res) {
 
   const { inputText, classifyMode } = req.body;
 
-  console.log("📝 inputText:", inputText);
-  console.log("🧩 classifyMode:", classifyMode);
-
   if (!inputText) {
-    return res.status(400).json({ error: "Input is required." });
+    return res.status(400).json({ error: "Input text is required." });
   }
 
   try {
     const prompt = classifyMode
-      ? `以下はある地域の自由記述メモです。地域課題として分類し、各課題に応じた対策カテゴリを日本語で明確に提示してください。
-
-${inputText}`
-      : `あなたは地域分析の専門家です。以下の郵便番号や地域名から、その地域の基本情報を日本語で出力してください。以下の12項目でお願いします：
-地域名：
-人口：
-高齢化率：
-世帯数：
-主な産業：
-地場産品：
-観光資源：
-小学校数：
-保育園数：
-災害リスク：
-過疎度分類：
-経済圏分類：
-最寄IC・SA：
-
-対象：${inputText}`;
+      ? `以下はある地域に関する自由記述です。内容を読み取り、地域課題として分類し、適切なカテゴリをつけて日本語で出力してください：\n\n${inputText}`
+      : `以下の郵便番号または地域名に関する情報を、以下の12項目に分けて日本語で簡潔に出力してください。\n地域名：\n人口：\n高齢化率：\n世帯数：\n主な産業：\n地場産品：\n観光資源：\n小学校数：\n保育園数：\n災害リスク：\n過疎度分類：\n経済圏分類：\n最寄IC・SA：\n\n対象：${inputText}`;
 
     const response = await openai.chat.completions.create({
       model: "gpt-4",
@@ -50,21 +30,13 @@ ${inputText}`
 
     const result = response.choices[0].message.content;
 
-    const dummyLatLng = {
+    res.status(200).json({
+      result,
       lat: 31.933,
       lng: 130.983,
       region: inputText
-    };
-
-    res.status(200).json({
-      result,
-      ...(classifyMode ? {} : dummyLatLng)
     });
   } catch (err) {
-    console.error("🔥 GPT-API Error:", err);
-    res.status(500).json({
-      error: "OpenAI API error",
-      detail: err?.message || "Unknown error"
-    });
+    res.status(500).json({ error: "OpenAI API error" });
   }
 }
