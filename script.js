@@ -1,40 +1,34 @@
 
-let map;
+document.getElementById("zipSearchBtn").addEventListener("click", completeRegionFromZip);
 
 async function completeRegionFromZip() {
-    const zip = document.getElementById('zip').value;
+    const zip = document.getElementById("zipInput").value;
     try {
-        const response = await fetch('/zipcode.json');
-        if (!response.ok) throw new Error('zipcode.json fetch failed');
+        const response = await fetch("zipcode.json");
         const data = await response.json();
+        const region = data[zip];
 
-        const matched = data.find(item => item.zipcode === zip);
-        if (!matched) {
-            alert('該当する地域が見つかりません');
-            return;
+        if (region) {
+            document.getElementById("regionInput").value = region;
+            updateMap(region);
+        } else {
+            alert("該当する地域が見つかりません");
         }
-
-        document.getElementById('region').value = matched.region;
-
-        updateMap(matched.lat, matched.lng, matched.region);
     } catch (error) {
-        console.error('Error in completeRegionFromZip:', error);
-        alert('データ取得に失敗しました');
+        console.error("郵便番号検索中にエラーが発生しました:", error);
     }
 }
 
-function updateMap(lat, lng, regionName) {
-    const mapContainer = document.getElementById('map');
-    if (!mapContainer) return;
-
-    // Remove existing map if initialized
-    if (map !== undefined) {
-        map.remove();
+function updateMap(regionName) {
+    if (window.map && window.map.remove) {
+        window.map.remove();  // 既存マップ削除
     }
 
-    map = L.map('map').setView([lat, lng], 13);
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '&copy; OpenStreetMap contributors'
-    }).addTo(map);
-    L.marker([lat, lng]).addTo(map).bindPopup(regionName).openPopup();
+    window.map = L.map("map").setView([31.9333, 131.0667], 13);
+    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+        attribution: "&copy; OpenStreetMap contributors"
+    }).addTo(window.map);
+    L.marker([31.9333, 131.0667]).addTo(window.map)
+        .bindPopup(regionName)
+        .openPopup();
 }
