@@ -6,5 +6,5 @@ function showSection(id) {
 }
 
 function autoComplete() {
-  alert("GPTによる自動補完機能（仮）を実行します。※実装準備中");
+  alert("⛅ GPTによる補完データ（仮）を表示します。正式な連携は次回実装予定です。");
 }
