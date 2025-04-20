@@ -1,1 +1,41 @@
-body { font-family: sans-serif; background: #f7f7f7; padding: 2rem; }
+
+body {
+  margin: 0;
+  font-family: 'Segoe UI', sans-serif;
+}
+.container {
+  display: flex;
+  height: 100vh;
+}
+.sidebar {
+  width: 220px;
+  background: #2d3e50;
+  color: white;
+  padding: 20px;
+}
+.sidebar h2 {
+  font-size: 18px;
+  margin-bottom: 15px;
+}
+.sidebar ul {
+  list-style: none;
+  padding: 0;
+}
+.sidebar li {
+  padding: 10px;
+  cursor: pointer;
+}
+.sidebar li:hover {
+  background: #3e536b;
+}
+.main-content {
+  flex: 1;
+  padding: 30px;
+  background: #f5f7fa;
+}
+.section {
+  display: none;
+}
+.section.active {
+  display: block;
+}

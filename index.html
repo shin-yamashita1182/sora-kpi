@@ -1,11 +1,42 @@
+
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>SORA KPI Webフォーム</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <h1>SORA KPI Webフォーム 起動準備完了</h1>
-  <p>ここからGitHub Pages公開・機能追加を進めていきます。</p>
+  <div class="container">
+    <aside class="sidebar">
+      <h2>📋 メニュー</h2>
+      <ul>
+        <li onclick="showSection('form')">📝 フォーム入力</li>
+        <li onclick="showSection('gpt')">🤖 GPT分類</li>
+        <li onclick="showSection('dashboard')">📊 ダッシュボード</li>
+        <li onclick="showSection('map')">🗺 地図・可視化</li>
+      </ul>
+    </aside>
+    <main class="main-content">
+      <section id="form" class="section active">
+        <h1>📝 フォーム入力</h1>
+        <p>ここに地域名や人口などの入力フォームが入ります。</p>
+      </section>
+      <section id="gpt" class="section">
+        <h1>🤖 GPT分類</h1>
+        <p>ここに議事録アップロードとGPT分類処理を入れます。</p>
+      </section>
+      <section id="dashboard" class="section">
+        <h1>📊 ダッシュボード</h1>
+        <p>ここにKPI表示とグラフ・チャートを表示します。</p>
+      </section>
+      <section id="map" class="section">
+        <h1>🗺 地図・可視化</h1>
+        <p>地図表示や地域別KPIヒートマップなどをここに。</p>
+      </section>
+    </main>
+  </div>
+  <script src="script.js"></script>
 </body>
 </html>
