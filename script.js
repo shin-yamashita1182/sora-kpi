@@ -58,6 +58,11 @@ async function autoComplete() {
   }
 }
 
+// ← ここが今回追加された関数
+function completeRegionFromZip() {
+  autoComplete();
+}
+
 async function classifyKPI() {
   const text = document.getElementById("freeText").value;
   if (!text.trim()) return alert("自由入力欄が空です");
