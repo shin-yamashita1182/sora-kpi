@@ -5,16 +5,12 @@ export default async function handler(req, res) {
 
   const { inputText, classifyMode } = req.body;
 
-  if (!inputText) {
-    return res.status(400).json({ error: "Input text is required." });
-  }
-
   const apiKey = process.env.OPENAI_API_KEY;
   if (!apiKey) {
     return res.status(500).json({ error: "OPENAI_API_KEY is not set." });
   }
 
-  // ✅ テストモード：ChatGPTを通さず固定データを返す
+  // ✅ テスト入力に対しては手動で模擬データを返す
   if (!classifyMode && inputText === "テスト") {
     return res.status(200).json({
       result: `地域名：宮崎県高原町
