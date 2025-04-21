@@ -2,6 +2,12 @@
   "functions": {
     "api/gpt-analyze.js": {
       "runtime": "nodejs18.x"
+    },
+    "api/chatgpt.js": {
+      "runtime": "nodejs18.x"
+    },
+    "api/gpt-real.js": {
+      "runtime": "nodejs18.x"
     }
   }
 }
