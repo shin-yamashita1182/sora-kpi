@@ -1,21 +1,32 @@
-// script.js - 完全版（ChatGPT + 音声 + 出力ボタン対応）
+// script.js - ログ付き診断版（最終確認用）
+console.log("✅ script.js loaded!");
+
 document.addEventListener("DOMContentLoaded", () => {
+  console.log("✅ DOM fully loaded!");
+
   const chatArea = document.querySelector("#chat-area");
   const pointsList = document.querySelector("#points-list");
   const inputArea = document.querySelector("#gpt-input");
   const micButton = document.querySelector("#mic-button");
   const sendButton = document.querySelector("#send-button");
 
-  // ChatGPT 送信処理
+  if (!chatArea || !pointsList || !inputArea || !micButton || !sendButton) {
+    console.warn("⚠️ 必要な要素が1つ以上見つかりません");
+    return;
+  }
+
+  console.log("🎤 マイク・送信・入力欄 検出OK");
+
+  // ChatGPT連携
   const sendMessage = async () => {
     const userMessage = inputArea.value.trim();
     if (!userMessage) return;
+    console.log("📤 送信内容:", userMessage);
 
     const userBubble = document.createElement("p");
     userBubble.className = "text-sm text-gray-900 mb-1";
     userBubble.textContent = `🧑‍💻 あなた: ${userMessage}`;
     chatArea.appendChild(userBubble);
-
     inputArea.value = "";
 
     try {
@@ -24,7 +35,6 @@ document.addEventListener("DOMContentLoaded", () => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ message: userMessage })
       });
-
       const data = await response.json();
 
       if (data.reply) {
@@ -61,37 +71,22 @@ document.addEventListener("DOMContentLoaded", () => {
       sendMessage();
     }
   });
-  sendButton.addEventListener("click", sendMessage);
+  sendButton.addEventListener("click", () => {
+    console.log("📤 送信ボタンがクリックされました");
+    sendMessage();
+  });
 
-  // 音声認識対応
-  if ("webkitSpeechRecognition" in window) {
-    const recognition = new webkitSpeechRecognition();
-    recognition.lang = "ja-JP";
-    recognition.continuous = false;
-    recognition.interimResults = false;
+  micButton.addEventListener("click", () => {
+    console.log("🎤 マイクボタンがクリックされました");
+  });
 
-    micButton.addEventListener("click", () => {
-      recognition.start();
-    });
-
-    recognition.onresult = (event) => {
-      const transcript = event.results[0][0].transcript;
-      inputArea.value += transcript;
-    };
-
-    recognition.onerror = (event) => {
-      console.error("Speech recognition error:", event.error);
-    };
-  } else {
-    micButton.disabled = true;
-    micButton.textContent = "🎤（非対応）";
-  }
-
-  // 出力ボタン（プレースホルダ）
+  // 出力ボタン動作確認
   document.querySelector(".bg-green-500")?.addEventListener("click", () => {
     alert("📄 PDF出力機能は今後追加予定です");
+    console.log("📄 PDF出力ボタン押下");
   });
   document.querySelector(".bg-gray-500")?.addEventListener("click", () => {
     alert("💾 ログ保存機能は今後追加予定です");
+    console.log("💾 ログ保存ボタン押下");
   });
 });
