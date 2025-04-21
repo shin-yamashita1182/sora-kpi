@@ -1,15 +1,17 @@
-// script.js - ChatGPT連携用
+// script.js - ChatGPTと連携するクライアントサイドスクリプト（Vercel用）
 document.addEventListener("DOMContentLoaded", () => {
   const chatArea = document.querySelector(".bg-gray-50");
   const pointsList = document.querySelector(".bg-gray-100 ul");
-  const inputArea = document.querySelector("textarea");
+  const inputArea = document.querySelector("#gpt-input");
 
   inputArea.addEventListener("keydown", async (e) => {
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
+
       const userMessage = inputArea.value.trim();
       if (!userMessage) return;
 
+      // 表示にユーザーメッセージ追加
       const userBubble = document.createElement("p");
       userBubble.className = "text-sm text-gray-900 mb-1";
       userBubble.textContent = `🧑‍💻 あなた: ${userMessage}`;
@@ -32,7 +34,8 @@ document.addEventListener("DOMContentLoaded", () => {
           gptBubble.textContent = `SORA: ${data.reply}`;
           chatArea.appendChild(gptBubble);
 
-          const summary = data.reply.split("。").slice(0, 3);
+          // 会話の要点を仮抽出（簡易）
+          const summary = data.reply.split("。").slice(0, 3); // 最初の3文だけ抽出
           pointsList.innerHTML = "";
           summary.forEach((line) => {
             if (line.trim()) {
