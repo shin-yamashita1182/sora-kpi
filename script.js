@@ -1,4 +1,4 @@
-// 🔹 セクション表示切り替え関数（メニュー用）
+// 🔹 セクション表示切り替え関数
 function showSection(sectionId) {
   document.querySelectorAll('.section').forEach(section => {
     section.classList.remove('active');
@@ -51,7 +51,7 @@ async function autoComplete() {
       body: JSON.stringify({ inputText: input })
     });
 
-    const raw = await res.text(); // ← 生のレスポンスをそのまま取得
+    const raw = await res.text();
     alert("ChatGPT 応答（生データ）:\n" + raw);
 
   } catch (err) {
@@ -63,48 +63,8 @@ async function autoComplete() {
   }
 }
 
-// 🔹 地域課題分類（GPT・BSC分類モード）
-async function classifyKPI() {
-  const text = document.getElementById("freeText").value;
-  if (!text.trim()) return alert("自由入力欄が空です");
-
-  const btn = document.getElementById("classifyBtn");
-  btn.disabled = true;
-  btn.textContent = "🧠 分析中…";
-
-  try {
-    const res = await fetch("/api/gpt-analyze", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ inputText: text, classifyMode: true })
-    });
-
-    const raw = await res.text();
-    alert("GPT課題分析 応答（生データ）:\n" + raw);
-  } catch (err) {
-    console.error("classifyKPI error:", err);
-    alert("GPT通信エラー（課題分析）");
-  } finally {
-    btn.disabled = false;
-    btn.textContent = "🧠 地域課題の分析";
-  }
-}
-
-// 🔹 地図表示（OpenStreetMap + Leaflet）
-function showMap(lat, lng, label) {
-  const mapDiv = document.getElementById("map");
-  mapDiv.innerHTML = "<div id='mapInner'></div>";
-  const map = L.map("mapInner").setView([lat, lng], 11);
-  L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-    attribution: "© OpenStreetMap contributors"
-  }).addTo(map);
-  L.marker([lat, lng]).addTo(map).bindPopup(label).openPopup();
-}
-
-// ✅ HTML側から呼び出せるように関数をグローバル公開
+// ✅ グローバル公開
 window.showSection = showSection;
 window.runGPTTest = runGPTTest;
 window.completeRegionFromZip = completeRegionFromZip;
 window.autoComplete = autoComplete;
-window.classifyKPI = classifyKPI;
-window.showMap = showMap;
