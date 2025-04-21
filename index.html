@@ -5,17 +5,8 @@
   <title>SORA KPI Webフォーム</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="stylesheet" href="style.css" />
-  <link
-    rel="stylesheet"
-    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-    integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
-    crossorigin=""
-  />
-  <script
-    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
-    integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
-    crossorigin=""
-  ></script>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 </head>
 <body>
   <div class="container">
@@ -23,60 +14,31 @@
       <h2>📋 メニュー</h2>
       <ul>
         <li onclick="showSection('form')">🏠 地域情報入力</li>
-        <li onclick="showSection('analysis')">🧠 地域課題分析</li>
-        <li onclick="showSection('action')">📌 アクションプラン</li>
-        <li onclick="showSection('dashboard')">📊 KPIダッシュボード</li>
       </ul>
     </aside>
+
     <main class="main-content">
       <section id="form" class="section active">
         <h1>地域情報入力</h1>
         <div class="top-bar">
-          <input type="text" id="zipcode" placeholder="例: 8894412" />
-          <button onclick="completeRegionFromZip()">📮 郵便番号から補完</button>
-          <input type="text" id="region" placeholder="例: 宮崎県西諸県郡高原町" />
-          <button onclick="autoComplete()" id="autoCompleteBtn">⛅ 自動補完（GPT）</button>
-          <label class="upload-btn">
-            📄 資料アップロード
-            <input type="file" id="minutesFile" />
-          </label>
-          <button onclick="saveData()">💾 保存</button>
-          <button onclick="loadData()">📂 呼び出し</button>
-          <button onclick="clearData()" class="delete-btn" style="background-color: #dc3545; color: white;">🗑️ 削除</button>
-          <select id="savedDataSelect"><option value="">保存データ選択</option></select>
+          <input type="text" id="zipcode" placeholder="郵便番号を入力（例: 8130017）" />
+          <input type="text" id="region" placeholder="地域名（例: 福岡市東区）" />
+          <button id="autoCompleteBtn" onclick="completeRegionFromZip()">⛅ 自動補完（GPT）</button>
         </div>
-
-        <div class="drop-zone" id="dropZone">📥 ここに資料ファイルをドラッグ＆ドロップ</div>
 
         <div class="card-grid">
-          <div class="card"><h3>人口</h3><p id="population">―</p></div>
-          <div class="card"><h3>高齢化率</h3><p id="aging">―</p></div>
-          <div class="card"><h3>世帯数</h3><p id="households">―</p></div>
-          <div class="card"><h3>主な産業</h3><p id="industry">―</p></div>
-          <div class="card"><h3>地場産品</h3><p id="products">―</p></div>
-          <div class="card"><h3>観光資源</h3><p id="tourism">―</p></div>
-          <div class="card"><h3>小学校数</h3><p id="schools">―</p></div>
-          <div class="card"><h3>保育園数</h3><p id="nurseries">―</p></div>
-          <div class="card"><h3>災害リスク</h3><p id="disaster">―</p></div>
-          <div class="card"><h3>過疎度分類</h3><p id="depopulation">―</p></div>
-          <div class="card"><h3>経済圏分類</h3><p id="economy">―</p></div>
-          <div class="card"><h3>最寄IC・SA</h3><p id="icinfo">―</p></div>
-        </div>
-
-        <div class="free-text-section" style="margin-top: 1em;">
-          <textarea id="freeText" placeholder="ここに自由入力してください..." style="width: 100%; height: 100px;"></textarea>
-          <button id="classifyBtn" onclick="classifyKPI()" style="margin-top: 0.5em; background-color: #0d6efd; color: white; padding: 0.5em 1em; border: none; border-radius: 4px; font-size: 1em;">🧠 地域課題の分析</button>
+          <div class="card"><h3>人口</h3><p id="人口"></p></div>
+          <div class="card"><h3>主要産業</h3><p id="主要産業"></p></div>
+          <div class="card"><h3>地域名</h3><p id="地域名"></p></div>
         </div>
 
         <div class="map-block">
-          <h3>🗺 地図表示（地域中心座標）</h3>
+          <h3>🗺️ 地図表示</h3>
           <div id="map" class="map-container"></div>
         </div>
       </section>
     </main>
   </div>
-
-  <!-- config.jsはVercelでは不要 -->
   <script src="script.js"></script>
 </body>
 </html>
