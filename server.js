@@ -1,4 +1,4 @@
-// server.js（GPT-4 + Railway Pro用 最終版）
+// server.js（GPT-4 テストAPI専用・軽量構成）
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
@@ -14,28 +14,26 @@ const configuration = new Configuration({
 });
 const openai = new OpenAIApi(configuration);
 
-app.post('/api/completeRegion', async (req, res) => {
-  const { region } = req.body;
-
-  if (!region) {
-    return res.status(400).json({ error: '地域名が必要です。' });
-  }
+// 🔹 GPT-4 テスト用ルート
+app.post('/api/testGPT', async (req, res) => {
+  const { message } = req.body;
+  if (!message) return res.status(400).json({ error: '入力が必要です。' });
 
   try {
-    const prompt = `${region}の地域特性と地域課題について、簡潔に3点だけ箇条書きで示してください。`;
-
+    console.log('📤 GPT送信内容:', message);
     const completion = await openai.createChatCompletion({
       model: 'gpt-4',
-      messages: [{ role: 'user', content: prompt }],
-      max_tokens: 512,
+      messages: [{ role: 'user', content: message }],
+      max_tokens: 256,
       temperature: 0.7,
     });
 
-    const summary = completion.data.choices[0].message.content;
-    res.json({ summary });
+    const result = completion.data.choices[0].message.content;
+    console.log('📥 GPT応答:', result);
+    res.json({ result });
   } catch (error) {
-    console.error('GPT Error:', error.response?.data || error.message);
-    res.status(500).json({ error: 'GPTとの連携に失敗しました。' });
+    console.error('❌ GPTエラー:', error.response?.data || error.message);
+    res.status(500).json({ error: 'GPTとの接続に失敗しました。' });
   }
 });
 
