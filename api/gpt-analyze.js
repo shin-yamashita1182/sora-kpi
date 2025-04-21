@@ -1,4 +1,3 @@
-
 import { OpenAI } from "openai";
 import fetch from "node-fetch";
 
@@ -14,7 +13,7 @@ export default async (req, res) => {
 
     const messages = classifyMode
       ? [{ role: "user", content: `以下の地域課題をBSC分類してください: ${inputText}` }]
-      : [{ role: "user", content: `${inputText} に関する地域情報を教えてください。人口、産業、観光なども含めてください。` }];
+      : [{ role: "user", content: `${inputText} に関する地域情報を教えてください。人口、産業、観光、緯度経度を含めてJSON形式で返してください。` }];
 
     const chatCompletion = await openai.chat.completions.create({
       model: "gpt-4",
