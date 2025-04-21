@@ -1,14 +1,11 @@
 
-import express from 'express';
-import cors from 'cors';
-import dotenv from 'dotenv';
-import bodyParser from 'body-parser';
-import { Configuration, OpenAIApi } from 'openai';
+const express = require('express');
+const bodyParser = require('body-parser');
+const cors = require('cors');
+const { Configuration, OpenAIApi } = require('openai');
+require('dotenv').config();
 
-dotenv.config();
 const app = express();
-const port = 3000;
-
 app.use(cors());
 app.use(bodyParser.json());
 
@@ -17,20 +14,29 @@ const configuration = new Configuration({
 });
 const openai = new OpenAIApi(configuration);
 
-app.post('/api/gpt', async (req, res) => {
+app.post('/api/completeRegion', async (req, res) => {
+  const { region } = req.body;
+  if (!region) {
+    return res.status(400).json({ error: '地域名が必要です。' });
+  }
+
   try {
-    const { prompt } = req.body;
+    const prompt = `${region}の地域課題について、簡潔に3点だけ箇条書きで示してください。`;
+
     const completion = await openai.createChatCompletion({
-      model: "gpt-4",
-      messages: [{ role: "user", content: prompt }],
+      model: 'gpt-3.5-turbo',
+      messages: [{ role: 'user', content: prompt }],
     });
-    res.json({ result: completion.data.choices[0].message.content });
+
+    const summary = completion.data.choices[0].message.content;
+    res.json({ summary });
   } catch (error) {
-    console.error("OpenAI API error:", error);
-    res.status(500).json({ error: "API request failed" });
+    console.error('GPT Error:', error.message);
+    res.status(500).json({ error: 'GPTとの連携に失敗しました。' });
   }
 });
 
-app.listen(port, () => {
-  console.log(`SORA server listening at http://localhost:${port}`);
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+  console.log(`🚀 Server running on port ${PORT}`);
 });
