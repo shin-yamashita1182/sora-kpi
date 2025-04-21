@@ -1,36 +1,40 @@
-export default async function handler(req, res) {
-  try {
-    const { inputText } = await req.json();
+import fetch from 'node-fetch';
 
-    const response = await fetch("https://api.openai.com/v1/chat/completions", {
-      method: "POST",
+export default async function handler(req, res) {
+  if (req.method !== 'POST') {
+    return res.status(405).json({ error: 'Method Not Allowed' });
+  }
+
+  const { inputText, classifyMode } = req.body;
+
+  if (!inputText) {
+    return res.status(400).json({ error: '入力テキストがありません' });
+  }
+
+  const prompt = classifyMode
+    ? `以下の内容をもとに、地域課題を4つのカテゴリ（①地域経済、②教育・人材、③福祉・医療、④環境・防災）で分類してください。\n\n${inputText}`
+    : `以下の地域名に関する基本情報（人口、主要産業、観光名所など）をJSON形式で簡潔に出力してください。\n\n地域名: ${inputText}`;
+
+  try {
+    const openaiRes = await fetch('https://api.openai.com/v1/chat/completions', {
+      method: 'POST',
       headers: {
-        "Authorization": `Bearer ${process.env.OPENAI_API_KEY}`,
-        "Content-Type": "application/json"
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${process.env.OPENAI_API_KEY}`
       },
       body: JSON.stringify({
-        model: "gpt-4",
-        messages: [{
-          role: "user",
-          content: `以下の郵便番号または地域名から、次の形式で返答してください：
-{
-  "region": "福岡市東区",
-  "population": "約12万人",
-  "industry": "製造業と観光業",
-  "latitude": 33.606,
-  "longitude": 130.418
-}
-入力: ${inputText}`
-        }]
+        model: 'gpt-4',
+        messages: [{ role: 'user', content: prompt }],
+        temperature: 0.7
       })
     });
 
-    const json = await response.json();
-    const result = json.choices?.[0]?.message?.content;
+    const data = await openaiRes.json();
+    const output = data.choices?.[0]?.message?.content || '[応答なし]';
+    res.status(200).send(output);
 
-    res.status(200).send(result);
   } catch (err) {
-    console.error("API Error:", err);
-    res.status(500).json({ error: "Server error", detail: err.message });
+    console.error('GPT通信エラー:', err);
+    res.status(500).json({ error: 'GPT呼び出しに失敗しました', detail: err.message });
   }
 }
