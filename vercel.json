@@ -1,7 +1,0 @@
-{
-  "functions": {
-    "api/gpt-analyze.js": {
-      "runtime": "nodejs18.x"
-    }
-  }
-}
