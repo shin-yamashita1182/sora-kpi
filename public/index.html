@@ -8,13 +8,25 @@
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script>
+    function toggleCanvas() {
+      const canvas = document.getElementById('canvas-body');
+      canvas.classList.toggle('hidden');
+    }
+  </script>
 </head>
 <body class="bg-gray-100">
-  <header class="flex items-center space-x-4 px-6 py-3 bg-white shadow">
-    <img src="Screenshot_2025-04-22_at_00-39-24_TOP_NK.VALUE-removebg-preview.png" alt="MFAS Logo" class="h-8">
-    <div>
-      <h1 class="text-xl font-bold text-gray-800 leading-none">MFAS DASHBOARD</h1>
-      <p class="text-sm text-gray-500 leading-tight">by Metahighway</p>
+  <header class="flex items-center justify-between px-6 py-3 bg-white shadow">
+    <div class="flex items-center space-x-4">
+      <img src="/images/logo.png" alt="MFAS Logo" class="h-8">
+      <div>
+        <h1 class="text-xl font-bold text-gray-800 leading-none">MFAS DASHBOARD</h1>
+        <p class="text-sm text-gray-500 leading-tight">by Metahighway</p>
+      </div>
+    </div>
+    <div class="ml-auto flex items-center space-x-2">
+      <img src="https://ui-avatars.com/api/?name=User&background=eee&color=555" class="h-8 w-8 rounded-full" />
+      <span class="text-sm text-gray-600 hidden sm:inline">Guest User</span>
     </div>
   </header>
 
@@ -30,7 +42,7 @@
           <li class="hover:underline cursor-pointer text-green-600 font-bold">＋ 新規作成...</li>
         </ul>
       </div>
-      <div class="text-xs text-gray-400 text-center mt-6">SORA-AI Dashboard ver 1.1</div>
+      
     </aside>
 
     <!-- Main Content -->
@@ -72,16 +84,20 @@
 
       <!-- SORA CANVAS -->
       <div class="col-span-2 bg-white p-4 rounded shadow border border-blue-100">
-        <h3 class="text-lg font-semibold text-blue-700 mb-3">🧠 SORA CANVAS - 分析展開セクション</h3>
-        <div class="grid grid-cols-3 gap-4 text-sm text-gray-700">
-          <div class="p-3 bg-gray-50 border rounded h-32 overflow-y-auto">
-            <strong>地域課題 詳細：</strong><br>現在の人口構成は高齢化率34%を超え、地域サービス維持に支障が出始めています。
-          </div>
-          <div class="p-3 bg-gray-50 border rounded h-32 overflow-y-auto">
-            <strong>GPT分類 詳細：</strong><br>農業と観光資源の連携による産業構造の強化施策を提案中。
-          </div>
-          <div class="p-3 bg-gray-50 border rounded h-32 overflow-y-auto">
-            <strong>アクション例 詳細：</strong><br>空き家のコミュニティ利用、地域Webプロモーションの実証実験が進行中。
+        <h3 onclick="toggleCanvas()" class="text-lg font-semibold text-blue-700 mb-3 cursor-pointer">
+          🧠 SORA CANVAS - 分析展開セクション（クリックで展開）
+        </h3>
+        <div id="canvas-body" class="hidden">
+          <div class="grid grid-cols-3 gap-4 text-sm text-gray-700">
+            <div class="p-3 bg-gray-50 border rounded h-32 overflow-y-auto">
+              <strong>地域課題 詳細：</strong><br>現在の人口構成は高齢化率34%を超え、地域サービス維持に支障が出始めています。
+            </div>
+            <div class="p-3 bg-gray-50 border rounded h-32 overflow-y-auto">
+              <strong>GPT分類 詳細：</strong><br>農業と観光資源の連携による産業構造の強化施策を提案中。
+            </div>
+            <div class="p-3 bg-gray-50 border rounded h-32 overflow-y-auto">
+              <strong>アクション例 詳細：</strong><br>空き家のコミュニティ利用、地域Webプロモーションの実証実験が進行中。
+            </div>
           </div>
         </div>
       </div>
