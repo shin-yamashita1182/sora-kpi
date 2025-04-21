@@ -4,29 +4,38 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>SORA KPI Dashboard</title>
+  <title>MFAS Dashboard by Metahighway</title>
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-
-  <!-- ✅ Leaflet読み込み -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 </head>
 <body class="bg-gray-100">
-  <div class="flex h-screen">
+  <header class="flex items-center space-x-4 px-6 py-3 bg-white shadow">
+    <img src="Screenshot_2025-04-22_at_00-39-24_TOP_NK.VALUE-removebg-preview.png" alt="MFAS Logo" class="h-8">
+    <div>
+      <h1 class="text-xl font-bold text-gray-800 leading-none">MFAS DASHBOARD</h1>
+      <p class="text-sm text-gray-500 leading-tight">by Metahighway</p>
+    </div>
+  </header>
+
+  <div class="flex h-[calc(100vh-64px)]">
     <!-- Sidebar -->
-    <aside class="w-64 bg-white shadow-md p-4 overflow-y-auto">
-      <h2 class="text-xl font-bold mb-4">📂 履歴一覧</h2>
-      <ul class="space-y-2 text-sm text-blue-600">
-        <li class="hover:underline cursor-pointer">2025-04-21 地域課題（南足柄市）</li>
-        <li class="hover:underline cursor-pointer">2025-04-20 高原町 検討メモ</li>
-        <li class="hover:underline cursor-pointer">2025-04-18 小城市 議事録まとめ</li>
-        <li class="hover:underline cursor-pointer text-green-600 font-bold">＋ 新規作成...</li>
-      </ul>
+    <aside class="w-64 bg-white shadow-md p-4 overflow-y-auto flex flex-col justify-between">
+      <div>
+        <h2 class="text-xl font-bold mb-4">📂 履歴一覧</h2>
+        <ul class="space-y-2 text-sm text-blue-600">
+          <li class="hover:underline cursor-pointer">2025-04-21 地域課題（南足柄市）</li>
+          <li class="hover:underline cursor-pointer">2025-04-20 高原町 検討メモ</li>
+          <li class="hover:underline cursor-pointer">2025-04-18 小城市 議事録まとめ</li>
+          <li class="hover:underline cursor-pointer text-green-600 font-bold">＋ 新規作成...</li>
+        </ul>
+      </div>
+      <div class="text-xs text-gray-400 text-center mt-6">SORA-AI Dashboard ver 1.1</div>
     </aside>
 
     <!-- Main Content -->
     <main class="flex-1 p-6 overflow-y-auto grid grid-cols-2 gap-6">
-      <!-- ChatGPT会話エリア -->
+      <!-- Chat Area -->
       <div class="col-span-2 bg-white p-4 rounded shadow">
         <h3 class="text-lg font-semibold mb-2">ChatGPT会話エリア</h3>
         <div id="chat-area" class="h-40 overflow-y-auto bg-gray-50 p-2 border border-gray-200 rounded mb-2">
@@ -39,19 +48,19 @@
         </div>
       </div>
 
-      <!-- 地域情報カードエリア -->
+      <!-- Region Info -->
       <div class="bg-white p-4 rounded shadow">
         <h3 class="text-lg font-semibold mb-2">地域情報カード</h3>
         <textarea id="region-card" placeholder="例：長崎県島原市、人口、観光資源など..." class="w-full h-40 p-2 border border-gray-300 rounded"></textarea>
       </div>
 
-      <!-- 地図エリア -->
+      <!-- Map -->
       <div class="bg-white p-4 rounded shadow">
         <h3 class="text-lg font-semibold mb-2">地図表示</h3>
         <div class="h-48 bg-gray-100 border border-gray-300 rounded flex items-center justify-center">Map Area</div>
       </div>
 
-      <!-- 分析結果エリア -->
+      <!-- Analysis -->
       <div class="col-span-2 bg-white p-4 rounded shadow">
         <h3 class="text-lg font-semibold mb-2">分析結果</h3>
         <div class="grid grid-cols-3 gap-2">
@@ -61,7 +70,23 @@
         </div>
       </div>
 
-      <!-- 出力ボタンエリア -->
+      <!-- SORA CANVAS -->
+      <div class="col-span-2 bg-white p-4 rounded shadow border border-blue-100">
+        <h3 class="text-lg font-semibold text-blue-700 mb-3">🧠 SORA CANVAS - 分析展開セクション</h3>
+        <div class="grid grid-cols-3 gap-4 text-sm text-gray-700">
+          <div class="p-3 bg-gray-50 border rounded h-32 overflow-y-auto">
+            <strong>地域課題 詳細：</strong><br>現在の人口構成は高齢化率34%を超え、地域サービス維持に支障が出始めています。
+          </div>
+          <div class="p-3 bg-gray-50 border rounded h-32 overflow-y-auto">
+            <strong>GPT分類 詳細：</strong><br>農業と観光資源の連携による産業構造の強化施策を提案中。
+          </div>
+          <div class="p-3 bg-gray-50 border rounded h-32 overflow-y-auto">
+            <strong>アクション例 詳細：</strong><br>空き家のコミュニティ利用、地域Webプロモーションの実証実験が進行中。
+          </div>
+        </div>
+      </div>
+
+      <!-- Buttons -->
       <div class="col-span-2 flex justify-end space-x-4">
         <button class="bg-green-500 text-white px-3 py-2 rounded hover:bg-green-600 text-sm">📄 PDF出力</button>
         <button class="bg-gray-500 text-white px-3 py-2 rounded hover:bg-gray-600 text-sm">💾 ログ保存</button>
