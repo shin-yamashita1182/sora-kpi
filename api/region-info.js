@@ -1,4 +1,5 @@
-import { Configuration, OpenAIApi } from "openai";
+
+import OpenAI from "openai";
 import express from "express";
 import cors from "cors";
 
@@ -6,10 +7,9 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-const configuration = new Configuration({
-  apiKey: process.env.OPENAI_API_KEY,
+const openai = new OpenAI({
+  apiKey: process.env.OPENAI_API_KEY
 });
-const openai = new OpenAIApi(configuration);
 
 app.post("/api/region-info", async (req, res) => {
   const { zipOrRegion } = req.body;
@@ -31,12 +31,12 @@ app.post("/api/region-info", async (req, res) => {
   `;
 
   try {
-    const completion = await openai.createChatCompletion({
+    const completion = await openai.chat.completions.create({
       model: "gpt-4",
-      messages: [{ role: "user", content: prompt }],
+      messages: [{ role: "user", content: prompt }]
     });
 
-    const reply = completion.data.choices[0].message.content;
+    const reply = completion.choices[0].message.content;
     res.json({ regionInfo: reply });
   } catch (error) {
     console.error("地域補完エラー:", error);
