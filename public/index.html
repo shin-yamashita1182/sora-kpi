@@ -46,7 +46,7 @@
     </aside>
 
     <!-- Main Content -->
-    <main class="flex-1 p-6 overflow-y-auto grid grid-cols-2 gap-6">
+    <main class="flex-1 p-6 overflow-y-auto grid grid-cols-1 md:grid-cols-2 gap-6">
       <!-- Chat Area -->
       <div class="col-span-2 bg-white p-4 rounded shadow">
         <h3 class="text-lg font-semibold mb-2">ChatGPT会話エリア</h3>
@@ -75,7 +75,7 @@
       <!-- Analysis -->
       <div class="col-span-2 bg-white p-4 rounded shadow">
         <h3 class="text-lg font-semibold mb-2">分析結果</h3>
-        <div class="grid grid-cols-3 gap-2">
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2">
           <div class="bg-gray-50 p-2 border border-gray-200 rounded text-sm">🟦 地域課題：高齢化、人口減少など</div>
           <div class="bg-gray-50 p-2 border border-gray-200 rounded text-sm">🟩 GPT分類：地域産業振興・観光開発</div>
           <div class="bg-gray-50 p-2 border border-gray-200 rounded text-sm">🟨 アクション例：空き家活用、Webプロモーション</div>
@@ -88,7 +88,7 @@
           🧠 SORA CANVAS - 分析展開セクション（クリックで展開）
         </h3>
         <div id="canvas-body" class="hidden">
-          <div class="grid grid-cols-3 gap-4 text-sm text-gray-700">
+          <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 text-sm text-gray-700">
             <div class="p-3 bg-gray-50 border rounded h-32 overflow-y-auto">
               <strong>地域課題 詳細：</strong><br>現在の人口構成は高齢化率34%を超え、地域サービス維持に支障が出始めています。
             </div>
@@ -103,7 +103,7 @@
       </div>
 
       <!-- Buttons -->
-      <div class="col-span-2 flex justify-end space-x-4">
+      <div class="col-span-2 flex flex-col sm:flex-row justify-end space-y-2 sm:space-y-0 sm:space-x-4">
         <button class="bg-green-500 text-white px-3 py-2 rounded hover:bg-green-600 text-sm">📄 PDF出力</button>
         <button class="bg-gray-500 text-white px-3 py-2 rounded hover:bg-gray-600 text-sm">💾 ログ保存</button>
       </div>
