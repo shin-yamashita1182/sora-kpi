@@ -1,7 +1,19 @@
-// script.js（GPTテスト分析用関数追加）
+// script.js（完全版・showSection + GPTテスト送信）
 
-// 既存関数群（autoCompleteなど）がある前提で、追記部分のみ示します。
+// 🔹 セクション表示切り替え関数（必須）
+function showSection(sectionId) {
+  document.querySelectorAll('.section').forEach(section => {
+    section.classList.remove('active');
+  });
+  const target = document.getElementById(sectionId);
+  if (target) {
+    target.classList.add('active');
+  } else {
+    console.warn("セクションが見つかりません:", sectionId);
+  }
+}
 
+// 🔹 GPTテスト送信関数（テスト分析欄）
 async function runGPTTest() {
   const input = document.getElementById("testInput").value;
   const responseDiv = document.getElementById("testResult");
@@ -20,3 +32,4 @@ async function runGPTTest() {
   }
 }
 
+// ✅ 今後ここに autoComplete や completeRegionFromZip など既存関数を追加できます
