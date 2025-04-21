@@ -162,3 +162,10 @@ button.delete-btn:hover {
   border: 1px solid #ccc;
   border-radius: 6px;
 }
+.section {
+  display: none;
+}
+
+.section.active {
+  display: block;
+}
