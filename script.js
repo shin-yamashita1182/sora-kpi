@@ -1,5 +1,4 @@
-
-// 🔹 セクション表示切り替え関数（メニュー切り替え用）
+// 🔹 セクション表示切り替え関数（メニュー用）
 function showSection(sectionId) {
   document.querySelectorAll('.section').forEach(section => {
     section.classList.remove('active');
@@ -31,7 +30,7 @@ async function runGPTTest() {
   }
 }
 
-// 🔹 郵便番号から地域名補完
+// 🔹 郵便番号から地域名補完（GPTへ中継）
 function completeRegionFromZip() {
   autoComplete();
 }
@@ -52,8 +51,9 @@ async function autoComplete() {
       body: JSON.stringify({ inputText: input })
     });
 
-    const raw = await res.text(); // 生のレスポンスをそのまま取得
+    const raw = await res.text(); // ← 生のレスポンスをそのまま取得
     alert("ChatGPT 応答（生データ）:\n" + raw);
+
   } catch (err) {
     console.error("autoComplete error:", err);
     alert("ChatGPT通信エラー");
@@ -63,10 +63,10 @@ async function autoComplete() {
   }
 }
 
-// 🔹 地域課題分類（BSCなど）
+// 🔹 地域課題分類（GPT・BSC分類モード）
 async function classifyKPI() {
-  const text = document.getElementById("freeText")?.value;
-  if (!text?.trim()) return alert("自由入力欄が空です");
+  const text = document.getElementById("freeText").value;
+  if (!text.trim()) return alert("自由入力欄が空です");
 
   const btn = document.getElementById("classifyBtn");
   btn.disabled = true;
@@ -90,7 +90,7 @@ async function classifyKPI() {
   }
 }
 
-// 🔹 地図表示用（中心座標とラベル付き）
+// 🔹 地図表示（OpenStreetMap + Leaflet）
 function showMap(lat, lng, label) {
   const mapDiv = document.getElementById("map");
   mapDiv.innerHTML = "<div id='mapInner'></div>";
@@ -101,7 +101,7 @@ function showMap(lat, lng, label) {
   L.marker([lat, lng]).addTo(map).bindPopup(label).openPopup();
 }
 
-// ✅ 関数をグローバル公開
+// ✅ HTML側から呼び出せるように関数をグローバル公開
 window.showSection = showSection;
 window.runGPTTest = runGPTTest;
 window.completeRegionFromZip = completeRegionFromZip;
