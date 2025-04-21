@@ -1,137 +1,74 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SORA GPT Interface</title>
-  <style>
-    body {
-      margin: 0;
-      padding: 0;
-      font-family: sans-serif;
-      background-color: #f5f5f5;
-      display: flex;
-      flex-direction: column;
-      height: 100vh;
-    }
-    header {
-      background-color: #1a1a1a;
-      color: white;
-      padding: 1rem;
-      font-size: 1.2rem;
-    }
-    main {
-      flex: 1;
-      padding: 1rem;
-      display: flex;
-      flex-direction: column;
-      gap: 1rem;
-      overflow-y: auto;
-    }
-    .chat-container {
-      flex: 1;
-      background: white;
-      border-radius: 8px;
-      padding: 1rem;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
-      overflow-y: auto;
-    }
-    .chat-message {
-      margin-bottom: 1rem;
-    }
-    .chat-message.user {
-      text-align: right;
-      color: #333;
-    }
-    .chat-message.bot {
-      text-align: left;
-      color: #007acc;
-    }
-    form {
-      display: flex;
-      padding: 1rem;
-      background: #fff;
-      border-top: 1px solid #ccc;
-      gap: 0.5rem;
-      flex-wrap: wrap;
-    }
-    input[type="text"] {
-      flex: 1 1 300px;
-      padding: 0.5rem;
-      font-size: 1rem;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-    }
-    button {
-      padding: 0.5rem 1rem;
-      font-size: 1rem;
-      background: #007acc;
-      color: white;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-    }
-  </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SORA KPI Dashboard</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 </head>
-<body>
-  <header>SORA GPT 対話型インターフェース</header>
-  <main>
-    <div class="chat-container" id="chat"></div>
-    <form id="chat-form">
-      <input type="text" id="user-input" placeholder="地域情報、課題、相談など何でもどうぞ...">
-      <button type="submit">送信</button>
-      <button type="button" id="region-button">地域情報を取得</button>
-    </form>
-  </main>
+<body class="bg-gray-100">
+  <div class="flex h-screen">
+    <!-- Optional Sidebar (履歴スタイルに変更) -->
+    <aside class="w-64 bg-white shadow-md p-4 overflow-y-auto">
+      <h2 class="text-xl font-bold mb-4">📂 履歴一覧</h2>
+      <ul class="space-y-2 text-sm text-blue-600">
+        <li class="hover:underline cursor-pointer">2025-04-21 地域課題（南足柄市）</li>
+        <li class="hover:underline cursor-pointer">2025-04-20 高原町 検討メモ</li>
+        <li class="hover:underline cursor-pointer">2025-04-18 小城市 議事録まとめ</li>
+        <li class="hover:underline cursor-pointer text-green-600 font-bold">＋ 新規作成...</li>
+      </ul>
+    </aside>
 
-  <script>
-    const form = document.getElementById('chat-form');
-    const input = document.getElementById('user-input');
-    const chat = document.getElementById('chat');
-    const regionButton = document.getElementById('region-button');
+    <!-- Main Content -->
+    <main class="flex-1 p-6 overflow-y-auto">
+      <!-- Top Section -->
+      <div class="grid grid-cols-3 gap-4 mb-6">
+        <div class="col-span-2 bg-white p-4 rounded shadow">
+          <h3 class="text-lg font-semibold mb-2">地域情報カード</h3>
+          <textarea placeholder="例：神奈川県南足柄市、人口、観光資源など..." class="w-full h-32 p-2 border border-gray-300 rounded"></textarea>
+        </div>
+        <div class="bg-white p-4 rounded shadow">
+          <h3 class="text-lg font-semibold mb-2">地図表示</h3>
+          <div class="w-full h-40 bg-gray-200 rounded flex items-center justify-center">Map Area</div>
+        </div>
+      </div>
 
-    form.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const userMessage = input.value;
-      if (!userMessage) return;
+      <!-- Middle Section -->
+      <div class="grid grid-cols-2 gap-4 mb-6">
+        <div class="bg-white p-4 rounded shadow">
+          <h3 class="text-lg font-semibold mb-2">ChatGPT会話エリア</h3>
+          <div class="h-48 overflow-y-auto bg-gray-50 p-2 border border-gray-200 rounded mb-4">
+            <p class="text-sm text-gray-700">SORA: こんにちは、地域の情報を教えてください。</p>
+          </div>
+          <!-- 会話の要点まとめ -->
+          <div class="bg-gray-100 p-3 rounded border border-gray-300 text-sm">
+            <p class="font-semibold text-gray-700 mb-1">💬 会話のポイント：</p>
+            <ul class="list-disc list-inside text-gray-600 space-y-1">
+              <li>地域名：南足柄市</li>
+              <li>課題認識：人口減少、観光資源の未活用</li>
+              <li>提案済み施策：Web集客、空き施設の利活用</li>
+            </ul>
+          </div>
+          <!-- ファイルアップロード -->
+          <div class="mt-4 p-4 bg-white border-2 border-dashed border-blue-400 rounded text-center cursor-pointer">
+            <p class="text-blue-600">📎 ファイルをここにドロップ、またはクリックしてアップロード</p>
+            <input type="file" class="w-full opacity-0 absolute inset-0 cursor-pointer" />
+          </div>
+        </div>
 
-      appendMessage('user', userMessage);
-      input.value = '';
+        <div class="bg-white p-4 rounded shadow">
+          <h3 class="text-lg font-semibold mb-2">分析結果</h3>
+          <div class="grid grid-cols-1 gap-2">
+            <div class="bg-gray-50 p-2 border border-gray-200 rounded text-sm">🟦 地域課題：高齢化、人口減少など</div>
+            <div class="bg-gray-50 p-2 border border-gray-200 rounded text-sm">🟩 GPT分類：地域産業振興・観光開発</div>
+            <div class="bg-gray-50 p-2 border border-gray-200 rounded text-sm">🟨 アクション例：空き家活用、Webプロモーション</div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
 
-      const response = await fetch('/api/chatgpt', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message: userMessage })
-      });
-
-      const data = await response.json();
-      appendMessage('bot', data.reply);
-    });
-
-    regionButton.addEventListener('click', async () => {
-      const userInput = input.value;
-      if (!userInput) return;
-
-      appendMessage('user', `[地域情報リクエスト] ${userInput}`);
-      input.value = '';
-
-      const response = await fetch('/api/region-info', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ zipOrRegion: userInput })
-      });
-
-      const data = await response.json();
-      appendMessage('bot', data.regionInfo);
-    });
-
-    function appendMessage(role, text) {
-      const div = document.createElement('div');
-      div.className = `chat-message ${role}`;
-      div.textContent = text;
-      chat.appendChild(div);
-      chat.scrollTop = chat.scrollHeight;
-    }
-  </script>
+  <!-- GPT連携スクリプト -->
+  <script src="script.js"></script>
 </body>
 </html>
