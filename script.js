@@ -1,5 +1,3 @@
-// script.js（完全版・showSection + GPTテスト送信）
-
 // 🔹 セクション表示切り替え関数（必須）
 function showSection(sectionId) {
   document.querySelectorAll('.section').forEach(section => {
@@ -32,4 +30,8 @@ async function runGPTTest() {
   }
 }
 
-// ✅ 今後ここに autoComplete や completeRegionFromZip など既存関数を追加できます
+// ✅ 関数をグローバル公開（HTMLから呼べるようにする）
+window.showSection = showSection;
+window.runGPTTest = runGPTTest;
+
+// ⬇️ 今後ここに autoComplete や completeRegionFromZip など追加可能
