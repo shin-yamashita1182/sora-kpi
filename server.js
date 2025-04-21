@@ -21,7 +21,7 @@ app.post('/api/completeRegion', async (req, res) => {
   }
 
   try {
-    const prompt = `${region}の地域課題について、簡潔に3点だけ箇条書きで示してください。`;
+    const prompt = `${region}の基本情報と地域課題について、簡潔に2～3点だけ箇条書きで示してください。`;
 
     const completion = await openai.createChatCompletion({
       model: 'gpt-3.5-turbo',
@@ -29,10 +29,10 @@ app.post('/api/completeRegion', async (req, res) => {
     });
 
     const summary = completion.data.choices[0].message.content;
-    res.json({ summary });
+    return res.json({ summary });
   } catch (error) {
     console.error('GPT Error:', error.message);
-    res.status(500).json({ error: 'GPTとの連携に失敗しました。' });
+    return res.status(500).json({ error: 'GPTとの連携に失敗しました。' });
   }
 });
 
