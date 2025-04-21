@@ -162,6 +162,8 @@ button.delete-btn:hover {
   border: 1px solid #ccc;
   border-radius: 6px;
 }
+
+/* 🔽 追加部分：セクションの表示制御 */
 .section {
   display: none;
 }
