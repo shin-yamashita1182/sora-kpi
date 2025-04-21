@@ -1,4 +1,3 @@
-<!-- index.html（テスト分析ブロック追加済） -->
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -29,11 +28,25 @@
         <li onclick="showSection('dashboard')">📊 KPIダッシュボード</li>
       </ul>
     </aside>
+
     <main class="main-content">
+      <!-- 地域情報入力 -->
       <section id="form" class="section active">
-        <!-- 地域情報入力（省略：既存構成をそのまま維持） -->
+        <h1>地域情報入力</h1>
+        <div class="top-bar">
+          <input type="text" id="zipcode" placeholder="郵便番号を入力（例: 8130017）" />
+          <input type="text" id="region" placeholder="地域名（例: 福岡市東区）" />
+          <button id="autoCompleteBtn" onclick="completeRegionFromZip()">⛅ 自動補完（GPT）</button>
+        </div>
+
+        <!-- 地図表示 -->
+        <div class="map-block">
+          <h3>🗺️ 地図表示</h3>
+          <div id="map" class="map-container"></div>
+        </div>
       </section>
 
+      <!-- 地域課題分析 -->
       <section id="analysis" class="section">
         <h1>地域課題分析</h1>
         <!-- GPTテスト分析ブロック -->
@@ -45,12 +58,16 @@
         </div>
       </section>
 
+      <!-- アクションプラン -->
       <section id="action" class="section">
-        <!-- アクションプラン（未実装OK） -->
+        <h1>アクションプラン</h1>
+        <!-- 実装は後で -->
       </section>
 
+      <!-- KPIダッシュボード -->
       <section id="dashboard" class="section">
-        <!-- KPIダッシュボード（未実装OK） -->
+        <h1>KPIダッシュボード</h1>
+        <!-- 実装は後で -->
       </section>
     </main>
   </div>
