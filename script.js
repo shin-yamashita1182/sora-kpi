@@ -1,4 +1,3 @@
-// 🔹 セクション表示切り替え関数
 function showSection(sectionId) {
   document.querySelectorAll('.section').forEach(section => {
     section.classList.remove('active');
@@ -6,36 +5,10 @@ function showSection(sectionId) {
   const target = document.getElementById(sectionId);
   if (target) {
     target.classList.add('active');
-  } else {
-    console.warn("セクションが見つかりません:", sectionId);
   }
 }
 
-// 🔹 GPTテスト送信関数（テスト分析欄）
-async function runGPTTest() {
-  const input = document.getElementById("testInput").value;
-  const responseDiv = document.getElementById("testResult");
-  responseDiv.textContent = "送信中...";
-
-  try {
-    const res = await fetch("/api/testGPT", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ message: input }),
-    });
-    const data = await res.json();
-    responseDiv.textContent = data.result || data.error || "応答なし";
-  } catch (e) {
-    responseDiv.textContent = "エラー: " + e.message;
-  }
-}
-
-// 🔹 郵便番号から地域名補完（GPTへ中継）
-function completeRegionFromZip() {
-  autoComplete();
-}
-
-// 🔹 地域名の自動補完（GPT）
+// 郵便番号または地域名で自動補完
 async function autoComplete() {
   const input = document.getElementById("zipcode")?.value || document.getElementById("region")?.value;
   if (!input) return alert("郵便番号または地域名を入力してください");
@@ -52,19 +25,42 @@ async function autoComplete() {
     });
 
     const raw = await res.text();
-    alert("ChatGPT 応答（生データ）:\n" + raw);
+    const data = JSON.parse(raw);
+
+    if (data.人口) document.getElementById("人口").textContent = data.人口;
+    if (data.主要産業) document.getElementById("主要産業").textContent = data.主要産業;
+    if (data.地域名) {
+      document.getElementById("地域名").textContent = data.地域名;
+      document.getElementById("region").value = data.地域名;
+    }
+
+    if (data.latitude && data.longitude) {
+      showMap(data.latitude, data.longitude, data.地域名 || input);
+    }
 
   } catch (err) {
-    console.error("autoComplete error:", err);
-    alert("ChatGPT通信エラー");
+    alert("エラー発生: " + err.message);
   } finally {
     btn.disabled = false;
     btn.textContent = "⛅ 自動補完（GPT）";
   }
 }
 
-// ✅ グローバル公開
+function completeRegionFromZip() {
+  autoComplete();
+}
+
+function showMap(lat, lng, label) {
+  const mapDiv = document.getElementById("map");
+  mapDiv.innerHTML = "<div id='mapInner'></div>";
+  const map = L.map("mapInner").setView([lat, lng], 11);
+  L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+    attribution: "© OpenStreetMap contributors"
+  }).addTo(map);
+  L.marker([lat, lng]).addTo(map).bindPopup(label).openPopup();
+}
+
 window.showSection = showSection;
-window.runGPTTest = runGPTTest;
-window.completeRegionFromZip = completeRegionFromZip;
 window.autoComplete = autoComplete;
+window.completeRegionFromZip = completeRegionFromZip;
+window.showMap = showMap;
