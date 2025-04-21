@@ -1,13 +1,13 @@
 {
   "functions": {
     "api/gpt-analyze.js": {
-      "runtime": "nodejs18.x"
+      "runtime": "nodejs18"
     },
     "api/chatgpt.js": {
-      "runtime": "nodejs18.x"
+      "runtime": "nodejs18"
     },
     "api/gpt-real.js": {
-      "runtime": "nodejs18.x"
+      "runtime": "nodejs18"
     }
   }
 }
