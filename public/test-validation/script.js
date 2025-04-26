@@ -8,7 +8,7 @@ const regionMaster = [
     "福岡県福岡市",
 ];
 
-// 地域名のバリデーション関数（部分一致＋複数マッチ制御版）
+// 地域名のバリデーション関数
 function validateRegionForTrigger(inputText) {
     inputText = inputText.trim().toLowerCase();
 
@@ -28,31 +28,20 @@ function validateRegionForTrigger(inputText) {
     }
 }
 
-// ChatGPT API連携用関数
+// ChatGPTサーバーAPIに問い合わせる関数
 async function callChatGPT(prompt) {
-    const apiKey = 'YOUR_API_KEY_HERE'; // ← ここにシンさんのOpenAI APIキーを入れてください！
-
-    const response = await fetch('https://api.openai.com/v1/chat/completions', {
+    const response = await fetch('/api/chatgpt', {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${apiKey}`
+            'Content-Type': 'application/json'
         },
-        body: JSON.stringify({
-            model: 'gpt-4', // 必要に応じて 'gpt-3.5-turbo' に変更可能
-            messages: [
-                { role: "system", content: "あなたは地域施策の専門家です。" },
-                { role: "user", content: prompt }
-            ],
-            max_tokens: 300
-        })
+        body: JSON.stringify({ prompt })
     });
 
     const data = await response.json();
-    console.log('ChatGPT応答:', data);
 
-    if (data.choices && data.choices.length > 0) {
-        return data.choices[0].message.content.trim();
+    if (data.result) {
+        return data.result;
     } else {
         throw new Error('GPT応答エラー');
     }
@@ -62,7 +51,7 @@ async function callChatGPT(prompt) {
 async function handleValidationAndTrigger() {
     const inputText = document.getElementById('regionInput').value;
     const resultArea = document.getElementById('resultArea');
-    resultArea.innerHTML = ''; // 初期化
+    resultArea.innerHTML = '';
 
     const validationResult = validateRegionForTrigger(inputText);
 
