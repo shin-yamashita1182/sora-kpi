@@ -1,4 +1,4 @@
-<!-- SORA Dashboard 改修版 index.html（施策マッチング結果エリアを追加＋script.js連携） -->
+<!-- SORA Dashboard 改修版（詳細モーダル対応） -->
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -54,6 +54,15 @@
                 <div class="canvas-placeholder">ここにキャンバス分析結果を展開</div>
             </section>
         </main>
+    </div>
+
+    <!-- モーダルウィンドウ -->
+    <div id="detailModal" class="modal" style="display:none;">
+        <div class="modal-content">
+            <span class="close-button" id="closeModal">&times;</span>
+            <h2 id="modalTitle">施策詳細</h2>
+            <p id="modalBody">ここに施策の詳細が表示されます。</p>
+        </div>
     </div>
 
     <footer>
