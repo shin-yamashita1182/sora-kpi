@@ -1,4 +1,4 @@
-// script.js - SORA課題抽出→施策マッチング連携（詳細モーダル対応）
+// script.js - SORA課題抽出→施策マッチング連携（詳細モーダル対応版 完全版）
 document.addEventListener("DOMContentLoaded", () => {
   const generateBtn = document.getElementById("generateBtn");
   const resultsContainer = document.getElementById("resultsContainer");
@@ -8,10 +8,6 @@ document.addEventListener("DOMContentLoaded", () => {
   const closeModal = document.getElementById("closeModal");
 
   generateBtn.addEventListener("click", () => {
-    const region = document.getElementById("regionName").value;
-    const category = document.getElementById("category").value;
-    const note = document.getElementById("userNote").value;
-
     const mockResults = [
       {
         title: "【戦略目標】観光資源活用",
