@@ -1,19 +1,41 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-    <meta charset="UTF-8">
-    <title>地域バリデーションテスト</title>
-    <script defer src="script.js"></script>
+  <meta charset="UTF-8">
+  <title>地域バリデーション＆トリガーテスト（拡張版）</title>
 </head>
 <body>
-    <h1>地域バリデーション ＆ トリガーテスト</h1>
 
-    <div id="validationSection" style="margin-bottom:20px;">
-        <input type="text" id="regionInput" placeholder="地域名を入力" style="width:300px; padding:8px;">
-        <button onclick="handleValidationAndTrigger()" style="padding:8px 16px;">チェック</button>
-    </div>
+  <h1>地域バリデーション ＆ トリガーテスト</h1>
 
-    <div id="resultArea" style="margin-top:20px; font-size:16px;"></div>
+  <!-- ✅ そのまま維持する入力ボックス＋チェックボタン -->
+  <input type="text" id="regionInput" placeholder="インサイト対象を記述" style="width:300px; padding:8px;">
+  <button onclick="handleValidationAndTrigger()">チェック</button>
+
+  <!-- ✅ 応答結果エリア（カード形式） -->
+  <div id="gptResponseCard" style="margin-top:20px; padding:15px; border:1px solid #ccc; border-radius:8px;">
+    <strong>提案施策：</strong>
+    <div id="resultArea"></div> <!-- 元々の応答出力エリア -->
+  </div>
+
+  <!-- ✅ 観光分類セレクトボックス -->
+  <div style="margin-top:30px;">
+    <label for="categorySelect"><strong>地域分類選択：</strong></label>
+    <select id="categorySelect" style="padding:8px;">
+      <option value="観光型">観光型</option>
+      <option value="交流型">交流型</option>
+      <option value="デジタル推進型">デジタル推進型</option>
+      <option value="移住促進型">移住促進型</option>
+    </select>
+  </div>
+
+  <!-- ✅ ファイルアップロードエリア -->
+  <div style="margin-top:20px;">
+    <label for="fileUpload"><strong>資料アップロード：</strong></label>
+    <input type="file" id="fileUpload">
+  </div>
+
+  <script src="script.js"></script> <!-- ✅ 元のscript.jsをそのまま読み込む -->
 
 </body>
 </html>
