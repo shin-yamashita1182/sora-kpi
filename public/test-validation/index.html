@@ -2,18 +2,45 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <title>地域バリデーションテスト</title>
+    <title>地域インサイトラボ｜SORA Dashboard</title>
     <script defer src="script.js"></script>
 </head>
 <body>
-    <h1>地域バリデーション ＆ トリガーテスト</h1>
+    <h1>地域インサイトラボ - 地域情報入力＆未来施策生成</h1>
 
-    <div id="validationSection" style="margin-bottom:20px;">
-        <input type="text" id="regionInput" placeholder="地域名を入力" style="width:300px; padding:8px;">
-        <button onclick="handleValidationAndTrigger()" style="padding:8px 16px;">チェック</button>
-    </div>
+    <!-- Aエリア：地域情報入力 -->
+    <section id="region-input" style="margin-bottom: 40px;">
+        <h2>地域情報入力</h2>
+        <input type="text" id="regionNameInput" placeholder="地域名を入力" style="width:300px; padding:8px;"><br><br>
 
-    <div id="resultArea" style="margin-top:20px; font-size:16px;"></div>
+        <label>地域分類:</label>
+        <select id="regionTypeSelect" style="width:320px; padding:8px;">
+            <option value="観光型">観光型</option>
+            <option value="離島型">離島型</option>
+            <option value="中山間地域型">中山間地域型</option>
+            <option value="都市型">都市型</option>
+        </select><br><br>
+
+        <input type="file" id="regionFileUpload" style="margin-top:10px;"><br><br>
+
+        <button onclick="saveRegionInfo()" style="padding:8px 16px;">地域情報を保存する</button>
+    </section>
+
+    <hr>
+
+    <!-- Bエリア：地域インサイトラボ -->
+    <section id="insight-lab" style="margin-top:40px;">
+        <h2>地域インサイトラボ</h2>
+        <textarea id="freeInput" rows="5" cols="50" placeholder="地域への想いや課題を書いてください" style="padding:8px;"></textarea><br><br>
+
+        <button onclick="generateInsight()" style="padding:8px 16px;">地域インサイトを生成する</button>
+
+        <h3>ChatGPT応答（第1トリガー）:</h3>
+        <div id="firstTriggerOutput" style="margin: 10px 0; padding: 10px; border: 1px solid #ccc;"></div>
+
+        <h3>フィルタリング後（第2トリガー施策候補）:</h3>
+        <div id="secondTriggerOutput" style="margin: 10px 0; padding: 10px; border: 1px solid #ccc;"></div>
+    </section>
 
 </body>
 </html>
