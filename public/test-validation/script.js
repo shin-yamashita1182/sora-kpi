@@ -17,7 +17,7 @@ function saveRegionInfo() {
 }
 
 // --------------------
-// 地域インサイト生成処理（ChatGPT接続）
+// 地域インサイト生成処理（ChatGPT正式接続版）
 // --------------------
 async function generateInsight() {
     const freeInput = document.getElementById('freeInput').value.trim();
@@ -28,14 +28,14 @@ async function generateInsight() {
     }
 
     try {
-        // ChatGPT APIへのリクエスト送信（エンドポイント確認要）
+        // ✅ ここが本番版エンドポイント！
         const response = await fetch('/api/chatgpt', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                message: freeInput
+                regionName: freeInput // ✅ 必ず「regionName」キーで送る（バリデ版に合わせた）
             })
         });
 
@@ -44,13 +44,12 @@ async function generateInsight() {
         }
 
         const data = await response.json();
-
         console.log("ChatGPT応答:", data);
-        
-        // 第1トリガー出力
+
+        // 第1トリガー応答出力
         document.getElementById('firstTriggerOutput').innerText = data.text || "応答がありませんでした。";
 
-        // 次にフィルタリング処理へ
+        // フィルタリング処理を呼び出す
         filterWithMasterData(data.text);
 
     } catch (error) {
@@ -68,13 +67,12 @@ function filterWithMasterData(gptResponseText) {
         return;
     }
 
-    // 仮マスターデータ（静的）
+    // 仮マスターデータ（本番では拡張予定）
     const masterData = [
         { keyword: '観光資源', title: '観光資源活用プロジェクト' },
         { keyword: '地域交流', title: '地域交流拠点整備' },
         { keyword: 'デジタル化', title: '地域デジタル化推進' },
         { keyword: '移住促進', title: '移住促進キャンペーン' }
-        // ※必要に応じて拡張
     ];
 
     let matched = [];
