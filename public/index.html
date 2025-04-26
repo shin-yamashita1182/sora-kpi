@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>SORA Dashboard Refine</title>
   <link rel="stylesheet" href="style.css">
-  <script defer src="script.js"></script>
 </head>
 <body>
   <header>
@@ -31,8 +30,15 @@
             <input id="regionName" type="text" placeholder="地域名を入力">
             <select id="category">
               <option>観光型</option>
-              <option>都市型</option>
               <option>離島型</option>
+              <option>中山間地域型</option>
+              <option>都市型</option>
+              <option>高齢化重点地域型</option>
+              <option>子育て・定住型</option>
+              <option>移住促進重点型</option>
+              <option>観光×農業ハイブリッド型</option>
+              <option>防災・災害対策型</option>
+              <option>デジタル活用先進地域型</option>
             </select>
             <textarea id="userNote" placeholder="自己紹介や希望を書いてください"></textarea>
             <div class="file-upload-wrapper">
@@ -81,5 +87,10 @@
   <footer>
     <p>&copy; 2025 SORA Project</p>
   </footer>
+
+  <!-- スクリプト読み込み -->
+  <script src="script_base.js" defer></script>
+  <script src="script_kankou.js" defer></script>
+
 </body>
 </html>
