@@ -1,123 +1,78 @@
-
+<!-- SORA Dashboard 改修版 index.html（施策マッチング結果エリアを追加） -->
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>MFAS Dashboard by Metahighway</title>
-  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-  <script>
-    function toggleCanvas() {
-      const canvas = document.getElementById('canvas-body');
-      canvas.classList.toggle('hidden');
-    }
-  </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SORA Dashboard Refine</title>
+    <link rel="stylesheet" href="style.css">
 </head>
-<body class="bg-gray-100">
-  <header class="flex items-center justify-between px-6 py-3 bg-white shadow">
-    <div class="flex flex-col sm:flex-row items-start sm:items-center space-y-2 sm:space-y-0 sm:space-x-4">
-      <img src="/images/logo.png" alt="MFAS Logo" class="h-16">
-      <div>
-        <h1 class="text-xl font-bold text-gray-800 leading-none">MFAS DASHBOARD</h1>
-        <p class="text-sm text-gray-500 leading-tight">by Metahighway</p>
-      </div>
+<body>
+    <header>
+        <div class="logo">SORA Dashboard</div>
+        <div class="user-info">ユーザー情報 ▼</div>
+    </header>
+
+    <div class="container">
+        <aside class="sidebar">
+            <h2>履歴一覧</h2>
+            <ul>
+                <li>履歴1</li>
+                <li>履歴2</li>
+                <li>履歴3</li>
+            </ul>
+        </aside>
+
+        <main class="main-content">
+            <section class="input-section">
+                <h2>地域情報入力</h2>
+                <!-- 地域名・分類・関心分野など入力エリア -->
+                <input type="text" placeholder="地域名を入力">
+                <select>
+                    <option>観光型</option>
+                    <option>都市型</option>
+                    <option>離島型</option>
+                </select>
+                <textarea placeholder="自己紹介や希望を書いてください"></textarea>
+                <button>課題を抽出する</button>
+            </section>
+
+            <section class="results-section">
+                <h2>施策・KPIマッチング結果</h2>
+                <!-- ここがChatGPTエリア改造後の新エリア -->
+                <div class="card">
+                    <h3>【戦略目標】観光資源活用</h3>
+                    <p>【施策案】観光アクセス改善プロジェクト</p>
+                    <p>【KPI】観光客数20%UP</p>
+                    <p>【実行体】自治体＋地元企業</p>
+                    <button>保存</button> <button>詳細</button> <button>比較</button>
+                </div>
+                <div class="card">
+                    <h3>【戦略目標】人口減少対策</h3>
+                    <p>【施策案】IT技術学習プログラム</p>
+                    <p>【KPI】20代移住者増加5%</p>
+                    <p>【実行体】地域企業連携協議会</p>
+                    <button>保存</button> <button>詳細</button> <button>比較</button>
+                </div>
+            </section>
+
+            <section class="map-section">
+                <h2>地図表示エリア</h2>
+                <!-- 地図埋め込み（仮） -->
+                <div class="map-placeholder">ここに地図を表示</div>
+            </section>
+
+            <section class="canvas-section">
+                <h2>SORA CANVAS（分析セクション）</h2>
+                <!-- 分析結果や展開チャートエリア -->
+                <div class="canvas-placeholder">ここにキャンバス分析結果を展開</div>
+            </section>
+
+        </main>
     </div>
-    
-<div class="ml-auto flex items-center space-x-2 relative">
-  <img id="user-icon" src="https://ui-avatars.com/api/?name=User&background=eee&color=555" class="h-8 w-8 rounded-full cursor-pointer" />
-  <div id="user-dropdown" class="absolute right-0 top-10 mt-2 w-48 bg-white border border-gray-200 rounded shadow-lg z-50 hidden">
-    <div class="px-4 py-2 text-sm text-gray-700 border-b">ユーザー情報は未登録です</div>
-    <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">設定</a>
-    <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">履歴</a>
-    <a href="#" class="block px-4 py-2 text-sm text-red-600 hover:bg-red-100 border-t">ログアウト</a>
-  </div>
-</div>
 
-  </header>
-
-  <div class="flex h-[calc(100vh-64px)]">
-    <!-- Sidebar -->
-    <aside class="w-64 bg-white shadow-md p-4 overflow-y-auto flex flex-col justify-between">
-      <div>
-        <h2 class="text-xl font-bold mb-4">📂 履歴一覧</h2>
-        <ul class="space-y-2 text-sm text-blue-600">
-          <li class="hover:underline cursor-pointer">2025-04-21 地域課題（南足柄市）</li>
-          <li class="hover:underline cursor-pointer">2025-04-20 高原町 検討メモ</li>
-          <li class="hover:underline cursor-pointer">2025-04-18 小城市 議事録まとめ</li>
-          <li class="hover:underline cursor-pointer text-green-600 font-bold">＋ 新規作成...</li>
-        </ul>
-      </div>
-      
-      <div class="text-xs text-gray-400 text-left mt-auto pt-4">SORA-AI Dashboard ver 1.1</div>
-</aside>
-
-    <!-- Main Content -->
-    <main class="flex-1 p-6 overflow-y-auto grid grid-cols-1 md:grid-cols-2 gap-6">
-      <!-- Chat Area -->
-      <div class="col-span-2 bg-white p-4 rounded shadow">
-        <h3 class="text-lg font-semibold mb-2">ChatGPT会話エリア</h3>
-        <div id="chat-area" class="h-40 overflow-y-auto bg-gray-50 p-2 border border-gray-200 rounded mb-2">
-          <p class="text-sm text-gray-700">SORA: こんにちは、地域の情報を教えてください。</p>
-        </div>
-        <div class="flex items-center space-x-2 mb-2">
-          <button id="mic-button" class="text-gray-600 hover:text-blue-600">🎤</button>
-          <textarea id="gpt-input" placeholder="ここに入力して Enter で送信..." class="flex-1 h-16 p-2 border border-gray-300 rounded"></textarea>
-          <button id="send-button" class="bg-blue-500 text-white px-4 py-2 rounded">送信</button>
-        </div>
-      </div>
-
-      <!-- Region Info -->
-      <div class="bg-white p-4 rounded shadow">
-        <h3 class="text-lg font-semibold mb-2">地域情報カード</h3>
-        <textarea id="region-card" placeholder="例：長崎県島原市、人口、観光資源など..." class="w-full h-40 p-2 border border-gray-300 rounded"></textarea>
-      </div>
-
-      <!-- Map -->
-      <div class="bg-white p-4 rounded shadow">
-        <h3 class="text-lg font-semibold mb-2">地図表示</h3>
-        <div class="h-48 bg-gray-100 border border-gray-300 rounded flex items-center justify-center">Map Area</div>
-      </div>
-
-      <!-- Analysis -->
-      <div class="col-span-2 bg-white p-4 rounded shadow">
-        <h3 class="text-lg font-semibold mb-2">分析結果</h3>
-        <div class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">
-          <div class="bg-gray-50 p-2 border border-gray-200 rounded text-sm">🟦 地域課題：高齢化、人口減少など</div>
-          <div class="bg-gray-50 p-2 border border-gray-200 rounded text-sm">🟩 GPT分類：地域産業振興・観光開発</div>
-          <div class="bg-gray-50 p-2 border border-gray-200 rounded text-sm">🟨 アクション例：空き家活用、Webプロモーション</div>
-        </div>
-      </div>
-
-      <!-- SORA CANVAS -->
-      <div class="col-span-2 bg-white p-4 rounded shadow border border-blue-100">
-        <h3 onclick="toggleCanvas()" class="text-lg font-semibold text-blue-700 mb-3 cursor-pointer">
-          🧠 SORA CANVAS - 分析展開セクション（クリックで展開）
-        </h3>
-        <div id="canvas-body" class="hidden">
-          <div class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 text-sm text-gray-700">
-            <div class="p-3 bg-gray-50 border rounded h-32 overflow-y-auto">
-              <strong>地域課題 詳細：</strong><br>現在の人口構成は高齢化率34%を超え、地域サービス維持に支障が出始めています。
-            </div>
-            <div class="p-3 bg-gray-50 border rounded h-32 overflow-y-auto">
-              <strong>GPT分類 詳細：</strong><br>農業と観光資源の連携による産業構造の強化施策を提案中。
-            </div>
-            <div class="p-3 bg-gray-50 border rounded h-32 overflow-y-auto">
-              <strong>アクション例 詳細：</strong><br>空き家のコミュニティ利用、地域Webプロモーションの実証実験が進行中。
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Buttons -->
-      <div class="col-span-2 flex flex-col sm:flex-row justify-end space-y-4 sm:space-y-0 sm:space-x-4">
-        <button class="bg-green-500 text-white px-3 py-2 rounded hover:bg-green-600 text-sm">📄 PDF出力</button>
-        <button class="bg-gray-500 text-white px-3 py-2 rounded hover:bg-gray-600 text-sm">💾 ログ保存</button>
-      </div>
-    </main>
-  </div>
-
-  <script src="script.js"></script>
+    <footer>
+        <p>&copy; 2025 SORA Project</p>
+    </footer>
 </body>
 </html>
