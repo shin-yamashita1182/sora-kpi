@@ -1,3 +1,4 @@
+
 body {
     font-family: 'Segoe UI', sans-serif;
     background-color: #f8f9fa;
@@ -131,38 +132,16 @@ footer {
     cursor: pointer;
 }
 
-/* ▼▼▼ここから新しく追加した施策KPI・比較リスト4列レイアウト！▼▼▼ */
-
-/* 施策・KPIマッチング結果と比較リストを4列並びにする */
-#resultsContainer,
-#compareListContainer {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 16px;
-    margin-top: 15px;
+/* ▼ 削除ボタン（赤）スタイル */
+.remove-btn {
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    padding: 6px 10px;
+    border-radius: 4px;
+    cursor: pointer;
 }
 
-/* 各カードのデザイン統一 */
-#resultsContainer .card,
-#compareListContainer .card {
-    background-color: #f8f9fa;
-    border: 1px solid #ced4da;
-    border-radius: 8px;
-    padding: 15px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-}
-
-/* レスポンシブ対応（スマホ・タブレット用） */
-@media (max-width: 768px) {
-    #resultsContainer,
-    #compareListContainer {
-        grid-template-columns: repeat(2, 1fr);
-    }
-}
-
-@media (max-width: 480px) {
-    #resultsContainer,
-    #compareListContainer {
-        grid-template-columns: 1fr;
-    }
+.remove-btn:hover {
+    background-color: #b02a37;
 }
