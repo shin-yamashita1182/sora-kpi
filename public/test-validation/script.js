@@ -17,7 +17,7 @@ function saveRegionInfo() {
 }
 
 // --------------------
-// 地域インサイト生成処理（ChatGPT正式連携版）
+// 地域インサイト生成処理（最終動作版合わせ）
 // --------------------
 async function generateInsight() {
     const freeInput = document.getElementById('freeInput').value.trim();
@@ -34,7 +34,7 @@ async function generateInsight() {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                regionName: freeInput // ✅ 必ず regionNameキーで送る（サーバー期待通り！）
+                regionName: freeInput  // ✅ regionNameキーだけで送信（動作版と完全一致）
             })
         });
 
@@ -66,7 +66,7 @@ function filterWithMasterData(gptResponseText) {
         return;
     }
 
-    // 仮マスターデータ（本番では拡張予定）
+    // 仮マスターデータ（後で拡張）
     const masterData = [
         { keyword: '観光資源', title: '観光資源活用プロジェクト' },
         { keyword: '地域交流', title: '地域交流拠点整備' },
