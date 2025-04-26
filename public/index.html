@@ -1,78 +1,96 @@
-<!-- SORA Dashboard 改修版 index.html（施策マッチング結果エリアを追加） -->
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SORA Dashboard Refine</title>
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
-    <header>
-        <div class="logo">SORA Dashboard</div>
-        <div class="user-info">ユーザー情報 ▼</div>
-    </header>
 
-    <div class="container">
-        <aside class="sidebar">
-            <h2>履歴一覧</h2>
-            <ul>
-                <li>履歴1</li>
-                <li>履歴2</li>
-                <li>履歴3</li>
-            </ul>
-        </aside>
+body {
+    font-family: 'Segoe UI', sans-serif;
+    background-color: #f8f9fa;
+    margin: 0;
+    padding: 0;
+}
 
-        <main class="main-content">
-            <section class="input-section">
-                <h2>地域情報入力</h2>
-                <!-- 地域名・分類・関心分野など入力エリア -->
-                <input type="text" placeholder="地域名を入力">
-                <select>
-                    <option>観光型</option>
-                    <option>都市型</option>
-                    <option>離島型</option>
-                </select>
-                <textarea placeholder="自己紹介や希望を書いてください"></textarea>
-                <button>課題を抽出する</button>
-            </section>
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: white;
+    padding: 10px 20px;
+    border-bottom: 1px solid #dee2e6;
+}
 
-            <section class="results-section">
-                <h2>施策・KPIマッチング結果</h2>
-                <!-- ここがChatGPTエリア改造後の新エリア -->
-                <div class="card">
-                    <h3>【戦略目標】観光資源活用</h3>
-                    <p>【施策案】観光アクセス改善プロジェクト</p>
-                    <p>【KPI】観光客数20%UP</p>
-                    <p>【実行体】自治体＋地元企業</p>
-                    <button>保存</button> <button>詳細</button> <button>比較</button>
-                </div>
-                <div class="card">
-                    <h3>【戦略目標】人口減少対策</h3>
-                    <p>【施策案】IT技術学習プログラム</p>
-                    <p>【KPI】20代移住者増加5%</p>
-                    <p>【実行体】地域企業連携協議会</p>
-                    <button>保存</button> <button>詳細</button> <button>比較</button>
-                </div>
-            </section>
+.logo {
+    font-weight: bold;
+    font-size: 20px;
+}
 
-            <section class="map-section">
-                <h2>地図表示エリア</h2>
-                <!-- 地図埋め込み（仮） -->
-                <div class="map-placeholder">ここに地図を表示</div>
-            </section>
+.user-info {
+    font-size: 14px;
+}
 
-            <section class="canvas-section">
-                <h2>SORA CANVAS（分析セクション）</h2>
-                <!-- 分析結果や展開チャートエリア -->
-                <div class="canvas-placeholder">ここにキャンバス分析結果を展開</div>
-            </section>
+.container {
+    display: flex;
+}
 
-        </main>
-    </div>
+.sidebar {
+    width: 240px;
+    background-color: #ffffff;
+    border-right: 1px solid #dee2e6;
+    padding: 20px;
+}
 
-    <footer>
-        <p>&copy; 2025 SORA Project</p>
-    </footer>
-</body>
-</html>
+.main-content {
+    flex-grow: 1;
+    padding: 20px;
+}
+
+.input-section,
+.results-section,
+.map-section,
+.canvas-section {
+    background-color: #ffffff;
+    border: 1px solid #dee2e6;
+    border-radius: 5px;
+    padding: 15px;
+    margin-bottom: 20px;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+}
+
+.card {
+    background-color: #f1f3f5;
+    padding: 15px;
+    margin-bottom: 15px;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+}
+
+.card h3 {
+    margin-top: 0;
+}
+
+button {
+    background-color: #007bff;
+    color: white;
+    padding: 6px 12px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-right: 8px;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+footer {
+    text-align: center;
+    font-size: 12px;
+    color: #6c757d;
+    padding: 15px 0;
+    border-top: 1px solid #dee2e6;
+}
+
+.map-placeholder, .canvas-placeholder {
+    height: 200px;
+    background-color: #e9ecef;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #6c757d;
+}
