@@ -2,6 +2,11 @@ document.addEventListener('DOMContentLoaded', () => {
   const modal = document.getElementById("detailModal");
   const modalBody = document.getElementById("modalBody");
   const closeBtn = document.getElementById("closeModal");
+
+  const mapModal = document.getElementById("mapModal");
+  const mapModalBody = document.getElementById("mapModalBody");
+  const closeMapBtn = document.getElementById("closeMapModal");
+
   const compareListContainer = document.getElementById("compareListContainer");
 
   const demoData = [
@@ -106,7 +111,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // 削除処理
   compareListContainer.addEventListener('click', (event) => {
     if (event.target.classList.contains('remove-btn')) {
       const card = event.target.closest('.card');
@@ -114,7 +118,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // モーダル閉じる処理
   closeBtn.addEventListener('click', () => {
     modal.style.display = "none";
   });
@@ -123,14 +126,20 @@ document.addEventListener('DOMContentLoaded', () => {
     if (event.target === modal) {
       modal.style.display = "none";
     }
+    if (event.target === mapModal) {
+      mapModal.style.display = "none";
+    }
   });
 
-  // 出力ボタン（今は仮）
-  const exportBtn = document.createElement('button');
-  exportBtn.textContent = "比較リストを出力";
-  exportBtn.style.marginTop = "10px";
-  exportBtn.onclick = () => {
-    alert("将来的にPDF出力されます（現在は仮のボタンです）");
-  };
-  compareListContainer.parentNode.appendChild(exportBtn);
+  // ミニマップクリックで拡大モーダルを表示
+  const miniMap = document.getElementById('miniMap');
+  miniMap.addEventListener('click', () => {
+    mapModalBody.innerHTML = "<div style='width: 100%; height: 400px; background-color: #cce5ff; display: flex; align-items: center; justify-content: center;'>拡大地図エリア</div>";
+    mapModal.style.display = "block";
+  });
+
+  // 地図モーダルを閉じる
+  closeMapBtn.addEventListener('click', () => {
+    mapModal.style.display = "none";
+  });
 });

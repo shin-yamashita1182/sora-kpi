@@ -53,6 +53,46 @@ header {
     box-shadow: 0 1px 2px rgba(0,0,0,0.05);
 }
 
+.input-map-wrapper {
+    display: flex;
+    gap: 20px;
+}
+
+.input-fields {
+    flex: 2;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.input-fields input,
+.input-fields select,
+.input-fields textarea {
+    height: 40px;
+    font-size: 16px;
+    padding: 8px;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+}
+
+.input-fields textarea {
+    height: 100px;
+    resize: vertical;
+}
+
+.mini-map {
+    flex: 1;
+    min-width: 250px;
+    min-height: 200px;
+    background-color: #e9ecef;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #6c757d;
+    cursor: pointer;
+    border-radius: 8px;
+}
+
 .card {
     background-color: #f1f3f5;
     padding: 15px;
@@ -79,6 +119,19 @@ button:hover {
     background-color: #0056b3;
 }
 
+.remove-btn {
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    padding: 6px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.remove-btn:hover {
+    background-color: #b02a37;
+}
+
 footer {
     text-align: center;
     font-size: 12px;
@@ -96,7 +149,6 @@ footer {
     color: #6c757d;
 }
 
-/* モーダルスタイル */
 .modal {
     display: none;
     position: fixed;
@@ -111,10 +163,10 @@ footer {
 
 .modal-content {
     background-color: #fff;
-    margin: 10% auto;
+    margin: 5% auto;
     padding: 20px;
     border: 1px solid #888;
-    width: 50%;
+    width: 80%;
     border-radius: 8px;
 }
 
@@ -132,21 +184,7 @@ footer {
     cursor: pointer;
 }
 
-/* 削除ボタン（赤） */
-.remove-btn {
-    background-color: #dc3545;
-    color: white;
-    border: none;
-    padding: 6px 10px;
-    border-radius: 4px;
-    cursor: pointer;
-}
-
-.remove-btn:hover {
-    background-color: #b02a37;
-}
-
-/* 横並びレイアウト復活 */
+/* 横並びレイアウト */
 #resultsContainer,
 #compareListContainer {
     display: grid;

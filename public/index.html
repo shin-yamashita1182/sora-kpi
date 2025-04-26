@@ -26,14 +26,19 @@
     <main class="main-content">
       <section class="input-section">
         <h2>地域情報入力</h2>
-        <input id="regionName" type="text" placeholder="地域名を入力">
-        <select id="category">
-          <option>観光型</option>
-          <option>都市型</option>
-          <option>離島型</option>
-        </select>
-        <textarea id="userNote" placeholder="自己紹介や希望を書いてください"></textarea>
-        <button id="generateBtn">課題を抽出する</button>
+        <div class="input-map-wrapper">
+          <div class="input-fields">
+            <input id="regionName" type="text" placeholder="地域名を入力">
+            <select id="category">
+              <option>観光型</option>
+              <option>都市型</option>
+              <option>離島型</option>
+            </select>
+            <textarea id="userNote" placeholder="自己紹介や希望を書いてください"></textarea>
+            <button id="generateBtn">課題を抽出する</button>
+          </div>
+          <div class="mini-map" id="miniMap">地図表示エリア</div>
+        </div>
       </section>
 
       <section class="results-section">
@@ -50,11 +55,6 @@
         </div>
       </section>
 
-      <section class="map-section">
-        <h2>地図表示エリア</h2>
-        <div class="map-placeholder">ここに地図を表示</div>
-      </section>
-
       <section class="canvas-section">
         <h2>SORA CANVAS（分析セクション）</h2>
         <div class="canvas-placeholder">ここにキャンバス分析結果を展開</div>
@@ -62,11 +62,18 @@
     </main>
   </div>
 
-  <!-- ▼詳細モーダル追加 -->
+  <!-- モーダル（詳細＋地図拡大用） -->
   <div id="detailModal" class="modal">
     <div class="modal-content">
       <span class="close-button" id="closeModal">&times;</span>
       <div id="modalBody"></div>
+    </div>
+  </div>
+
+  <div id="mapModal" class="modal">
+    <div class="modal-content">
+      <span class="close-button" id="closeMapModal">&times;</span>
+      <div id="mapModalBody">拡大地図表示</div>
     </div>
   </div>
 
