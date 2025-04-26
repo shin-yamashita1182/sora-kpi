@@ -17,7 +17,7 @@ function saveRegionInfo() {
 }
 
 // --------------------
-// 地域インサイト生成処理（ChatGPT正式接続版）
+// 地域インサイト生成処理（ChatGPT正式連携版）
 // --------------------
 async function generateInsight() {
     const freeInput = document.getElementById('freeInput').value.trim();
@@ -28,14 +28,13 @@ async function generateInsight() {
     }
 
     try {
-        // ✅ ここが本番版エンドポイント！
         const response = await fetch('/api/chatgpt', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                regionName: freeInput // ✅ 必ず「regionName」キーで送る（バリデ版に合わせた）
+                regionName: freeInput // ✅ 必ず regionNameキーで送る（サーバー期待通り！）
             })
         });
 
@@ -46,7 +45,7 @@ async function generateInsight() {
         const data = await response.json();
         console.log("ChatGPT応答:", data);
 
-        // 第1トリガー応答出力
+        // 第1トリガー応答表示
         document.getElementById('firstTriggerOutput').innerText = data.text || "応答がありませんでした。";
 
         // フィルタリング処理を呼び出す
