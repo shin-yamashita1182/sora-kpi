@@ -35,6 +35,10 @@
               <option>離島型</option>
             </select>
             <textarea id="userNote" placeholder="自己紹介や希望を書いてください"></textarea>
+            <div class="file-upload-wrapper">
+              <input type="file" id="fileInput" accept=".txt,.pdf,.docx">
+              <span id="fileNameDisplay">ファイルを選択してください</span>
+            </div>
             <button id="generateBtn">課題を抽出する</button>
           </div>
           <div class="mini-map" id="miniMap">地図表示エリア</div>
@@ -44,14 +48,12 @@
       <section class="results-section">
         <h2>施策・KPIマッチング結果</h2>
         <div id="resultsContainer" class="card-container">
-          <!-- ここにカードが追加されます -->
         </div>
       </section>
 
       <section class="compare-section">
         <h2>比較リスト</h2>
         <div id="compareListContainer" class="card-container">
-          <!-- ここに比較カードが追加されます -->
         </div>
       </section>
 
@@ -62,7 +64,6 @@
     </main>
   </div>
 
-  <!-- モーダル（詳細＋地図拡大用） -->
   <div id="detailModal" class="modal">
     <div class="modal-content">
       <span class="close-button" id="closeModal">&times;</span>

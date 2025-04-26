@@ -43,7 +43,6 @@ header {
 .input-section,
 .results-section,
 .compare-section,
-.map-section,
 .canvas-section {
     background-color: #ffffff;
     border: 1px solid #dee2e6;
@@ -78,6 +77,21 @@ header {
 .input-fields textarea {
     height: 100px;
     resize: vertical;
+}
+
+.file-upload-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.file-upload-wrapper input[type="file"] {
+    height: 40px;
+}
+
+.file-upload-wrapper span {
+    font-size: 14px;
+    color: #6c757d;
 }
 
 .mini-map {
@@ -184,7 +198,6 @@ footer {
     cursor: pointer;
 }
 
-/* 横並びレイアウト */
 #resultsContainer,
 #compareListContainer {
     display: grid;

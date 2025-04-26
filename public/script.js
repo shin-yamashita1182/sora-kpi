@@ -122,6 +122,10 @@ document.addEventListener('DOMContentLoaded', () => {
     modal.style.display = "none";
   });
 
+  closeMapBtn.addEventListener('click', () => {
+    mapModal.style.display = "none";
+  });
+
   window.addEventListener('click', (event) => {
     if (event.target === modal) {
       modal.style.display = "none";
@@ -131,15 +135,21 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // ミニマップクリックで拡大モーダルを表示
   const miniMap = document.getElementById('miniMap');
   miniMap.addEventListener('click', () => {
     mapModalBody.innerHTML = "<div style='width: 100%; height: 400px; background-color: #cce5ff; display: flex; align-items: center; justify-content: center;'>拡大地図エリア</div>";
     mapModal.style.display = "block";
   });
 
-  // 地図モーダルを閉じる
-  closeMapBtn.addEventListener('click', () => {
-    mapModal.style.display = "none";
+  // ▼ ファイルアップロード機能追加
+  const fileInput = document.getElementById('fileInput');
+  const fileNameDisplay = document.getElementById('fileNameDisplay');
+
+  fileInput.addEventListener('change', () => {
+    if (fileInput.files.length > 0) {
+      fileNameDisplay.textContent = fileInput.files[0].name;
+    } else {
+      fileNameDisplay.textContent = "ファイルを選択してください";
+    }
   });
 });
