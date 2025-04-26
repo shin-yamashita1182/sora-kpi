@@ -1,30 +1,33 @@
-// script.js - SORA課題抽出→施策マッチング連携（詳細モーダル対応版 完全版）
+// script.js - SORA課題抽出→施策マッチング連携（モーダル詳細情報拡張版）
 document.addEventListener("DOMContentLoaded", () => {
   const generateBtn = document.getElementById("generateBtn");
   const resultsContainer = document.getElementById("resultsContainer");
   const modal = document.getElementById("detailModal");
   const modalTitle = document.getElementById("modalTitle");
+  const modalPolicy = document.getElementById("modalPolicy");
+  const modalKPI = document.getElementById("modalKPI");
+  const modalActor = document.getElementById("modalActor");
   const modalBody = document.getElementById("modalBody");
   const closeModal = document.getElementById("closeModal");
 
-  generateBtn.addEventListener("click", () => {
-    const mockResults = [
-      {
-        title: "【戦略目標】観光資源活用",
-        policy: "【施策案】観光アクセス改善プロジェクト",
-        kpi: "【KPI】観光客数20%UP",
-        actor: "【実行体】自治体＋地元企業",
-        detail: "この施策は観光地へのアクセス手段（バス・船・車）の改善により、観光客の流入を増やすことを目的としています。"
-      },
-      {
-        title: "【戦略目標】人口減少対策",
-        policy: "【施策案】IT技術学習プログラム",
-        kpi: "【KPI】20代移住者増加5%",
-        actor: "【実行体】地域企業連携協議会",
-        detail: "この施策は、若年層にIT教育機会を提供し、就労支援と移住促進をセットで展開します。"
-      }
-    ];
+  const mockResults = [
+    {
+      title: "【戦略目標】観光資源活用",
+      policy: "【施策案】観光アクセス改善プロジェクト",
+      kpi: "【KPI】観光客数20%UP",
+      actor: "【実行体】自治体＋地元企業",
+      detail: "この施策は観光地へのアクセス手段（バス・船・車）の改善により、観光客の流入を増やすことを目的としています。"
+    },
+    {
+      title: "【戦略目標】人口減少対策",
+      policy: "【施策案】IT技術学習プログラム",
+      kpi: "【KPI】20代移住者増加5%",
+      actor: "【実行体】地域企業連携協議会",
+      detail: "この施策は、若年層にIT教育機会を提供し、就労支援と移住促進をセットで展開します。"
+    }
+  ];
 
+  generateBtn.addEventListener("click", () => {
     resultsContainer.innerHTML = "";
     mockResults.forEach((result, index) => {
       const card = document.createElement("div");
@@ -49,18 +52,11 @@ document.addEventListener("DOMContentLoaded", () => {
         alert("施策が保存されました！");
       } else if (text === "詳細") {
         const index = event.target.dataset.index;
-        const result = [
-          {
-            title: "【戦略目標】観光資源活用",
-            detail: "この施策は観光地へのアクセス手段（バス・船・車）の改善により、観光客の流入を増やすことを目的としています。"
-          },
-          {
-            title: "【戦略目標】人口減少対策",
-            detail: "この施策は、若年層にIT教育機会を提供し、就労支援と移住促進をセットで展開します。"
-          }
-        ][index];
-
+        const result = mockResults[index];
         modalTitle.textContent = result.title;
+        modalPolicy.textContent = result.policy;
+        modalKPI.textContent = result.kpi;
+        modalActor.textContent = result.actor;
         modalBody.textContent = result.detail;
         modal.style.display = "block";
       } else if (text === "比較") {
