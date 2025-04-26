@@ -1,14 +1,9 @@
-// script.js - SORA課題抽出→施策マッチング連携（モーダル詳細情報拡張版）
 document.addEventListener("DOMContentLoaded", () => {
   const generateBtn = document.getElementById("generateBtn");
   const resultsContainer = document.getElementById("resultsContainer");
-  const modal = document.getElementById("detailModal");
-  const modalTitle = document.getElementById("modalTitle");
-  const modalPolicy = document.getElementById("modalPolicy");
-  const modalKPI = document.getElementById("modalKPI");
-  const modalActor = document.getElementById("modalActor");
-  const modalBody = document.getElementById("modalBody");
-  const closeModal = document.getElementById("closeModal");
+  const compareListContainer = document.getElementById("compareListContainer");
+
+  const compareList = [];
 
   const mockResults = [
     {
@@ -27,6 +22,26 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   ];
 
+  function renderCompareList() {
+    compareListContainer.innerHTML = "";
+    if (compareList.length === 0) {
+      compareListContainer.innerHTML = "<p>保存された施策はまだありません。</p>";
+      return;
+    }
+
+    compareList.forEach((item, index) => {
+      const card = document.createElement("div");
+      card.className = "card";
+      card.innerHTML = `
+        <h4>${item.title}</h4>
+        <p>${item.policy}</p>
+        <p>${item.kpi}</p>
+        <p>${item.actor}</p>
+      `;
+      compareListContainer.appendChild(card);
+    });
+  }
+
   generateBtn.addEventListener("click", () => {
     resultsContainer.innerHTML = "";
     mockResults.forEach((result, index) => {
@@ -37,7 +52,7 @@ document.addEventListener("DOMContentLoaded", () => {
         <p>${result.policy}</p>
         <p>${result.kpi}</p>
         <p>${result.actor}</p>
-        <button class="saveBtn">保存</button>
+        <button class="saveBtn" data-index="${index}">保存</button>
         <button class="detailBtn" data-index="${index}">詳細</button>
         <button class="compareBtn">比較</button>
       `;
@@ -46,32 +61,18 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   resultsContainer.addEventListener("click", (event) => {
-    if (event.target.tagName === "BUTTON") {
-      const text = event.target.textContent;
-      if (text === "保存") {
-        alert("施策が保存されました！");
-      } else if (text === "詳細") {
-        const index = event.target.dataset.index;
-        const result = mockResults[index];
-        modalTitle.textContent = result.title;
-        modalPolicy.textContent = result.policy;
-        modalKPI.textContent = result.kpi;
-        modalActor.textContent = result.actor;
-        modalBody.textContent = result.detail;
-        modal.style.display = "block";
-      } else if (text === "比較") {
-        alert("比較リストに追加しました！（仮）");
+    if (event.target.tagName === "BUTTON" && event.target.classList.contains("saveBtn")) {
+      const index = event.target.dataset.index;
+      const item = mockResults[index];
+      const exists = compareList.some(c => c.title === item.title);
+      if (!exists) {
+        compareList.push(item);
+        renderCompareList();
+      } else {
+        alert("この施策はすでに保存されています。");
       }
     }
   });
 
-  closeModal.addEventListener("click", () => {
-    modal.style.display = "none";
-  });
-
-  window.addEventListener("click", (e) => {
-    if (e.target === modal) {
-      modal.style.display = "none";
-    }
-  });
+  renderCompareList();
 });
