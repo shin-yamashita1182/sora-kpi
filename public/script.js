@@ -1,4 +1,4 @@
-// script.js - SORA課題抽出→施策マッチング連携（Mock動作）
+// script.js - SORA課題抽出→施策マッチング連携（Mock動作＋ボタンリアクション）
 document.addEventListener("DOMContentLoaded", () => {
   const generateBtn = document.getElementById("generateBtn");
   const resultsContainer = document.getElementById("resultsContainer");
@@ -39,5 +39,19 @@ document.addEventListener("DOMContentLoaded", () => {
       `;
       resultsContainer.appendChild(card);
     });
+  });
+
+  // ボタンクリックリアクション（保存・詳細・比較）
+  resultsContainer.addEventListener("click", (event) => {
+    if (event.target.tagName === "BUTTON") {
+      const buttonText = event.target.textContent;
+      if (buttonText === "保存") {
+        alert("施策が保存されました！");
+      } else if (buttonText === "詳細") {
+        alert("施策の詳細を確認できます！（仮）");
+      } else if (buttonText === "比較") {
+        alert("比較リストに追加しました！（仮）");
+      }
+    }
   });
 });
