@@ -1,57 +1,19 @@
-<!-- ✅ 正式統合版 test-validation/index.html -->
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>地域バリデーション＆トリガーテスト（正式統合版）</title>
-  <link rel="stylesheet" href="/style.css">
+    <meta charset="UTF-8">
+    <title>地域バリデーションテスト</title>
+    <script defer src="script.js"></script>
 </head>
 <body>
-  <div class="container">
-    <h1>SORA 地域バリデーション＆トリガーテスト</h1>
+    <h1>地域バリデーション ＆ トリガーテスト</h1>
 
-    <section class="input-section">
-      <h2>地域情報入力</h2>
-      <label for="regionInput">地域名</label>
-      <input type="text" id="regionInput" placeholder="例：広島県尾道市">
+    <div id="validationSection" style="margin-bottom:20px;">
+        <input type="text" id="regionInput" placeholder="地域名を入力" style="width:300px; padding:8px;">
+        <button onclick="handleValidationAndTrigger()" style="padding:8px 16px;">チェック</button>
+    </div>
 
-      <label for="freeInput">自由入力</label>
-      <textarea id="freeInput" placeholder="例：観光施策に力を入れたい" rows="4"></textarea>
+    <div id="resultArea" style="margin-top:20px; font-size:16px;"></div>
 
-      <label for="regionType">地域分類選択</label>
-      <select id="regionType">
-        <option value="">分類を選択してください</option>
-        <option value="観光型">観光型</option>
-        <option value="離島型">離島型</option>
-        <option value="都市型">都市型</option>
-        <option value="中山間地域型">中山間地域型</option>
-        <option value="高齢化重点地域型">高齢化重点地域型</option>
-        <option value="子育て・定住型">子育て・定住型</option>
-        <option value="移住促進重点型">移住促進重点型</option>
-        <option value="観光×農業ハイブリッド型">観光×農業ハイブリッド型</option>
-        <option value="防災・災害対策型">防災・災害対策型</option>
-        <option value="デジタル活用先進地域型">デジタル活用先進地域型</option>
-      </select>
-
-      <button onclick="handleValidationAndTrigger()">施策を抽出する</button>
-    </section>
-
-    <section id="resultArea" class="result-section">
-      <!-- ChatGPT応答や施策結果展開領域 -->
-    </section>
-
-    <section id="cardArea" class="result-section">
-      <!-- 施策カード表示領域 -->
-    </section>
-
-    <section id="compareListContainer" class="compare-section">
-      <!-- 比較リストカード表示領域 -->
-    </section>
-
-  </div>
-
-  <script src="/script_base.js" defer></script>
-  <script src="/script_kankou.js" defer></script>
 </body>
 </html>
