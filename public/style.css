@@ -132,7 +132,7 @@ footer {
     cursor: pointer;
 }
 
-/* ▼ 削除ボタン（赤）スタイル */
+/* 削除ボタン（赤） */
 .remove-btn {
     background-color: #dc3545;
     color: white;
@@ -144,4 +144,27 @@ footer {
 
 .remove-btn:hover {
     background-color: #b02a37;
+}
+
+/* 横並びレイアウト復活 */
+#resultsContainer,
+#compareListContainer {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-top: 15px;
+}
+
+@media (max-width: 768px) {
+    #resultsContainer,
+    #compareListContainer {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 480px) {
+    #resultsContainer,
+    #compareListContainer {
+        grid-template-columns: 1fr;
+    }
 }
