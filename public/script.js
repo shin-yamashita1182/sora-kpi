@@ -4,7 +4,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const closeBtn = document.getElementById("closeModal");
   const compareListContainer = document.getElementById("compareListContainer");
 
-  // リッチなデモデータ（施策＋概要＋KPI＋対象＋想定主体）
   const demoData = [
     {
       title: "観光資源活用の促進",
@@ -47,7 +46,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const generateBtn = document.getElementById('generateBtn');
   let currentDetailIndex = null;
 
-  // 課題抽出ボタン押下時の処理
   generateBtn.addEventListener('click', () => {
     resultsContainer.innerHTML = "";
 
@@ -63,7 +61,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // 詳細ボタン押下時のモーダル展開
   document.body.addEventListener('click', (event) => {
     if (event.target.classList.contains('detail-btn')) {
       const parentCard = event.target.closest('.card');
@@ -85,12 +82,10 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // 比較リストに追加処理（モーダルのボタン）
   modalBody.addEventListener('click', (event) => {
     if (event.target.id === 'addToCompareBtn' && currentDetailIndex !== null) {
       const item = demoData[currentDetailIndex];
 
-      // 重複チェック
       const exists = [...compareListContainer.querySelectorAll('.card')]
         .some(card => card.querySelector('h3')?.textContent === item.title);
 
@@ -100,11 +95,22 @@ document.addEventListener('DOMContentLoaded', () => {
         card.innerHTML = `
           <h3>${item.title}</h3>
           <p><strong>目標KPI:</strong> ${item.kpi}</p>
+          <div style="text-align: right;">
+            <button class="remove-btn">削除</button>
+          </div>
         `;
         compareListContainer.appendChild(card);
       }
 
       modal.style.display = "none";
+    }
+  });
+
+  // 削除処理
+  compareListContainer.addEventListener('click', (event) => {
+    if (event.target.classList.contains('remove-btn')) {
+      const card = event.target.closest('.card');
+      if (card) card.remove();
     }
   });
 
@@ -118,4 +124,13 @@ document.addEventListener('DOMContentLoaded', () => {
       modal.style.display = "none";
     }
   });
+
+  // 出力ボタン（今は仮）
+  const exportBtn = document.createElement('button');
+  exportBtn.textContent = "比較リストを出力";
+  exportBtn.style.marginTop = "10px";
+  exportBtn.onclick = () => {
+    alert("将来的にPDF出力されます（現在は仮のボタンです）");
+  };
+  compareListContainer.parentNode.appendChild(exportBtn);
 });
