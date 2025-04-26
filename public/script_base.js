@@ -1,7 +1,6 @@
-// ✅ 正式統合版 script_base.js
+// ✅ 正式統合版 script_base.js（本番版＋ChatGPT連携）
 
 document.addEventListener('DOMContentLoaded', () => {
-  // --- 各種要素取得
   const modal = document.getElementById("detailModal");
   const modalBody = document.getElementById("modalBody");
   const closeBtn = document.getElementById("closeModal");
@@ -11,6 +10,11 @@ document.addEventListener('DOMContentLoaded', () => {
   const fileInput = document.getElementById("fileInput");
   const fileNameDisplay = document.getElementById("fileNameDisplay");
   const compareListContainer = document.getElementById("compareListContainer");
+  const resultsContainer = document.getElementById('resultsContainer');
+  const generateBtn = document.getElementById('generateBtn');
+
+  let currentMasterData = [];
+  let currentDetailIndex = null;
 
   // --- ファイル選択
   if (fileInput) {
@@ -39,15 +43,89 @@ document.addEventListener('DOMContentLoaded', () => {
       mapModal.style.display = "block";
     });
   }
+
+  // --- 課題抽出ボタン（静的マスター読み込み）
+  if (generateBtn) {
+    generateBtn.addEventListener('click', async () => {
+      await loadMasterData();
+      resultsContainer.innerHTML = "";
+      if (currentMasterData.length === 0) return;
+
+      currentMasterData.forEach((item, index) => {
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.setAttribute('data-index', index);
+        card.innerHTML = `
+          <h3>${item.title}</h3>
+          <p><strong>KPI:</strong> ${item.kpi}</p>
+          <button class="detail-btn">詳細</button>
+        `;
+        resultsContainer.appendChild(card);
+      });
+    });
+  }
+
+  // --- 詳細ボタン
+  document.body.addEventListener('click', (event) => {
+    if (event.target.classList.contains('detail-btn')) {
+      const parentCard = event.target.closest('.card');
+      const index = parentCard.getAttribute('data-index');
+      const item = currentMasterData[index];
+      currentDetailIndex = parseInt(index);
+
+      modalBody.innerHTML = `
+        <h2>${item.title}</h2>
+        <p><strong>施策概要:</strong> ${item.overview}</p>
+        <p><strong>目標KPI:</strong> ${item.kpi}</p>
+        <p><strong>想定主体:</strong> ${item.actor}</p>
+        <div style="margin-top: 20px; text-align: right;">
+          <button id="addToCompareBtn">比較リストに追加</button>
+        </div>
+      `;
+      modal.style.display = "block";
+    }
+  });
+
+  // --- モーダル内追加ボタン
+  modalBody.addEventListener('click', (event) => {
+    if (event.target.id === 'addToCompareBtn' && currentDetailIndex !== null) {
+      const item = currentMasterData[currentDetailIndex];
+
+      const exists = [...compareListContainer.querySelectorAll('.card')]
+        .some(card => card.querySelector('h3')?.textContent === item.title);
+
+      if (!exists) {
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.innerHTML = `
+          <h3>${item.title}</h3>
+          <p><strong>KPI:</strong> ${item.kpi}</p>
+          <div style="text-align: right;">
+            <button class="remove-btn">削除</button>
+          </div>
+        `;
+        compareListContainer.appendChild(card);
+      }
+      modal.style.display = "none";
+    }
+  });
+
+  // --- 比較リスト削除ボタン
+  compareListContainer.addEventListener('click', (event) => {
+    if (event.target.classList.contains('remove-btn')) {
+      const card = event.target.closest('.card');
+      if (card) card.remove();
+    }
+  });
 });
 
-// ✅ 正式版 handleValidationAndTrigger 関数
+// ✅ ChatGPT連携＋トリガー生成版 handleValidationAndTrigger 関数
 async function handleValidationAndTrigger() {
     const regionInput = document.getElementById('regionInput').value.trim();
     const freeInput = document.getElementById('freeInput').value.trim();
     const regionType = document.getElementById('regionType').value.trim();
     const resultArea = document.getElementById('resultArea');
-    const cardArea = document.getElementById('cardArea');
+    const cardArea = document.getElementById('resultsContainer');
 
     if (!regionInput || !regionType) {
         resultArea.innerHTML = '<span style="color:red;">地域名と地域分類は必須です。</span>';
@@ -94,7 +172,17 @@ async function handleValidationAndTrigger() {
         await loadMasterData(regionType);
 
         // 読み込んだ静的マスターからカード生成
-        displayMasterData();
+        currentMasterData.forEach((item, index) => {
+          const card = document.createElement('div');
+          card.className = 'card';
+          card.setAttribute('data-index', index);
+          card.innerHTML = `
+            <h3>${item.title}</h3>
+            <p><strong>KPI:</strong> ${item.kpi}</p>
+            <button class="detail-btn">詳細</button>
+          `;
+          cardArea.appendChild(card);
+        });
 
     } catch (error) {
         console.error('Error:', error);
