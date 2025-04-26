@@ -1,5 +1,3 @@
-// script.js
-
 // 仮地域マスター
 const regionMaster = [
     "佐賀県鳥栖市",
@@ -9,16 +7,6 @@ const regionMaster = [
     "長崎県新上五島町",
     "福岡県福岡市",
 ];
-
-// 仮トリガーデータ
-const triggerMaster = {
-    "佐賀県鳥栖市": "交通インフラ強化プロジェクト",
-    "佐賀県小城市": "観光資源開発プロジェクト",
-    "長崎県長崎市": "都市活性化プロジェクト",
-    "長崎県五島市": "離島振興プロジェクト",
-    "長崎県新上五島町": "地域医療充実プロジェクト",
-    "福岡県福岡市": "スタートアップ支援プロジェクト",
-};
 
 // 地域名のバリデーション関数（部分一致＋複数マッチ制御版）
 function validateRegionForTrigger(inputText) {
@@ -40,8 +28,38 @@ function validateRegionForTrigger(inputText) {
     }
 }
 
-// バリデーション＋トリガー生成＋結果表示
-function handleValidationAndTrigger() {
+// ChatGPT API連携用関数
+async function callChatGPT(prompt) {
+    const apiKey = 'YOUR_API_KEY_HERE'; // ← ここにシンさんのOpenAI APIキーを入れてください！
+
+    const response = await fetch('https://api.openai.com/v1/chat/completions', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${apiKey}`
+        },
+        body: JSON.stringify({
+            model: 'gpt-4', // 必要に応じて 'gpt-3.5-turbo' に変更可能
+            messages: [
+                { role: "system", content: "あなたは地域施策の専門家です。" },
+                { role: "user", content: prompt }
+            ],
+            max_tokens: 300
+        })
+    });
+
+    const data = await response.json();
+    console.log('ChatGPT応答:', data);
+
+    if (data.choices && data.choices.length > 0) {
+        return data.choices[0].message.content.trim();
+    } else {
+        throw new Error('GPT応答エラー');
+    }
+}
+
+// バリデーション＋ChatGPT施策取得＋結果表示
+async function handleValidationAndTrigger() {
     const inputText = document.getElementById('regionInput').value;
     const resultArea = document.getElementById('resultArea');
     resultArea.innerHTML = ''; // 初期化
@@ -50,8 +68,18 @@ function handleValidationAndTrigger() {
 
     if (validationResult.status === "success") {
         const region = validationResult.region;
-        const trigger = triggerMaster[region] || "（仮）施策情報なし";
-        resultArea.innerHTML = `<div><strong>地域：</strong>${region}</div><div><strong>施策：</strong>${trigger}</div>`;
+        
+        resultArea.innerHTML = `<div><strong>地域：</strong>${region}</div><div><em>ChatGPTに問い合わせ中...</em></div>`;
+
+        try {
+            const prompt = `${region}における最適な地域施策案を簡潔に提案してください。`;
+            const gptResponse = await callChatGPT(prompt);
+
+            resultArea.innerHTML = `<div><strong>地域：</strong>${region}</div><div><strong>施策：</strong>${gptResponse}</div>`;
+        } catch (error) {
+            console.error(error);
+            resultArea.innerHTML = `<div style="color:red;">施策の取得に失敗しました。</div>`;
+        }
     } else {
         resultArea.innerHTML = `<div style="color:red;">${validationResult.message}</div>`;
         if (validationResult.status === "multiple") {
