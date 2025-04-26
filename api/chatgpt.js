@@ -1,31 +1,33 @@
+export default async function handler(req, res) {
+    if (req.method !== 'POST') {
+        return res.status(405).json({ error: 'Method not allowed' });
+    }
 
-import OpenAI from "openai";
-import express from "express";
-import cors from "cors";
+    const { prompt } = req.body;
+    const apiKey = process.env.OPENAI_API_KEY;
 
-const app = express();
-app.use(cors());
-app.use(express.json());
+    try {
+        const response = await fetch('https://api.openai.com/v1/chat/completions', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${apiKey}`,
+            },
+            body: JSON.stringify({
+                model: 'gpt-4-1106-preview', // ←ここ重要！！
+                messages: [
+                    { role: "system", content: "あなたは地域施策の専門家です。" },
+                    { role: "user", content: prompt }
+                ],
+                max_tokens: 300,
+            }),
+        });
 
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY
-});
+        const data = await response.json();
+        res.status(200).json({ result: data.choices[0].message.content.trim() });
 
-app.post("/api/chatgpt", async (req, res) => {
-  try {
-    const { message } = req.body;
-
-    const completion = await openai.chat.completions.create({
-      model: "gpt-4",
-      messages: [{ role: "user", content: message }]
-    });
-
-    const reply = completion.choices[0].message.content;
-    res.json({ reply });
-  } catch (error) {
-    console.error("GPTエラー:", error);
-    res.status(500).json({ reply: "エラーが発生しました。" });
-  }
-});
-
-export default app;
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'OpenAI API error' });
+    }
+}
