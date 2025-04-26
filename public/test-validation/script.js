@@ -1,36 +1,93 @@
-// ✅ 地域自由入力版 (onclick対応版) script.js
+// --------------------
+// 地域情報保存処理
+// --------------------
+function saveRegionInfo() {
+    const regionName = document.getElementById('regionNameInput').value.trim();
+    const regionType = document.getElementById('regionTypeSelect').value;
+    const regionFile = document.getElementById('regionFileUpload').files[0];
 
-async function handleValidationAndTrigger() {
-    const regionInput = document.getElementById('regionInput').value.trim();
-    const resultArea = document.getElementById('resultArea');
-
-    if (!regionInput) {
-        resultArea.innerHTML = '<span style="color:red;">地域名を入力してください。</span>';
+    if (!regionName) {
+        alert('地域名を入力してください。');
         return;
     }
 
-    resultArea.innerHTML = "<p>施策生成中...</p>";
+    console.log("地域情報を保存:", { regionName, regionType, regionFile });
+
+    alert("地域情報を保存しました！");
+}
+
+// --------------------
+// 地域インサイト生成処理（ChatGPT接続）
+// --------------------
+async function generateInsight() {
+    const freeInput = document.getElementById('freeInput').value.trim();
+
+    if (!freeInput) {
+        alert("自由記述欄に地域への想いや課題を書いてください。");
+        return;
+    }
 
     try {
+        // ChatGPT APIへのリクエスト送信（エンドポイント確認要）
         const response = await fetch('/api/chatgpt', {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json',
+                'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                prompt: `${regionInput}に関連する地域施策を出力してください。`
+                message: freeInput
             })
         });
 
         if (!response.ok) {
-            throw new Error('施策の取得に失敗しました。');
+            throw new Error('ChatGPT APIエラー');
         }
 
         const data = await response.json();
-        resultArea.innerHTML = `<p><strong>提案施策：</strong><br>${data.result}</p>`;
+
+        console.log("ChatGPT応答:", data);
+        
+        // 第1トリガー出力
+        document.getElementById('firstTriggerOutput').innerText = data.text || "応答がありませんでした。";
+
+        // 次にフィルタリング処理へ
+        filterWithMasterData(data.text);
 
     } catch (error) {
-        console.error('Error:', error);
-        resultArea.innerHTML = '<span style="color:red;">施策の取得に失敗しました。</span>';
+        console.error('インサイト生成エラー:', error);
+        alert('インサイト生成中にエラーが発生しました。');
+    }
+}
+
+// --------------------
+// フィルタリング＋第2トリガー生成処理
+// --------------------
+function filterWithMasterData(gptResponseText) {
+    if (!gptResponseText) {
+        document.getElementById('secondTriggerOutput').innerText = "フィルタリング対象がありません。";
+        return;
+    }
+
+    // 仮マスターデータ（静的）
+    const masterData = [
+        { keyword: '観光資源', title: '観光資源活用プロジェクト' },
+        { keyword: '地域交流', title: '地域交流拠点整備' },
+        { keyword: 'デジタル化', title: '地域デジタル化推進' },
+        { keyword: '移住促進', title: '移住促進キャンペーン' }
+        // ※必要に応じて拡張
+    ];
+
+    let matched = [];
+
+    masterData.forEach(item => {
+        if (gptResponseText.includes(item.keyword)) {
+            matched.push(item.title);
+        }
+    });
+
+    if (matched.length > 0) {
+        document.getElementById('secondTriggerOutput').innerHTML = matched.map(title => `<li>${title}</li>`).join('');
+    } else {
+        document.getElementById('secondTriggerOutput').innerText = "関連施策が見つかりませんでした。";
     }
 }
