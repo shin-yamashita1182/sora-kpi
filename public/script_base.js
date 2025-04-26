@@ -11,57 +11,145 @@ document.addEventListener('DOMContentLoaded', () => {
   const fileNameDisplay = document.getElementById("fileNameDisplay");
 
   const compareListContainer = document.getElementById("compareListContainer");
+  const resultsContainer = document.getElementById('resultsContainer');
+  const generateBtn = document.getElementById('generateBtn');
+  const categorySelect = document.getElementById('category');
 
-  window.SORA_UI = {
-    openDetailModal(contentHTML) {
-      modalBody.innerHTML = contentHTML;
+  let currentMasterData = [];
+  let currentDetailIndex = null;
+
+  // 地域入力＋分類選択からマスターを読み込む
+  async function loadMasterData() {
+    const category = categorySelect.value;
+    console.log("Category selected:", category);  // カテゴリ選択の確認
+
+    if (category === "観光型") {
+      try {
+        const response = await fetch('kankou_master.json');
+        if (!response.ok) {
+          console.error('Failed to load kankou_master.json:', response.status);
+          return;
+        }
+        currentMasterData = await response.json();
+        console.log('Data loaded:', currentMasterData);  // データが正しく読み込まれたか確認
+      } catch (error) {
+        console.error('Error loading JSON:', error);  // エラー詳細表示
+      }
+    } else {
+      currentMasterData = []; // 他分類は今は空
+    }
+  }
+
+  // 課題抽出ボタンのクリック時
+  generateBtn.addEventListener('click', async () => {
+    console.log('Generate button clicked');  // ボタンがクリックされたことの確認
+
+    await loadMasterData();
+
+    resultsContainer.innerHTML = "";  // 前回の結果をリセット
+
+    if (currentMasterData.length === 0) {
+      console.log('No data to display!');  // データがない場合
+      return;
+    }
+
+    console.log("Displaying data...");  // データを表示することを確認
+    currentMasterData.forEach((item, index) => {
+      const card = document.createElement('div');
+      card.className = 'card';
+      card.setAttribute('data-index', index);
+      card.innerHTML = `
+        <h3>${item.title}</h3>
+        <p><strong>KPI:</strong> ${item.kpi}</p>
+        <button class="detail-btn">詳細</button>
+      `;
+      resultsContainer.appendChild(card);  // カードを追加
+    });
+
+    console.log('Results Container HTML:', resultsContainer.innerHTML);  // 結果を確認
+  });
+
+  // 詳細ボタンのクリック時
+  document.body.addEventListener('click', (event) => {
+    if (event.target.classList.contains('detail-btn')) {
+      const parentCard = event.target.closest('.card');
+      const index = parentCard.getAttribute('data-index');
+      const item = currentMasterData[index];
+      currentDetailIndex = parseInt(index);
+
+      console.log("Opening detail modal for:", item.title);  // モーダルを開く際に内容を表示
+
+      modalBody.innerHTML = `
+        <h2>${item.title}</h2>
+        <p><strong>施策概要:</strong> ${item.overview}</p>
+        <p><strong>目標KPI:</strong> ${item.kpi}</p>
+        <p><strong>想定主体:</strong> ${item.actor}</p>
+        <div style="margin-top: 20px; text-align: right;">
+          <button id="addToCompareBtn">比較リストに追加</button>
+        </div>
+      `;
       modal.style.display = "block";
-    },
-    closeModals() {
-      modal.style.display = "none";
-      mapModal.style.display = "none";
-    },
-    openMapModal() {
-      mapModalBody.innerHTML = "<div style='width: 100%; height: 400px; background-color: #cce5ff; display: flex; align-items: center; justify-content: center;'>拡大地図エリア</div>";
-      mapModal.style.display = "block";
-    },
-    addToCompare(title, kpi) {
+    }
+  });
+
+  // モーダル内の「比較リストに追加」ボタン
+  modalBody.addEventListener('click', (event) => {
+    if (event.target.id === 'addToCompareBtn' && currentDetailIndex !== null) {
+      const item = currentMasterData[currentDetailIndex];
+
       const exists = [...compareListContainer.querySelectorAll('.card')]
-        .some(card => card.querySelector('h3')?.textContent === title);
+        .some(card => card.querySelector('h3')?.textContent === item.title);
+
       if (!exists) {
         const card = document.createElement('div');
         card.className = 'card';
         card.innerHTML = `
-          <h3>${title}</h3>
-          <p><strong>KPI:</strong> ${kpi}</p>
+          <h3>${item.title}</h3>
+          <p><strong>KPI:</strong> ${item.kpi}</p>
           <div style="text-align: right;">
             <button class="remove-btn">削除</button>
           </div>
         `;
         compareListContainer.appendChild(card);
+        console.log("Added to compare list:", item.title);  // 比較リストに追加したことを確認
       }
+
+      modal.style.display = "none";
     }
-  };
+  });
+
+  // 比較リストから削除ボタン
+  compareListContainer.addEventListener('click', (event) => {
+    if (event.target.classList.contains('remove-btn')) {
+      const card = event.target.closest('.card');
+      if (card) card.remove();
+      console.log("Card removed from compare list");  // 削除されたことを確認
+    }
+  });
 
   // モーダル閉じるボタン
   closeBtn.addEventListener('click', () => {
-    SORA_UI.closeModals();
+    modal.style.display = "none";
   });
 
   closeMapBtn.addEventListener('click', () => {
-    SORA_UI.closeModals();
+    mapModal.style.display = "none";
   });
 
   window.addEventListener('click', (event) => {
-    if (event.target === modal || event.target === mapModal) {
-      SORA_UI.closeModals();
+    if (event.target === modal) {
+      modal.style.display = "none";
+    }
+    if (event.target === mapModal) {
+      mapModal.style.display = "none";
     }
   });
 
   // ミニマップクリック時
   const miniMap = document.getElementById('miniMap');
   miniMap.addEventListener('click', () => {
-    SORA_UI.openMapModal();
+    mapModalBody.innerHTML = "<div style='width: 100%; height: 400px; background-color: #cce5ff; display: flex; align-items: center; justify-content: center;'>拡大地図エリア</div>";
+    mapModal.style.display = "block";
   });
 
   // ファイル選択時
@@ -72,13 +160,4 @@ document.addEventListener('DOMContentLoaded', () => {
       fileNameDisplay.textContent = "ファイルを選択してください";
     }
   });
-
-  // 比較リストから削除ボタン
-  compareListContainer.addEventListener('click', (event) => {
-    if (event.target.classList.contains('remove-btn')) {
-      const card = event.target.closest('.card');
-      if (card) card.remove();
-    }
-  });
-
 });
