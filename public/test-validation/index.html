@@ -1,70 +1,86 @@
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SORA Dashboard - 未来版安定改訂 v1.3.0</title>
-  <link rel="stylesheet" href="style.css"> <!-- 外部スタイルシート読み込み -->
-</head>
+<!-- チャット応答入力エリア -->
+<div style="padding: 20px; font-family: sans-serif;">
+  <h2>リアルタイム応答入力</h2>
+  <textarea id="chatInput" placeholder="ここにChatGPT応答を書いてください（1行1課題）" style="width: 100%; height: 150px; margin-bottom: 15px;"></textarea>
+  <button onclick="processChatResponse()" style="padding: 10px 20px; background-color: #007bff; color: white; border: none; border-radius: 6px; cursor: pointer;">リスト生成</button>
+</div>
 
-<body>
-  <div class="sidebar">
-    <h2>地域情報入力</h2>
+<!-- 課題リスト表示エリア -->
+<div id="responseArea" style="padding: 20px;"></div>
 
-    <label for="regionStaticInput">地域名（必須）:</label>
-    <input type="text" id="regionStaticInput" placeholder="例：大分市">
-
-    <label for="freeInput">テーマ・自由記述:</label>
-    <div class="input-with-mic">
-      <textarea id="freeInput" rows="5" placeholder="例：インバウンド観光施策の強化"></textarea>
-      <div class="mic-area">
-        <button class="mic-button" title="音声入力未対応">🎤</button>
-      </div>
-    </div>
-
-    <label for="regionType">地域分類:</label>
-    <select id="regionType">
-      <option value="観光型">観光型</option>
-      <option value="都市型">都市型</option>
-      <option value="離島型">離島型</option>
-      <option value="農村型">農村型</option>
-      <option value="その他">その他</option>
-    </select>
-
-    <label for="fileUpload">資料アップロード（任意）:</label>
-    <input type="file" id="fileUpload">
-
-    <button id="extractButton">課題を抽出する</button>
-  </div>
-
-  <div class="content">
-    <div class="response-area" id="gptResponse">
-      （ここにChatGPT応答が表示されます）
-    </div>
-
-    <div class="map-wrapper">
-      <div class="map-area" id="mapArea">
-        （地図エリア仮置き）
-      </div>
-      <div class="map-instruction">※地図をクリックするとGoogleマップが開きます</div>
-      <div class="info-area">
-        🚗 高速道路サービスエリア・インターチェンジ情報例<br>
-        ・〇〇サービスエリア（上り） - 休憩・飲食施設あり<br>
-        ・△△インターチェンジ - 主要出口、都市中心部アクセス良好
-      </div>
+<!-- モーダル -->
+<div id="modalOverlay" style="display: none; position: fixed; top:0; left:0; width:100%; height:100%; background-color: rgba(0,0,0,0.5); z-index: 9999;">
+  <div id="modalContent" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 30px; border-radius: 12px; max-width: 400px; width: 90%; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.2);">
+    <h2 id="modalTitle" style="margin-bottom: 20px;">タイトル</h2>
+    <p id="modalBody" style="margin-bottom: 30px;">内容</p>
+    <div style="display: flex; gap: 10px; justify-content: center;">
+      <button id="actionButton" style="padding: 10px 20px; background-color: #28a745; color: white; border: none; border-radius: 6px; cursor: pointer;">戦略目標を見る</button>
+      <button onclick="closeModal()" style="padding: 10px 20px; background-color: #6c757d; color: white; border: none; border-radius: 6px; cursor: pointer;">閉じる</button>
     </div>
   </div>
+</div>
 
-  <!-- ChatGPT連携 script.jsは絶対にそのまま -->
-  <script src="script.js"></script>
+<script>
+// チャット応答をリアルタイム処理
+function processChatResponse() {
+    const inputText = document.getElementById('chatInput').value;
+    const items = inputText.trim().split('\n');
 
-  <!-- 地図クリックイベント -->
-  <script>
-    document.getElementById('mapArea').addEventListener('click', function() {
-      const mapUrl = 'https://www.google.com/maps';
-      window.open(mapUrl, '_blank');
+    const responseArea = document.getElementById('responseArea');
+    responseArea.innerHTML = '';
+
+    const list = document.createElement('ul');
+    list.style.listStyle = 'none';
+    list.style.padding = '0';
+
+    items.forEach((itemText, index) => {
+        if (itemText.trim() !== '') {
+            const listItem = document.createElement('li');
+            listItem.textContent = itemText.trim();
+            listItem.style.marginBottom = '12px';
+            listItem.style.padding = '15px';
+            listItem.style.backgroundColor = '#f5f5f5';
+            listItem.style.borderRadius = '8px';
+            listItem.style.cursor = 'pointer';
+            listItem.style.transition = 'background-color 0.3s, transform 0.2s';
+            listItem.setAttribute('data-index', index);
+
+            listItem.addEventListener('mouseover', () => {
+                listItem.style.backgroundColor = '#e0e0e0';
+                listItem.style.transform = 'scale(1.02)';
+            });
+            listItem.addEventListener('mouseout', () => {
+                listItem.style.backgroundColor = '#f5f5f5';
+                listItem.style.transform = 'scale(1)';
+            });
+
+            listItem.addEventListener('click', () => {
+                openModal(itemText.trim());
+            });
+
+            list.appendChild(listItem);
+        }
     });
-  </script>
 
-</body>
-</html>
+    responseArea.appendChild(list);
+}
+
+// モーダル開く
+function openModal(taskName) {
+    document.getElementById('modalTitle').textContent = `課題: ${taskName}`;
+    document.getElementById('modalBody').textContent = `この課題に対応する戦略目標を設定します。`;
+
+    const actionButton = document.getElementById('actionButton');
+    actionButton.onclick = () => {
+        alert(`「${taskName}」に対応する戦略目標ページへジャンプ！（仮）`);
+        // 本番ではここで画面遷移
+    };
+
+    document.getElementById('modalOverlay').style.display = 'block';
+}
+
+// モーダル閉じる
+function closeModal() {
+    document.getElementById('modalOverlay').style.display = 'none';
+}
+</script>
