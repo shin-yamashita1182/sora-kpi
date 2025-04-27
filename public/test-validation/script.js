@@ -172,6 +172,9 @@ document.addEventListener('click', function(event) {
 
     const matchedData = clickData.find(item => item.title === clickedTitle);
 
+// 一致したデータをログに出力
+    console.log("一致したデータ:", matchedData); // 一致したデータを確認
+
     if (matchedData) {
       document.getElementById('modalTitle').textContent = matchedData.title;
       document.getElementById('modalDescription').textContent = matchedData.description;
