@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SORA Dashboard - 未来版安定改訂 v1.2</title>
+  <title>SORA Dashboard - 未来版安定改訂 v1.2.1</title>
   <style>
     body { font-family: sans-serif; margin: 0; padding: 0; display: flex; }
     .sidebar { 
@@ -25,7 +25,7 @@
       flex-wrap: nowrap; 
     }
     label { display: block; margin-top: 15px; font-weight: bold; }
-    input[type="text"] { width: 85%; padding: 8px; margin-top: 5px; } /* 地域名欄短縮 */
+    input[type="text"] { width: 95%; padding: 8px; margin-top: 5px; } /* 地域名欄＝テーマ欄と幅揃え */
     select, textarea { width: 95%; padding: 8px; margin-top: 5px; }
 
     .input-with-mic { 
@@ -86,9 +86,7 @@
       padding: 20px; 
       border-radius: 8px; 
       min-height: 500px; 
-      display: flex; 
-      flex-direction: column; 
-      justify-content: flex-start; 
+      max-height: 900px; /* 長文にも対応 */
       overflow-y: auto; 
       width: 100%;
       word-break: break-word;
@@ -135,7 +133,7 @@
       <div class="map-area" id="mapArea">
         （地図エリア仮置き）
       </div>
-      <div class="map-instruction">※地図をクリックすると拡大表示されます</div>
+      <div class="map-instruction">※地図をクリックするとGoogleマップが開きます</div>
       <div class="info-area">
         🚗 高速道路サービスエリア・インターチェンジ情報例<br>
         ・〇〇サービスエリア（上り） - 休憩・飲食施設あり<br>
@@ -144,7 +142,16 @@
     </div>
   </div>
 
-  <!-- script.jsを読み込む（GPT連携は完全保持） -->
+  <!-- script.jsを正式に読み込む（GPT連携設計は完全保持） -->
   <script src="script.js"></script>
+
+  <!-- 地図クリック時Googleマップ遷移復活 -->
+  <script>
+    document.getElementById('mapArea').addEventListener('click', function() {
+      const mapUrl = 'https://www.google.com/maps'; // 仮設定（必要なら動的URL化可）
+      window.open(mapUrl, '_blank');
+    });
+  </script>
+
 </body>
 </html>
