@@ -181,6 +181,11 @@ document.addEventListener('click', function(event) {
 });
 
 // モーダル閉じる処理
-document.getElementById('closeModal').addEventListener('click', function() {
-  document.getElementById('modal').style.display = 'none';
+document.addEventListener("DOMContentLoaded", function() {
+  const closeModalButton = document.getElementById('closeModal');
+  if (closeModalButton) {
+    closeModalButton.addEventListener('click', function() {
+      document.getElementById('modal').style.display = 'none';
+    });
+  }
 });
