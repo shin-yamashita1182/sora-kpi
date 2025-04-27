@@ -3,94 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SORA Dashboard - 未来版安定改訂 v1.2.4</title>
-  <style>
-    body { font-family: sans-serif; margin: 0; padding: 0; display: flex; }
-    .sidebar { 
-      width: 420px; 
-      padding: 20px; 
-      background: #f9f9f9; 
-      border-right: 1px solid #ccc; 
-      height: 100vh; 
-      overflow-y: auto; 
-      overflow-x: hidden;
-    }
-    .content { 
-      flex-grow: 1; 
-      padding: 20px; 
-      display: flex; 
-      flex-direction: row; 
-      gap: 20px; 
-      align-items: flex-start; 
-      flex-wrap: nowrap; 
-    }
-    label { display: block; margin-top: 15px; font-weight: bold; }
-    input[type="text"] { width: 95%; padding: 8px; margin-top: 5px; }
-    select, textarea { width: 95%; padding: 8px; margin-top: 5px; }
-
-    .input-with-mic { 
-      display: flex; 
-      flex-direction: column; 
-      gap: 8px; 
-      margin-top: 5px;
-    }
-
-    .mic-area {
-      margin-top: 5px;
-    }
-
-    .mic-button {
-      background: none;
-      border: none;
-      cursor: pointer;
-      font-size: 24px;
-      color: #555;
-    }
-
-    button { margin-top: 20px; width: 100%; padding: 10px; background: #007bff; color: white; border: none; font-size: 16px; cursor: pointer; }
-    button:hover { background: #0056b3; }
-
-    .map-wrapper { 
-      display: flex; 
-      flex-direction: column; 
-      align-items: center; 
-      height: 600px; 
-      justify-content: space-between; 
-    }
-    .map-area { 
-      width: 300px; 
-      height: 300px; 
-      background: #ddd; 
-      display: flex; 
-      align-items: center; 
-      justify-content: center; 
-      position: relative; 
-      flex-shrink: 0; 
-      cursor: pointer; 
-    }
-    .map-instruction { margin-top: 5px; font-size: 12px; color: #666; }
-    .info-area { 
-      width: 300px; 
-      background: #ffffff; 
-      padding: 15px; 
-      border-radius: 8px; 
-      font-size: 14px; 
-      color: #333; 
-      box-shadow: 0 0 5px rgba(0,0,0,0.1); 
-      margin-top: 10px; 
-    }
-
-    .response-area { 
-      background: #efefef; 
-      padding: 20px; 
-      border-radius: 8px; 
-      height: 700px; /* 高さ固定 */
-      overflow-y: auto; /* 強制スクロールON */
-      overflow-x: hidden;
-      width: 100%;
-      word-break: break-word;
-    }
-  </style>
+  <title>SORA Dashboard - 未来版安定改訂 v1.3.0</title>
+  <link rel="stylesheet" href="style.css"> <!-- 外部スタイルシート読み込み -->
 </head>
 
 <body>
@@ -141,10 +55,10 @@
     </div>
   </div>
 
-  <!-- script.jsを正式に読み込む（GPT連携完全保持） -->
+  <!-- ChatGPT連携 script.jsは絶対にそのまま -->
   <script src="script.js"></script>
 
-  <!-- 地図クリックでGoogleマップ遷移 -->
+  <!-- 地図クリックイベント -->
   <script>
     document.getElementById('mapArea').addEventListener('click', function() {
       const mapUrl = 'https://www.google.com/maps';
