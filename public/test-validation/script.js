@@ -24,8 +24,8 @@ const region = document.getElementById("regionStaticInput").value.trim();
 
     generateInsight(prompt);
     triggerMap(region);
-  });
-});
+}); // ★←ここ！クリックイベントの中をここで閉じる！
+} // ★←そしてここ！setupExtractButton()関数自体をここで閉じる！
 
 // ChatGPTへのリクエスト送信関数
 async function generateInsight(prompt) {
