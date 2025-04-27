@@ -1,129 +1,19 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8">
-  <title>地域情報入力 - 統合版</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      margin: 20px;
-    }
-    .container {
-      width: 100%;
-      max-width: 600px;
-      display: flex;
-      flex-direction: column;
-      gap: 15px;
-    }
-    label {
-      font-weight: bold;
-      margin-bottom: 5px;
-    }
-    input[type="text"], textarea, select, input[type="file"] {
-      width: 100%;
-      padding: 8px;
-      box-sizing: border-box;
-    }
-    textarea {
-      resize: vertical;
-      height: 80px;
-    }
-    .button-group {
-      display: flex;
-      gap: 10px;
-    }
-    button {
-      flex: 1;
-      padding: 10px;
-      border: none;
-      color: white;
-      background-color: #007bff;
-      cursor: pointer;
-      border-radius: 4px;
-    }
-    button:hover {
-      background-color: #0056b3;
-    }
-    .response-card {
-      margin-top: 30px;
-      padding: 15px;
-      border: 1px solid #ccc;
-      border-radius: 8px;
-      width: 100%;
-      box-sizing: border-box;
-      background-color: #f9f9f9;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <title>地域バリデーションテスト</title>
+    <script defer src="script.js"></script>
 </head>
 <body>
+    <h1>地域バリデーション ＆ トリガーテスト</h1>
 
-  <h1>地域情報入力</h1>
-
-  <div class="container">
-
-    <div>
-      <label for="regionInput">地域名:</label>
-      <input type="text" id="regionInput" placeholder="例：大分市">
+    <div id="validationSection" style="margin-bottom:20px;">
+        <input type="text" id="regionInput" placeholder="地域名を入力" style="width:300px; padding:8px;">
+        <button onclick="handleValidationAndTrigger()" style="padding:8px 16px;">チェック</button>
     </div>
 
-    <div>
-      <label for="themeInput">テーマ:</label>
-      <input type="text" id="themeInput" placeholder="例：宿泊施設の充実">
-    </div>
-
-    <div>
-      <label for="additionalInput">補足情報:</label>
-      <textarea id="additionalInput" placeholder="補足説明を記載してください"></textarea>
-    </div>
-
-    <div>
-      <label for="categorySelect">地域分類:</label>
-      <select id="categorySelect">
-        <option value="観光型">観光型</option>
-        <option value="交流型">交流型</option>
-        <option value="デジタル推進型">デジタル推進型</option>
-        <option value="移住促進型">移住促進型</option>
-      </select>
-    </div>
-
-    <div>
-      <label for="fileUpload">資料アップロード:</label>
-      <input type="file" id="fileUpload">
-    </div>
-
-    <div class="button-group">
-      <button id="checkButton" onclick="handleCheck()">課題を抽出する</button>
-      <button id="saveButton" onclick="handleSave()">保存する</button>
-    </div>
-
-  </div>
-
-  <div id="gptResponseCard" class="response-card" style="display: none;">
-    <strong>提案施策：</strong>
-    <div id="resultArea"></div>
-  </div>
-
-  <script>
-    function handleCheck() {
-      const region = document.getElementById('regionInput').value.trim();
-      const theme = document.getElementById('themeInput').value.trim();
-      const additional = document.getElementById('additionalInput').value.trim();
-
-      const combinedInput = `地域: ${region}\nテーマ: ${theme}\n補足情報: ${additional}`;
-
-      console.log("送信内容:", combinedInput);
-      // 本来ここでfetch APIを使ってサーバーにPOSTする流れになります
-      document.getElementById('gptResponseCard').style.display = 'block';
-      document.getElementById('resultArea').innerText = `（ここにChatGPT応答が表示されます）\n${combinedInput}`;
-    }
-
-    function handleSave() {
-      alert("保存機能は後ほど実装されます。");
-    }
-  </script>
+    <div id="resultArea" style="margin-top:20px; font-size:16px;"></div>
 
 </body>
 </html>
