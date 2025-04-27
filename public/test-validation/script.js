@@ -34,7 +34,7 @@ async function generateInsight(prompt) {
     }
 
     const data = await response.json();
-    document.getElementById("gptResponse").innerText = data.result;
+    displayChatGptResponseAsList(data.result);
   } catch (error) {
     console.error("インサイト生成エラー:", error);
     document.getElementById("gptResponse").innerText = "インサイト生成中にエラーが発生しました。";
@@ -45,4 +45,47 @@ async function generateInsight(prompt) {
 function triggerMap(region) {
   console.log(`地図トリガー: ${region} の地図を表示します（仮）`);
   // ここに実際の地図描画処理を後で追加します
+}
+// ChatGPTから応答を受け取ったときにリスト化する関数
+function displayChatGptResponseAsList(responseText) {
+    const responseArea = document.getElementById('gptResponse');
+    responseArea.innerHTML = '';
+
+    const list = document.createElement('ul');
+    list.style.listStyle = 'none';
+    list.style.padding = '0';
+    list.style.margin = '0';
+
+    const items = responseText.trim().split('\n');
+
+    items.forEach((itemText, index) => {
+        if (itemText.trim() !== '') {
+            const listItem = document.createElement('li');
+            listItem.textContent = itemText.trim();
+            listItem.style.marginBottom = '10px';
+            listItem.style.padding = '12px 15px';
+            listItem.style.backgroundColor = '#f5f5f5';
+            listItem.style.borderRadius = '8px';
+            listItem.style.cursor = 'pointer';
+            listItem.style.transition = 'background-color 0.3s, transform 0.2s';
+            listItem.setAttribute('data-index', index);
+
+            listItem.addEventListener('mouseover', () => {
+                listItem.style.backgroundColor = '#e0e0e0';
+                listItem.style.transform = 'scale(1.02)';
+            });
+            listItem.addEventListener('mouseout', () => {
+                listItem.style.backgroundColor = '#f5f5f5';
+                listItem.style.transform = 'scale(1)';
+            });
+
+            listItem.addEventListener('click', () => {
+                alert(`「${itemText.trim()}」がクリックされました！`);
+            });
+
+            list.appendChild(listItem);
+        }
+    });
+
+    responseArea.appendChild(list);
 }
