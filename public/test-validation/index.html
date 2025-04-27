@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SORA Dashboard - 未来版安定改訂 v1.2.1</title>
+  <title>SORA Dashboard - 未来版安定改訂 v1.2.2</title>
   <style>
     body { font-family: sans-serif; margin: 0; padding: 0; display: flex; }
     .sidebar { 
@@ -25,7 +25,7 @@
       flex-wrap: nowrap; 
     }
     label { display: block; margin-top: 15px; font-weight: bold; }
-    input[type="text"] { width: 95%; padding: 8px; margin-top: 5px; } /* 地域名欄＝テーマ欄と幅揃え */
+    input[type="text"] { width: 95%; padding: 8px; margin-top: 5px; }
     select, textarea { width: 95%; padding: 8px; margin-top: 5px; }
 
     .input-with-mic { 
@@ -86,10 +86,11 @@
       padding: 20px; 
       border-radius: 8px; 
       min-height: 500px; 
-      max-height: 900px; /* 長文にも対応 */
-      overflow-y: auto; 
+      height: auto; /* 高さ自動拡張 */
+      overflow-y: auto; /* 長文スクロール対応 */
       width: 100%;
       word-break: break-word;
+      max-height: calc(100vh - 80px); /* 画面サイズに追従、かつスクロール可 */
     }
   </style>
 </head>
@@ -142,13 +143,13 @@
     </div>
   </div>
 
-  <!-- script.jsを正式に読み込む（GPT連携設計は完全保持） -->
+  <!-- script.jsを正式に読み込む（GPT連携保持） -->
   <script src="script.js"></script>
 
-  <!-- 地図クリック時Googleマップ遷移復活 -->
+  <!-- 地図クリックでGoogleマップ遷移 -->
   <script>
     document.getElementById('mapArea').addEventListener('click', function() {
-      const mapUrl = 'https://www.google.com/maps'; // 仮設定（必要なら動的URL化可）
+      const mapUrl = 'https://www.google.com/maps';
       window.open(mapUrl, '_blank');
     });
   </script>
