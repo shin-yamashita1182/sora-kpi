@@ -149,3 +149,38 @@ function displayChatGptResponseAsList(responseText) {
 
     responseArea.appendChild(list);
 }
+// mind_trigger_kankou_click.jsonをロード
+let clickData = [];
+
+fetch('mind_trigger_kankou_click.json')
+  .then(response => response.json())
+  .then(data => {
+    clickData = data;
+  })
+  .catch(error => console.error('クリック用データ読み込みエラー:', error));
+
+// 課題リストのクリックイベント登録
+document.addEventListener('click', function(event) {
+  if (event.target && event.target.classList.contains('trigger-item')) {
+    const clickedTitle = event.target.textContent.trim();
+
+    const matchedData = clickData.find(item => item.title === clickedTitle);
+
+    if (matchedData) {
+      document.getElementById('modalTitle').textContent = matchedData.title;
+      document.getElementById('modalDescription').textContent = matchedData.description;
+      document.getElementById('modalAction').textContent = matchedData.action;
+      document.getElementById('modal').style.display = 'block';
+    } else {
+      document.getElementById('modalTitle').textContent = clickedTitle;
+      document.getElementById('modalDescription').textContent = "この課題に対応するマインド起点データがまだ設定されていません。";
+      document.getElementById('modalAction').textContent = "-";
+      document.getElementById('modal').style.display = 'block';
+    }
+  }
+});
+
+// モーダル閉じる処理
+document.getElementById('closeModal').addEventListener('click', function() {
+  document.getElementById('modal').style.display = 'none';
+});
