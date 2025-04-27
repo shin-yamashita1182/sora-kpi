@@ -20,6 +20,7 @@ export default async function handler(req, res) {
                     { role: "user", content: prompt }
                 ],
                 max_tokens: 300,
++ max_tokens: req.body.max_tokens || 1000,
             }),
         });
 
