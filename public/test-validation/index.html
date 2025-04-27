@@ -1,37 +1,37 @@
-<!-- チャット応答入力エリア -->
+<!-- ボタン1個でデータを受け取るテスト -->
 <div style="padding: 20px; font-family: sans-serif;">
-  <h2>リアルタイム応答入力</h2>
-  <textarea id="chatInput" placeholder="ここにChatGPT応答を書いてください（1行1課題）" style="width: 100%; height: 150px; margin-bottom: 15px;"></textarea>
-  <button onclick="processChatResponse()" style="padding: 10px 20px; background-color: #007bff; color: white; border: none; border-radius: 6px; cursor: pointer;">リスト生成</button>
+  <h2>外部応答テスト</h2>
+  <button onclick="fetchChatData()" style="padding: 10px 20px; background-color: #007bff; color: white; border: none; border-radius: 6px; cursor: pointer;">データ取得してリスト生成</button>
 </div>
 
 <!-- 課題リスト表示エリア -->
 <div id="responseArea" style="padding: 20px;"></div>
 
-<!-- モーダル -->
-<div id="modalOverlay" style="display: none; position: fixed; top:0; left:0; width:100%; height:100%; background-color: rgba(0,0,0,0.5); z-index: 9999;">
-  <div id="modalContent" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 30px; border-radius: 12px; max-width: 400px; width: 90%; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.2);">
-    <h2 id="modalTitle" style="margin-bottom: 20px;">タイトル</h2>
-    <p id="modalBody" style="margin-bottom: 30px;">内容</p>
-    <div style="display: flex; gap: 10px; justify-content: center;">
-      <button id="actionButton" style="padding: 10px 20px; background-color: #28a745; color: white; border: none; border-radius: 6px; cursor: pointer;">戦略目標を見る</button>
-      <button onclick="closeModal()" style="padding: 10px 20px; background-color: #6c757d; color: white; border: none; border-radius: 6px; cursor: pointer;">閉じる</button>
-    </div>
-  </div>
-</div>
-
 <script>
-// チャット応答をリアルタイム処理
-function processChatResponse() {
-    const inputText = document.getElementById('chatInput').value;
-    const items = inputText.trim().split('\n');
+// 仮APIからデータを取ってくる
+function fetchChatData() {
+    // 仮の応答（本当はAPI呼び出しする）
+    const mockApiResponse = `
+過疎化の進行
+医療施設の不足
+空き家問題
+地域経済の衰退
+`;
 
+    // リスト生成
+    displayResponseAsList(mockApiResponse);
+}
+
+// リスト化して画面に出す
+function displayResponseAsList(responseText) {
     const responseArea = document.getElementById('responseArea');
     responseArea.innerHTML = '';
 
     const list = document.createElement('ul');
     list.style.listStyle = 'none';
     list.style.padding = '0';
+
+    const items = responseText.trim().split('\n');
 
     items.forEach((itemText, index) => {
         if (itemText.trim() !== '') {
@@ -43,7 +43,6 @@ function processChatResponse() {
             listItem.style.borderRadius = '8px';
             listItem.style.cursor = 'pointer';
             listItem.style.transition = 'background-color 0.3s, transform 0.2s';
-            listItem.setAttribute('data-index', index);
 
             listItem.addEventListener('mouseover', () => {
                 listItem.style.backgroundColor = '#e0e0e0';
@@ -55,7 +54,7 @@ function processChatResponse() {
             });
 
             listItem.addEventListener('click', () => {
-                openModal(itemText.trim());
+                alert(`クリックされました：${itemText.trim()}`);
             });
 
             list.appendChild(listItem);
@@ -63,24 +62,5 @@ function processChatResponse() {
     });
 
     responseArea.appendChild(list);
-}
-
-// モーダル開く
-function openModal(taskName) {
-    document.getElementById('modalTitle').textContent = `課題: ${taskName}`;
-    document.getElementById('modalBody').textContent = `この課題に対応する戦略目標を設定します。`;
-
-    const actionButton = document.getElementById('actionButton');
-    actionButton.onclick = () => {
-        alert(`「${taskName}」に対応する戦略目標ページへジャンプ！（仮）`);
-        // 本番ではここで画面遷移
-    };
-
-    document.getElementById('modalOverlay').style.display = 'block';
-}
-
-// モーダル閉じる
-function closeModal() {
-    document.getElementById('modalOverlay').style.display = 'none';
 }
 </script>
