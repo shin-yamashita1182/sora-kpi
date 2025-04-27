@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SORA Dashboard - 未来版安定改訂 v1.2.3</title>
+  <title>SORA Dashboard - 未来版安定改訂 v1.2.4</title>
   <style>
     body { font-family: sans-serif; margin: 0; padding: 0; display: flex; }
     .sidebar { 
@@ -81,13 +81,11 @@
     }
 
     .response-area { 
-      flex-grow: 1; 
       background: #efefef; 
       padding: 20px; 
       border-radius: 8px; 
-      min-height: 500px; 
-      max-height: 700px; /* ←高さ制限して必ずスクロール */
-      overflow-y: auto;  /* ←スクロールを必ず出す */
+      height: 700px; /* 高さ固定 */
+      overflow-y: auto; /* 強制スクロールON */
       overflow-x: hidden;
       width: 100%;
       word-break: break-word;
@@ -143,7 +141,7 @@
     </div>
   </div>
 
-  <!-- script.jsを正式に読み込む（GPT連携は完全保持） -->
+  <!-- script.jsを正式に読み込む（GPT連携完全保持） -->
   <script src="script.js"></script>
 
   <!-- 地図クリックでGoogleマップ遷移 -->
