@@ -1,66 +1,70 @@
-<!-- ボタン1個でデータを受け取るテスト -->
-<div style="padding: 20px; font-family: sans-serif;">
-  <h2>外部応答テスト</h2>
-  <button onclick="fetchChatData()" style="padding: 10px 20px; background-color: #007bff; color: white; border: none; border-radius: 6px; cursor: pointer;">データ取得してリスト生成</button>
-</div>
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SORA Dashboard - 未来版安定改訂 v1.3.0</title>
+  <link rel="stylesheet" href="style.css"> <!-- 外部スタイルシート読み込み -->
+</head>
 
-<!-- 課題リスト表示エリア -->
-<div id="responseArea" style="padding: 20px;"></div>
+<body>
+  <div class="sidebar">
+    <h2>地域情報入力</h2>
 
-<script>
-// 仮APIからデータを取ってくる
-function fetchChatData() {
-    // 仮の応答（本当はAPI呼び出しする）
-    const mockApiResponse = `
-過疎化の進行
-医療施設の不足
-空き家問題
-地域経済の衰退
-`;
+    <label for="regionStaticInput">地域名（必須）:</label>
+    <input type="text" id="regionStaticInput" placeholder="例：大分市">
 
-    // リスト生成
-    displayResponseAsList(mockApiResponse);
-}
+    <label for="freeInput">テーマ・自由記述:</label>
+    <div class="input-with-mic">
+      <textarea id="freeInput" rows="5" placeholder="例：インバウンド観光施策の強化"></textarea>
+      <div class="mic-area">
+        <button class="mic-button" title="音声入力未対応">🎤</button>
+      </div>
+    </div>
 
-// リスト化して画面に出す
-function displayResponseAsList(responseText) {
-    const responseArea = document.getElementById('responseArea');
-    responseArea.innerHTML = '';
+    <label for="regionType">地域分類:</label>
+    <select id="regionType">
+      <option value="観光型">観光型</option>
+      <option value="都市型">都市型</option>
+      <option value="離島型">離島型</option>
+      <option value="農村型">農村型</option>
+      <option value="その他">その他</option>
+    </select>
 
-    const list = document.createElement('ul');
-    list.style.listStyle = 'none';
-    list.style.padding = '0';
+    <label for="fileUpload">資料アップロード（任意）:</label>
+    <input type="file" id="fileUpload">
 
-    const items = responseText.trim().split('\n');
+    <button id="extractButton">課題を抽出する</button>
+  </div>
 
-    items.forEach((itemText, index) => {
-        if (itemText.trim() !== '') {
-            const listItem = document.createElement('li');
-            listItem.textContent = itemText.trim();
-            listItem.style.marginBottom = '12px';
-            listItem.style.padding = '15px';
-            listItem.style.backgroundColor = '#f5f5f5';
-            listItem.style.borderRadius = '8px';
-            listItem.style.cursor = 'pointer';
-            listItem.style.transition = 'background-color 0.3s, transform 0.2s';
+  <div class="content">
+    <div class="response-area" id="gptResponse">
+      （ここにChatGPT応答が表示されます）
+    </div>
 
-            listItem.addEventListener('mouseover', () => {
-                listItem.style.backgroundColor = '#e0e0e0';
-                listItem.style.transform = 'scale(1.02)';
-            });
-            listItem.addEventListener('mouseout', () => {
-                listItem.style.backgroundColor = '#f5f5f5';
-                listItem.style.transform = 'scale(1)';
-            });
+    <div class="map-wrapper">
+      <div class="map-area" id="mapArea">
+        （地図エリア仮置き）
+      </div>
+      <div class="map-instruction">※地図をクリックするとGoogleマップが開きます</div>
+      <div class="info-area">
+        🚗 高速道路サービスエリア・インターチェンジ情報例<br>
+        ・〇〇サービスエリア（上り） - 休憩・飲食施設あり<br>
+        ・△△インターチェンジ - 主要出口、都市中心部アクセス良好
+      </div>
+    </div>
+  </div>
 
-            listItem.addEventListener('click', () => {
-                alert(`クリックされました：${itemText.trim()}`);
-            });
+  <!-- ChatGPT連携 script.jsは絶対にそのまま -->
+  <script src="script.js"></script>
 
-            list.appendChild(listItem);
-        }
+  <!-- 地図クリックイベント -->
+  <script>
+    document.getElementById('mapArea').addEventListener('click', function() {
+      const mapUrl = 'https://www.google.com/maps';
+      window.open(mapUrl, '_blank');
     });
+  </script>
 
-    responseArea.appendChild(list);
-}
-</script>
+</body>
+</html>

@@ -26,10 +26,7 @@ async function generateInsight(prompt) {
     const response = await fetch("/api/chatgpt", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        prompt: prompt,
-        max_tokens: 2000 // ← ここを新しく追加する
-      })
+      body: JSON.stringify({ prompt })
     });
 
     if (!response.ok) {
