@@ -156,6 +156,7 @@ fetch('mind_trigger_kankou_click.json')
   .then(response => response.json())
   .then(data => {
     clickData = data;
+console.log("クリックデータが読み込まれました:", clickData); // ここでデータが正しく読み込まれたか確認
   })
   .catch(error => console.error('クリック用データ読み込みエラー:', error));
 
@@ -163,6 +164,9 @@ fetch('mind_trigger_kankou_click.json')
 document.addEventListener('click', function(event) {
   if (event.target && event.target.classList.contains('trigger-item')) {
     const clickedTitle = event.target.textContent.trim();
+
+// クリックしたタイトルをログに出力
+    console.log("クリックされたタイトル:", clickedTitle);
 
     const matchedData = clickData.find(item => item.title === clickedTitle);
 
