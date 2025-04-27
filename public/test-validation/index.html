@@ -3,20 +3,20 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SORA Dashboard - 地域情報入力統合版（未来版安定改訂）</title>
+  <title>SORA Dashboard - 地域情報入力統合版（未来版安定改訂・完全版）</title>
   <style>
     body { font-family: sans-serif; margin: 0; padding: 0; display: flex; }
     .sidebar { width: 420px; padding: 20px; background: #f9f9f9; border-right: 1px solid #ccc; height: 100vh; overflow-y: auto; }
     .content { flex-grow: 1; padding: 20px; display: flex; flex-direction: row; gap: 20px; align-items: flex-start; flex-wrap: nowrap; }
     label { display: block; margin-top: 15px; font-weight: bold; }
-    input[type="text"], select, textarea { width: 100%; padding: 8px; margin-top: 5px; }
+    input[type="text"], select, textarea { width: calc(100% - 10px); padding: 8px; margin-top: 5px; }
     button { margin-top: 20px; width: 100%; padding: 10px; background: #007bff; color: white; border: none; font-size: 16px; cursor: pointer; }
     button:hover { background: #0056b3; }
     .map-wrapper { display: flex; flex-direction: column; align-items: center; height: 600px; justify-content: space-between; }
     .map-area { width: 300px; height: 300px; background: #ddd; display: flex; align-items: center; justify-content: center; position: relative; flex-shrink: 0; }
-    #expand-btn { position: absolute; top: 5px; right: 5px; background: transparent; color: #333; border: none; border-radius: 5px; padding: 5px; font-size: 18px; cursor: pointer; }
+    #expand-btn { position: absolute; top: 5px; right: 5px; background: transparent; color: #333; border: none; font-size: 20px; cursor: pointer; }
     .info-area { width: 300px; background: #ffffff; padding: 15px; border-radius: 8px; font-size: 14px; color: #333; box-shadow: 0 0 5px rgba(0,0,0,0.1); }
-    .response-area { flex-grow: 1; background: #efefef; padding: 20px; border-radius: 8px; min-height: 600px; display: flex; flex-direction: column; justify-content: flex-start; }
+    .response-area { flex-grow: 1; background: #efefef; padding: 20px; border-radius: 8px; min-height: 600px; display: flex; flex-direction: column; justify-content: flex-start; overflow-y: auto; width: 100%; word-break: break-word; }
     #modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.7); justify-content: center; align-items: center; z-index: 1000; }
     #modal-content { background: white; padding: 20px; border-radius: 10px; max-width: 90%; max-height: 80%; overflow: hidden; position: relative; }
     #close-btn { position: absolute; top: 10px; right: 10px; background: #FF4136; color: white; border: none; border-radius: 5px; padding: 5px 10px; cursor: pointer; }
