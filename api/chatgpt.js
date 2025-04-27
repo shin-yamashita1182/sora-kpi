@@ -1,34 +1,33 @@
-const { Configuration, OpenAIApi } = require("openai");
+export default async function handler(req, res) {
+    if (req.method !== 'POST') {
+        return res.status(405).json({ error: 'Method not allowed' });
+    }
 
-// OpenAI APIキー設定
-const configuration = new Configuration({
-  apiKey: process.env.OPENAI_API_KEY,
-});
-const openai = new OpenAIApi(configuration);
+    const { prompt } = req.body;
+    const apiKey = process.env.OPENAI_API_KEY;
 
-// ChatGPT APIハンドラ
-async function chatgptHandler(req, res) {
-  if (req.method !== "POST") {
-    res.status(405).json({ error: "Method not allowed" });
-    return;
-  }
+    try {
+        const response = await fetch('https://api.openai.com/v1/chat/completions', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${apiKey}`,
+            },
+            body: JSON.stringify({
+                model: 'gpt-4-1106-preview', // ←ここ重要！！
+                messages: [
+                    { role: "system", content: "あなたは地域施策の専門家です。" },
+                    { role: "user", content: prompt }
+                ],
+                max_tokens: 300,
+            }),
+        });
 
-  const { prompt, max_tokens } = req.body; // ★ここでmax_tokensも受け取る
+        const data = await response.json();
+        res.status(200).json({ result: data.choices[0].message.content.trim() });
 
-  try {
-    const openaiResponse = await openai.createChatCompletion({
-      model: "gpt-4",
-      messages: [{ role: "user", content: prompt }],
-      max_tokens: max_tokens || 1000, // ★ここでmax_tokensをOpenAIに渡す！（なければデフォルト1000）
-      temperature: 0.7,
-    });
-
-    const reply = openaiResponse.data.choices[0].message.content;
-    res.status(200).json({ reply });
-  } catch (error) {
-    console.error(error.response ? error.response.data : error.message);
-    res.status(500).json({ error: "ChatGPT API呼び出し失敗" });
-  }
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'OpenAI API error' });
+    }
 }
-
-module.exports = chatgptHandler;
