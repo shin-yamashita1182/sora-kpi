@@ -164,6 +164,9 @@ console.log("クリックデータが読み込まれました:", clickData); // 
 
 // 課題リストのクリックイベント登録
 document.addEventListener('click', function(event) {
+// クリックイベントが発火したことを確認するためにログを追加
+  console.log("クリックイベントが発火しました");
+
   if (event.target && event.target.classList.contains('trigger-item')) {
     const clickedTitle = event.target.textContent.trim().toLowerCase();  // 小文字に変換して一致確認
 
