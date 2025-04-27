@@ -1,18 +1,17 @@
 let mindTriggerMaster = {};  // MindTriggerマスターをグローバルに定義
-// 未来版 script.js 応答検証優先版
 
 // DOM読み込み後にイベントを設定
 document.addEventListener("DOMContentLoaded", async () => {
-  await loadMindTriggerMaster();  // ★最初にマスターを読み込む
-  setupExtractButton();           // ★ボタン設定を分ける
-}); // ←ここでしっかり閉じる！ (26行目)
+  await loadMindTriggerMaster();  // 最初にマスターを読み込む
+  setupExtractButton();           // ボタン設定を分ける
+});
 
-// そして次に新しい関数定義
+// ボタンの設定
 function setupExtractButton() {
   const extractButton = document.getElementById("extractButton");
 
   extractButton.addEventListener("click", () => {    
-const region = document.getElementById("regionStaticInput").value.trim();
+    const region = document.getElementById("regionStaticInput").value.trim();
     const freeInput = document.getElementById("freeInput").value.trim();
 
     if (!region) {
@@ -24,15 +23,15 @@ const region = document.getElementById("regionStaticInput").value.trim();
 
     generateInsight(prompt);
     triggerMap(region);
-}); // ★←ここ！クリックイベントの中をここで閉じる！
-} // ★←そしてここ！setupExtractButton()関数自体をここで閉じる！
+  });
+}
 
 // ChatGPTへのリクエスト送信関数
 async function generateInsight(prompt) {
   try {
-  console.log("送信するPrompt:", prompt);  // ここで送信する内容を確認！
+    console.log("送信するPrompt:", prompt);  // ここで送信する内容を確認！
 
-  const response = await fetch("/api/chatgpt", {
+    const response = await fetch("/api/chatgpt", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ prompt })
@@ -49,9 +48,11 @@ async function generateInsight(prompt) {
     document.getElementById("gptResponse").innerText = "インサイト生成中にエラーが発生しました。";
   }
 }
+
+// MindTriggerMasterの読み込み
 async function loadMindTriggerMaster() {
   try {
-    const response = await fetch('./mind_trigger_kankou.json');  // ★必ず ./mind_trigger_kankou.json ！
+    const response = await fetch('./mind_trigger_kankou.json');
     if (!response.ok) throw new Error('MindTriggerMaster読み込み失敗');
     mindTriggerMaster = await response.json();
     console.log("MindTriggerMaster読み込み完了:", mindTriggerMaster);
@@ -59,15 +60,18 @@ async function loadMindTriggerMaster() {
     console.error('MindTriggerMaster読み込みエラー:', error);
   }
 }
+
+// 課題に対応するデータを表示
 function handleMindTrigger(taskText) {
   const selected = mindTriggerMaster[taskText];
-
   if (selected) {
     showMindModal(selected.mind, selected.strategies);
   } else {
     alert("この課題に対応するマインド起点データがまだ設定されていません。");
   }
 }
+
+// モーダル表示
 function showMindModal(mindText, strategyList) {
   const modal = document.createElement('div');
   modal.className = 'mind-modal';
@@ -104,86 +108,89 @@ function showMindModal(mindText, strategyList) {
   });
 }
 
-// 地図表示用トリガー関数（仮実装）
+// 地図表示用の仮トリガー
 function triggerMap(region) {
   console.log(`地図トリガー: ${region} の地図を表示します（仮）`);
-  // ここに実際の地図描画処理を後で追加します
+  // 実際の地図描画処理を後で追加します
 }
+
 // ChatGPTから応答を受け取ったときにリスト化する関数
 function displayChatGptResponseAsList(responseText) {
-    const responseArea = document.getElementById('gptResponse');
-    responseArea.innerHTML = '';
+  const responseArea = document.getElementById('gptResponse');
+  responseArea.innerHTML = '';
 
-    const list = document.createElement('ul');
-    list.style.listStyle = 'none';
-    list.style.padding = '0';
-    list.style.margin = '0';
+  const list = document.createElement('ul');
+  list.style.listStyle = 'none';
+  list.style.padding = '0';
+  list.style.margin = '0';
 
-    const items = responseText.trim().split('\n');
+  const items = responseText.trim().split('\n');
 
-    items.forEach((itemText, index) => {
-        if (itemText.trim() !== '') {
-            const listItem = document.createElement('li');
-            listItem.textContent = itemText.trim();
-            listItem.style.marginBottom = '10px';
-            listItem.style.padding = '12px 15px';
-            listItem.style.backgroundColor = '#f5f5f5';
-            listItem.style.borderRadius = '8px';
-            listItem.style.cursor = 'pointer';
-            listItem.style.transition = 'background-color 0.3s, transform 0.2s';
-            listItem.setAttribute('data-index', index);
+  items.forEach((itemText, index) => {
+    if (itemText.trim() !== '') {
+      const listItem = document.createElement('li');
+      listItem.textContent = itemText.trim();
+      listItem.style.marginBottom = '10px';
+      listItem.style.padding = '12px 15px';
+      listItem.style.backgroundColor = '#f5f5f5';
+      listItem.style.borderRadius = '8px';
+      listItem.style.cursor = 'pointer';
+      listItem.style.transition = 'background-color 0.3s, transform 0.2s';
+      listItem.setAttribute('data-index', index);
 
-            listItem.addEventListener('mouseover', () => {
-                listItem.style.backgroundColor = '#e0e0e0';
-                listItem.style.transform = 'scale(1.02)';
-            });
-            listItem.addEventListener('mouseout', () => {
-                listItem.style.backgroundColor = '#f5f5f5';
-                listItem.style.transform = 'scale(1)';
-            });
+      listItem.addEventListener('mouseover', () => {
+        listItem.style.backgroundColor = '#e0e0e0';
+        listItem.style.transform = 'scale(1.02)';
+      });
+      listItem.addEventListener('mouseout', () => {
+        listItem.style.backgroundColor = '#f5f5f5';
+        listItem.style.transform = 'scale(1)';
+      });
 
-            listItem.addEventListener('click', () => {
-               handleMindTrigger(itemText.trim());
-});
-            list.appendChild(listItem);
-        }
-    });
+      listItem.addEventListener('click', () => {
+        handleMindTrigger(itemText.trim());
+      });
 
-    responseArea.appendChild(list);
+      list.appendChild(listItem);
+    }
+  });
+
+  responseArea.appendChild(list);
 }
-// mind_trigger_kankou_click.jsonをロード
+
+// mind_trigger_kankou_click.jsonの読み込み
 let clickData = [];
 
 fetch('mind_trigger_kankou_click.json')
   .then(response => response.json())
   .then(data => {
     clickData = data;
-console.log("クリックデータが読み込まれました:", clickData); // ここでデータが正しく読み込まれたか確認
+    console.log("クリックデータが読み込まれました:", clickData);
   })
   .catch(error => console.error('クリック用データ読み込みエラー:', error));
 
 // 課題リストのクリックイベント登録
 document.addEventListener('click', function(event) {
-// クリックイベントが発火したことを確認するためにログを追加
   console.log("クリックイベントが発火しました");
 
   if (event.target && event.target.classList.contains('trigger-item')) {
-    const clickedTitle = event.target.textContent.trim().toLowerCase();  // 小文字に変換して一致確認
+    const clickedTitle = event.target.textContent.trim();  // 小文字に変換しないでそのまま取得
 
-// クリックしたタイトルをログに出力
     console.log("クリックされたタイトル:", clickedTitle);
 
-    const matchedData = clickData.find(item => item.title === clickedTitle);
+    // clickData内の各 item.title と一致するものをチェック
+    const matchedData = clickData.find(item => item.title.trim() === clickedTitle);
 
-// 一致したデータをログに出力
-    console.log("一致したデータ:", matchedData); // 一致したデータを確認
+    console.log("一致したデータ:", matchedData);  // 一致したデータを確認
 
     if (matchedData) {
+      // 一致したデータが見つかった場合、モーダルを表示
       document.getElementById('modalTitle').textContent = matchedData.title;
       document.getElementById('modalDescription').textContent = matchedData.description;
       document.getElementById('modalAction').textContent = matchedData.action;
       document.getElementById('modal').style.display = 'block';
     } else {
+      // 一致しない場合
       document.getElementById('modalTitle').textContent = clickedTitle;
       document.getElementById('modalDescription').textContent = "この課題に対応するマインド起点データがまだ設定されていません。";
       document.getElementById('modalAction').textContent = "-";
