@@ -10,17 +10,15 @@
     .content { flex-grow: 1; padding: 20px; display: flex; flex-direction: row; gap: 20px; align-items: flex-start; flex-wrap: nowrap; }
     label { display: block; margin-top: 15px; font-weight: bold; }
     input[type="text"], select, textarea { width: calc(100% - 10px); padding: 8px; margin-top: 5px; }
+    .input-with-mic { position: relative; }
+    .mic-button { position: absolute; top: 50%; right: 10px; transform: translateY(-50%); background: none; border: none; cursor: pointer; font-size: 20px; }
     button { margin-top: 20px; width: 100%; padding: 10px; background: #007bff; color: white; border: none; font-size: 16px; cursor: pointer; }
     button:hover { background: #0056b3; }
     .map-wrapper { display: flex; flex-direction: column; align-items: center; height: 600px; justify-content: space-between; }
-    .map-area { width: 300px; height: 300px; background: #ddd; display: flex; align-items: center; justify-content: center; position: relative; flex-shrink: 0; }
-    #expand-btn { position: absolute; top: 5px; right: 5px; background: transparent; color: #333; border: none; font-size: 20px; cursor: pointer; }
-    .info-area { width: 300px; background: #ffffff; padding: 15px; border-radius: 8px; font-size: 14px; color: #333; box-shadow: 0 0 5px rgba(0,0,0,0.1); }
-    .response-area { flex-grow: 1; background: #efefef; padding: 20px; border-radius: 8px; min-height: 600px; display: flex; flex-direction: column; justify-content: flex-start; overflow-y: auto; width: 100%; word-break: break-word; }
-    #modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.7); justify-content: center; align-items: center; z-index: 1000; }
-    #modal-content { background: white; padding: 20px; border-radius: 10px; max-width: 90%; max-height: 80%; overflow: hidden; position: relative; }
-    #close-btn { position: absolute; top: 10px; right: 10px; background: #FF4136; color: white; border: none; border-radius: 5px; padding: 5px 10px; cursor: pointer; }
-    iframe { width: 100%; height: 400px; border: none; }
+    .map-area { width: 300px; height: 300px; background: #ddd; display: flex; align-items: center; justify-content: center; position: relative; flex-shrink: 0; cursor: pointer; }
+    .map-instruction { margin-top: 5px; font-size: 12px; color: #666; }
+    .info-area { width: 300px; background: #ffffff; padding: 15px; border-radius: 8px; font-size: 14px; color: #333; box-shadow: 0 0 5px rgba(0,0,0,0.1); margin-top: 10px; }
+    .response-area { flex-grow: 1; background: #efefef; padding: 20px; border-radius: 8px; min-height: 500px; display: flex; flex-direction: column; justify-content: flex-start; overflow-y: auto; width: 100%; word-break: break-word; }
   </style>
 </head>
 <body>
@@ -31,7 +29,10 @@
     <input type="text" id="regionStaticInput" placeholder="例：大分市">
 
     <label for="freeInput">テーマ・自由記述:</label>
-    <textarea id="freeInput" rows="4" placeholder="例：インバウンド観光施策の強化"></textarea>
+    <div class="input-with-mic">
+      <textarea id="freeInput" rows="4" placeholder="例：インバウンド観光施策の強化"></textarea>
+      <button class="mic-button" title="音声入力未対応">🎤</button>
+    </div>
 
     <label for="regionType">地域分類:</label>
     <select id="regionType">
@@ -53,10 +54,10 @@
       （ここにChatGPT応答が表示されます）
     </div>
     <div class="map-wrapper">
-      <div class="map-area">
+      <div class="map-area" id="mapArea">
         （地図エリア仮置き）
-        <button id="expand-btn">🔍</button>
       </div>
+      <div class="map-instruction">※地図をクリックすると拡大表示されます</div>
       <div class="info-area">
         🚗 高速道路サービスエリア・インターチェンジ情報例<br>
         ・〇〇サービスエリア（上り） - 休憩・飲食施設あり<br>
@@ -65,25 +66,11 @@
     </div>
   </div>
 
-  <div id="modal">
-    <div id="modal-content">
-      <button id="close-btn">✖️閉じる</button>
-      <iframe src="https://maps.google.com" title="拡大地図"></iframe>
-    </div>
-  </div>
-
-  <script src="script.js"></script>
   <script>
-    const expandBtn = document.getElementById('expand-btn');
-    const closeBtn = document.getElementById('close-btn');
-    const modal = document.getElementById('modal');
+    const mapArea = document.getElementById('mapArea');
 
-    expandBtn.addEventListener('click', () => {
-      modal.style.display = 'flex';
-    });
-
-    closeBtn.addEventListener('click', () => {
-      modal.style.display = 'none';
+    mapArea.addEventListener('click', () => {
+      window.open('https://maps.google.com', '_blank');
     });
   </script>
 </body>
