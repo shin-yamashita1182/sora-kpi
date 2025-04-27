@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SORA Dashboard - 完全未来版</title>
+  <title>SORA Dashboard - 未来版安定改訂</title>
   <style>
     body { font-family: sans-serif; margin: 0; padding: 0; display: flex; }
     .sidebar { width: 420px; padding: 20px; background: #f9f9f9; border-right: 1px solid #ccc; height: 100vh; overflow-y: auto; }
@@ -66,44 +66,7 @@
     </div>
   </div>
 
-  <script>
-    const mapArea = document.getElementById('mapArea');
-    const extractButton = document.getElementById('extractButton');
-    const gptResponse = document.getElementById('gptResponse');
-
-    mapArea.addEventListener('click', () => {
-      window.open('https://maps.google.com', '_blank');
-    });
-
-    extractButton.addEventListener('click', async () => {
-      const region = document.getElementById('regionStaticInput').value;
-      const theme = document.getElementById('freeInput').value;
-      const category = document.getElementById('regionType').value;
-
-      const prompt = `${region}に関する課題を「${category}」分類で整理してください。テーマ: ${theme}`;
-
-      gptResponse.textContent = "ChatGPTに問い合わせ中...";
-
-      try {
-        const response = await fetch('https://api.openai.com/v1/chat/completions', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': 'Bearer YOUR_API_KEY'
-          },
-          body: JSON.stringify({
-            model: "gpt-4",
-            messages: [{ role: "user", content: prompt }]
-          })
-        });
-
-        const data = await response.json();
-        gptResponse.textContent = data.choices[0].message.content.trim();
-      } catch (error) {
-        gptResponse.textContent = "エラーが発生しました。";
-        console.error(error);
-      }
-    });
-  </script>
+  <!-- ここでscript.jsを正式に読み込み -->
+  <script src="script.js"></script>
 </body>
 </html>
