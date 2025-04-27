@@ -5,7 +5,9 @@ let mindTriggerMaster = {};  // MindTriggerマスターをグローバルに定�
 document.addEventListener("DOMContentLoaded", async () => {
   await loadMindTriggerMaster();  // ★最初にマスターを読み込む
   setupExtractButton();           // ★ボタン設定を分ける
-});
+}); // ←ここでしっかり閉じる！ (26行目)
+
+// そして次に新しい関数定義
 function setupExtractButton() {
   const extractButton = document.getElementById("extractButton");
 
