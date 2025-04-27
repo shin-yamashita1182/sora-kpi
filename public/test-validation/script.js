@@ -30,7 +30,9 @@ const region = document.getElementById("regionStaticInput").value.trim();
 // ChatGPTへのリクエスト送信関数
 async function generateInsight(prompt) {
   try {
-    const response = await fetch("/api/chatgpt", {
+  console.log("送信するPrompt:", prompt);  // ここで送信する内容を確認！
+
+  const response = await fetch("/api/chatgpt", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ prompt })
