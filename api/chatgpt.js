@@ -19,7 +19,7 @@ export default async function handler(req, res) {
                     { role: "system", content: "あなたは地域施策の専門家です。" },
                     { role: "user", content: prompt }
                 ],
-                max_tokens: 1000,
+                max_tokens: 300,
             }),
         });
 
