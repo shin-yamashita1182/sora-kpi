@@ -80,9 +80,9 @@ function displayChatGptResponseAsList(responseText) {
             });
 
             listItem.addEventListener('click', () => {
-                alert(`「${itemText.trim()}」がクリックされました！`);
-            });
-
+                listItem.addEventListener('click', () => {
+  handleMindTrigger(itemText.trim());
+});
             list.appendChild(listItem);
         }
     });
