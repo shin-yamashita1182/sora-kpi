@@ -80,8 +80,7 @@ function displayChatGptResponseAsList(responseText) {
             });
 
             listItem.addEventListener('click', () => {
-                listItem.addEventListener('click', () => {
-  handleMindTrigger(itemText.trim());
+               handleMindTrigger(itemText.trim());
 });
             list.appendChild(listItem);
         }
