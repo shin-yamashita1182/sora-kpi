@@ -2,76 +2,65 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SORA Dashboard - 未来版安定改訂 v1.3.0</title>
-  <link rel="stylesheet" href="style.css"> <!-- 外部スタイルシート読み込み -->
+  <title>未来版 MindTrigger Dashboard</title>
+  <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
-  <div class="sidebar">
+
+  <!-- 地域情報入力セクション -->
+  <section id="area-input">
     <h2>地域情報入力</h2>
-
-    <label for="regionStaticInput">地域名（必須）:</label>
-    <input type="text" id="regionStaticInput" placeholder="例：大分市">
-
-    <label for="freeInput">テーマ・自由記述:</label>
-    <div class="input-with-mic">
-      <textarea id="freeInput" rows="5" placeholder="例：インバウンド観光施策の強化"></textarea>
-      <div class="mic-area">
-        <button class="mic-button" title="音声入力未対応">🎤</button>
-      </div>
-    </div>
-
-    <label for="regionType">地域分類:</label>
-    <select id="regionType">
-      <option value="観光型">観光型</option>
-      <option value="都市型">都市型</option>
-      <option value="離島型">離島型</option>
-      <option value="農村型">農村型</option>
-      <option value="その他">その他</option>
+    <input type="text" id="regionName" placeholder="地域名を入力">
+    <select id="themeSelect">
+      <option value="観光">観光</option>
+      <option value="福祉">福祉</option>
+      <option value="インフラ">インフラ</option>
     </select>
+    <button id="generateTasksBtn">課題抽出スタート</button>
+  </section>
 
-    <label for="fileUpload">資料アップロード（任意）:</label>
-    <input type="file" id="fileUpload">
+  <!-- 自由課題生成セクション -->
+  <section id="task-list" style="display:none;">
+    <h2>課題リスト</h2>
+    <div id="generatedTasks"></div>
+    <button id="generateStrategiesBtn">仮戦略リスト生成へ</button>
+  </section>
 
-    <button id="extractButton">課題を抽出する</button>
-  </div>
+  <!-- 仮戦略リストセクション -->
+  <section id="strategy-list" style="display:none;">
+    <h2>仮戦略リスト</h2>
+    <div id="strategyCards"></div>
+    <button id="confirmStrategiesBtn">このリストで確定！</button>
+  </section>
 
-  <div class="content">
-    <div class="response-area" id="gptResponse">
-      （ここにChatGPT応答が表示されます）
-    </div>
+  <!-- 四象限マッピングセクション -->
+  <section id="quadrant-map" style="display:none;">
+    <h2>四象限マッピング</h2>
+    <div id="mapGrid"></div>
+  </section>
 
-    <div class="map-wrapper">
-      <div class="map-area" id="mapArea">
-        （地図エリア仮置き）
-      </div>
-      <div class="map-instruction">※地図をクリックするとGoogleマップが開きます</div>
-      <div class="info-area">
-        🚗 高速道路サービスエリア・インターチェンジ情報例<br>
-        ・〇〇サービスエリア（上り） - 休憩・飲食施設あり<br>
-        ・△△インターチェンジ - 主要出口、都市中心部アクセス良好
-      </div>
-    </div>
-  </div>
+  <!-- バランスチャート＋密度マップセクション -->
+  <section id="charts" style="display:none;">
+    <h2>バランスチャート</h2>
+    <canvas id="balanceChart"></canvas>
+    <h2>密度マップ</h2>
+    <div id="densityMap"></div>
+  </section>
 
-  <script src="script.js"></script>
+  <!-- スコアカード（BSC）セクション -->
+  <section id="bsc" style="display:none;">
+    <h2>BSC スコアカード</h2>
+    <table id="bscTable"></table>
+  </section>
 
-  <script>
-    document.getElementById('mapArea').addEventListener('click', function() {
-      const mapUrl = 'https://www.google.com/maps';
-      window.open(mapUrl, '_blank');
-    });
-  </script>
-<!-- モーダルポップアップ -->
-<div id="modal" class="modal" style="display:none;">
-  <div class="modal-content">
-    <span id="closeModal" class="close">&times;</span>
-    <h2 id="modalTitle">課題詳細</h2>
-    <p id="modalDescription"></p>
-    <p><strong>次のアクション:</strong> <span id="modalAction"></span></p>
-  </div>
-</div>
+  <!-- 出力保存セクション -->
+  <section id="output" style="display:none;">
+    <h2>出力</h2>
+    <button id="downloadPdfBtn">PDF出力</button>
+    <button id="downloadPngBtn">PNG保存</button>
+    <button id="downloadExcelBtn">Excel出力</button>
+  </section>
 
+  <script src="app.js"></script>
 </body>
 </html>
