@@ -22,7 +22,7 @@ async function generateInsight() {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         message: message,
-         // ★ここだけ追加（ほかは一切いじっていない）
+         max_tokens: 2000// ★ここだけ追加（ほかは一切いじっていない）
       }),
     });
 
