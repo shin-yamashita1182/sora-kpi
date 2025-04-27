@@ -165,7 +165,7 @@ console.log("クリックデータが読み込まれました:", clickData); // 
 // 課題リストのクリックイベント登録
 document.addEventListener('click', function(event) {
   if (event.target && event.target.classList.contains('trigger-item')) {
-    const clickedTitle = event.target.textContent.trim();
+    const clickedTitle = event.target.textContent.trim().toLowerCase();  // 小文字に変換して一致確認
 
 // クリックしたタイトルをログに出力
     console.log("クリックされたタイトル:", clickedTitle);
