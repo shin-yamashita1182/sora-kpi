@@ -180,26 +180,38 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // fetchChatGPTResponse関数（ChatGPT連携）
 async function fetchChatGPTResponse(prompt) {
-  try {
-    console.log("送信するPrompt:", prompt);
+    try {
+        console.log("送信するPrompt:", prompt);
 
-    const response = await fetch("/api/chatgpt", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ prompt })
-    });
+        const response = await fetch("/api/chatgpt", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ prompt })
+        });
 
-    if (!response.ok) {
-      throw new Error("ChatGPT APIエラー");
+        if (!response.ok) {
+            throw new Error("ChatGPT APIエラー");
+        }
+
+        const data = await response.json();
+        document.getElementById('gptResponse').innerText = data.result || "結果が取得できませんでした。";
+        
+    } catch (error) {
+        console.error("課題抽出中にエラー発生:", error);
+        alert("課題抽出に失敗しました。");
+    }
+}
+
+document.getElementById('extractButton').addEventListener('click', async () => {
+    const regionName = document.getElementById('regionStaticInput').value.trim();
+    const userNote = document.getElementById('freeInput').value.trim();
+
+    if (!regionName || !userNote) {
+        alert('地域名とテーマは両方入力してください。');
+        return;
     }
 
-    const data = await response.json();
+    const prompt = `${regionName}について、テーマ「${userNote}」に基づく地域課題を抽出してください。`;
 
-    const canvasResult = document.getElementById("canvasResult");
-    canvasResult.innerText = data.result || "結果が取得できませんでした。";
-
-  } catch (error) {
-    console.error("課題抽出中にエラー発生:", error);
-    alert("課題抽出に失敗しました。");
-  }
-}
+    await fetchChatGPTResponse(prompt);
+});
