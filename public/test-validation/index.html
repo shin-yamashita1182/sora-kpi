@@ -1,62 +1,61 @@
-<!-- --- 未来版 仮結合版ダッシュボード --- -->
+<!-- --- 未来版 モダンデザインダッシュボード --- -->
 <div class="dashboard-wrapper">
 
   <!-- 左：地域情報入力エリア -->
   <div class="sidebar">
     <h2>地域情報入力</h2>
 
-    <label for="regionStaticInput">地域名（必須）:</label>
-    <input type="text" id="regionStaticInput" placeholder="例：大分市">
+    <div class="form-group">
+      <label for="regionStaticInput">地域名（必須）:</label>
+      <input type="text" id="regionStaticInput" placeholder="例：大分市">
+    </div>
 
-    <label for="freeInput">テーマ・自由記述:</label>
-    <textarea id="freeInput" rows="5" placeholder="例：インバウンド観光施策の強化"></textarea>
+    <div class="form-group">
+      <label for="freeInput">テーマ・自由記述:</label>
+      <textarea id="freeInput" rows="4" placeholder="例：インバウンド観光施策の強化"></textarea>
+      <button id="voiceInputBtn" class="secondary-button">音声入力（仮）</button>
+    </div>
 
-    <label for="regionType">地域分類:</label>
-    <select id="regionType">
-      <option value="観光型">観光型</option>
-      <option value="都市型">都市型</option>
-      <option value="離島型">離島型</option>
-      <option value="農村型">農村型</option>
-      <option value="その他">その他</option>
-    </select>
+    <div class="form-group">
+      <label for="regionType">地域分類:</label>
+      <select id="regionType">
+        <option value="観光型">観光型</option>
+        <option value="都市型">都市型</option>
+        <option value="離島型">離島型</option>
+        <option value="農村型">農村型</option>
+        <option value="その他">その他</option>
+      </select>
+    </div>
 
-    <button id="extractButton">課題を抽出する</button>
+    <button id="extractButton" class="primary-button">課題を抽出する</button>
   </div>
 
   <!-- 中央：ChatGPT応答＆仮戦略リスト展開エリア -->
   <div class="center-area">
-
     <div class="gpt-response-area" id="gptResponse">
       （ここにChatGPT応答が表示されます）
     </div>
-
     <div class="generate-button-wrapper">
-      <button id="generateStrategyBtn">仮戦略リストを生成する</button>
+      <button id="generateStrategyBtn" class="primary-button">仮戦略リストを生成する</button>
     </div>
-
     <div class="generated-tasks-area" id="generatedTasks">
       <!-- 仮戦略カードがここに並びます -->
     </div>
-
   </div>
 
   <!-- 右：マップ＆情報エリア -->
   <div class="map-wrapper">
-
     <div class="map-area" id="mapArea">
       （地図エリア仮置き）
     </div>
-
     <div class="map-instruction">
       ※地図をクリックするとGoogleマップが開きます
     </div>
-
     <div class="info-area">
       🚗 高速道路サービスエリア・インターチェンジ情報例<br>
       ・〇〇サービスエリア（上り） - 休憩・飲食施設あり<br>
       ・△△インターチェンジ - 主要出口、都市中心部アクセス良好
     </div>
-
   </div>
 
 </div>
@@ -66,34 +65,58 @@
   .dashboard-wrapper {
     display: flex;
     height: 100vh;
+    background: #f8f9fa;
+    gap: 10px;
   }
 
   /* 左：サイドバー */
   .sidebar {
-    width: 300px;
+    width: 280px;
     background: #ffffff;
-    padding: 20px;
-    box-shadow: 2px 0 5px rgba(0,0,0,0.1);
-    box-sizing: border-box;
+    padding: 24px;
+    box-shadow: 2px 0 8px rgba(0,0,0,0.1);
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 20px;
+    border-radius: 0 16px 16px 0;
+  }
+
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  #voiceInputBtn {
+    margin-top: 8px;
+    padding: 8px 16px;
+    background: #6c757d;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    cursor: pointer;
+  }
+
+  #voiceInputBtn:hover {
+    background: #5a6268;
   }
 
   /* 中央：センターエリア */
   .center-area {
     flex-grow: 2;
-    padding: 20px;
+    padding: 24px;
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 24px;
     overflow-y: auto;
   }
 
   .gpt-response-area {
-    background: #f0f0f0;
+    background: #ffffff;
     padding: 20px;
-    border-radius: 8px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
     min-height: 300px;
   }
 
@@ -102,17 +125,18 @@
     justify-content: center;
   }
 
-  #generateStrategyBtn {
-    padding: 10px 20px;
+  .primary-button {
+    padding: 10px 24px;
     background: #007bff;
     color: white;
     border: none;
-    border-radius: 8px;
+    border-radius: 12px;
     font-size: 16px;
     cursor: pointer;
+    transition: background 0.3s;
   }
 
-  #generateStrategyBtn:hover {
+  .primary-button:hover {
     background: #0056b3;
   }
 
@@ -126,22 +150,25 @@
   .map-wrapper {
     width: 320px;
     background: #ffffff;
-    padding: 20px;
-    box-sizing: border-box;
+    padding: 24px;
     display: flex;
     flex-direction: column;
-    gap: 10px;
-    box-shadow: -2px 0 5px rgba(0,0,0,0.1);
+    gap: 12px;
+    box-shadow: -2px 0 8px rgba(0,0,0,0.1);
+    border-radius: 16px 0 0 16px;
   }
 
   .map-area {
     background: #cccccc;
     height: 300px;
-    border-radius: 8px;
+    border-radius: 12px;
   }
 
   .map-instruction, .info-area {
     font-size: 14px;
     color: #666;
+    background: #f1f1f1;
+    padding: 10px;
+    border-radius: 8px;
   }
 </style>
