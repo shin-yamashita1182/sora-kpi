@@ -183,20 +183,20 @@ document.addEventListener('DOMContentLoaded', () => {
         body: JSON.stringify({ regionName, userNote }),
       });
 
-// レスポンスをまずテキスト形式で受け取る
-  const data = await response.text(); // .text()を使って生のレスポンスを取得
+      // レスポンスをまずテキスト形式で受け取る
+      const data = await response.text(); // .text()を使って生のレスポンスを取得
 
-  console.log('Raw response:', data); // 生のレスポンスをコンソールに表示
+      console.log('Raw response:', data); // 生のレスポンスをコンソールに表示
 
-  // レスポンスがJSONかどうかを確認し、解析する
-  try {
-    const jsonResponse = JSON.parse(data); // JSONとして解析
-    console.log('Parsed JSON response:', jsonResponse); // 正しくJSONが返ってきたか確認
-    document.getElementById('canvasResult').innerHTML = `<pre>${jsonResponse.result}</pre>`;
-  } catch (error) {
-    console.error('Failed to parse JSON:', error);
-    document.getElementById('canvasResult').innerHTML = 'JSON解析に失敗しました。';
-  }
+      // レスポンスがJSONかどうかを確認し、解析する
+      try {
+        const jsonResponse = JSON.parse(data); // JSONとして解析
+        console.log('Parsed JSON response:', jsonResponse); // 正しくJSONが返ってきたか確認
+        document.getElementById('canvasResult').innerHTML = `<pre>${jsonResponse.result}</pre>`;
+      } catch (error) {
+        console.error('Failed to parse JSON:', error);
+        document.getElementById('canvasResult').innerHTML = 'JSON解析に失敗しました。';
+      }
 
     } catch (error) {
       console.error('API呼び出しに失敗:', error);
