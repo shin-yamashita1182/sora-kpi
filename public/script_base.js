@@ -12,7 +12,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const compareListContainer = document.getElementById("compareListContainer");
   const resultsContainer = document.getElementById('resultsContainer');
-  const generateBtn = document.getElementById('generateBtn');
+  const generateBtn = document.getElementById('generateBtn');  // 課題抽出ボタン
+  const analyzeBtn = document.getElementById('analyzeBtn');    // 分析対策ボタン
   const categorySelect = document.getElementById('category');
 
   let currentMasterData = [];
@@ -40,7 +41,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  // 課題抽出ボタンのクリック時
+  // 課題抽出ボタンのクリック時（ChatGPTを呼び出す）
   generateBtn.addEventListener('click', async () => {
     console.log('Generate button clicked');  // ボタンがクリックされたことの確認
 
@@ -162,7 +163,7 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   // ChatGPT API経由で課題抽出（新しく追加する処理）
-  document.getElementById('generateBtn').addEventListener('click', async () => {
+  generateBtn.addEventListener('click', async () => {
     const regionName = document.getElementById('regionName').value.trim();
     const userNote = document.getElementById('userNote').value.trim();
 
@@ -202,5 +203,11 @@ document.addEventListener('DOMContentLoaded', () => {
       console.error('API呼び出しに失敗:', error);
       document.getElementById('canvasResult').innerHTML = '課題抽出に失敗しました。';
     }
+  });
+
+  // 分析対策ボタン（従来の施策マッチング処理）
+  analyzeBtn.addEventListener('click', () => {
+    // ここには従来の施策マッチングのロジックを呼び出す！
+    runAnalyze(); // 仮関数（実際に今のコードつないでOK）
   });
 });
