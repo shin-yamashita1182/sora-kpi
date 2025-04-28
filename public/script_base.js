@@ -206,9 +206,10 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // 分析対策ボタン（従来の施策マッチング処理）
+  // 分析対策ボタン（施策・KPIマッチング処理）
   analyzeBtn.addEventListener('click', () => {
     console.log('分析対策ボタンがクリックされました');
-    // ここで施策・KPIマッチング処理を呼び出す
+    // 施策・KPIマッチング処理をここに追加
+    // 例えば、従来のコードをここに接続
   });
 });
