@@ -52,3 +52,6 @@ function generateStrategyCards() {
 
 // 仮テスト用：ページロード時にカード生成
 window.addEventListener('DOMContentLoaded', generateStrategyCards);
+
+// 仮戦略リスト生成ボタン押下時に仮戦略カード生成を実行
+document.getElementById('generateStrategyBtn').addEventListener('click', generateStrategyCards);
