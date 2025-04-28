@@ -13,6 +13,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const compareListContainer = document.getElementById("compareListContainer");
   const resultsContainer = document.getElementById('resultsContainer');
   const generateBtn = document.getElementById('generateBtn');
+  const analyzeBtn = document.getElementById('analyzeBtn');
   const categorySelect = document.getElementById('category');
 
   let currentMasterData = [];
@@ -21,7 +22,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // 地域入力＋分類選択からマスターを読み込む
   async function loadMasterData() {
     const category = categorySelect.value;
-    console.log("Category selected:", category);  // カテゴリ選択の確認
+    console.log("Category selected:", category);
 
     if (category === "観光型") {
       try {
@@ -31,29 +32,29 @@ document.addEventListener('DOMContentLoaded', () => {
           return;
         }
         currentMasterData = await response.json();
-        console.log('Data loaded:', currentMasterData);  // データが正しく読み込まれたか確認
+        console.log('Data loaded:', currentMasterData);
       } catch (error) {
-        console.error('Error loading JSON:', error);  // エラー詳細表示
+        console.error('Error loading JSON:', error);
       }
     } else {
       currentMasterData = []; // 他分類は今は空
     }
   }
 
-  // 課題抽出ボタンのクリック時
+  // 分析対策ボタンのクリック時（従来マスター読み込み処理）
   generateBtn.addEventListener('click', async () => {
-    console.log('Generate button clicked');  // ボタンがクリックされたことの確認
+    console.log('Generate button clicked');
 
     await loadMasterData();
 
-    resultsContainer.innerHTML = "";  // 前回の結果をリセット
+    resultsContainer.innerHTML = "";
 
     if (currentMasterData.length === 0) {
-      console.log('No data to display!');  // データがない場合
+      console.log('No data to display!');
       return;
     }
 
-    console.log("Displaying data...");  // データを表示することを確認
+    console.log("Displaying data...");
     currentMasterData.forEach((item, index) => {
       const card = document.createElement('div');
       card.className = 'card';
@@ -63,10 +64,10 @@ document.addEventListener('DOMContentLoaded', () => {
         <p><strong>KPI:</strong> ${item.kpi}</p>
         <button class="detail-btn">詳細</button>
       `;
-      resultsContainer.appendChild(card);  // カードを追加
+      resultsContainer.appendChild(card);
     });
 
-    console.log('Results Container HTML:', resultsContainer.innerHTML);  // 結果を確認
+    console.log('Results Container HTML:', resultsContainer.innerHTML);
   });
 
   // 詳細ボタンのクリック時
@@ -77,7 +78,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const item = currentMasterData[index];
       currentDetailIndex = parseInt(index);
 
-      console.log("Opening detail modal for:", item.title);  // モーダルを開く際に内容を表示
+      console.log("Opening detail modal for:", item.title);
 
       modalBody.innerHTML = `
         <h2>${item.title}</h2>
@@ -111,7 +112,7 @@ document.addEventListener('DOMContentLoaded', () => {
           </div>
         `;
         compareListContainer.appendChild(card);
-        console.log("Added to compare list:", item.title);  // 比較リストに追加したことを確認
+        console.log("Added to compare list:", item.title);
       }
 
       modal.style.display = "none";
@@ -123,7 +124,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (event.target.classList.contains('remove-btn')) {
       const card = event.target.closest('.card');
       if (card) card.remove();
-      console.log("Card removed from compare list");  // 削除されたことを確認
+      console.log("Card removed from compare list");
     }
   });
 
@@ -160,45 +161,45 @@ document.addEventListener('DOMContentLoaded', () => {
       fileNameDisplay.textContent = "ファイルを選択してください";
     }
   });
-});
-// analyzeBtn（課題抽出ボタン）クリック時、本番コードでChatGPT API連携
-async function fetchChatGPTResponse(prompt) {
-    try {
-        console.log("送信するPrompt:", prompt);
 
-        const response = await fetch("/api/chatgpt", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ prompt })
-        });
-
-        if (!response.ok) {
-            throw new Error("ChatGPT APIエラー");
-        }
-
-        const data = await response.json();
-
-        // ★ 本番版では #canvasResult に結果を書き出す
-        const canvasResult = document.getElementById("canvasResult");
-        canvasResult.innerText = data.result || "結果が取得できませんでした。";
-        
-    } catch (error) {
-        console.error("課題抽出中にエラー発生:", error);
-        alert("課題抽出に失敗しました。");
-    }
-}
-
-// analyzeBtn（課題抽出ボタン）クリック時の動き
-document.getElementById("analyzeBtn").addEventListener("click", async () => {
+  // analyzeBtn（課題抽出ボタン）クリック時
+  analyzeBtn.addEventListener("click", async () => {
     const regionName = document.getElementById("regionName").value.trim();
     const userNote = document.getElementById("userNote").value.trim();
 
     if (!regionName || !userNote) {
-        alert("地域名とテーマは両方入力してください。");
-        return;
+      alert("地域名とテーマは両方入力してください。");
+      return;
     }
 
     const prompt = `${regionName}について、テーマ「${userNote}」に基づく地域課題を抽出してください。`;
 
     await fetchChatGPTResponse(prompt);
+  });
 });
+
+// fetchChatGPTResponse関数（ChatGPT連携）
+async function fetchChatGPTResponse(prompt) {
+  try {
+    console.log("送信するPrompt:", prompt);
+
+    const response = await fetch("/api/chatgpt", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ prompt })
+    });
+
+    if (!response.ok) {
+      throw new Error("ChatGPT APIエラー");
+    }
+
+    const data = await response.json();
+
+    const canvasResult = document.getElementById("canvasResult");
+    canvasResult.innerText = data.result || "結果が取得できませんでした。";
+
+  } catch (error) {
+    console.error("課題抽出中にエラー発生:", error);
+    alert("課題抽出に失敗しました。");
+  }
+}
