@@ -45,7 +45,6 @@ document.addEventListener('DOMContentLoaded', () => {
   generateBtn.addEventListener('click', async () => {
     console.log('Generate button clicked');  // ボタンがクリックされたことの確認
 
-    // まずはデータを読み込む
     await loadMasterData();
 
     resultsContainer.innerHTML = "";  // 前回の結果をリセット
@@ -208,7 +207,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // 分析対策ボタン（従来の施策マッチング処理）
   analyzeBtn.addEventListener('click', () => {
-    // ここには従来の施策マッチングのロジックを呼び出す！
-    runAnalyze(); // 仮関数（実際に今のコードつないでOK）
+    // ここで施策・KPIマッチング処理を呼び出す
+    console.log('分析対策ボタンがクリックされました');
+    // ここに施策・KPIマッチング処理を追加してください
   });
 });
