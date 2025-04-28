@@ -1,122 +1,162 @@
+/* --- 全体リセット・基本設定 --- */
 body {
-  font-family: sans-serif;
   margin: 0;
-  padding: 0;
-  display: flex;
+  font-family: 'Noto Sans JP', sans-serif;
+  background: #f5f5f5;
 }
 
+/* --- サイドバー --- */
 .sidebar {
-  width: 420px;
+  width: 300px;
+  background: #ffffff;
   padding: 20px;
-  background: #f9f9f9;
-  border-right: 1px solid #ccc;
+  box-shadow: 2px 0 5px rgba(0,0,0,0.1);
   height: 100vh;
-  overflow-y: auto;
-  overflow-x: hidden;
+  box-sizing: border-box;
+  float: left;
 }
 
+/* --- コンテンツエリア --- */
 .content {
-  flex-grow: 1;
+  margin-left: 320px;
   padding: 20px;
+}
+
+/* --- 課題応答エリア --- */
+.response-area {
+  background: #eeeeee;
+  padding: 20px;
+  border-radius: 8px;
+  min-height: 300px;
+}
+
+/* --- 仮戦略リスト生成ボタン --- */
+#generateStrategyBtn {
+  margin-top: 20px;
+  padding: 10px 20px;
+  background: #007bff;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+#generateStrategyBtn:hover {
+  background: #0056b3;
+}
+
+/* --- 仮戦略カードエリア --- */
+.generated-tasks-area {
   display: flex;
-  flex-direction: row;
-  gap: 20px;
-  align-items: flex-start;
-  flex-wrap: nowrap;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-top: 20px;
 }
 
-label {
-  display: block;
-  margin-top: 15px;
-  font-weight: bold;
+/* --- 仮戦略カード --- */
+.strategy-card {
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  padding: 16px;
+  width: 280px;
+  box-sizing: border-box;
+  position: relative;
 }
 
-input[type="text"],
-select,
-textarea {
-  width: 95%;
-  padding: 8px;
-  margin-top: 5px;
+/* --- カードヘッダー（タイトル＋削除ボタン） --- */
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
+.card-header h3 {
+  font-size: 18px;
+  margin: 0;
+  word-break: break-word;
+}
+
+/* --- 削除ボタン --- */
+.delete-btn {
+  background: #ff4d4d;
+  border: none;
+  color: white;
+  font-size: 18px;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  cursor: pointer;
+  line-height: 1;
+}
+
+.delete-btn:hover {
+  background: #cc0000;
+}
+
+/* --- カード本文説明 --- */
+.card-description {
+  margin-top: 10px;
+  font-size: 14px;
+  color: #555;
+}
+
+/* --- 視点タグ --- */
+.viewpoint-tag {
+  display: inline-block;
+  margin-top: 10px;
+  padding: 4px 8px;
+  background: #e0e0e0;
+  border-radius: 12px;
+  font-size: 12px;
+  color: #333;
+}
+
+/* --- 視点ごとの色分け（オプション） --- */
+.strategy-blue {
+  border-left: 6px solid #007bff;
+}
+
+.strategy-green {
+  border-left: 6px solid #28a745;
+}
+
+.strategy-red {
+  border-left: 6px solid #dc3545;
+}
+
+.strategy-yellowgreen {
+  border-left: 6px solid #9acd32;
+}
+
+/* --- マップエリア仮設定 --- */
+.map-wrapper {
+  margin-top: 40px;
+}
+
+.map-area {
+  background: #cccccc;
+  height: 200px;
+  border-radius: 8px;
+}
+
+/* --- その他細かいところ --- */
 .input-with-mic {
   display: flex;
-  flex-direction: column;
-  gap: 8px;
-  margin-top: 5px;
-}
-
-.mic-area {
-  margin-top: 5px;
+  align-items: center;
 }
 
 .mic-button {
   background: none;
   border: none;
-  cursor: pointer;
   font-size: 24px;
-  color: #555;
+  cursor: not-allowed;
+  margin-left: 8px;
 }
 
-button {
-  margin-top: 20px;
-  width: 100%;
-  padding: 10px;
-  background: #007bff;
-  color: white;
-  border: none;
-  font-size: 16px;
-  cursor: pointer;
-}
-
-button:hover {
-  background: #0056b3;
-}
-
-.map-wrapper {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  height: 600px;
-  justify-content: space-between;
-}
-
-.map-area {
-  width: 300px;
-  height: 300px;
-  background: #ddd;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-  flex-shrink: 0;
-  cursor: pointer;
-}
-
-.map-instruction {
-  margin-top: 5px;
-  font-size: 12px;
-  color: #666;
-}
-
-.info-area {
-  width: 300px;
-  background: #ffffff;
-  padding: 15px;
-  border-radius: 8px;
+.map-instruction, .info-area {
   font-size: 14px;
-  color: #333;
-  box-shadow: 0 0 5px rgba(0,0,0,0.1);
   margin-top: 10px;
-}
-
-.response-area {
-  background: #efefef;
-  padding: 20px;
-  border-radius: 8px;
-  height: 700px;
-  overflow-y: scroll; /* 強制スクロールに変更 */
-  overflow-x: hidden;
-  width: 100%;
-  word-break: break-word;
+  color: #666;
 }
