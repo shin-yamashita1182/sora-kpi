@@ -136,7 +136,7 @@ button:hover {
 /* ★ 課題抽出・分析対策ボタン専用スタイル */
 .button-wrapper {
     display: flex;
-    gap: 5px;
+    gap: 10px;
 }
 
 .button-wrapper button {
