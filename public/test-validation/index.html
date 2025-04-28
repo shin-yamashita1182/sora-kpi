@@ -3,75 +3,123 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SORA Dashboard - 未来版安定改訂 v1.3.0</title>
-  <link rel="stylesheet" href="style.css"> <!-- 外部スタイルシート読み込み -->
+  <title>SORA Dashboard - 未来版安定改訂 v1.3.1</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      margin: 20px;
+      background: #f5f5f5;
+    }
+    #gptResponse {
+      background: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    #strategyCards {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .card {
+      flex: 0 0 30%;
+      background: #d3d3d3;
+      padding: 10px;
+      border-radius: 10px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    .card strong {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 16px;
+    }
+    button {
+      background: #007bff;
+      color: #fff;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    button:disabled {
+      background: #aaa;
+      cursor: not-allowed;
+    }
+  </style>
 </head>
-
 <body>
-  <div class="sidebar">
-    <h2>地域情報入力</h2>
 
-    <label for="regionStaticInput">地域名（必須）:</label>
-    <input type="text" id="regionStaticInput" placeholder="例：大分市">
-
-    <label for="freeInput">テーマ・自由記述:</label>
-    <div class="input-with-mic">
-      <textarea id="freeInput" rows="5" placeholder="例：インバウンド観光施策の強化"></textarea>
-      <div class="mic-area">
-        <button class="mic-button" title="音声入力未対応">🎤</button>
-      </div>
-    </div>
-
-    <label for="regionType">地域分類:</label>
-    <select id="regionType">
-      <option value="観光型">観光型</option>
-      <option value="都市型">都市型</option>
-      <option value="離島型">離島型</option>
-      <option value="農村型">農村型</option>
-      <option value="その他">その他</option>
-    </select>
-
-    <label for="fileUpload">資料アップロード（任意）:</label>
-    <input type="file" id="fileUpload">
-
-    <button id="extractButton">課題を抽出する</button>
-  </div>
-
-  <div class="content">
-    <div class="response-area" id="gptResponse">
-      （ここにChatGPT応答が表示されます）
-    </div>
-
-    <div class="map-wrapper">
-      <div class="map-area" id="mapArea">
-        （地図エリア仮置き）
-      </div>
-      <div class="map-instruction">※地図をクリックするとGoogleマップが開きます</div>
-      <div class="info-area">
-        🚗 高速道路サービスエリア・インターチェンジ情報例<br>
-        ・〇〇サービスエリア（上り） - 休憩・飲食施設あり<br>
-        ・△△インターチェンジ - 主要出口、都市中心部アクセス良好
-      </div>
-    </div>
-  </div>
-
-  <script src="script.js"></script>
+  <button id="extractButton">課題を抽出する</button>
+  <div id="gptResponse"></div>
+  <div id="strategyCards"></div>
 
   <script>
-    document.getElementById('mapArea').addEventListener('click', function() {
-      const mapUrl = 'https://www.google.com/maps';
-      window.open(mapUrl, '_blank');
-    });
-  </script>
-<!-- モーダルポップアップ -->
-<div id="modal" class="modal" style="display:none;">
-  <div class="modal-content">
-    <span id="closeModal" class="close">&times;</span>
-    <h2 id="modalTitle">課題詳細</h2>
-    <p id="modalDescription"></p>
-    <p><strong>次のアクション:</strong> <span id="modalAction"></span></p>
-  </div>
-</div>
+    const mindTriggerMaster = {/* ここにmind_trigger_kankou.jsonを読み込む */};
 
+    const colorMap = {
+      "Financial": "#FFD700",
+      "Customer": "#87CEFA",
+      "Internal": "#90EE90",
+      "Learning & Growth": "#FFB6C1"
+    };
+
+    document.getElementById('extractButton').addEventListener('click', async () => {
+      const button = document.getElementById('extractButton');
+      button.disabled = true;
+
+      try {
+        const response = await fetch('/api/chatgpt', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ message: "観光課題を抽出してください。" })
+        });
+
+        if (!response.ok) throw new Error('APIエラー');
+
+        const data = await response.json();
+        generateInsight(data.reply || '応答なし');
+      } catch (error) {
+        document.getElementById('gptResponse').innerText = 'インサイト生成エラー: ' + error.message;
+      }
+    });
+
+    function generateInsight(responseText) {
+      const gptArea = document.getElementById('gptResponse');
+      const strategyArea = document.getElementById('strategyCards');
+
+      gptArea.innerText = responseText;
+      strategyArea.innerHTML = '';
+
+      const matchedStrategies = findStrategies(responseText);
+      matchedStrategies.forEach(strategy => {
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.style.background = colorMap[strategy.perspective] || '#d3d3d3';
+        card.innerHTML = `<strong>${strategy.title}</strong><p>${strategy.overview}</p>`;
+        strategyArea.appendChild(card);
+      });
+    }
+
+    function findStrategies(responseText) {
+      const matched = [];
+      for (const trigger in mindTriggerMaster) {
+        const info = mindTriggerMaster[trigger];
+        const perspective = info.perspective;
+        const strategies = info.strategies;
+        strategies.forEach(strategy => {
+          if (responseText.includes(strategy.title)) {
+            matched.push({
+              title: strategy.title,
+              overview: strategy.overview,
+              perspective: perspective
+            });
+          }
+        });
+      }
+      return matched;
+    }
+  </script>
 </body>
 </html>
