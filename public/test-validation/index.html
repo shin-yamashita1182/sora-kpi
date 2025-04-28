@@ -1,13 +1,7 @@
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SORA Dashboard - 未来版安定改訂 v1.3.0</title>
-  <link rel="stylesheet" href="style.css"> <!-- 外部スタイルシート読み込み -->
-</head>
+<!-- --- 未来版 仮結合版ダッシュボード --- -->
+<div class="dashboard-wrapper">
 
-<body>
+  <!-- 左：地域情報入力エリア -->
   <div class="sidebar">
     <h2>地域情報入力</h2>
 
@@ -15,12 +9,7 @@
     <input type="text" id="regionStaticInput" placeholder="例：大分市">
 
     <label for="freeInput">テーマ・自由記述:</label>
-    <div class="input-with-mic">
-      <textarea id="freeInput" rows="5" placeholder="例：インバウンド観光施策の強化"></textarea>
-      <div class="mic-area">
-        <button class="mic-button" title="音声入力未対応">🎤</button>
-      </div>
-    </div>
+    <textarea id="freeInput" rows="5" placeholder="例：インバウンド観光施策の強化"></textarea>
 
     <label for="regionType">地域分類:</label>
     <select id="regionType">
@@ -31,52 +20,128 @@
       <option value="その他">その他</option>
     </select>
 
-    <label for="fileUpload">資料アップロード（任意）:</label>
-    <input type="file" id="fileUpload">
-
     <button id="extractButton">課題を抽出する</button>
   </div>
 
-  <div class="content">
-    <div class="response-area" id="gptResponse">
+  <!-- 中央：ChatGPT応答＆仮戦略リスト展開エリア -->
+  <div class="center-area">
+
+    <div class="gpt-response-area" id="gptResponse">
       （ここにChatGPT応答が表示されます）
     </div>
-<button id="generateStrategyBtn">仮戦略リストを生成する</button>
-  
-<div id="generatedTasks" class="generated-tasks-area">
-  <!-- ここに仮戦略カードが並びます -->
-</div>
 
-  <div class="map-wrapper">
-      <div class="map-area" id="mapArea">
-        （地図エリア仮置き）
-      </div>
-      <div class="map-instruction">※地図をクリックするとGoogleマップが開きます</div>
-      <div class="info-area">
-        🚗 高速道路サービスエリア・インターチェンジ情報例<br>
-        ・〇〇サービスエリア（上り） - 休憩・飲食施設あり<br>
-        ・△△インターチェンジ - 主要出口、都市中心部アクセス良好
-      </div>
+    <div class="generate-button-wrapper">
+      <button id="generateStrategyBtn">仮戦略リストを生成する</button>
     </div>
+
+    <div class="generated-tasks-area" id="generatedTasks">
+      <!-- 仮戦略カードがここに並びます -->
+    </div>
+
   </div>
 
-  <script src="script.js"></script>
+  <!-- 右：マップ＆情報エリア -->
+  <div class="map-wrapper">
 
-  <script>
-    document.getElementById('mapArea').addEventListener('click', function() {
-      const mapUrl = 'https://www.google.com/maps';
-      window.open(mapUrl, '_blank');
-    });
-  </script>
-<!-- モーダルポップアップ -->
-<div id="modal" class="modal" style="display:none;">
-  <div class="modal-content">
-    <span id="closeModal" class="close">&times;</span>
-    <h2 id="modalTitle">課題詳細</h2>
-    <p id="modalDescription"></p>
-    <p><strong>次のアクション:</strong> <span id="modalAction"></span></p>
+    <div class="map-area" id="mapArea">
+      （地図エリア仮置き）
+    </div>
+
+    <div class="map-instruction">
+      ※地図をクリックするとGoogleマップが開きます
+    </div>
+
+    <div class="info-area">
+      🚗 高速道路サービスエリア・インターチェンジ情報例<br>
+      ・〇〇サービスエリア（上り） - 休憩・飲食施設あり<br>
+      ・△△インターチェンジ - 主要出口、都市中心部アクセス良好
+    </div>
+
   </div>
+
 </div>
-<script src="app.js"></script>
-</body>
-</html>
+
+<style>
+  /* --- 全体ラッパー --- */
+  .dashboard-wrapper {
+    display: flex;
+    height: 100vh;
+  }
+
+  /* 左：サイドバー */
+  .sidebar {
+    width: 300px;
+    background: #ffffff;
+    padding: 20px;
+    box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  /* 中央：センターエリア */
+  .center-area {
+    flex-grow: 2;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    overflow-y: auto;
+  }
+
+  .gpt-response-area {
+    background: #f0f0f0;
+    padding: 20px;
+    border-radius: 8px;
+    min-height: 300px;
+  }
+
+  .generate-button-wrapper {
+    display: flex;
+    justify-content: center;
+  }
+
+  #generateStrategyBtn {
+    padding: 10px 20px;
+    background: #007bff;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+  }
+
+  #generateStrategyBtn:hover {
+    background: #0056b3;
+  }
+
+  .generated-tasks-area {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+
+  /* 右：マップエリア */
+  .map-wrapper {
+    width: 320px;
+    background: #ffffff;
+    padding: 20px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    box-shadow: -2px 0 5px rgba(0,0,0,0.1);
+  }
+
+  .map-area {
+    background: #cccccc;
+    height: 300px;
+    border-radius: 8px;
+  }
+
+  .map-instruction, .info-area {
+    font-size: 14px;
+    color: #666;
+  }
+</style>
