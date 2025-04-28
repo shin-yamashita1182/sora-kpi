@@ -171,7 +171,8 @@ document.getElementById('analyzeBtn').addEventListener('click', async function()
         return;
     }
 
-    const promptMessage = `${regionName}について、テーマ「${userNote}」に基づく地域課題を抽出してください。`;
+    // 送信するPromptを組み立て
+    const prompt = `${regionName}について、テーマ「${userNote}」に基づく地域課題を抽出してください。`;
 
     try {
         const response = await fetch('/api/chatgpt', {
@@ -179,16 +180,19 @@ document.getElementById('analyzeBtn').addEventListener('click', async function()
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ message: promptMessage })
+            body: JSON.stringify({ prompt })  // ここを正しい「prompt」に
         });
 
         if (!response.ok) {
-            throw new Error('ChatGPT API request failed');
+            throw new Error('ChatGPT APIエラー');
         }
 
         const data = await response.json();
+
+        // キャンバスに結果表示
         const canvasResult = document.getElementById('canvasResult');
-        canvasResult.innerText = data.reply || '結果が取得できませんでした。';
+        canvasResult.innerText = data.result || '結果が取得できませんでした。';
+
     } catch (error) {
         console.error('課題抽出中にエラー発生:', error);
         alert('課題抽出に失敗しました。');
