@@ -12,8 +12,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const compareListContainer = document.getElementById("compareListContainer");
   const resultsContainer = document.getElementById('resultsContainer');
-  const generateBtn = document.getElementById('generateBtn');  // 課題抽出ボタン
-  const analyzeBtn = document.getElementById('analyzeBtn');    // 分析対策ボタン
+  const generateBtn = document.getElementById('generateBtn');  // 分析対策ボタン（旧課題抽出）
+  const analyzeBtn = document.getElementById('analyzeBtn');    // 課題抽出ボタン（旧分析対策）
   const categorySelect = document.getElementById('category');
 
   let currentMasterData = [];
@@ -41,9 +41,9 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  // 課題抽出ボタンのクリック時（ChatGPTを呼び出す）
-  generateBtn.addEventListener('click', async () => {
-    console.log('Generate button clicked');  // ボタンがクリックされたことの確認
+  // 課題抽出（分析対策ボタンのクリック時）
+  analyzeBtn.addEventListener('click', async () => {
+    console.log('課題抽出ボタンがクリックされました');  // 課題抽出ボタンがクリックされたことを確認
 
     // まずはデータを読み込む
     await loadMasterData();
@@ -69,6 +69,15 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     console.log('Results Container HTML:', resultsContainer.innerHTML);  // 結果を確認
+  });
+
+  // 分析対策ボタン（課題抽出ボタンのクリック時）
+  generateBtn.addEventListener('click', async () => {
+    console.log('分析対策ボタンがクリックされました');  // 分析対策ボタンがクリックされたことを確認
+
+    // ここで施策・KPIマッチング処理を呼び出す
+    // 例えば、従来のコードをここに接続
+    // 施策マッチング処理
   });
 
   // 詳細ボタンのクリック時
@@ -204,12 +213,5 @@ document.addEventListener('DOMContentLoaded', () => {
       console.error('API呼び出しに失敗:', error);
       document.getElementById('canvasResult').innerHTML = '課題抽出に失敗しました。';
     }
-  });
-
-  // 分析対策ボタン（施策・KPIマッチング処理）
-  analyzeBtn.addEventListener('click', () => {
-    console.log('分析対策ボタンがクリックされました');
-    // 施策・KPIマッチング処理をここに追加
-    // 例えば、従来のコードをここに接続
   });
 });
