@@ -1,91 +1,59 @@
 document.addEventListener('DOMContentLoaded', () => {
-  const generateBtn = document.getElementById('generateBtn');  // 【課題抽出】ボタン
-  const analyzeBtn = document.getElementById('analyzeBtn');    // 【分析対策】ボタン
-  const categorySelect = document.getElementById('category');
-  const resultsContainer = document.getElementById('resultsContainer');
-  const canvasResult = document.querySelector('.canvas-placeholder');
-
   const modal = document.getElementById("detailModal");
   const modalBody = document.getElementById("modalBody");
   const closeBtn = document.getElementById("closeModal");
 
+  const mapModal = document.getElementById("mapModal");
+  const mapModalBody = document.getElementById("mapModalBody");
+  const closeMapBtn = document.getElementById("closeMapModal");
+
+  const fileInput = document.getElementById("fileInput");
+  const fileNameDisplay = document.getElementById("fileNameDisplay");
+
   const compareListContainer = document.getElementById("compareListContainer");
+  const resultsContainer = document.getElementById('resultsContainer');
+  const generateBtn = document.getElementById('generateBtn');
+  const categorySelect = document.getElementById('category');
 
   let currentMasterData = [];
   let currentDetailIndex = null;
 
-  // マスターデータロード
+  // 地域入力＋分類選択からマスターを読み込む
   async function loadMasterData() {
     const category = categorySelect.value;
+    console.log("Category selected:", category);  // カテゴリ選択の確認
+
     if (category === "観光型") {
       try {
         const response = await fetch('kankou_master.json');
         if (!response.ok) {
-          console.error('Failed to load master data:', response.status);
-          return [];
+          console.error('Failed to load kankou_master.json:', response.status);
+          return;
         }
-        return await response.json();
+        currentMasterData = await response.json();
+        console.log('Data loaded:', currentMasterData);  // データが正しく読み込まれたか確認
       } catch (error) {
-        console.error('Error loading master JSON:', error);
-        return [];
+        console.error('Error loading JSON:', error);  // エラー詳細表示
       }
     } else {
-      return [];
+      currentMasterData = []; // 他分類は今は空
     }
   }
 
-  // 【課題抽出】ボタンクリック（ChatGPT API呼び出し）
+  // 課題抽出ボタンのクリック時
   generateBtn.addEventListener('click', async () => {
-    console.log('課題抽出ボタンが押されました');
-    
-    const regionName = document.getElementById('regionName').value.trim();
-    const userNote = document.getElementById('userNote').value.trim();
+    console.log('Generate button clicked');  // ボタンがクリックされたことの確認
 
-    if (!regionName || !userNote) {
-      alert('地域名とテーマを入力してください');
-      return;
-    }
+    await loadMasterData();
 
-    try {
-      canvasResult.innerHTML = '課題抽出中です...';
-
-      const response = await fetch('/api/chatgpt', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ regionName, userNote }),
-      });
-
-      const data = await response.text();
-
-      try {
-        const jsonResponse = JSON.parse(data);
-        console.log('ChatGPT応答:', jsonResponse);
-        canvasResult.innerHTML = `<pre>${jsonResponse.result}</pre>`;
-      } catch (parseError) {
-        console.error('JSONパース失敗:', parseError);
-        canvasResult.innerHTML = 'JSON解析に失敗しました。';
-      }
-
-    } catch (apiError) {
-      console.error('API呼び出し失敗:', apiError);
-      canvasResult.innerHTML = '課題抽出に失敗しました。';
-    }
-  });
-
-  // 【分析対策】ボタンクリック（施策リスト表示）
-  analyzeBtn.addEventListener('click', async () => {
-    console.log('分析対策ボタンが押されました');
-
-    resultsContainer.innerHTML = ''; // 一旦クリア
-
-    currentMasterData = await loadMasterData();
+    resultsContainer.innerHTML = "";  // 前回の結果をリセット
 
     if (currentMasterData.length === 0) {
-      console.log('表示できるマスターデータがありません');
-      resultsContainer.innerHTML = '<p>施策データがありません</p>';
+      console.log('No data to display!');  // データがない場合
       return;
     }
 
+    console.log("Displaying data...");  // データを表示することを確認
     currentMasterData.forEach((item, index) => {
       const card = document.createElement('div');
       card.className = 'card';
@@ -95,13 +63,13 @@ document.addEventListener('DOMContentLoaded', () => {
         <p><strong>KPI:</strong> ${item.kpi}</p>
         <button class="detail-btn">詳細</button>
       `;
-      resultsContainer.appendChild(card);
+      resultsContainer.appendChild(card);  // カードを追加
     });
 
-    console.log('施策リストが表示されました');
+    console.log('Results Container HTML:', resultsContainer.innerHTML);  // 結果を確認
   });
 
-  // 【詳細ボタン】クリックでモーダル表示
+  // 詳細ボタンのクリック時
   document.body.addEventListener('click', (event) => {
     if (event.target.classList.contains('detail-btn')) {
       const parentCard = event.target.closest('.card');
@@ -109,7 +77,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const item = currentMasterData[index];
       currentDetailIndex = parseInt(index);
 
-      console.log("モーダルを開きます:", item.title);
+      console.log("Opening detail modal for:", item.title);  // モーダルを開く際に内容を表示
 
       modalBody.innerHTML = `
         <h2>${item.title}</h2>
@@ -124,7 +92,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // 【モーダル内・比較リストに追加】
+  // モーダル内の「比較リストに追加」ボタン
   modalBody.addEventListener('click', (event) => {
     if (event.target.id === 'addToCompareBtn' && currentDetailIndex !== null) {
       const item = currentMasterData[currentDetailIndex];
@@ -143,32 +111,53 @@ document.addEventListener('DOMContentLoaded', () => {
           </div>
         `;
         compareListContainer.appendChild(card);
-        console.log("比較リストに追加:", item.title);
+        console.log("Added to compare list:", item.title);  // 比較リストに追加したことを確認
       }
 
       modal.style.display = "none";
     }
   });
 
-  // 【比較リスト】から削除
+  // 比較リストから削除ボタン
   compareListContainer.addEventListener('click', (event) => {
     if (event.target.classList.contains('remove-btn')) {
       const card = event.target.closest('.card');
       if (card) card.remove();
-      console.log("比較リストから削除しました");
+      console.log("Card removed from compare list");  // 削除されたことを確認
     }
   });
 
-  // モーダルを閉じる
+  // モーダル閉じるボタン
   closeBtn.addEventListener('click', () => {
     modal.style.display = "none";
   });
 
-  // モーダル外クリックで閉じる
+  closeMapBtn.addEventListener('click', () => {
+    mapModal.style.display = "none";
+  });
+
   window.addEventListener('click', (event) => {
     if (event.target === modal) {
       modal.style.display = "none";
     }
+    if (event.target === mapModal) {
+      mapModal.style.display = "none";
+    }
   });
 
+  // ミニマップクリック時
+  const miniMap = document.getElementById('miniMap');
+  miniMap.addEventListener('click', () => {
+    mapModalBody.innerHTML = "<div style='width: 100%; height: 400px; background-color: #cce5ff; display: flex; align-items: center; justify-content: center;'>拡大地図エリア</div>";
+    mapModal.style.display = "block";
+  });
+
+  // ファイル選択時
+  fileInput.addEventListener('change', (event) => {
+    if (fileInput.files.length > 0) {
+      fileNameDisplay.textContent = fileInput.files[0].name;
+    } else {
+      fileNameDisplay.textContent = "ファイルを選択してください";
+    }
+  });
 });
