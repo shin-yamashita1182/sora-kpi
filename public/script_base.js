@@ -162,39 +162,43 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 });
 // analyzeBtn（課題抽出ボタン）クリック時、本番コードでChatGPT API連携
-document.getElementById('analyzeBtn').addEventListener('click', async function() {
-    const regionName = document.getElementById('regionName').value.trim();
-    const userNote = document.getElementById('userNote').value.trim();
-
-    if (!regionName || !userNote) {
-        alert('地域名とテーマは両方入力してください。');
-        return;
-    }
-
-    // 送信するPromptを組み立て
-    const prompt = `${regionName}について、テーマ「${userNote}」に基づく地域課題を抽出してください。`;
-
+async function fetchChatGPTResponse(prompt) {
     try {
-        const response = await fetch('/api/chatgpt', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ prompt })  // ここを正しい「prompt」に
+        console.log("送信するPrompt:", prompt);
+
+        const response = await fetch("/api/chatgpt", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ prompt })
         });
 
         if (!response.ok) {
-            throw new Error('ChatGPT APIエラー');
+            throw new Error("ChatGPT APIエラー");
         }
 
         const data = await response.json();
 
-        // キャンバスに結果表示
-        const canvasResult = document.getElementById('canvasResult');
-        canvasResult.innerText = data.result || '結果が取得できませんでした。';
-
+        // ★ 本番版では #canvasResult に結果を書き出す
+        const canvasResult = document.getElementById("canvasResult");
+        canvasResult.innerText = data.result || "結果が取得できませんでした。";
+        
     } catch (error) {
-        console.error('課題抽出中にエラー発生:', error);
-        alert('課題抽出に失敗しました。');
+        console.error("課題抽出中にエラー発生:", error);
+        alert("課題抽出に失敗しました。");
     }
+}
+
+// analyzeBtn（課題抽出ボタン）クリック時の動き
+document.getElementById("analyzeBtn").addEventListener("click", async () => {
+    const regionName = document.getElementById("regionName").value.trim();
+    const userNote = document.getElementById("userNote").value.trim();
+
+    if (!regionName || !userNote) {
+        alert("地域名とテーマは両方入力してください。");
+        return;
+    }
+
+    const prompt = `${regionName}について、テーマ「${userNote}」に基づく地域課題を抽出してください。`;
+
+    await fetchChatGPTResponse(prompt);
 });
