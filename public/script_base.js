@@ -161,3 +161,45 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 });
+// analyzeBtn（課題抽出ボタン）クリック時、本番コードでChatGPT API連携
+document.getElementById('analyzeBtn').addEventListener('click', async function() {
+    try {
+        const regionName = document.getElementById('regionName').value.trim();
+        const userNote = document.getElementById('userNote').value.trim();
+
+        // 必須チェック
+        if (!regionName || !userNote) {
+            alert('地域名とテーマは両方入力してください。');
+            return;
+        }
+
+        // ChatGPT APIに送信するデータ
+        const requestData = {
+            region: regionName,
+            theme: userNote
+        };
+
+        // APIリクエスト
+        const response = await fetch('/api/chatgpt', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(requestData)
+        });
+
+        if (!response.ok) {
+            throw new Error('APIリクエストに失敗しました');
+        }
+
+        const result = await response.json();
+
+        // ソラキャンバスに結果を展開
+        const canvasResult = document.getElementById('canvasResult');
+        canvasResult.textContent = result.message || '結果がありません。';
+
+    } catch (error) {
+        console.error('課題抽出中にエラー発生:', error);
+        alert('課題抽出に失敗しました。');
+    }
+});
