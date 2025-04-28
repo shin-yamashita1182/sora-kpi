@@ -1,61 +1,91 @@
 document.addEventListener('DOMContentLoaded', () => {
+  const generateBtn = document.getElementById('generateBtn');  // 【課題抽出】ボタン
+  const analyzeBtn = document.getElementById('analyzeBtn');    // 【分析対策】ボタン
+  const categorySelect = document.getElementById('category');
+  const resultsContainer = document.getElementById('resultsContainer');
+  const canvasResult = document.querySelector('.canvas-placeholder');
+
   const modal = document.getElementById("detailModal");
   const modalBody = document.getElementById("modalBody");
   const closeBtn = document.getElementById("closeModal");
 
-  const mapModal = document.getElementById("mapModal");
-  const mapModalBody = document.getElementById("mapModalBody");
-  const closeMapBtn = document.getElementById("closeMapModal");
-
-  const fileInput = document.getElementById("fileInput");
-  const fileNameDisplay = document.getElementById("fileNameDisplay");
-
   const compareListContainer = document.getElementById("compareListContainer");
-  const resultsContainer = document.getElementById('resultsContainer');
-  const generateBtn = document.getElementById('generateBtn');  // 分析対策ボタン（旧課題抽出）
-  const analyzeBtn = document.getElementById('analyzeBtn');    // 課題抽出ボタン（旧分析対策）
-  const categorySelect = document.getElementById('category');
 
   let currentMasterData = [];
   let currentDetailIndex = null;
 
-  // 地域入力＋分類選択からマスターを読み込む
+  // マスターデータロード
   async function loadMasterData() {
     const category = categorySelect.value;
-    console.log("Category selected:", category);  // カテゴリ選択の確認
-
     if (category === "観光型") {
       try {
         const response = await fetch('kankou_master.json');
         if (!response.ok) {
-          console.error('Failed to load kankou_master.json:', response.status);
-          return;
+          console.error('Failed to load master data:', response.status);
+          return [];
         }
-        currentMasterData = await response.json();
-        console.log('Data loaded:', currentMasterData);  // データが正しく読み込まれたか確認
+        return await response.json();
       } catch (error) {
-        console.error('Error loading JSON:', error);  // エラー詳細表示
+        console.error('Error loading master JSON:', error);
+        return [];
       }
     } else {
-      currentMasterData = []; // 他分類は今は空
+      return [];
     }
   }
 
-  // 課題抽出（分析対策ボタンのクリック時）
-  analyzeBtn.addEventListener('click', async () => {
-    console.log('課題抽出ボタンがクリックされました');  // 課題抽出ボタンがクリックされたことを確認
+  // 【課題抽出】ボタンクリック（ChatGPT API呼び出し）
+  generateBtn.addEventListener('click', async () => {
+    console.log('課題抽出ボタンが押されました');
+    
+    const regionName = document.getElementById('regionName').value.trim();
+    const userNote = document.getElementById('userNote').value.trim();
 
-    // まずはデータを読み込む
-    await loadMasterData();
-
-    resultsContainer.innerHTML = "";  // 前回の結果をリセット
-
-    if (currentMasterData.length === 0) {
-      console.log('No data to display!');  // データがない場合
+    if (!regionName || !userNote) {
+      alert('地域名とテーマを入力してください');
       return;
     }
 
-    console.log("Displaying data...");  // データを表示することを確認
+    try {
+      canvasResult.innerHTML = '課題抽出中です...';
+
+      const response = await fetch('/api/chatgpt', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ regionName, userNote }),
+      });
+
+      const data = await response.text();
+
+      try {
+        const jsonResponse = JSON.parse(data);
+        console.log('ChatGPT応答:', jsonResponse);
+        canvasResult.innerHTML = `<pre>${jsonResponse.result}</pre>`;
+      } catch (parseError) {
+        console.error('JSONパース失敗:', parseError);
+        canvasResult.innerHTML = 'JSON解析に失敗しました。';
+      }
+
+    } catch (apiError) {
+      console.error('API呼び出し失敗:', apiError);
+      canvasResult.innerHTML = '課題抽出に失敗しました。';
+    }
+  });
+
+  // 【分析対策】ボタンクリック（施策リスト表示）
+  analyzeBtn.addEventListener('click', async () => {
+    console.log('分析対策ボタンが押されました');
+
+    resultsContainer.innerHTML = ''; // 一旦クリア
+
+    currentMasterData = await loadMasterData();
+
+    if (currentMasterData.length === 0) {
+      console.log('表示できるマスターデータがありません');
+      resultsContainer.innerHTML = '<p>施策データがありません</p>';
+      return;
+    }
+
     currentMasterData.forEach((item, index) => {
       const card = document.createElement('div');
       card.className = 'card';
@@ -65,22 +95,13 @@ document.addEventListener('DOMContentLoaded', () => {
         <p><strong>KPI:</strong> ${item.kpi}</p>
         <button class="detail-btn">詳細</button>
       `;
-      resultsContainer.appendChild(card);  // カードを追加
+      resultsContainer.appendChild(card);
     });
 
-    console.log('Results Container HTML:', resultsContainer.innerHTML);  // 結果を確認
+    console.log('施策リストが表示されました');
   });
 
-  // 分析対策ボタン（課題抽出ボタンのクリック時）
-  generateBtn.addEventListener('click', async () => {
-    console.log('分析対策ボタンがクリックされました');  // 分析対策ボタンがクリックされたことを確認
-
-    // ここで施策・KPIマッチング処理を呼び出す
-    // 例えば、従来のコードをここに接続
-    // 施策マッチング処理
-  });
-
-  // 詳細ボタンのクリック時
+  // 【詳細ボタン】クリックでモーダル表示
   document.body.addEventListener('click', (event) => {
     if (event.target.classList.contains('detail-btn')) {
       const parentCard = event.target.closest('.card');
@@ -88,7 +109,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const item = currentMasterData[index];
       currentDetailIndex = parseInt(index);
 
-      console.log("Opening detail modal for:", item.title);  // モーダルを開く際に内容を表示
+      console.log("モーダルを開きます:", item.title);
 
       modalBody.innerHTML = `
         <h2>${item.title}</h2>
@@ -103,7 +124,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // モーダル内の「比較リストに追加」ボタン
+  // 【モーダル内・比較リストに追加】
   modalBody.addEventListener('click', (event) => {
     if (event.target.id === 'addToCompareBtn' && currentDetailIndex !== null) {
       const item = currentMasterData[currentDetailIndex];
@@ -122,96 +143,32 @@ document.addEventListener('DOMContentLoaded', () => {
           </div>
         `;
         compareListContainer.appendChild(card);
-        console.log("Added to compare list:", item.title);  // 比較リストに追加したことを確認
+        console.log("比較リストに追加:", item.title);
       }
 
       modal.style.display = "none";
     }
   });
 
-  // 比較リストから削除ボタン
+  // 【比較リスト】から削除
   compareListContainer.addEventListener('click', (event) => {
     if (event.target.classList.contains('remove-btn')) {
       const card = event.target.closest('.card');
       if (card) card.remove();
-      console.log("Card removed from compare list");  // 削除されたことを確認
+      console.log("比較リストから削除しました");
     }
   });
 
-  // モーダル閉じるボタン
+  // モーダルを閉じる
   closeBtn.addEventListener('click', () => {
     modal.style.display = "none";
   });
 
-  closeMapBtn.addEventListener('click', () => {
-    mapModal.style.display = "none";
-  });
-
+  // モーダル外クリックで閉じる
   window.addEventListener('click', (event) => {
     if (event.target === modal) {
       modal.style.display = "none";
     }
-    if (event.target === mapModal) {
-      mapModal.style.display = "none";
-    }
   });
 
-  // ミニマップクリック時
-  const miniMap = document.getElementById('miniMap');
-  miniMap.addEventListener('click', () => {
-    mapModalBody.innerHTML = "<div style='width: 100%; height: 400px; background-color: #cce5ff; display: flex; align-items: center; justify-content: center;'>拡大地図エリア</div>";
-    mapModal.style.display = "block";
-  });
-
-  // ファイル選択時
-  fileInput.addEventListener('change', (event) => {
-    if (fileInput.files.length > 0) {
-      fileNameDisplay.textContent = fileInput.files[0].name;
-    } else {
-      fileNameDisplay.textContent = "ファイルを選択してください";
-    }
-  });
-
-  // ChatGPT API経由で課題抽出（新しく追加する処理）
-  generateBtn.addEventListener('click', async () => {
-    const regionName = document.getElementById('regionName').value.trim();
-    const userNote = document.getElementById('userNote').value.trim();
-
-    if (!regionName || !userNote) {
-      alert('地域名とテーマを入力してください');
-      return;
-    }
-
-    // 課題抽出（ChatGPT API経由）
-    try {
-      document.getElementById('canvasResult').innerHTML = '課題抽出中です...';
-
-      const response = await fetch('/api/chatgpt', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ regionName, userNote }),
-      });
-
-      // レスポンスをまずテキスト形式で受け取る
-      const data = await response.text(); // .text()を使って生のレスポンスを取得
-
-      console.log('Raw response:', data); // 生のレスポンスをコンソールに表示
-
-      // レスポンスがJSONかどうかを確認し、解析する
-      try {
-        const jsonResponse = JSON.parse(data); // JSONとして解析
-        console.log('Parsed JSON response:', jsonResponse); // 正しくJSONが返ってきたか確認
-        document.getElementById('canvasResult').innerHTML = `<pre>${jsonResponse.result}</pre>`;
-      } catch (error) {
-        console.error('Failed to parse JSON:', error);
-        document.getElementById('canvasResult').innerHTML = 'JSON解析に失敗しました。';
-      }
-
-    } catch (error) {
-      console.error('API呼び出しに失敗:', error);
-      document.getElementById('canvasResult').innerHTML = '課題抽出に失敗しました。';
-    }
-  });
 });
