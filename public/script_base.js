@@ -183,13 +183,21 @@ document.addEventListener('DOMContentLoaded', () => {
         body: JSON.stringify({ regionName, userNote }),
       });
 
-      const data = await response.json();
+// レスポンスをまずテキスト形式で受け取る
+  const data = await response.text(); // .text()を使って生のレスポンスを取得
 
-      if (data.error) {
-        document.getElementById('canvasResult').innerHTML = `エラー: ${data.error}`;
-      } else {
-        document.getElementById('canvasResult').innerHTML = `<pre>${data.result}</pre>`;
-      }
+  console.log('Raw response:', data); // 生のレスポンスをコンソールに表示
+
+  // レスポンスがJSONかどうかを確認し、解析する
+  try {
+    const jsonResponse = JSON.parse(data); // JSONとして解析
+    console.log('Parsed JSON response:', jsonResponse); // 正しくJSONが返ってきたか確認
+    document.getElementById('canvasResult').innerHTML = `<pre>${jsonResponse.result}</pre>`;
+  } catch (error) {
+    console.error('Failed to parse JSON:', error);
+    document.getElementById('canvasResult').innerHTML = 'JSON解析に失敗しました。';
+  }
+
     } catch (error) {
       console.error('API呼び出しに失敗:', error);
       document.getElementById('canvasResult').innerHTML = '課題抽出に失敗しました。';
