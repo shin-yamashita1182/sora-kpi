@@ -160,4 +160,39 @@ document.addEventListener('DOMContentLoaded', () => {
       fileNameDisplay.textContent = "ファイルを選択してください";
     }
   });
+
+  // ChatGPT API経由で課題抽出（新しく追加する処理）
+  document.getElementById('generateBtn').addEventListener('click', async () => {
+    const regionName = document.getElementById('regionName').value.trim();
+    const userNote = document.getElementById('userNote').value.trim();
+
+    if (!regionName || !userNote) {
+      alert('地域名とテーマを入力してください');
+      return;
+    }
+
+    // 課題抽出（ChatGPT API経由）
+    try {
+      document.getElementById('canvasResult').innerHTML = '課題抽出中です...';
+
+      const response = await fetch('/api/chatgpt', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ regionName, userNote }),
+      });
+
+      const data = await response.json();
+
+      if (data.error) {
+        document.getElementById('canvasResult').innerHTML = `エラー: ${data.error}`;
+      } else {
+        document.getElementById('canvasResult').innerHTML = `<pre>${data.result}</pre>`;
+      }
+    } catch (error) {
+      console.error('API呼び出しに失敗:', error);
+      document.getElementById('canvasResult').innerHTML = '課題抽出に失敗しました。';
+    }
+  });
 });
