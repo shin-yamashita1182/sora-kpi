@@ -1,43 +1,46 @@
-/* --- 全体レイアウト調整 --- */
+/* --- 全体リセット・基本設定 --- */
 body {
-  display: flex;
-  min-height: 100vh;
   margin: 0;
   font-family: 'Noto Sans JP', sans-serif;
   background: #f5f5f5;
+  display: flex;
+  flex-direction: row;
+  height: 100vh;
 }
 
+/* --- サイドバー（地域情報入力エリア）--- */
 .sidebar {
-  width: 280px;
+  width: 300px;
   background: #ffffff;
   padding: 20px;
   box-shadow: 2px 0 5px rgba(0,0,0,0.1);
   box-sizing: border-box;
-  flex-shrink: 0;
-}
-
-.content {
-  flex-grow: 1;
-  padding: 30px;
   display: flex;
   flex-direction: column;
-  gap: 20px;
 }
 
-/* --- 課題応答エリア（ChatGPT応答） --- */
+/* --- メインコンテンツエリア（中央部分） --- */
+.content {
+  flex: 2;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+}
+
+/* --- GPT応答エリア＋仮戦略リストボタン --- */
 .response-area {
   background: #eeeeee;
   padding: 20px;
   border-radius: 8px;
-  min-height: 200px;
+  min-height: 250px;
+  margin-bottom: 20px;
 }
 
-/* --- 仮戦略リスト生成ボタン --- */
 #generateStrategyBtn {
-  width: 250px;
-  padding: 10px;
-  margin-top: 10px;
-  background-color: #007bff;
+  margin-bottom: 20px;
+  padding: 10px 20px;
+  background: #007bff;
   color: white;
   border: none;
   border-radius: 6px;
@@ -47,7 +50,7 @@ body {
 }
 
 #generateStrategyBtn:hover {
-  background-color: #0056b3;
+  background: #0056b3;
 }
 
 /* --- 仮戦略カードエリア --- */
@@ -57,28 +60,32 @@ body {
   gap: 16px;
 }
 
-/* --- 仮戦略カード（見た目共通） --- */
+/* --- 仮戦略カード個別スタイル --- */
 .strategy-card {
   background: #ffffff;
-  padding: 16px;
   border-radius: 12px;
   box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  padding: 16px;
   width: 280px;
   box-sizing: border-box;
+  position: relative;
 }
 
-/* --- 地図エリア --- */
+/* --- 右側 地図エリア --- */
 .map-wrapper {
-  margin-top: 20px;
+  flex: 1;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
 }
 
 .map-area {
   background: #cccccc;
-  height: 200px;
+  height: 300px;
   border-radius: 8px;
 }
 
-/* --- 地図説明エリア --- */
 .map-instruction,
 .info-area {
   font-size: 14px;
@@ -86,18 +93,17 @@ body {
   color: #666;
 }
 
-/* --- モバイル対応（オプション） --- */
-@media (max-width: 768px) {
+/* --- レスポンシブ対応（スマホ時は縦並び） --- */
+@media (max-width: 1024px) {
   body {
     flex-direction: column;
   }
 
-  .sidebar {
+  .sidebar, .content, .map-wrapper {
     width: 100%;
-    box-shadow: none;
   }
 
-  .content {
-    margin-left: 0;
+  .map-area {
+    height: 200px;
   }
 }
