@@ -268,3 +268,12 @@ footer {
         grid-template-columns: 1fr;
     }
 }
+#nexcoInfoBox {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s ease-in-out;
+}
+
+#nexcoInfoBox.open {
+  max-height: 600px;
+}
