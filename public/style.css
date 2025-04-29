@@ -195,22 +195,6 @@ footer {
     color: #6c757d;
 }
 
-#canvasResult {
-  white-space: pre-wrap;          /* 改行・折り返しあり */
-  word-break: break-word;         /* 単語が長くても折り返す */
-  overflow-wrap: break-word;      /* 長い語句もOK */
-  padding: 16px;                  /* ゆとりある内側 */
-  min-height: 200px;              /* 初期の最低高さ */
-  height: auto;                   /* 内容に応じて縦に伸びる */
-  background-color: #f7f7f7;      /* 明るい背景で読みやすく */
-  border-radius: 8px;             /* 角丸でデザイン統一 */
-  line-height: 1.6;               /* 行間を広くして読みやすく */
-  font-size: 16px;
-  resize: vertical;              /* ユーザーが高さを変えられる */
-  overflow-y: auto;              /* 内容があふれたらスクロール */
-  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-}
-
 .modal {
     display: none;
     position: fixed;
@@ -252,6 +236,22 @@ footer {
     grid-template-columns: repeat(4, 1fr);
     gap: 16px;
     margin-top: 15px;
+}
+
+#canvasResult {
+  white-space: pre-wrap;          /* 改行・折り返しあり */
+  word-break: break-word;         /* 単語が長くても折り返す */
+  overflow-wrap: break-word;      /* 長い語句もOK */
+  padding: 16px;                  /* ゆとりある内側 */
+  min-height: 200px;              /* 初期の最低高さ */
+  height: auto;                   /* 内容に応じて縦に伸びる */
+  background-color: #f7f7f7;      /* 明るい背景で読みやすく */
+  border-radius: 8px;             /* 角丸でデザイン統一 */
+  line-height: 1.6;               /* 行間を広くして読みやすく */
+  font-size: 16px;
+  resize: vertical;              /* ユーザーが高さを変えられる */
+  overflow-y: auto;              /* 内容があふれたらスクロール */
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
 }
 
 @media (max-width: 768px) {
