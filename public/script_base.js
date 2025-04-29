@@ -212,15 +212,6 @@ async function fetchChatGPTResponse(prompt) {
 }
 
 // ←★ここに追記！！
-const toggleNexcoButton = document.getElementById('toggleNexco');
-const nexcoSection = document.getElementById('nexcoSection');
-
-if (toggleNexcoButton && nexcoSection) {
-  toggleNexcoButton.addEventListener('click', () => {
-    nexcoSection.classList.toggle('open');
-  });
-}
-
 const toggleBtn = document.getElementById("toggleNexcoBtn");
 const infoBox = document.getElementById("nexcoInfoBox");
 const infoList = document.getElementById("nexcoInfoList");
