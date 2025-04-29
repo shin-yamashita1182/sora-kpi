@@ -242,21 +242,20 @@ footer {
 }
 
 #canvasResult {
-  white-space: pre-wrap;          /* 改行・折り返しあり */
-  word-break: break-word;         /* 単語が長くても折り返す */
-  overflow-wrap: break-word;      /* 長い語句もOK */
-  padding: 16px;                  /* ゆとりある内側 */
-  min-height: 200px;              /* 初期の最低高さ */
-  height: auto;                   /* 内容に応じて縦に伸びる */
-  background-color: #f7f7f7;      /* 明るい背景で読みやすく */
-  border-radius: 8px;             /* 角丸でデザイン統一 */
-  line-height: 1.6;               /* 行間を広くして読みやすく */
+  white-space: pre-wrap;
+  word-break: break-word;
+  overflow-wrap: break-word;
+  padding: 16px;
+  min-height: 200px;
+  height: auto;
+  background-color: #f7f7f7;
+  border-radius: 8px;
+  line-height: 1.6;
   font-size: 16px;
-  resize: vertical;              /* ユーザーが高さを変えられる */
-  overflow-y: auto;              /* 内容があふれたらスクロール */
-  color: #000000 !important;  /* ← これで絶対に適用されるようにする */
-　box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-
+  resize: vertical;
+  overflow-y: auto;
+  color: #000000 !important;  /* ← 半角スペースで正しく！ */
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
 }
 
 @media (max-width: 768px) {
