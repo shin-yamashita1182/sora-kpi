@@ -76,8 +76,53 @@
     <!-- ChatGPTが返すSA・IC・PA情報をここに入れる予定 -->
   </ul>
 </div>
+ 
+      <section class="results-section">
+        <h2>施策・KPIマッチング結果</h2>
+        <div id="resultsContainer" class="card-container">
+        </div>
+      </section>
+
+      <section class="compare-section">
+        <h2>比較リスト</h2>
+        <div id="compareListContainer" class="card-container">
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- モーダル（詳細） -->
+  <div id="detailModal" class="modal">
+    <div class="modal-content">
+      <span class="close-button" id="closeModal">&times;</span>
+      <div id="modalBody"></div>
+    </div>
+  </div>
+
+  <!-- モーダル（地図拡大） -->
+  <div id="mapModal" class="modal">
+    <div class="modal-content">
+      <span class="close-button" id="closeMapModal">&times;</span>
+      <div id="mapModalBody">拡大地図表示</div>
+    </div>
+  </div>
+
+  <footer>
+    <p>&copy; 2025 SORA Project</p>
+  </footer>
+
+  <!-- スクリプト読み込み -->
+  <script src="script_base.js" defer></script>
+  <script src="script_kankou.js" defer></script>
+<!-- 🔵 これを追加！ -->
+<script src="map_controller.js" defer></script>
 
 <script>
+  // ✅ 最初にボタンとエリアを取得する
+  const toggleBtn = document.getElementById("toggleNexcoBtn");
+  const infoBox = document.getElementById("nexcoInfoBox");
+  const infoList = document.getElementById("nexcoInfoList");
+
 // ✅ NEXCO情報取得ボタンクリック時の処理（正式版）
 toggleBtn.addEventListener("click", async () => {
   const regionName = document.getElementById("regionName").value.trim();
@@ -125,46 +170,6 @@ toggleBtn.addEventListener("click", async () => {
   }
 });
 </script> 
-      
-      <section class="results-section">
-        <h2>施策・KPIマッチング結果</h2>
-        <div id="resultsContainer" class="card-container">
-        </div>
-      </section>
-
-      <section class="compare-section">
-        <h2>比較リスト</h2>
-        <div id="compareListContainer" class="card-container">
-        </div>
-      </section>
-    </main>
-  </div>
-
-  <!-- モーダル（詳細） -->
-  <div id="detailModal" class="modal">
-    <div class="modal-content">
-      <span class="close-button" id="closeModal">&times;</span>
-      <div id="modalBody"></div>
-    </div>
-  </div>
-
-  <!-- モーダル（地図拡大） -->
-  <div id="mapModal" class="modal">
-    <div class="modal-content">
-      <span class="close-button" id="closeMapModal">&times;</span>
-      <div id="mapModalBody">拡大地図表示</div>
-    </div>
-  </div>
-
-  <footer>
-    <p>&copy; 2025 SORA Project</p>
-  </footer>
-
-  <!-- スクリプト読み込み -->
-  <script src="script_base.js" defer></script>
-  <script src="script_kankou.js" defer></script>
-<!-- 🔵 これを追加！ -->
-<script src="map_controller.js" defer></script>
 
 </body>
 </html>
