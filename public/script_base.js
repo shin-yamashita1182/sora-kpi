@@ -195,8 +195,9 @@ async function fetchChatGPTResponse(prompt) {
 
     const data = await response.json();
 
-    const gptResponse = document.getElementById("gptResponse");
-    gptResponse.innerText = data.result || "結果が取得できませんでした。";
+    const canvasResult = document.getElementById("canvasResult");
+canvasResult.innerText = data.result || "結果が取得できませんでした。";
+
 
   } catch (error) {
     console.error("課題抽出中にエラー発生:", error);
