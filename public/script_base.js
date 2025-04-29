@@ -221,4 +221,57 @@ if (toggleNexcoButton && nexcoSection) {
   });
 }
 
-}); // ←★この行の直前に入れること！
+const toggleBtn = document.getElementById("toggleNexcoBtn");
+const infoBox = document.getElementById("nexcoInfoBox");
+const infoList = document.getElementById("nexcoInfoList");
+
+toggleBtn.addEventListener("click", async () => {
+  const regionName = document.getElementById("regionName").value.trim();
+  if (!regionName) {
+    alert("地域名を入力してください！");
+    return;
+  }
+
+  const isOpen = infoBox.classList.contains("open");
+
+  if (!isOpen) {
+    toggleBtn.innerText = "NEXCO情報 取得中…";
+    toggleBtn.disabled = true;
+    infoBox.classList.add("open");
+
+    const nexcoPrompt = `${regionName}周辺の高速道路に関する、主なインターチェンジ、サービスエリア、パーキングエリアを最大5〜7件程度、リスト形式で簡潔にまとめてください。各施設名と簡単な特徴（例：トイレ、飲食、ガソリン有無など）だけを記載してください。それ以外の情報は不要です。`;
+
+    try {
+      const response = await fetch("/api/chatgpt", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ prompt: nexcoPrompt })
+      });
+
+      if (!response.ok) throw new Error("NEXCO情報の取得に失敗しました！");
+
+      const data = await response.json();
+
+      infoList.innerHTML = "";
+      const raw = data.result || "";
+      const items = raw.split(/[\n・。！？]/).filter(line => line.trim().length > 4);
+      items.forEach(text => {
+        const li = document.createElement("li");
+        li.textContent = text.trim();
+        infoList.appendChild(li);
+      });
+
+      toggleBtn.innerText = "NEXCO情報を閉じる";
+    } catch (error) {
+      console.error("NEXCO情報取得エラー:", error);
+      infoList.innerHTML = "<li>情報取得に失敗しました。</li>";
+      toggleBtn.innerText = "NEXCO情報を表示";
+    } finally {
+      toggleBtn.disabled = false;
+    }
+
+  } else {
+    toggleBtn.innerText = "NEXCO情報を表示";
+    infoBox.classList.remove("open");
+  }
+});
