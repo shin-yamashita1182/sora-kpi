@@ -163,58 +163,48 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   // analyzeBtn（課題抽出ボタン）クリック時（ChatGPT連携）
-  analyzeBtn.addEventListener("click", async () => {
-    const regionName = document.getElementById("regionName").value.trim();
-    const userNote = document.getElementById("userNote").value.trim();
+analyzeBtn.addEventListener("click", async () => {
+  const regionName = document.getElementById("regionName").value.trim();
+  const userNote = document.getElementById("userNote").value.trim();
 
-    if (!regionName || !userNote) {
-      alert("地域名とテーマは両方入力してください。");
-      return;
-    }
+  if (!regionName || !userNote) {
+    alert("地域名とテーマは両方入力してください。");
+    return;
+  }
 
-// 🔵 ここから新規追加：ボタン状態変更
-    const originalBtnText = analyzeBtn.innerText;
-    analyzeBtn.innerText = "課題抽出中…";
-    analyzeBtn.disabled = true;
-   
- const prompt = `${regionName}について、テーマ「${userNote}」に基づく地域課題を抽出してください。\n以下の内容について、最大トークン数500以内で、最大5つまでの地域課題を簡潔に挙げてください。各課題は1〜2文で記述し、原因や背景が簡潔に分かるようにしてください。`;
+  // 🔵 ボタン状態変更
+  const originalBtnText = analyzeBtn.innerText;
+  analyzeBtn.innerText = "課題抽出中…";
+  analyzeBtn.disabled = true;
 
-    await fetchChatGPTResponse(prompt);
-  });
-
-// fetchChatGPTResponse関数（ChatGPT連携）
-async function fetchChatGPTResponse(prompt) {
-  const originalBtnText = analyzeBtn.innerText; // ←必要であればここでも定義してOK
+  const prompt = `${regionName}について、テーマ「${userNote}」に基づく地域課題を抽出してください。\n以下の内容について、最大トークン数500以内で、最大5つまでの地域課題を簡潔に挙げてください。各課題は1〜2文で記述し、原因や背景が簡潔に分かるようにしてください。`;
 
   try {
-    console.log("送信するPrompt:", prompt);
-} catch (error) {
-    console.error("課題抽出中にエラー発生:", error);
+    await fetchChatGPTResponse(prompt);
+  } catch (error) {
+    console.error("抽出中に問題が発生しました:", error);
     alert("課題抽出に失敗しました。");
   } finally {
-    // 🔵 ボタン状態を元に戻す
     analyzeBtn.innerText = originalBtnText;
     analyzeBtn.disabled = false;
   }
 });
-    const response = await fetch("/api/chatgpt", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ prompt })
-    });
+// fetchChatGPTResponse関数（ChatGPT連携）
+async function fetchChatGPTResponse(prompt) {
+  console.log("送信するPrompt:", prompt);
 
-    if (!response.ok) {
-      throw new Error("ChatGPT APIエラー");
-    }
+  const response = await fetch("/api/chatgpt", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ prompt })
+  });
 
-    const data = await response.json();
-
-    const canvasResult = document.getElementById("canvasResult");
-canvasResult.innerText = data.result || "結果が取得できませんでした。";
-
-
-  } catch (error) {
-    console.error("課題抽出中にエラー発生:", error);
-    alert("課題抽出に失敗しました。");
+  if (!response.ok) {
+    throw new Error("ChatGPT APIエラー");
   }
+
+  const data = await response.json();
+
+  const canvasResult = document.getElementById("canvasResult");
+  canvasResult.innerText = data.result || "結果が取得できませんでした。";
 }
