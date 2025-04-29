@@ -274,9 +274,11 @@ footer {
 #nexcoInfoBox {
   max-height: 0;
   overflow: hidden;
-  transition: max-height 0.4s ease-in-out;
+  transition: max-height 0.4s ease-in-out, margin-bottom 0.3s ease;
+  margin-bottom: 0;  /* ← ★閉じてるときは余白ゼロ */
 }
 
 #nexcoInfoBox.open {
   max-height: 600px;
+  margin-bottom: 20px;  /* ← ★開いたときだけ余白を出す */
 }
