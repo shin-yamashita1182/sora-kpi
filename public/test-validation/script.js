@@ -6,7 +6,7 @@ async function loadCategory(category) {
     const response = await fetch("../mind_trigger_kankou.json");
     const data = await response.json();
 
-    let filtered = data.filter(item => item["分類カテゴリ"] === category);
+    let filtered = data.filter(item => item["分類"] === category); // ✅ 修正：分類カテゴリ → 分類
 
     if (filtered.length === 0) {
       container.innerHTML = `<p style="text-align: center; margin-top: 50px;">データがありません</p>`;
@@ -26,7 +26,7 @@ async function loadCategory(category) {
 
       const desc = document.createElement("span");
       desc.className = "viewpoint-desc";
-      desc.innerText = "";  // 解説列がないので空欄に
+      desc.innerText = "";  // 今回は視点の解説なしでOK
 
       header.appendChild(tag);
       header.appendChild(desc);
@@ -35,7 +35,7 @@ async function loadCategory(category) {
       body.className = "card-body";
 
       const title = document.createElement("h2");
-      title.innerText = item["戦略目標"]; // 表示名
+      title.innerText = item["戦略目標"]; // 表示用タイトル
 
       const detailButton = document.createElement("button");
       detailButton.className = "detail-button";
