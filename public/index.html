@@ -171,6 +171,7 @@ infoBox.classList.add("open");
       });
     } catch (error) {
       console.error("NEXCO情報取得エラー:", error);
+console.error("NEXCO情報取得エラー:", error);  // この行を入れてください！
       infoList.innerHTML = "<li>情報取得に失敗しました。</li>";
     }
   });
