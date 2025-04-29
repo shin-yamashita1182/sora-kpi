@@ -255,7 +255,7 @@ footer {
   resize: vertical;              /* ユーザーが高さを変えられる */
   overflow-y: auto;              /* 内容があふれたらスクロール */
   box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-　color: #000000; /* ←★これだけ追加で文字が濃くなる！ */
+　color: #000000 !important;  /* ← これで絶対に適用されるようにする */
 }
 
 @media (max-width: 768px) {
