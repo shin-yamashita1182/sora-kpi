@@ -6,7 +6,7 @@ async function loadCategory(category) {
     const response = await fetch("../mind_trigger_kankou.json");
     const data = await response.json();
 
-    let filtered = data.filter(item => item.分類 === category);
+    let filtered = data.filter(item => item["分類カテゴリ"] === category);
 
     if (filtered.length === 0) {
       container.innerHTML = `<p style="text-align: center; margin-top: 50px;">データがありません</p>`;
@@ -22,11 +22,11 @@ async function loadCategory(category) {
 
       const tag = document.createElement("span");
       tag.className = "viewpoint-tag " + viewpointClass(item.視点);
-      tag.innerText = item.視点ラベル;
+      tag.innerText = item.視点;
 
       const desc = document.createElement("span");
       desc.className = "viewpoint-desc";
-      desc.innerText = item.視点解説;
+      desc.innerText = "";  // 解説列がないので空欄に
 
       header.appendChild(tag);
       header.appendChild(desc);
@@ -34,16 +34,14 @@ async function loadCategory(category) {
       const body = document.createElement("div");
       body.className = "card-body";
 
-      // 表に出すのは「戦略目標」＝戦略名（タイトル）
       const title = document.createElement("h2");
-      title.innerText = item.戦略目標;
+      title.innerText = item["戦略目標"]; // 表示名
 
-      // 詳細（中に入るのは施策名＝実施内容）＋KPI
       const detailButton = document.createElement("button");
       detailButton.className = "detail-button";
       detailButton.innerText = "🔎 詳細を見る";
       detailButton.onclick = function() {
-        openModal(item.戦略目標, item["施策／活動案"], item.KPI);
+        openModal(item["戦略目標"], item["施策／活動案"], item["KPI案"]);
       };
 
       const priorityButton = document.createElement("button");
@@ -71,7 +69,7 @@ function viewpointClass(label) {
   switch (label) {
     case "財務の視点": return "viewpoint-finance";
     case "顧客の視点": return "viewpoint-customer";
-    case "内部プロセスの視点": return "viewpoint-process"; // ✅ 正しくラベル一致
+    case "内部プロセスの視点": return "viewpoint-process";
     case "学習と成長の視点": return "viewpoint-growth";
     default: return "";
   }
@@ -89,7 +87,7 @@ function closeModal() {
 }
 
 function addToPriorityList(item) {
-  alert(`優先リストに追加しました：${item.戦略目標}`);
+  alert(`優先リストに追加しました：${item["戦略目標"]}`);
 }
 
 window.addEventListener("DOMContentLoaded", () => {
