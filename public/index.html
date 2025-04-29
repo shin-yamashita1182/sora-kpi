@@ -77,36 +77,54 @@
   </ul>
 </div>
 
-<!-- ✅ 3. スクリプト（アコーディオン＋仮データ挿入用） -->
 <script>
-  const toggleBtn = document.getElementById("toggleNexcoBtn");
-  const infoBox = document.getElementById("nexcoInfoBox");
-  const infoList = document.getElementById("nexcoInfoList");
+// ✅ NEXCO情報取得ボタンクリック時の処理（正式版）
+toggleBtn.addEventListener("click", async () => {
+  const regionName = document.getElementById("regionName").value.trim();
+  if (!regionName) {
+    alert("地域名を入力してください！");
+    return;
+  }
 
-  toggleBtn.addEventListener("click", async () => {
-    if (infoBox.style.display === "none") {
-      toggleBtn.innerText = "NEXCO情報を閉じる";
-      infoBox.style.display = "block";
+  if (infoBox.style.display === "none") {
+    toggleBtn.innerText = "NEXCO情報を閉じる";
+    infoBox.style.display = "block";
 
-      // ✅ 仮の表示データ（本番はChatGPT連携で差し替え）
+    // 🔵 正式版 NEXCO情報用プロンプト生成
+    const nexcoPrompt = `${regionName}周辺の高速道路に関する、主なインターチェンジ、サービスエリア、パーキングエリアを最大5〜7件程度、リスト形式で簡潔にまとめてください。各施設名と簡単な特徴（例：トイレ、飲食、ガソリン有無など）だけを記載してください。それ以外の情報は不要です。`;
+
+    try {
+      const response = await fetch("/api/chatgpt", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ prompt: nexcoPrompt })
+      });
+
+      if (!response.ok) {
+        throw new Error("NEXCO情報の取得に失敗しました！");
+      }
+
+      const data = await response.json();
+
+      // 🔵 受け取ったデータをリスト展開
       infoList.innerHTML = "";
-      const dummyItems = [
-        "基山サービスエリア（飲食・トイレ・ガソリン）",
-        "佐賀大和IC（市街地南部と連結）",
-        "山田PA（休憩設備のみ）"
-      ];
-      dummyItems.forEach(text => {
+      const items = (data.result || "").split(/\\n|・|\\u30fb/).filter(line => line.trim() !== "");
+      items.forEach(text => {
         const li = document.createElement("li");
-        li.textContent = text;
+        li.textContent = text.trim();
         infoList.appendChild(li);
       });
-    } else {
-      toggleBtn.innerText = "NEXCO情報を表示";
-      infoBox.style.display = "none";
+    } catch (error) {
+      console.error("NEXCO情報取得エラー:", error);
+      infoList.innerHTML = "<li>情報取得に失敗しました。</li>";
     }
-  });
-</script>
 
+  } else {
+    toggleBtn.innerText = "NEXCO情報を表示";
+    infoBox.style.display = "none";
+  }
+});
+</script> 
       
       <section class="results-section">
         <h2>施策・KPIマッチング結果</h2>
