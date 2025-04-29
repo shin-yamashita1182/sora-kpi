@@ -136,12 +136,12 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
-    // ✅ 表示を確実に行う
+    // ✅ アコーディオンを確実に開く
     infoBox.style.display = "block";
     infoBox.classList.add("open");
     toggleBtn.innerText = "NEXCO情報（表示中）";
 
-    // ✅ すでにリストがあれば再取得しない（表示だけ）
+    // ✅ すでにリストが描画されていれば再取得はしない（ただ開く）
     if (infoList.children.length > 0) {
       alert("NEXCO情報はすでに表示されています。");
       return;
@@ -169,6 +169,10 @@ document.addEventListener("DOMContentLoaded", () => {
         li.textContent = text.trim();
         infoList.appendChild(li);
       });
+
+      // ✅ 念のため再度アコーディオンを開く命令（リセット対策）
+      infoBox.style.display = "block";
+      infoBox.classList.add("open");
 
       alert("✅ NEXCO情報の取得が完了しました。");
 
