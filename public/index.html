@@ -152,7 +152,7 @@
 
         infoList.innerHTML = "";
         const raw = data.result || "";
-　　　   const items = raw.split(/[\n・。！？]/).filter(line => line.trim().length > 4);　
+        const items = raw.split(/[\n・。！？]/).filter(line => line.trim().length > 4);
         items.forEach(text => {
           const li = document.createElement("li");
           li.textContent = text.trim();
