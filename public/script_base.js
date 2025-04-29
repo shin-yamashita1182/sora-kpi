@@ -1,3 +1,4 @@
+// ✅ SORA Dashboard Script Base - 完全版（NEXCO連動 + 課題抽出 + KPI分析 + 比較）
 document.addEventListener('DOMContentLoaded', () => {
   const modal = document.getElementById("detailModal");
   const modalBody = document.getElementById("modalBody");
@@ -163,10 +164,11 @@ document.addEventListener('DOMContentLoaded', () => {
     canvasResult.innerText = data.result || "結果が取得できませんでした。";
   }
 
-  // ✅ NEXCO情報ボタンのみで取得・トグル制御
+  // ✅ NEXCO情報表示ボタン（取得・開閉トグル）
   const nexcoBtn = document.getElementById("toggleNexcoBtn");
   const infoBox = document.getElementById("nexcoInfoBox");
   const infoList = document.getElementById("nexcoInfoList");
+  const statusBox = document.getElementById("nexcoStatus");
 
   let infoFetched = false;
   let isAccordionOpen = false;
@@ -206,7 +208,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
           infoFetched = true;
           isFetching = false;
-          infoBox.style.display = "block";
+          infoBox.classList.add("open");
           isAccordionOpen = true;
           updateButtonLabel();
         })
@@ -218,10 +220,10 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     } else {
       if (!isAccordionOpen) {
-        infoBox.style.display = "block";
+        infoBox.classList.add("open");
         isAccordionOpen = true;
       } else {
-        infoBox.style.display = "none";
+        infoBox.classList.remove("open");
         isAccordionOpen = false;
       }
       updateButtonLabel();
@@ -230,5 +232,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function updateButtonLabel() {
     nexcoBtn.textContent = isAccordionOpen ? "NEXCO情報を閉じる" : "NEXCO情報を表示";
+    if (statusBox) {
+      statusBox.textContent = isAccordionOpen ? "NEXCO情報を表示中" : "NEXCO情報を非表示にしました";
+    }
   }
 });
