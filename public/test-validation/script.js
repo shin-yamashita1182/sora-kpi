@@ -1,61 +1,70 @@
-// カードデータ（今は観光型のみ）
-const data = [
-  {
-    id: 1,
-    overview: "地域文化体験の充実",
-    kpi: "体験ツアー参加者数",
-    title: "地域文化体験を拡充し、訪問客の滞在時間を伸ばす施策を展開する。",
-    category: "顧客視点",
-    color: "#00AEEF",
-    classification: "観光型"
-  },
-  {
-    id: 2,
-    overview: "地元資源を活用した観光商品開発",
-    kpi: "新商品開発数",
-    title: "地域資源を活かした体験型観光商品の開発を促進し、観光収益を高める。",
-    category: "財務視点",
-    color: "#FFD700",
-    classification: "観光型"
-  }
-];
-
-const priorityList = [];
-
-// カードの描画処理
-function renderCards(filtered) {
+async function loadCategory(category) {
   const container = document.getElementById("card-container");
-  container.innerHTML = "";
-  filtered.forEach(card => {
-    const div = document.createElement("div");
-    div.className = "card";
-    div.style.borderLeft = `8px solid ${card.color}`;
-    div.innerHTML = `
-      <h3>${card.overview}</h3>
-      <p><strong>KPI:</strong> ${card.kpi}</p>
-      <details>
-        <summary>詳細を見る</summary>
-        <p>${card.title}</p>
-      </details>
-      <button class="compare-button" onclick="addToPriority(${card.id})">優先に追加</button>
-    `;
-    container.appendChild(div);
-  });
-}
+  container.innerHTML = ""; // 一旦リセット
 
-function addToPriority(id) {
-  const found = data.find(c => c.id === id);
-  if (found && !priorityList.some(c => c.id === id)) {
-    priorityList.push(found);
-    alert(`「${found.overview}」を優先リストに追加しました！`);
+  try {
+    const response = await fetch("../mind_trigger_kankou.json"); // 1つ上の階層から読む
+    const data = await response.json();
+
+    let filtered = data.filter(item => item.分類 === category);
+
+    if (filtered.length === 0) {
+      container.innerHTML = `<p style="text-align: center; margin-top: 50px;">データがありません</p>`;
+      return;
+    }
+
+    filtered.forEach(item => {
+      const card = document.createElement("div");
+      card.className = "card";
+
+      const header = document.createElement("div");
+      header.className = "card-header";
+
+      const tag = document.createElement("span");
+      tag.className = "viewpoint-tag " + viewpointClass(item.視点ラベル);
+      tag.innerText = item.視点ラベル;
+
+      const desc = document.createElement("span");
+      desc.className = "viewpoint-desc";
+      desc.innerText = item.視点解説;
+
+      header.appendChild(tag);
+      header.appendChild(desc);
+
+      const body = document.createElement("div");
+      body.className = "card-body";
+
+      const title = document.createElement("h4");
+      title.innerText = "施策名：" + item.施策名;
+
+      const content = document.createElement("p");
+      content.innerText = item.説明;
+
+      body.appendChild(title);
+      body.appendChild(content);
+
+      card.appendChild(header);
+      card.appendChild(body);
+
+      container.appendChild(card);
+    });
+  } catch (error) {
+    console.error("JSON読み込みエラー:", error);
+    container.innerHTML = `<p style="text-align: center; margin-top: 50px;">データ読み込みに失敗しました</p>`;
   }
 }
 
-// 分類ボタンでの絞り込み処理
-function loadCategory(type) {
-  const filtered = data.filter(item => item.classification === type);
-  renderCards(filtered);
+function viewpointClass(label) {
+  switch (label) {
+    case "財務視点": return "viewpoint-finance";
+    case "顧客視点": return "viewpoint-customer";
+    case "業務プロセス視点": return "viewpoint-process";
+    case "学習・成長視点": return "viewpoint-growth";
+    default: return "";
+  }
 }
 
-// 初期表示（観光型）
-window.onload = () => loadCategory("観光型");
+// 初期ロードで観光型を表示
+window.addEventListener("DOMContentLoaded", () => {
+  loadCategory("観光型");
+});
