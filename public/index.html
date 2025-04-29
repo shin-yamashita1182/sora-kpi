@@ -118,60 +118,59 @@
 <script src="map_controller.js" defer></script>
 
 <script>
-  document.addEventListener("DOMContentLoaded", () => {
-    const toggleBtn = document.getElementById("toggleNexcoBtn");
-    const infoBox = document.getElementById("nexcoInfoBox");
-    const infoList = document.getElementById("nexcoInfoList");
+document.addEventListener("DOMContentLoaded", () => {
+  const toggleBtn = document.getElementById("toggleNexcoBtn");
+  const infoBox = document.getElementById("nexcoInfoBox");
+  const infoList = document.getElementById("nexcoInfoList");
 
-    toggleBtn.addEventListener("click", async () => {
-      const regionName = document.getElementById("regionName").value.trim();
-      if (!regionName) {
-        alert("地域名を入力してください！");
-        return;
-      }
+  toggleBtn.addEventListener("click", async () => {
+    const regionName = document.getElementById("regionName").value.trim();
+    if (!regionName) {
+      alert("地域名を入力してください！");
+      return;
+    }
 
-      const isOpen = infoBox.classList.contains("open");
+    const isOpen = infoBox.classList.contains("open");
 
-      if (!isOpen) {
-        toggleBtn.innerText = "NEXCO情報を閉じる";
-        infoBox.classList.add("open");
-        infoBox.style.display = "block";
+    if (isOpen) {
+      // 明示的に閉じる
+      infoBox.classList.remove("open");
+      toggleBtn.innerText = "NEXCO情報を表示";
+      return;
+    }
 
-        const nexcoPrompt = `${regionName}周辺の高速道路に関する、主なインターチェンジ、サービスエリア、パーキングエリアを最大5〜7件程度、リスト形式で簡潔にまとめてください。各施設名と簡単な特徴（例：トイレ、飲食、ガソリン有無など）だけを記載してください。それ以外の情報は不要です。`;
+    // 開く（CSS側で表示制御）
+    infoBox.classList.add("open");
+    toggleBtn.innerText = "NEXCO情報を閉じる";
 
-        try {
-          const response = await fetch("/api/chatgpt", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ prompt: nexcoPrompt })
-          });
+    // すでに表示データがあるなら再取得しない
+    if (infoList.children.length > 0) return;
 
-          if (!response.ok) {
-            throw new Error("NEXCO情報の取得に失敗しました！");
-          }
+    const nexcoPrompt = `${regionName}周辺の高速道路に関する、主なインターチェンジ、サービスエリア、パーキングエリアを最大5〜7件程度、リスト形式で簡潔にまとめてください。各施設名と簡単な特徴（例：トイレ、飲食、ガソリン有無など）だけを記載してください。それ以外の情報は不要です。`;
 
-          const data = await response.json();
+    try {
+      const response = await fetch("/api/chatgpt", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ prompt: nexcoPrompt })
+      });
 
-          infoList.innerHTML = "";
-          const raw = data.result || "";
-          const items = raw.split(/[\n・。！？]/).filter(line => line.trim().length > 4);
-          items.forEach(text => {
-            const li = document.createElement("li");
-            li.textContent = text.trim();
-            infoList.appendChild(li);
-          });
-        } catch (error) {
-          console.error("NEXCO情報取得エラー:", error);
-          infoList.innerHTML = "<li>情報取得に失敗しました。</li>";
-        }
+      if (!response.ok) throw new Error("NEXCO情報の取得に失敗しました！");
 
-      } else {
-        toggleBtn.innerText = "NEXCO情報を表示";
-        infoBox.classList.remove("open");
-        infoBox.style.display = "none";
-      }
-    });
+      const data = await response.json();
+      const raw = data.result || "";
+      const items = raw.split(/[\n・。！？]/).filter(line => line.trim().length > 4);
+      items.forEach(text => {
+        const li = document.createElement("li");
+        li.textContent = text.trim();
+        infoList.appendChild(li);
+      });
+    } catch (error) {
+      console.error("NEXCO情報取得エラー:", error);
+      infoList.innerHTML = "<li>情報取得に失敗しました。</li>";
+    }
   });
+});
 </script>
 </body>
 </html>
