@@ -139,9 +139,10 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
-    // 開く（CSS側で表示制御）
-    infoBox.classList.add("open");
+    // 開く（CSS側で表示制御）    
     toggleBtn.innerText = "NEXCO情報を閉じる";
+infoBox.style.display = "block";  // ← これを追加！！
+infoBox.classList.add("open");
 
     // すでに表示データがあるなら再取得しない
     if (infoList.children.length > 0) return;
