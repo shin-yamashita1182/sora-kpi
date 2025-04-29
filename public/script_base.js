@@ -210,4 +210,15 @@ async function fetchChatGPTResponse(prompt) {
   const canvasResult = document.getElementById("canvasResult");
   canvasResult.innerText = data.result || "結果が取得できませんでした。";
 }
-}); // ← これで全体を閉じる
+
+// ←★ここに追記！！
+const toggleNexcoButton = document.getElementById('toggleNexco');
+const nexcoSection = document.getElementById('nexcoSection');
+
+if (toggleNexcoButton && nexcoSection) {
+  toggleNexcoButton.addEventListener('click', () => {
+    nexcoSection.classList.toggle('open');
+  });
+}
+
+}); // ←★この行の直前に入れること！
