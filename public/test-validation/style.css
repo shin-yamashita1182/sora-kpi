@@ -13,6 +13,7 @@ h1 {
 
 #category-buttons {
   margin-bottom: 1.5rem;
+  flex-wrap: wrap;
 }
 
 #category-buttons button {
@@ -31,8 +32,9 @@ h1 {
 
 #card-container {
   display: flex;
-  flex-direction: column;
+  flex-wrap: wrap;
   gap: 1rem;
+  justify-content: flex-start;
 }
 
 .card {
@@ -42,6 +44,10 @@ h1 {
   border-radius: 6px;
   box-shadow: 0 2px 5px rgba(0,0,0,0.05);
   transition: 0.2s;
+  width: 300px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 .card:hover {
@@ -50,17 +56,20 @@ h1 {
 
 .card h3 {
   margin-top: 0;
-  font-size: 1.2rem;
+  font-size: 1.1rem;
   color: #222;
 }
 
 .card p {
   margin: 0.3rem 0;
   color: #555;
+  font-size: 0.9rem;
 }
 
 .card summary {
   cursor: pointer;
   font-weight: bold;
   margin-top: 0.5rem;
+  font-size: 0.9rem;
 }
+
