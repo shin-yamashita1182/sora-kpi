@@ -184,6 +184,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // fetchChatGPTResponse関数（ChatGPT連携）
 async function fetchChatGPTResponse(prompt) {
+  const originalBtnText = analyzeBtn.innerText; // ←必要であればここでも定義してOK
+
   try {
     console.log("送信するPrompt:", prompt);
 } catch (error) {
