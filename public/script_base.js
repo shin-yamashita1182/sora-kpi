@@ -181,7 +181,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     await fetchChatGPTResponse(prompt);
   });
-});
 
 // fetchChatGPTResponse関数（ChatGPT連携）
 async function fetchChatGPTResponse(prompt) {
