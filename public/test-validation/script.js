@@ -34,14 +34,16 @@ async function loadCategory(category) {
       const body = document.createElement("div");
       body.className = "card-body";
 
+      // 表に出すのは「戦略目標」＝戦略名（タイトル）
       const title = document.createElement("h2");
-      title.innerText = item.戦略目標;  // 戦略テーマ（表に出す）
+      title.innerText = item.戦略目標;
 
+      // 詳細（中に入るのは施策名＝実施内容）＋KPI
       const detailButton = document.createElement("button");
       detailButton.className = "detail-button";
       detailButton.innerText = "🔎 詳細を見る";
       detailButton.onclick = function() {
-        openModal(item.施策名, item.説明, item.KPI);
+        openModal(item.戦略目標, item["施策／活動案"], item.KPI);
       };
 
       const priorityButton = document.createElement("button");
@@ -69,7 +71,7 @@ function viewpointClass(label) {
   switch (label) {
     case "財務の視点": return "viewpoint-finance";
     case "顧客の視点": return "viewpoint-customer";
-    case "内部プロセスの視点": return "viewpoint-process"; // ← ここ正しく修正！
+    case "内部プロセスの視点": return "viewpoint-process"; // ✅ 正しくラベル一致
     case "学習と成長の視点": return "viewpoint-growth";
     default: return "";
   }
