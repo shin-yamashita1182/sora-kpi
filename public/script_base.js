@@ -167,6 +167,8 @@ analyzeBtn.addEventListener("click", async () => {
   const regionName = document.getElementById("regionName").value.trim();
   const userNote = document.getElementById("userNote").value.trim();
 
+updateGoogleMap(regionName); // 🔵 地図更新をここに呼ぶ！（絶対ここ）
+  
   if (!regionName || !userNote) {
     alert("地域名とテーマは両方入力してください。");
     return;
