@@ -273,21 +273,21 @@ footer {
 }
 
 #nexcoInfoBox {
-  max-height: 0 !important;
+  display: none !important;
+  max-height: 0;
   overflow: hidden;
   transition: max-height 0.4s ease-in-out;
   margin: 0;
   padding: 0;
   border: none;
   background-color: #f8f9fa;
-  display: none;
 }
 
 #nexcoInfoBox.open {
   display: block !important;
   max-height: 1000px !important;
-  overflow: visible;
   padding: 10px;
   margin-bottom: 20px;
   border: 1px solid #ccc;
+  overflow: visible;
 }
