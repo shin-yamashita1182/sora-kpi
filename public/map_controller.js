@@ -1,5 +1,5 @@
 function updateGoogleMap(regionName) {
-  const mapContainer = document.getElementById('map'); // 地図エリアのdiv
+  const mapContainer = document.getElementById('miniMap'); // 地図エリアのdiv
   const encodedRegion = encodeURIComponent(regionName);
 
   const apiKey = 'AIzaSyA-DU92xdbCPQLQsjQnBiMm-Td3fht-0N0'; // ★本番キーをここに！
