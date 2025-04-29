@@ -1,122 +1,66 @@
 body {
-  font-family: sans-serif;
+  font-family: "Helvetica Neue", sans-serif;
+  background-color: #f9f9f9;
   margin: 0;
-  padding: 0;
-  display: flex;
+  padding: 1rem;
 }
 
-.sidebar {
-  width: 420px;
-  padding: 20px;
-  background: #f9f9f9;
-  border-right: 1px solid #ccc;
-  height: 100vh;
-  overflow-y: auto;
-  overflow-x: hidden;
+h1 {
+  margin-bottom: 1rem;
+  font-size: 1.5rem;
+  color: #333;
 }
 
-.content {
-  flex-grow: 1;
-  padding: 20px;
-  display: flex;
-  flex-direction: row;
-  gap: 20px;
-  align-items: flex-start;
-  flex-wrap: nowrap;
+#category-buttons {
+  margin-bottom: 1.5rem;
 }
 
-label {
-  display: block;
-  margin-top: 15px;
-  font-weight: bold;
+#category-buttons button {
+  margin: 0.2rem;
+  padding: 0.5rem 1rem;
+  background-color: #e0e0e0;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 0.9rem;
 }
 
-input[type="text"],
-select,
-textarea {
-  width: 95%;
-  padding: 8px;
-  margin-top: 5px;
+#category-buttons button:hover {
+  background-color: #d0d0d0;
 }
 
-.input-with-mic {
+#card-container {
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  margin-top: 5px;
+  gap: 1rem;
 }
 
-.mic-area {
-  margin-top: 5px;
+.card {
+  background-color: white;
+  border-left: 8px solid #ccc;
+  padding: 1rem;
+  border-radius: 6px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+  transition: 0.2s;
 }
 
-.mic-button {
-  background: none;
-  border: none;
-  cursor: pointer;
-  font-size: 24px;
+.card:hover {
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.card h3 {
+  margin-top: 0;
+  font-size: 1.2rem;
+  color: #222;
+}
+
+.card p {
+  margin: 0.3rem 0;
   color: #555;
 }
 
-button {
-  margin-top: 20px;
-  width: 100%;
-  padding: 10px;
-  background: #007bff;
-  color: white;
-  border: none;
-  font-size: 16px;
+.card summary {
   cursor: pointer;
-}
-
-button:hover {
-  background: #0056b3;
-}
-
-.map-wrapper {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  height: 600px;
-  justify-content: space-between;
-}
-
-.map-area {
-  width: 300px;
-  height: 300px;
-  background: #ddd;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-  flex-shrink: 0;
-  cursor: pointer;
-}
-
-.map-instruction {
-  margin-top: 5px;
-  font-size: 12px;
-  color: #666;
-}
-
-.info-area {
-  width: 300px;
-  background: #ffffff;
-  padding: 15px;
-  border-radius: 8px;
-  font-size: 14px;
-  color: #333;
-  box-shadow: 0 0 5px rgba(0,0,0,0.1);
-  margin-top: 10px;
-}
-
-.response-area {
-  background: #efefef;
-  padding: 20px;
-  border-radius: 8px;
-  height: 700px;
-  overflow-y: scroll; /* 強制スクロールに変更 */
-  overflow-x: hidden;
-  width: 100%;
-  word-break: break-word;
+  font-weight: bold;
+  margin-top: 0.5rem;
 }
