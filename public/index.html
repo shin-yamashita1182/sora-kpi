@@ -151,7 +151,8 @@
         const data = await response.json();
 
         infoList.innerHTML = "";
-        const items = (data.result || "").split(/\\n|・|\\u30fb/).filter(line => line.trim() !== "");
+        const raw = data.result || "";
+const items = raw.split(/[\n。・・･●・\\u30fb]/).filter(line => line.trim() !== "");
         items.forEach(text => {
           const li = document.createElement("li");
           li.textContent = text.trim();
