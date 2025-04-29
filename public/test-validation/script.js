@@ -20,7 +20,7 @@ const data = [
   }
 ];
 
-const selectedCards = [];
+const priorityList = [];
 
 // カードの描画処理
 function renderCards(filtered) {
@@ -37,17 +37,17 @@ function renderCards(filtered) {
         <summary>詳細を見る</summary>
         <p>${card.title}</p>
       </details>
-      <button class="compare-button" onclick="addToComparison(${card.id})">比較に追加</button>
+      <button class="compare-button" onclick="addToPriority(${card.id})">優先に追加</button>
     `;
     container.appendChild(div);
   });
 }
 
-function addToComparison(id) {
+function addToPriority(id) {
   const found = data.find(c => c.id === id);
-  if (found && !selectedCards.some(c => c.id === id)) {
-    selectedCards.push(found);
-    alert(`「${found.overview}」を比較リストに追加しました！`);
+  if (found && !priorityList.some(c => c.id === id)) {
+    priorityList.push(found);
+    alert(`「${found.overview}」を優先リストに追加しました！`);
   }
 }
 
