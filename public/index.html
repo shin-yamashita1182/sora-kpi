@@ -125,8 +125,10 @@ console.log("✅ NEXCOスクリプトが実行されました");
   const infoList = document.getElementById("nexcoInfoList");
 
   toggleBtn.addEventListener("click", async () => {
+console.log("✅ ボタンがクリックされました");
     const regionName = document.getElementById("regionName").value.trim();
-    if (!regionName) {
+   console.log("▶ 地域名：", regionName);
+ if (!regionName) {
       alert("地域名を入力してください！");
       return;
     }
