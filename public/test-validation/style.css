@@ -89,6 +89,8 @@ h1 {
 .compare-button:hover {
   background-color: #0056b3;
 }
+
+/* ここから視点カラー・ラベル */
 .viewpoint-tag {
   font-size: 0.75rem;
   font-weight: bold;
@@ -108,9 +110,9 @@ h1 {
 .viewpoint-customer { background-color: #1565c0; }     /* 顧客視点（青） */
 .viewpoint-process { background-color: #2e7d32; }      /* 業務視点（緑） */
 .viewpoint-growth { background-color: #f9a825; }       /* 学習視点（黄） */
-.modal {
- }
 
+/* ここからモーダル */
+.modal {
   display: none;
   position: fixed;
   z-index: 1000;
