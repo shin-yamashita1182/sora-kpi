@@ -275,14 +275,15 @@ footer {
 #nexcoInfoBox {
   max-height: 0;
   overflow: hidden;
-  transition: max-height 0.4s ease-in-out, margin 0.3s ease;
-  margin: 0 !important;  /* ← 完全に初期はゼロ！重要！ */
-  padding: 10px;
+  transition: max-height 0.4s ease-in-out, margin-bottom 0.3s ease, padding 0.3s ease;
+  margin: 0 !important;
+  padding: 0;  /* ← ★閉じてるときはpaddingゼロ */
   border: 1px solid #ccc;
   background-color: #f8f9fa;
 }
 
 #nexcoInfoBox.open {
   max-height: 600px;
-  margin-bottom: 20px !important;  /* ← 開いたときだけ余白を出す */
+  margin-bottom: 20px !important;
+  padding: 10px;  /* ← ★開いたときだけ中身に余白が出る */
 }
