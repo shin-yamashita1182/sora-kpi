@@ -108,3 +108,62 @@ h1 {
 .viewpoint-customer { background-color: #1565c0; }     /* 顧客視点（青） */
 .viewpoint-process { background-color: #2e7d32; }      /* 業務視点（緑） */
 .viewpoint-growth { background-color: #f9a825; }       /* 学習視点（黄） */
+.modal {
+ }
+
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  padding-top: 100px;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0,0,0,0.6);
+}
+
+.modal-content-box {
+  background-color: #fff;
+  margin: auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%;
+  max-width: 600px;
+  border-radius: 12px;
+}
+
+.close-button {
+  color: #aaa;
+  float: right;
+  font-size: 24px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.detail-button, .add-priority-button {
+  margin: 10px 8px 0 0;
+  padding: 8px 12px;
+  font-size: 0.9rem;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.detail-button {
+  background-color: #4caf50;
+  color: white;
+}
+
+.detail-button:hover {
+  background-color: #43a047;
+}
+
+.add-priority-button {
+  background-color: #1976d2;
+  color: white;
+}
+
+.add-priority-button:hover {
+  background-color: #1565c0;
+}
