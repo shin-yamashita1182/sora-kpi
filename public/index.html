@@ -70,7 +70,7 @@
 </div>
 
 <!-- ✅ 2. アコーディオンエリア（最初は非表示） -->
-<div id="nexcoInfoBox">
+<div id="nexcoInfoBox" style="display: none;">
   <h3>NEXCO周辺施設・高速道路情報</h3>
   <ul id="nexcoInfoList">
     <!-- ChatGPTが返すSA・IC・PA情報をここに入れる予定 -->
@@ -134,7 +134,7 @@
     if (!isOpen) {
       toggleBtn.innerText = "NEXCO情報を閉じる";
       infoBox.classList.add("open");
-
+infoBox.style.display = "block";  // ← ここ追加！
       const nexcoPrompt = `${regionName}周辺の高速道路に関する、主なインターチェンジ、サービスエリア、パーキングエリアを最大5〜7件程度、リスト形式で簡潔にまとめてください。各施設名と簡単な特徴（例：トイレ、飲食、ガソリン有無など）だけを記載してください。それ以外の情報は不要です。`;
 
       try {
@@ -166,6 +166,7 @@
     } else {
       toggleBtn.innerText = "NEXCO情報を表示";
       infoBox.classList.remove("open");
+infoBox.style.display = "none";  // ← ここ追加！
     }
   });
 </script>
