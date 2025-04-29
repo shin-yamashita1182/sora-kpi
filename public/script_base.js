@@ -229,6 +229,7 @@ toggleBtn.addEventListener("click", async () => {
     toggleBtn.innerText = "NEXCO情報 取得中…";
     toggleBtn.disabled = true;
     infoBox.classList.add("open");
+infoBox.style.display = "block"; // ← この行を足すだけ
 
     const nexcoPrompt = `${regionName}周辺の高速道路に関する、主なインターチェンジ、サービスエリア、パーキングエリアを最大5〜7件程度、リスト形式で簡潔にまとめてください。各施設名と簡単な特徴（例：トイレ、飲食、ガソリン有無など）だけを記載してください。それ以外の情報は不要です。`;
 
