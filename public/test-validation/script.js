@@ -20,6 +20,8 @@ const data = [
   }
 ];
 
+const selectedCards = [];
+
 // カードの描画処理
 function renderCards(filtered) {
   const container = document.getElementById("card-container");
@@ -35,9 +37,18 @@ function renderCards(filtered) {
         <summary>詳細を見る</summary>
         <p>${card.title}</p>
       </details>
+      <button class="compare-button" onclick="addToComparison(${card.id})">比較に追加</button>
     `;
     container.appendChild(div);
   });
+}
+
+function addToComparison(id) {
+  const found = data.find(c => c.id === id);
+  if (found && !selectedCards.some(c => c.id === id)) {
+    selectedCards.push(found);
+    alert(`「${found.overview}」を比較リストに追加しました！`);
+  }
 }
 
 // 分類ボタンでの絞り込み処理
