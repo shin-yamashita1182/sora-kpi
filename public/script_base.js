@@ -208,3 +208,4 @@ async function fetchChatGPTResponse(prompt) {
   const canvasResult = document.getElementById("canvasResult");
   canvasResult.innerText = data.result || "結果が取得できませんでした。";
 }
+}); // ← これで全体を閉じる
