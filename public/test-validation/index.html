@@ -3,75 +3,30 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SORA Dashboard - 未来版安定改訂 v1.3.0</title>
-  <link rel="stylesheet" href="style.css"> <!-- 外部スタイルシート読み込み -->
+  <title>Mind Trigger Master Checker</title>
+  <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
-  <div class="sidebar">
-    <h2>地域情報入力</h2>
-
-    <label for="regionStaticInput">地域名（必須）:</label>
-    <input type="text" id="regionStaticInput" placeholder="例：大分市">
-
-    <label for="freeInput">テーマ・自由記述:</label>
-    <div class="input-with-mic">
-      <textarea id="freeInput" rows="5" placeholder="例：インバウンド観光施策の強化"></textarea>
-      <div class="mic-area">
-        <button class="mic-button" title="音声入力未対応">🎤</button>
-      </div>
+  <header>
+    <h1>Mind Trigger カード管理ページ</h1>
+    <div id="category-buttons">
+      <button onclick="loadCategory('観光型')">観光型</button>
+      <button onclick="loadCategory('離島型')">離島型</button>
+      <button onclick="loadCategory('中山間地域型')">中山間地域型</button>
+      <button onclick="loadCategory('都市型')">都市型</button>
+      <button onclick="loadCategory('広域連携型')">広域連携型</button>
+      <button onclick="loadCategory('インバウンド型')">インバウンド型</button>
+      <button onclick="loadCategory('DX推進型')">DX推進型</button>
+      <button onclick="loadCategory('サステナブル型')">サステナブル型</button>
+      <button onclick="loadCategory('産業振興型')">産業振興型</button>
+      <button onclick="loadCategory('教育・人材育成型')">教育・人材育成型</button>
     </div>
+  </header>
 
-    <label for="regionType">地域分類:</label>
-    <select id="regionType">
-      <option value="観光型">観光型</option>
-      <option value="都市型">都市型</option>
-      <option value="離島型">離島型</option>
-      <option value="農村型">農村型</option>
-      <option value="その他">その他</option>
-    </select>
-
-    <label for="fileUpload">資料アップロード（任意）:</label>
-    <input type="file" id="fileUpload">
-
-    <button id="extractButton">課題を抽出する</button>
-  </div>
-
-  <div class="content">
-    <div class="response-area" id="gptResponse">
-      （ここにChatGPT応答が表示されます）
-    </div>
-
-    <div class="map-wrapper">
-      <div class="map-area" id="mapArea">
-        （地図エリア仮置き）
-      </div>
-      <div class="map-instruction">※地図をクリックするとGoogleマップが開きます</div>
-      <div class="info-area">
-        🚗 高速道路サービスエリア・インターチェンジ情報例<br>
-        ・〇〇サービスエリア（上り） - 休憩・飲食施設あり<br>
-        ・△△インターチェンジ - 主要出口、都市中心部アクセス良好
-      </div>
-    </div>
-  </div>
+  <main id="card-container">
+    <!-- カード一覧がここに並びます -->
+  </main>
 
   <script src="script.js"></script>
-
-  <script>
-    document.getElementById('mapArea').addEventListener('click', function() {
-      const mapUrl = 'https://www.google.com/maps';
-      window.open(mapUrl, '_blank');
-    });
-  </script>
-<!-- モーダルポップアップ -->
-<div id="modal" class="modal" style="display:none;">
-  <div class="modal-content">
-    <span id="closeModal" class="close">&times;</span>
-    <h2 id="modalTitle">課題詳細</h2>
-    <p id="modalDescription"></p>
-    <p><strong>次のアクション:</strong> <span id="modalAction"></span></p>
-  </div>
-</div>
-
 </body>
 </html>
