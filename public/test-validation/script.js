@@ -13,7 +13,7 @@ async function loadCategory(category) {
       return;
     }
 
-    filtered.forEach((item, index) => {
+    filtered.forEach((item) => {
       const card = document.createElement("div");
       card.className = "card";
 
@@ -41,14 +41,14 @@ async function loadCategory(category) {
       detailButton.className = "detail-button";
       detailButton.innerText = "🔎 詳細を見る";
       detailButton.onclick = function() {
-        openModal(item.施策名, item.説明);
+        openModal(item.施策名, item.説明, item.KPI);
       };
 
       const priorityButton = document.createElement("button");
       priorityButton.className = "add-priority-button";
       priorityButton.innerText = "＋ 優先リストに追加";
       priorityButton.onclick = function() {
-        addToPriorityList(item); // 今後ここに優先リスト保存ロジックを書く
+        addToPriorityList(item);
       };
 
       body.appendChild(title);
@@ -75,27 +75,22 @@ function viewpointClass(label) {
   }
 }
 
-// モーダルを開く
-function openModal(title, content) {
-  const modal = document.getElementById("modal");
-  const modalTitle = document.getElementById("modal-title");
-  const modalContent = document.getElementById("modal-content");
-  modalTitle.innerText = title;
-  modalContent.innerText = content;
-  modal.style.display = "block";
+function openModal(title, content, kpi) {
+  document.getElementById("modal-title").innerText = "戦略テーマ：" + title;
+  document.getElementById("modal-content").innerText = content;
+  document.getElementById("modal-kpi").innerText = "【KPI】" + kpi;
+  document.getElementById("modal").style.display = "block";
 }
 
-// モーダルを閉じる
 function closeModal() {
   document.getElementById("modal").style.display = "none";
 }
 
-// 仮の優先リスト追加（ここは今後強化）
+// 仮：優先リスト追加
 function addToPriorityList(item) {
   alert(`優先リストに追加しました：${item.施策名}`);
 }
 
-// 初期ロード
 window.addEventListener("DOMContentLoaded", () => {
   loadCategory("観光型");
 });
