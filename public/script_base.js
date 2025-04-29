@@ -172,7 +172,12 @@ document.addEventListener('DOMContentLoaded', () => {
       return;
     }
 
-    const prompt = `${regionName}について、テーマ「${userNote}」に基づく地域課題を抽出してください。\n以下の内容について、最大トークン数500以内で、最大5つまでの地域課題を簡潔に挙げてください。各課題は1〜2文で記述し、原因や背景が簡潔に分かるようにしてください。`;
+// 🔵 ここから新規追加：ボタン状態変更
+    const originalBtnText = analyzeBtn.innerText;
+    analyzeBtn.innerText = "課題抽出中…";
+    analyzeBtn.disabled = true;
+   
+ const prompt = `${regionName}について、テーマ「${userNote}」に基づく地域課題を抽出してください。\n以下の内容について、最大トークン数500以内で、最大5つまでの地域課題を簡潔に挙げてください。各課題は1〜2文で記述し、原因や背景が簡潔に分かるようにしてください。`;
 
     await fetchChatGPTResponse(prompt);
   });
@@ -182,7 +187,15 @@ document.addEventListener('DOMContentLoaded', () => {
 async function fetchChatGPTResponse(prompt) {
   try {
     console.log("送信するPrompt:", prompt);
-
+} catch (error) {
+    console.error("課題抽出中にエラー発生:", error);
+    alert("課題抽出に失敗しました。");
+  } finally {
+    // 🔵 ボタン状態を元に戻す
+    analyzeBtn.innerText = originalBtnText;
+    analyzeBtn.disabled = false;
+  }
+});
     const response = await fetch("/api/chatgpt", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
