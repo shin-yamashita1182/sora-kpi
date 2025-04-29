@@ -21,7 +21,7 @@ async function loadCategory(category) {
       header.className = "card-header";
 
       const tag = document.createElement("span");
-      tag.className = "viewpoint-tag " + viewpointClass(item.視点ラベル);
+      tag.className = "viewpoint-tag " + viewpointClass(item.視点);
       tag.innerText = item.視点ラベル;
 
       const desc = document.createElement("span");
@@ -35,7 +35,7 @@ async function loadCategory(category) {
       body.className = "card-body";
 
       const title = document.createElement("h2");
-      title.innerText = item.施策名;
+      title.innerText = item.戦略目標;  // 戦略テーマ（表に出す）
 
       const detailButton = document.createElement("button");
       detailButton.className = "detail-button";
@@ -67,10 +67,10 @@ async function loadCategory(category) {
 
 function viewpointClass(label) {
   switch (label) {
-    case "財務視点": return "viewpoint-finance";
-    case "顧客視点": return "viewpoint-customer";
-    case "業務プロセス視点": return "viewpoint-process";
-    case "学習・成長視点": return "viewpoint-growth";
+    case "財務の視点": return "viewpoint-finance";
+    case "顧客の視点": return "viewpoint-customer";
+    case "内部プロセスの視点": return "viewpoint-process"; // ← ここ正しく修正！
+    case "学習と成長の視点": return "viewpoint-growth";
     default: return "";
   }
 }
@@ -78,7 +78,7 @@ function viewpointClass(label) {
 function openModal(title, content, kpi) {
   document.getElementById("modal-title").innerText = "戦略テーマ：" + title;
   document.getElementById("modal-content").innerText = content;
-  document.getElementById("modal-kpi").innerText = "【KPI】" + kpi;
+  document.getElementById("modal-kpi").innerText = "【KPI】" + (kpi ?? "設定なし");
   document.getElementById("modal").style.display = "block";
 }
 
@@ -86,9 +86,8 @@ function closeModal() {
   document.getElementById("modal").style.display = "none";
 }
 
-// 仮：優先リスト追加
 function addToPriorityList(item) {
-  alert(`優先リストに追加しました：${item.施策名}`);
+  alert(`優先リストに追加しました：${item.戦略目標}`);
 }
 
 window.addEventListener("DOMContentLoaded", () => {
