@@ -172,7 +172,8 @@ document.addEventListener('DOMContentLoaded', () => {
       return;
     }
 
-    const prompt = `${regionName}について、テーマ「${userNote}」に基づく地域課題を抽出してください。`;
+    const prompt = `${area}について、テーマ「${theme}」に基づく地域課題を抽出してください。\n以下の内容について、最大トークン数500以内で、最大5つまでの地域課題を簡潔に挙げてください。各課題は1〜2文で記述し、原因や背景が簡潔に分かるようにしてください。`;
+
 
     await fetchChatGPTResponse(prompt);
   });
