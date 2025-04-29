@@ -286,7 +286,8 @@ footer {
 #nexcoInfoBox.open {
   display: block !important;
   max-height: 1000px !important;
-  margin-bottom: 20px;
+  overflow: visible;
   padding: 10px;
+  margin-bottom: 20px;
   border: 1px solid #ccc;
 }
