@@ -19,7 +19,6 @@ document.addEventListener('DOMContentLoaded', () => {
   let currentMasterData = [];
   let currentDetailIndex = null;
 
-  // 地域入力＋分類選択からマスターを読み込む
   async function loadMasterData() {
     const category = categorySelect.value;
     console.log("Category selected:", category);
@@ -37,16 +36,13 @@ document.addEventListener('DOMContentLoaded', () => {
         console.error('Error loading JSON:', error);
       }
     } else {
-      currentMasterData = []; // 他分類は今は空
+      currentMasterData = []; 
     }
   }
 
-  // 分析対策ボタンのクリック時（従来マスター読み込み処理）
   generateBtn.addEventListener('click', async () => {
     console.log('Generate button clicked');
-
     await loadMasterData();
-
     resultsContainer.innerHTML = "";
 
     if (currentMasterData.length === 0) {
@@ -54,7 +50,6 @@ document.addEventListener('DOMContentLoaded', () => {
       return;
     }
 
-    console.log("Displaying data...");
     currentMasterData.forEach((item, index) => {
       const card = document.createElement('div');
       card.className = 'card';
@@ -66,19 +61,14 @@ document.addEventListener('DOMContentLoaded', () => {
       `;
       resultsContainer.appendChild(card);
     });
-
-    console.log('Results Container HTML:', resultsContainer.innerHTML);
   });
 
-  // 詳細ボタンのクリック時
   document.body.addEventListener('click', (event) => {
     if (event.target.classList.contains('detail-btn')) {
       const parentCard = event.target.closest('.card');
       const index = parentCard.getAttribute('data-index');
       const item = currentMasterData[index];
       currentDetailIndex = parseInt(index);
-
-      console.log("Opening detail modal for:", item.title);
 
       modalBody.innerHTML = `
         <h2>${item.title}</h2>
@@ -93,7 +83,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // モーダル内の「比較リストに追加」ボタン
   modalBody.addEventListener('click', (event) => {
     if (event.target.id === 'addToCompareBtn' && currentDetailIndex !== null) {
       const item = currentMasterData[currentDetailIndex];
@@ -112,23 +101,18 @@ document.addEventListener('DOMContentLoaded', () => {
           </div>
         `;
         compareListContainer.appendChild(card);
-        console.log("Added to compare list:", item.title);
       }
-
       modal.style.display = "none";
     }
   });
 
-  // 比較リストから削除ボタン
   compareListContainer.addEventListener('click', (event) => {
     if (event.target.classList.contains('remove-btn')) {
       const card = event.target.closest('.card');
       if (card) card.remove();
-      console.log("Card removed from compare list");
     }
   });
 
-  // モーダル閉じるボタン
   closeBtn.addEventListener('click', () => {
     modal.style.display = "none";
   });
@@ -146,74 +130,60 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // ミニマップクリック時
   const miniMap = document.getElementById('miniMap');
   miniMap.addEventListener('click', () => {
     mapModalBody.innerHTML = "<div style='width: 100%; height: 400px; background-color: #cce5ff; display: flex; align-items: center; justify-content: center;'>拡大地図エリア</div>";
     mapModal.style.display = "block";
   });
 
-  // ファイル選択時
   fileInput.addEventListener('change', (event) => {
-    if (fileInput.files.length > 0) {
-      fileNameDisplay.textContent = fileInput.files[0].name;
-    } else {
-      fileNameDisplay.textContent = "ファイルを選択してください";
+    fileNameDisplay.textContent = fileInput.files.length > 0
+      ? fileInput.files[0].name
+      : "ファイルを選択してください";
+  });
+
+  analyzeBtn.addEventListener("click", async () => {
+    const regionName = document.getElementById("regionName").value.trim();
+    const userNote = document.getElementById("userNote").value.trim();
+
+    updateGoogleMap(regionName);
+
+    if (!regionName || !userNote) {
+      alert("地域名とテーマは両方入力してください。");
+      return;
+    }
+
+    const originalBtnText = analyzeBtn.innerText;
+    analyzeBtn.innerText = "課題抽出中…";
+    analyzeBtn.disabled = true;
+
+    const prompt = `${regionName}について、テーマ「${userNote}」に基づく地域課題を抽出してください。\n以下の内容について、最大トークン数500以内で、最大5つまでの地域課題を簡潔に挙げてください。各課題は1〜2文で記述し、原因や背景が簡潔に分かるようにしてください。`;
+
+    try {
+      await fetchChatGPTResponse(prompt);
+    } catch (error) {
+      console.error("抽出中に問題が発生しました:", error);
+      alert("課題抽出に失敗しました。");
+    } finally {
+      analyzeBtn.innerText = originalBtnText;
+      analyzeBtn.disabled = false;
     }
   });
 
-  // analyzeBtn（課題抽出ボタン）クリック時（ChatGPT連携）
-analyzeBtn.addEventListener("click", async () => {
-  const regionName = document.getElementById("regionName").value.trim();
-  const userNote = document.getElementById("userNote").value.trim();
-
-updateGoogleMap(regionName); // 🔵 地図更新をここに呼ぶ！（絶対ここ）
-  
-  if (!regionName || !userNote) {
-    alert("地域名とテーマは両方入力してください。");
-    return;
+  async function fetchChatGPTResponse(prompt) {
+    console.log("送信するPrompt:", prompt);
+    const response = await fetch("/api/chatgpt", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ prompt })
+    });
+    if (!response.ok) throw new Error("ChatGPT APIエラー");
+    const data = await response.json();
+    const canvasResult = document.getElementById("canvasResult");
+    canvasResult.innerText = data.result || "結果が取得できませんでした。";
   }
 
-  // 🔵 ボタン状態変更
-  const originalBtnText = analyzeBtn.innerText;
-  analyzeBtn.innerText = "課題抽出中…";
-  analyzeBtn.disabled = true;
-
-  const prompt = `${regionName}について、テーマ「${userNote}」に基づく地域課題を抽出してください。\n以下の内容について、最大トークン数500以内で、最大5つまでの地域課題を簡潔に挙げてください。各課題は1〜2文で記述し、原因や背景が簡潔に分かるようにしてください。`;
-
-  try {
-    await fetchChatGPTResponse(prompt);
-  } catch (error) {
-    console.error("抽出中に問題が発生しました:", error);
-    alert("課題抽出に失敗しました。");
-  } finally {
-    analyzeBtn.innerText = originalBtnText;
-    analyzeBtn.disabled = false;
-  }
-});
-// fetchChatGPTResponse関数（ChatGPT連携）
-async function fetchChatGPTResponse(prompt) {
-  console.log("送信するPrompt:", prompt);
-
-  const response = await fetch("/api/chatgpt", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ prompt })
-  });
-
-  if (!response.ok) {
-    throw new Error("ChatGPT APIエラー");
-  }
-
-  const data = await response.json();
-
-  const canvasResult = document.getElementById("canvasResult");
-  canvasResult.innerText = data.result || "結果が取得できませんでした。";
-}
-
-document.addEventListener("DOMContentLoaded", () => {
-  console.log("✅ script_base.js：NEXCOトグル処理開始");
-
+  // ✅ NEXCO情報トグル機能
   const nexcoBtn = document.getElementById("toggleNexcoBtn");
   const infoBox = document.getElementById("nexcoInfoBox");
   const infoList = document.getElementById("nexcoInfoList");
@@ -242,34 +212,32 @@ document.addEventListener("DOMContentLoaded", () => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ prompt })
       })
-      .then(response => {
-        if (!response.ok) throw new Error("取得失敗");
-        return response.json();
-      })
-      .then(data => {
-        const raw = data.result || "";
-        const items = raw.split(/[\n・。！？]/).filter(line => line.trim().length > 4);
-        items.forEach(text => {
-          const li = document.createElement("li");
-          li.textContent = text.trim();
-          infoList.appendChild(li);
+        .then(response => {
+          if (!response.ok) throw new Error("取得失敗");
+          return response.json();
+        })
+        .then(data => {
+          const raw = data.result || "";
+          const items = raw.split(/[\n・。！？]/).filter(line => line.trim().length > 4);
+          items.forEach(text => {
+            const li = document.createElement("li");
+            li.textContent = text.trim();
+            infoList.appendChild(li);
+          });
+
+          infoFetched = true;
+          isFetching = false;
+          statusBox.innerText = "";
+          toggleAccordion(true);
+          isAccordionOpen = true;
+          updateButtonLabel();
+        })
+        .catch(error => {
+          console.error("🔥 取得エラー:", error);
+          infoList.innerHTML = "<li>情報取得に失敗しました。</li>";
+          statusBox.innerText = "";
         });
-
-        infoFetched = true;
-        isFetching = false;
-        statusBox.innerText = "";
-        toggleAccordion(true);
-        isAccordionOpen = true;
-        updateButtonLabel();
-      })
-      .catch(error => {
-        console.error("🔥 取得エラー:", error);
-        infoList.innerHTML = "<li>情報取得に失敗しました。</li>";
-        statusBox.innerText = "";
-      });
-
     } else {
-      // 再取得せずトグルだけ
       if (!isAccordionOpen) {
         toggleAccordion(true);
         isAccordionOpen = true;
@@ -288,6 +256,4 @@ document.addEventListener("DOMContentLoaded", () => {
   function updateButtonLabel() {
     nexcoBtn.textContent = isAccordionOpen ? "NEXCO情報を閉じる" : "NEXCO情報を表示";
   }
-});
-// 🔵 これで全体を閉じる
 });
