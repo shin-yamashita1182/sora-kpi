@@ -266,3 +266,5 @@ toggleBtn.addEventListener("click", async () => {
     infoBox.classList.remove("open");
   }
 });
+// 🔵 これで全体を閉じる
+});
