@@ -67,7 +67,7 @@
 <!-- ✅ 1. ボタンを追加（SORA CANVASの中に配置） -->
 <div class="nexco-toggle-wrapper" style="margin-top: 10px; margin-bottom: 10px; text-align: right;">
   <button id="toggleNexcoBtn">NEXCO情報を表示</button>
-  <div id="nexcoStatus" style="text-align:right; font-size: 0.9em; color: #888;"></div>
+  <div id="nexcoStatus" style="margin-top: 4px; font-size: 0.9em; color: #888;"></div>
 </div>
 
 <!-- ✅ 2. アコーディオンエリア（最初は非表示） -->
@@ -120,14 +120,16 @@
 
 <script>
 document.addEventListener("DOMContentLoaded", () => {
-  console.log("✅ NEXCOスクリプト（トグル版）実行開始");
+  console.log("✅ NEXCOスクリプト（フラグ式）実行開始");
 
   const toggleBtn = document.getElementById("toggleNexcoBtn");
   const infoBox = document.getElementById("nexcoInfoBox");
   const infoList = document.getElementById("nexcoInfoList");
-
-  // ✅ ステータス表示用（あらかじめHTMLに <div id="nexcoStatus"> を追加しておいてください）
   const statusBox = document.getElementById("nexcoStatus");
+
+  // ✅ 表示状態を保持するフラグ
+  let nexcoOpen = false;
+  let nexcoFetched = false; // ✅ 情報取得済みかどうか
 
   toggleBtn.addEventListener("click", async () => {
     const regionName = document.getElementById("regionName").value.trim();
@@ -138,28 +140,30 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
-    // ✅ 開いているなら閉じる
-    if (infoBox.classList.contains("open")) {
+    // ✅ すでに開いていれば閉じる
+    if (nexcoOpen) {
       infoBox.classList.remove("open");
       infoBox.style.display = "none";
       toggleBtn.innerText = "NEXCO情報を表示";
+      nexcoOpen = false;
       console.log("🔻 アコーディオンを閉じました");
       return;
     }
 
-    // ✅ 開いていない状態 → 開く
+    // ✅ 開く動作（フラグ更新）
     infoBox.style.display = "block";
     infoBox.classList.add("open");
     toggleBtn.innerText = "NEXCO情報を閉じる";
+    nexcoOpen = true;
     console.log("🔺 アコーディオンを開きました");
 
-    // ✅ すでに情報が表示されていれば再取得しない
-    if (infoList.children.length > 0) {
+    // ✅ すでに取得済みなら再取得はしない
+    if (nexcoFetched) {
       alert("NEXCO情報はすでに表示されています。");
       return;
     }
 
-    // ✅ ステータス表示（取得中）
+    // ✅ ステータス表示：取得中
     statusBox.innerText = "🚧 NEXCO情報を取得中...";
 
     const prompt = `${regionName}周辺の高速道路に関する、主なインターチェンジ、サービスエリア、パーキングエリアを最大5〜7件程度、リスト形式で簡潔にまとめてください。各施設名と簡単な特徴（例：トイレ、飲食、ガソリン有無など）だけを記載してください。それ以外の情報は不要です。`;
@@ -183,17 +187,15 @@ document.addEventListener("DOMContentLoaded", () => {
         infoList.appendChild(li);
       });
 
-      // ✅ 表示を確保（万一classが外れた場合も対策）
-      infoBox.style.display = "block";
-      infoBox.classList.add("open");
-
+      nexcoFetched = true; // ✅ 情報取得済みに設定
       alert("✅ NEXCO情報の取得が完了しました。");
+
     } catch (error) {
       console.error("🔥 NEXCO情報取得エラー:", error);
       infoList.innerHTML = "<li>情報取得に失敗しました。</li>";
       alert("⚠️ NEXCO情報の取得に失敗しました。");
     } finally {
-      statusBox.innerText = ""; // ✅ ステータスクリア
+      statusBox.innerText = ""; // ステータス非表示
     }
   });
 });
