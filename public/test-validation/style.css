@@ -55,42 +55,12 @@ h1 {
   box-shadow: 0 4px 8px rgba(0,0,0,0.1);
 }
 
-.card h3 {
+.card h2 {
   margin-top: 0;
-  font-size: 1.1rem;
+  font-size: 1.2rem;
   color: #222;
 }
 
-.card p {
-  margin: 0.3rem 0;
-  color: #555;
-  font-size: 0.9rem;
-}
-
-.card summary {
-  cursor: pointer;
-  font-weight: bold;
-  margin-top: 0.5rem;
-  font-size: 0.9rem;
-}
-
-.compare-button {
-  margin-top: 0.5rem;
-  align-self: flex-end;
-  background-color: #007bff;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  padding: 0.3rem 0.6rem;
-  font-size: 0.8rem;
-  cursor: pointer;
-}
-
-.compare-button:hover {
-  background-color: #0056b3;
-}
-
-/* ここから視点カラー・ラベル */
 .viewpoint-tag {
   font-size: 0.75rem;
   font-weight: bold;
@@ -106,12 +76,12 @@ h1 {
   font-style: italic;
 }
 
-.viewpoint-finance { background-color: #c62828; }      /* 財務視点（赤） */
-.viewpoint-customer { background-color: #1565c0; }     /* 顧客視点（青） */
-.viewpoint-process { background-color: #2e7d32; }      /* 業務視点（緑） */
-.viewpoint-growth { background-color: #f9a825; }       /* 学習視点（黄） */
+.viewpoint-finance { background-color: #c62828; }
+.viewpoint-customer { background-color: #1565c0; }
+.viewpoint-process { background-color: #2e7d32; }
+.viewpoint-growth { background-color: #f9a825; }
 
-/* ここからモーダル */
+/* モーダル */
 .modal {
   display: none;
   position: fixed;
@@ -143,10 +113,29 @@ h1 {
   cursor: pointer;
 }
 
-.detail-button, .add-priority-button {
-  margin: 10px 8px 0 0;
-  padding: 8px 12px;
+.modal-subtitle {
+  font-size: 0.85rem;
+  color: #777;
+}
+
+.modal-maintext {
+  font-size: 1.2rem;
+  color: #222;
+  margin-top: 1rem;
+}
+
+.modal-kpi {
   font-size: 0.9rem;
+  color: #444;
+  margin-top: 1.5rem;
+  font-style: italic;
+}
+
+/* ボタン（小さめに調整） */
+.detail-button, .add-priority-button {
+  margin: 8px 6px 0 0;
+  padding: 5px 10px;
+  font-size: 0.8rem;
   border: none;
   border-radius: 6px;
   cursor: pointer;
