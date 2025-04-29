@@ -275,10 +275,10 @@ footer {
 #nexcoInfoBox {
   max-height: 0;
   overflow: hidden;
-  transition: max-height 0.4s ease-in-out, margin-bottom 0.3s ease, padding 0.3s ease, border 0.3s ease;
+  transition: max-height 0.4s ease-in-out, margin-bottom 0.3s ease, padding 0.3s ease;
   margin: 0 !important;
   padding: 0;
-  border: none;  /* ← 閉じてるときは線なし！ */
+  border: none;
   background-color: #f8f9fa;
 }
 
@@ -286,5 +286,5 @@ footer {
   max-height: 600px;
   margin-bottom: 20px !important;
   padding: 10px;
-  border: 1px solid #ccc; /* ← 開いたときだけ線が出る！ */
+  border: 1px solid #ccc;
 }
