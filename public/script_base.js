@@ -21,17 +21,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
   async function loadMasterData() {
     const category = categorySelect.value;
-    console.log("Category selected:", category);
-
     if (category === "観光型") {
       try {
         const response = await fetch('kankou_master.json');
-        if (!response.ok) {
-          console.error('Failed to load kankou_master.json:', response.status);
-          return;
-        }
+        if (!response.ok) return;
         currentMasterData = await response.json();
-        console.log('Data loaded:', currentMasterData);
       } catch (error) {
         console.error('Error loading JSON:', error);
       }
@@ -41,15 +35,9 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   generateBtn.addEventListener('click', async () => {
-    console.log('Generate button clicked');
     await loadMasterData();
     resultsContainer.innerHTML = "";
-
-    if (currentMasterData.length === 0) {
-      console.log('No data to display!');
-      return;
-    }
-
+    if (currentMasterData.length === 0) return;
     currentMasterData.forEach((item, index) => {
       const card = document.createElement('div');
       card.className = 'card';
@@ -86,10 +74,8 @@ document.addEventListener('DOMContentLoaded', () => {
   modalBody.addEventListener('click', (event) => {
     if (event.target.id === 'addToCompareBtn' && currentDetailIndex !== null) {
       const item = currentMasterData[currentDetailIndex];
-
       const exists = [...compareListContainer.querySelectorAll('.card')]
         .some(card => card.querySelector('h3')?.textContent === item.title);
-
       if (!exists) {
         const card = document.createElement('div');
         card.className = 'card';
@@ -122,12 +108,8 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   window.addEventListener('click', (event) => {
-    if (event.target === modal) {
-      modal.style.display = "none";
-    }
-    if (event.target === mapModal) {
-      mapModal.style.display = "none";
-    }
+    if (event.target === modal) modal.style.display = "none";
+    if (event.target === mapModal) mapModal.style.display = "none";
   });
 
   const miniMap = document.getElementById('miniMap');
@@ -147,7 +129,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const userNote = document.getElementById("userNote").value.trim();
 
     updateGoogleMap(regionName);
-
     if (!regionName || !userNote) {
       alert("地域名とテーマは両方入力してください。");
       return;
@@ -171,7 +152,6 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   async function fetchChatGPTResponse(prompt) {
-    console.log("送信するPrompt:", prompt);
     const response = await fetch("/api/chatgpt", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -183,11 +163,10 @@ document.addEventListener('DOMContentLoaded', () => {
     canvasResult.innerText = data.result || "結果が取得できませんでした。";
   }
 
-  // ✅ NEXCO情報トグル機能
+  // ✅ NEXCO情報ボタンのみで取得・トグル制御
   const nexcoBtn = document.getElementById("toggleNexcoBtn");
   const infoBox = document.getElementById("nexcoInfoBox");
   const infoList = document.getElementById("nexcoInfoList");
-  const statusBox = document.getElementById("nexcoStatus");
 
   let infoFetched = false;
   let isAccordionOpen = false;
@@ -203,7 +182,6 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!infoFetched && !isFetching) {
       isFetching = true;
       nexcoBtn.textContent = "NEXCO情報 取得中…";
-      statusBox.innerText = "🚧 NEXCO情報を取得中...";
 
       const prompt = `${region}周辺の高速道路に関する、主なインターチェンジ、サービスエリア、パーキングエリアを最大5〜7件程度、リスト形式で簡潔にまとめてください。各施設名と簡単な特徴（例：トイレ、飲食、ガソリン有無など）だけを記載してください。それ以外の情報は不要です。`;
 
@@ -219,6 +197,7 @@ document.addEventListener('DOMContentLoaded', () => {
         .then(data => {
           const raw = data.result || "";
           const items = raw.split(/[\n・。！？]/).filter(line => line.trim().length > 4);
+          infoList.innerHTML = "";
           items.forEach(text => {
             const li = document.createElement("li");
             li.textContent = text.trim();
@@ -227,31 +206,27 @@ document.addEventListener('DOMContentLoaded', () => {
 
           infoFetched = true;
           isFetching = false;
-          statusBox.innerText = "";
-          toggleAccordion(true);
+          infoBox.style.display = "block";
           isAccordionOpen = true;
           updateButtonLabel();
         })
         .catch(error => {
           console.error("🔥 取得エラー:", error);
           infoList.innerHTML = "<li>情報取得に失敗しました。</li>";
-          statusBox.innerText = "";
+          nexcoBtn.textContent = "NEXCO情報を表示";
+          isFetching = false;
         });
     } else {
       if (!isAccordionOpen) {
-        toggleAccordion(true);
+        infoBox.style.display = "block";
         isAccordionOpen = true;
       } else {
-        toggleAccordion(false);
+        infoBox.style.display = "none";
         isAccordionOpen = false;
       }
       updateButtonLabel();
     }
   });
-
-  function toggleAccordion(open) {
-    infoBox.style.display = open ? "block" : "none";
-  }
 
   function updateButtonLabel() {
     nexcoBtn.textContent = isAccordionOpen ? "NEXCO情報を閉じる" : "NEXCO情報を表示";
