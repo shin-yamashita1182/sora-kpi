@@ -273,19 +273,19 @@ footer {
 }
 
 #nexcoInfoBox {
-  max-height: 0;
   overflow: hidden;
   transition: max-height 0.4s ease-in-out, margin-bottom 0.3s ease, padding 0.3s ease;
-  margin: 0 !important;
+  max-height: 0;
+  margin: 0;
   padding: 0;
   border: none;
   background-color: #f8f9fa;
 }
 
 #nexcoInfoBox.open {
-  display: block !important;
-  max-height: 600px;
-  margin-bottom: 20px !important;
+  display: block;
+  max-height: 1000px;  /* ← 高めにして中身がしっかり見えるように */
+  margin-bottom: 20px;
   padding: 10px;
   border: 1px solid #ccc;
 }
