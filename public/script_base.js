@@ -266,6 +266,83 @@ infoBox.style.display = "block"; // ← この行を足すだけ
     toggleBtn.innerText = "NEXCO情報を表示";
     infoBox.classList.remove("open");
   }
+document.addEventListener("DOMContentLoaded", () => {
+  console.log("✅ script_base.js：NEXCOトグル処理開始");
+
+  const nexcoBtn = document.getElementById("toggleNexcoBtn");
+  const infoBox = document.getElementById("nexcoInfoBox");
+  const infoList = document.getElementById("nexcoInfoList");
+  const statusBox = document.getElementById("nexcoStatus");
+
+  let infoFetched = false;
+  let isAccordionOpen = false;
+  let isFetching = false;
+
+  nexcoBtn.addEventListener("click", () => {
+    const region = document.getElementById("regionName").value.trim();
+    if (!region) {
+      alert("地域名を入力してください！");
+      return;
+    }
+
+    if (!infoFetched && !isFetching) {
+      isFetching = true;
+      nexcoBtn.textContent = "NEXCO情報 取得中…";
+      statusBox.innerText = "🚧 NEXCO情報を取得中...";
+
+      const prompt = `${region}周辺の高速道路に関する、主なインターチェンジ、サービスエリア、パーキングエリアを最大5〜7件程度、リスト形式で簡潔にまとめてください。各施設名と簡単な特徴（例：トイレ、飲食、ガソリン有無など）だけを記載してください。それ以外の情報は不要です。`;
+
+      fetch("/api/chatgpt", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ prompt })
+      })
+      .then(response => {
+        if (!response.ok) throw new Error("取得失敗");
+        return response.json();
+      })
+      .then(data => {
+        const raw = data.result || "";
+        const items = raw.split(/[\n・。！？]/).filter(line => line.trim().length > 4);
+        items.forEach(text => {
+          const li = document.createElement("li");
+          li.textContent = text.trim();
+          infoList.appendChild(li);
+        });
+
+        infoFetched = true;
+        isFetching = false;
+        statusBox.innerText = "";
+        toggleAccordion(true);
+        isAccordionOpen = true;
+        updateButtonLabel();
+      })
+      .catch(error => {
+        console.error("🔥 取得エラー:", error);
+        infoList.innerHTML = "<li>情報取得に失敗しました。</li>";
+        statusBox.innerText = "";
+      });
+
+    } else {
+      // 再取得せずトグルだけ
+      if (!isAccordionOpen) {
+        toggleAccordion(true);
+        isAccordionOpen = true;
+      } else {
+        toggleAccordion(false);
+        isAccordionOpen = false;
+      }
+      updateButtonLabel();
+    }
+  });
+
+  function toggleAccordion(open) {
+    infoBox.style.display = open ? "block" : "none";
+  }
+
+  function updateButtonLabel() {
+    nexcoBtn.textContent = isAccordionOpen ? "NEXCO情報を閉じる" : "NEXCO情報を表示";
+  }
 });
 // 🔵 これで全体を閉じる
 });
