@@ -64,6 +64,50 @@
         <div class="canvas-placeholder" id="canvasResult">ここにキャンバス課題リストを展開</div>
       </section>
 
+<!-- ✅ 1. ボタンを追加（SORA CANVASの中に配置） -->
+<div class="nexco-toggle-wrapper" style="margin-top: 20px;">
+  <button id="toggleNexcoBtn">NEXCO情報を表示</button>
+</div>
+
+<!-- ✅ 2. アコーディオンエリア（最初は非表示） -->
+<div id="nexcoInfoBox" style="display: none; margin-top: 10px; padding: 10px; border: 1px solid #ccc; background-color: #f8f9fa;">
+  <h3>NEXCO周辺施設・高速道路情報</h3>
+  <ul id="nexcoInfoList">
+    <!-- ChatGPTが返すSA・IC・PA情報をここに入れる予定 -->
+  </ul>
+</div>
+
+<!-- ✅ 3. スクリプト（アコーディオン＋仮データ挿入用） -->
+<script>
+  const toggleBtn = document.getElementById("toggleNexcoBtn");
+  const infoBox = document.getElementById("nexcoInfoBox");
+  const infoList = document.getElementById("nexcoInfoList");
+
+  toggleBtn.addEventListener("click", async () => {
+    if (infoBox.style.display === "none") {
+      toggleBtn.innerText = "NEXCO情報を閉じる";
+      infoBox.style.display = "block";
+
+      // ✅ 仮の表示データ（本番はChatGPT連携で差し替え）
+      infoList.innerHTML = "";
+      const dummyItems = [
+        "基山サービスエリア（飲食・トイレ・ガソリン）",
+        "佐賀大和IC（市街地南部と連結）",
+        "山田PA（休憩設備のみ）"
+      ];
+      dummyItems.forEach(text => {
+        const li = document.createElement("li");
+        li.textContent = text;
+        infoList.appendChild(li);
+      });
+    } else {
+      toggleBtn.innerText = "NEXCO情報を表示";
+      infoBox.style.display = "none";
+    }
+  });
+</script>
+
+      
       <section class="results-section">
         <h2>施策・KPIマッチング結果</h2>
         <div id="resultsContainer" class="card-container">
