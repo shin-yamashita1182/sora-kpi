@@ -1,9 +1,9 @@
 async function loadCategory(category) {
   const container = document.getElementById("card-container");
-  container.innerHTML = ""; // 一旦リセット
+  container.innerHTML = "";
 
   try {
-    const response = await fetch("../mind_trigger_kankou.json"); // 1つ上の階層から読む
+    const response = await fetch("../mind_trigger_kankou.json");
     const data = await response.json();
 
     let filtered = data.filter(item => item.分類 === category);
@@ -13,7 +13,7 @@ async function loadCategory(category) {
       return;
     }
 
-    filtered.forEach(item => {
+    filtered.forEach((item, index) => {
       const card = document.createElement("div");
       card.className = "card";
 
@@ -34,18 +34,29 @@ async function loadCategory(category) {
       const body = document.createElement("div");
       body.className = "card-body";
 
-      const title = document.createElement("h4");
-      title.innerText = "施策名：" + item.施策名;
+      const title = document.createElement("h2");
+      title.innerText = item.施策名;
 
-      const content = document.createElement("p");
-      content.innerText = item.説明;
+      const detailButton = document.createElement("button");
+      detailButton.className = "detail-button";
+      detailButton.innerText = "🔎 詳細を見る";
+      detailButton.onclick = function() {
+        openModal(item.施策名, item.説明);
+      };
+
+      const priorityButton = document.createElement("button");
+      priorityButton.className = "add-priority-button";
+      priorityButton.innerText = "＋ 優先リストに追加";
+      priorityButton.onclick = function() {
+        addToPriorityList(item); // 今後ここに優先リスト保存ロジックを書く
+      };
 
       body.appendChild(title);
-      body.appendChild(content);
+      body.appendChild(detailButton);
+      body.appendChild(priorityButton);
 
       card.appendChild(header);
       card.appendChild(body);
-
       container.appendChild(card);
     });
   } catch (error) {
@@ -64,7 +75,27 @@ function viewpointClass(label) {
   }
 }
 
-// 初期ロードで観光型を表示
+// モーダルを開く
+function openModal(title, content) {
+  const modal = document.getElementById("modal");
+  const modalTitle = document.getElementById("modal-title");
+  const modalContent = document.getElementById("modal-content");
+  modalTitle.innerText = title;
+  modalContent.innerText = content;
+  modal.style.display = "block";
+}
+
+// モーダルを閉じる
+function closeModal() {
+  document.getElementById("modal").style.display = "none";
+}
+
+// 仮の優先リスト追加（ここは今後強化）
+function addToPriorityList(item) {
+  alert(`優先リストに追加しました：${item.施策名}`);
+}
+
+// 初期ロード
 window.addEventListener("DOMContentLoaded", () => {
   loadCategory("観光型");
 });
