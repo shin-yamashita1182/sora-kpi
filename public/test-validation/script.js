@@ -1,3 +1,10 @@
+const viewpointDefinitions = {
+  "財務": "地域・企業が持続的に成長するための経済的成果や資源の最適化",
+  "顧客": "住民・観光客・取引先など外部の満足度や信頼の向上",
+  "業務プロセス": "地域や組織の中の業務やプロセスの質を高める取り組み",
+  "学習と成長": "人材育成・知識共有・技術力強化など将来の成長に向けた基盤作り"
+};
+
 async function loadCategory(category) {
   const container = document.getElementById("card-container");
   container.innerHTML = "";
@@ -27,7 +34,7 @@ async function loadCategory(category) {
 
       const desc = document.createElement("span");
       desc.className = "viewpoint-desc";
-      desc.innerText = "";  // 視点の補足解説は省略
+      desc.innerText = viewpointDefinitions[item.視点] || ""
 
       header.appendChild(tag);
       header.appendChild(desc);
