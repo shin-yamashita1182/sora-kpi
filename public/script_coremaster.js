@@ -1,11 +1,17 @@
-// script_coremaster.js（Master Checker準拠・本番用CoreMaster連携）
+// script_coremaster.js（Master Checker準拠・美麗カード描画版）
 
 console.log("✅ script_coremaster.js 読み込まれた！");
+
+// 🔧 モーダルがリロード直後に開いたままになるのを防止
+window.addEventListener("DOMContentLoaded", () => {
+  const modal = document.getElementById("detailModal") || document.getElementById("detail-modal");
+  if (modal) modal.style.display = "none";
+});
 
 document.addEventListener("DOMContentLoaded", () => {
   console.log("✅ DOMContentLoaded 発火！");
 
-  fetch("coremaster_real_20_refined.json")
+  fetch("mind_trigger_core_master_no_notes.json")
     .then((res) => {
       if (!res.ok) throw new Error("❌ JSON取得失敗: " + res.status);
       return res.json();
@@ -40,9 +46,11 @@ function renderStrategyCards(cards) {
       <button class="add-priority-button">優先リストへ追加</button>
     `;
 
+    // 詳細ボタンの挙動
     const detailBtn = div.querySelector(".detail-button");
     detailBtn.onclick = () => openDetailModal(card);
 
+    // 優先リストボタン
     const addBtn = div.querySelector(".add-priority-button");
     addBtn.onclick = () => addToCompareList(card);
 
