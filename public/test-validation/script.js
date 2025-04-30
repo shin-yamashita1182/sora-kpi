@@ -18,7 +18,7 @@ function loadCategory(category) {
     "観光×農業ハイブリッド型": "/mind_trigger_hybrid.json",
     "防災・災害対策型": "/mind_trigger_bousai.json",
     "デジタル活用先進地域型": "/mind_trigger_digital.json",
-  　"CoreMaster":="/mind_trigger_core_master.json"
+  　"コアマスター":= "/mind_trigger_core_master.json"
   };
 
   const fileName = fileMap[category];
