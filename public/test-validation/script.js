@@ -7,36 +7,41 @@ const viewpointDefinitions = {
 };
 
 function loadCategory(category) {
-  const fileMap = {
-    "観光型": "/mind_trigger_kankou.json",
-    "離島型": "/mind_trigger_ritou.json",
-    "中山間地域型": "/mind_trigger_chusankan.json",
-    "都市型": "/mind_trigger_toshi.json",
-    "高齢化重点地域型": "/mind_trigger_koureika.json",
-    "子育て・定住型": "/mind_trigger_kosodate.json",
-    "移住促進重点型": "/mind_trigger_iju.json",
-    "観光×農業ハイブリッド型": "/mind_trigger_hybrid.json",
-    "防災・災害対策型": "/mind_trigger_bousai.json",
-    "デジタル活用先進地域型": "/mind_trigger_digital.json",
-  　"コアマスター":= "/mind_trigger_core_master.json"
-  };
+const fileMap = {
+  "観光型": "/mind_trigger_kankou.json",
+  "離島型": "/mind_trigger_ritou.json",
+  "中山間地域型": "/mind_trigger_chusankan.json",
+  "都市型": "/mind_trigger_toshi.json",
+  "高齢化重点地域型": "/mind_trigger_koureika.json",
+  "子育て・定住型": "/mind_trigger_kosodate.json",
+  "移住促進重点型": "/mind_trigger_iju.json",
+  "観光×農業ハイブリッド型": "/mind_trigger_hybrid.json",
+  "防災・災害対策型": "/mind_trigger_bousai.json",
+  "デジタル活用先進地域型": "/mind_trigger_digital.json",
+  "コアマスター": "/mind_trigger_core_master_no_notes.json" // ✅ 追加！
+};
 
-  const fileName = fileMap[category];
+const fileName = fileMap[category];
 
-  if (!fileName) {
-    console.error("不明なカテゴリ:", category);
-    return;
-  }
+if (!fileName) {
+  console.error("不明なカテゴリ:", category);
+  return;
+}
 
-  fetch(fileName)
-    .then(response => response.json())
-    .then(data => {
+fetch(fileName)
+  .then(response => response.json())
+  .then(data => {
+    // ✅ コアマスターはフィルタしない
+    if (category === "コアマスター") {
+      displayCards(data); // ← フル表示
+    } else {
       const filtered = data.filter(item => item["分類カテゴリ"] === category);
       displayCards(filtered);
-    })
-    .catch(error => {
-      console.error("JSON読み込みエラー:", error);
-    });
+    }
+  })
+  .catch(error => {
+    console.error("JSON読み込みエラー:", error);
+  });
 }
 
 function displayCards(filtered) {
