@@ -9,7 +9,7 @@ ChatGPT を活用した地域経営支援のための最小構成アプリケー
 - `/api/chatgpt.js`：ChatGPTと連携するAPI
 - `/api/region-info.js`：郵便番号・地域名から情報補完
 - `package.json`：依存パッケージ定義
-- `.env.example`：OpenAIキー設定（`.env`はアップしないこと）
+- `.env.example`：OpenAIキー設定（`.env`はアップしないこと）！
 
 ## 起動手順
 
