@@ -1,4 +1,4 @@
-// 最終版 script.js（観光型＋視点ミニ注釈のみ追加）
+// 昨日の完成版 script.js にミニ注釈のみ追加した最終版
 
 async function loadCategory(category) {
   const container = document.getElementById("card-container");
@@ -24,15 +24,15 @@ async function loadCategory(category) {
       tag.className = `viewpoint-tag ${getViewpointClass(viewpoint)}`;
       tag.textContent = viewpoint;
 
+      const note = document.createElement("span");
+      note.className = "viewpoint-desc";
+      note.textContent = getViewpointNote(viewpoint);
+
       const tagRow = document.createElement("div");
       tagRow.style.display = "flex";
       tagRow.style.alignItems = "center";
       tagRow.style.gap = "8px";
       tagRow.appendChild(tag);
-
-      const note = document.createElement("span");
-      note.className = "viewpoint-desc";
-      note.textContent = getViewpointNote(viewpoint);
       tagRow.appendChild(note);
       card.appendChild(tagRow);
 
@@ -53,7 +53,6 @@ async function loadCategory(category) {
       priorityBtn.textContent = "優先リストに追加";
       priorityBtn.onclick = () => {
         console.log("優先追加:", item["戦略目標"]);
-        // TODO: 優先リスト保存処理
       };
 
       btnArea.appendChild(detailBtn);
@@ -101,3 +100,4 @@ function closeModal() {
 window.onload = () => {
   loadCategory("観光型");
 };
+
