@@ -8,16 +8,16 @@ const viewpointDefinitions = {
 
 function loadCategory(category) {
   const fileMap = {
-    "観光型": "mind_trigger_kankou.json",
-    "離島型": "mind_trigger_ritou.json",
-    "中山間地域型": "mind_trigger_chusankan.json",
-    "都市型": "mind_trigger_toshi.json",
-    "高齢化重点地域型": "mind_trigger_koureika.json",
-    "子育て・定住型": "mind_trigger_kosodate.json",
-    "移住促進重点型": "mind_trigger_iju.json",
-    "観光×農業ハイブリッド型": "mind_trigger_hybrid.json",
-    "防災・災害対策型": "mind_trigger_bousai.json",
-    "デジタル活用先進地域型": "mind_trigger_digital.json"
+    "観光型": "/mind_trigger_kankou.json",
+    "離島型": "/mind_trigger_ritou.json",
+    "中山間地域型": "/mind_trigger_chusankan.json",
+    "都市型": "/mind_trigger_toshi.json",
+    "高齢化重点地域型": "/mind_trigger_koureika.json",
+    "子育て・定住型": "/mind_trigger_kosodate.json",
+    "移住促進重点型": "/mind_trigger_iju.json",
+    "観光×農業ハイブリッド型": "/mind_trigger_hybrid.json",
+    "防災・災害対策型": "/mind_trigger_bousai.json",
+    "デジタル活用先進地域型": "/mind_trigger_digital.json"
   };
 
   const fileName = fileMap[category];
