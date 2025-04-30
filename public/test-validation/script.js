@@ -1,4 +1,4 @@
-// 昨日の完成版 script.js にミニ注釈のみ追加した最終版
+// 昨日のscript.jsにミニ注釈だけ追加した最終決定版
 
 async function loadCategory(category) {
   const container = document.getElementById("card-container");
@@ -24,16 +24,18 @@ async function loadCategory(category) {
       tag.className = `viewpoint-tag ${getViewpointClass(viewpoint)}`;
       tag.textContent = viewpoint;
 
-      const note = document.createElement("span");
-      note.className = "viewpoint-desc";
-      note.textContent = getViewpointNote(viewpoint);
-
       const tagRow = document.createElement("div");
       tagRow.style.display = "flex";
       tagRow.style.alignItems = "center";
       tagRow.style.gap = "8px";
       tagRow.appendChild(tag);
+
+      // ✅ ミニ注釈（ノートン定義）追加部分
+      const note = document.createElement("span");
+      note.className = "viewpoint-desc";
+      note.textContent = getViewpointNote(viewpoint);
       tagRow.appendChild(note);
+
       card.appendChild(tagRow);
 
       const title = document.createElement("h2");
@@ -100,4 +102,3 @@ function closeModal() {
 window.onload = () => {
   loadCategory("観光型");
 };
-
