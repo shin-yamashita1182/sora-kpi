@@ -161,3 +161,36 @@ h1 {
 .add-priority-button:hover {
   background-color: #1565c0;
 }
+.viewpoint-tag {
+  display: inline-block;
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 0.85rem;
+  font-weight: bold;
+  color: white;
+  margin-right: 6px;
+}
+
+.viewpoint-finance {
+  background-color: #e74c3c;
+}
+
+.viewpoint-customer {
+  background-color: #3498db;
+}
+
+.viewpoint-process {
+  background-color: #2ecc71;
+}
+
+.viewpoint-growth {
+  background-color: #f39c12;
+}
+
+.viewpoint-desc {
+  font-size: 0.8rem;
+  color: #333;
+  display: inline-block;
+  vertical-align: middle;
+  max-width: 280px;
+}
