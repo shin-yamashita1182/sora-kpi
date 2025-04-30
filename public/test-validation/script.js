@@ -1,4 +1,4 @@
-// 最終版 script.js（観光型マスター表示 + 視点注釈 + 優先リスト対応）
+// 最終版 script.js（観光型マスター表示 + ミニ注釈追加 + ボタン修正）
 
 let mindTriggerMaster = [];
 
@@ -43,7 +43,7 @@ function renderCards() {
     const card = document.createElement("div");
     card.className = "card";
 
-    const viewpoint = item["視点"].replace("の視点", "");
+    const viewpoint = item["視点"];
     const viewpointTag = document.createElement("div");
     viewpointTag.className = `viewpoint-tag ${getViewpointClass(viewpoint)}`;
     viewpointTag.textContent = viewpoint;
@@ -72,7 +72,7 @@ function renderCards() {
     const detailButton = document.createElement("button");
     detailButton.className = "detail-button";
     detailButton.textContent = "詳細を見る";
-    detailButton.onclick = () => openModal(item["施策／活動案"], item["戦略目標"], item["KPI案"]);
+    detailButton.onclick = () => openModal(item["戦略目標"], item["施策／活動案"], item["KPI案"]);
 
     const priorityButton = document.createElement("button");
     priorityButton.className = "priority-button";
@@ -90,9 +90,9 @@ function renderCards() {
   });
 }
 
-function openModal(title, overview, kpi) {
+function openModal(title, content, kpi) {
   document.getElementById("modal-title").textContent = title;
-  document.getElementById("modal-content").textContent = overview;
+  document.getElementById("modal-content").textContent = content;
   document.getElementById("modal-kpi").textContent = kpi;
   document.getElementById("modal").style.display = "block";
 }
