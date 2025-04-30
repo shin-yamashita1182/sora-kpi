@@ -1,0 +1,242 @@
+[
+  {
+    "id": "core-001",
+    "strategy": "財政構造の強化・1",
+    "policy": "観光関連商品のEC販売促進に向けた収益基盤と財源構造の強化",
+    "kpi": "観光関連商品のEC収益拡大数値目標1",
+    "viewpoint": "財務の視点",
+    "viewpointKey": "finance",
+    "note": "地域・企業が持続的に成長するための経済的成果や資源の最適化",
+    "tags": [
+      "CoreMaster"
+    ]
+  },
+  {
+    "id": "core-002",
+    "strategy": "財政構造の強化・2",
+    "policy": "観光関連商品のEC販売促進に向けた収益基盤と財源構造の強化",
+    "kpi": "観光関連商品のEC収益拡大数値目標2",
+    "viewpoint": "顧客の視点",
+    "viewpointKey": "customer",
+    "note": "住民・観光客・取引先など外部の満足度や信頼の向上",
+    "tags": [
+      "CoreMaster"
+    ]
+  },
+  {
+    "id": "core-003",
+    "strategy": "財政構造の強化・3",
+    "policy": "観光関連商品のEC販売促進に向けた収益基盤と財源構造の強化",
+    "kpi": "観光関連商品のEC収益拡大数値目標3",
+    "viewpoint": "内部プロセスの視点",
+    "viewpointKey": "process",
+    "note": "業務の効率化やサービス品質の改善に関する活動",
+    "tags": [
+      "CoreMaster"
+    ]
+  },
+  {
+    "id": "core-004",
+    "strategy": "財政構造の強化・4",
+    "policy": "観光関連商品のEC販売促進に向けた収益基盤と財源構造の強化",
+    "kpi": "観光関連商品のEC収益拡大数値目標4",
+    "viewpoint": "学習と成長の視点",
+    "viewpointKey": "learning",
+    "note": "職員や地域全体のスキル・知識・文化の成長と革新性",
+    "tags": [
+      "CoreMaster"
+    ]
+  },
+  {
+    "id": "core-005",
+    "strategy": "財政構造の強化・5",
+    "policy": "観光関連商品のEC販売促進に向けた収益基盤と財源構造の強化",
+    "kpi": "観光関連商品のEC収益拡大数値目標5",
+    "viewpoint": "財務の視点",
+    "viewpointKey": "finance",
+    "note": "地域・企業が持続的に成長するための経済的成果や資源の最適化",
+    "tags": [
+      "CoreMaster"
+    ]
+  },
+  {
+    "id": "core-006",
+    "strategy": "財政構造の強化・6",
+    "policy": "観光関連商品のEC販売促進に向けた収益基盤と財源構造の強化",
+    "kpi": "観光関連商品のEC収益拡大数値目標6",
+    "viewpoint": "顧客の視点",
+    "viewpointKey": "customer",
+    "note": "住民・観光客・取引先など外部の満足度や信頼の向上",
+    "tags": [
+      "CoreMaster"
+    ]
+  },
+  {
+    "id": "core-007",
+    "strategy": "財政構造の強化・7",
+    "policy": "観光関連商品のEC販売促進に向けた収益基盤と財源構造の強化",
+    "kpi": "観光関連商品のEC収益拡大数値目標7",
+    "viewpoint": "内部プロセスの視点",
+    "viewpointKey": "process",
+    "note": "業務の効率化やサービス品質の改善に関する活動",
+    "tags": [
+      "CoreMaster"
+    ]
+  },
+  {
+    "id": "core-008",
+    "strategy": "財政構造の強化・8",
+    "policy": "観光関連商品のEC販売促進に向けた収益基盤と財源構造の強化",
+    "kpi": "観光関連商品のEC収益拡大数値目標8",
+    "viewpoint": "学習と成長の視点",
+    "viewpointKey": "learning",
+    "note": "職員や地域全体のスキル・知識・文化の成長と革新性",
+    "tags": [
+      "CoreMaster"
+    ]
+  },
+  {
+    "id": "core-009",
+    "strategy": "財政構造の強化・9",
+    "policy": "観光関連商品のEC販売促進に向けた収益基盤と財源構造の強化",
+    "kpi": "観光関連商品のEC収益拡大数値目標9",
+    "viewpoint": "財務の視点",
+    "viewpointKey": "finance",
+    "note": "地域・企業が持続的に成長するための経済的成果や資源の最適化",
+    "tags": [
+      "CoreMaster"
+    ]
+  },
+  {
+    "id": "core-010",
+    "strategy": "財政構造の強化・10",
+    "policy": "観光関連商品のEC販売促進に向けた収益基盤と財源構造の強化",
+    "kpi": "観光関連商品のEC収益拡大数値目標10",
+    "viewpoint": "顧客の視点",
+    "viewpointKey": "customer",
+    "note": "住民・観光客・取引先など外部の満足度や信頼の向上",
+    "tags": [
+      "CoreMaster"
+    ]
+  },
+  {
+    "id": "core-011",
+    "strategy": "財政構造の強化・11",
+    "policy": "観光関連商品のEC販売促進に向けた収益基盤と財源構造の強化",
+    "kpi": "観光関連商品のEC収益拡大数値目標11",
+    "viewpoint": "内部プロセスの視点",
+    "viewpointKey": "process",
+    "note": "業務の効率化やサービス品質の改善に関する活動",
+    "tags": [
+      "CoreMaster"
+    ]
+  },
+  {
+    "id": "core-012",
+    "strategy": "財政構造の強化・12",
+    "policy": "観光関連商品のEC販売促進に向けた収益基盤と財源構造の強化",
+    "kpi": "観光関連商品のEC収益拡大数値目標12",
+    "viewpoint": "学習と成長の視点",
+    "viewpointKey": "learning",
+    "note": "職員や地域全体のスキル・知識・文化の成長と革新性",
+    "tags": [
+      "CoreMaster"
+    ]
+  },
+  {
+    "id": "core-013",
+    "strategy": "財政構造の強化・13",
+    "policy": "観光関連商品のEC販売促進に向けた収益基盤と財源構造の強化",
+    "kpi": "観光関連商品のEC収益拡大数値目標13",
+    "viewpoint": "財務の視点",
+    "viewpointKey": "finance",
+    "note": "地域・企業が持続的に成長するための経済的成果や資源の最適化",
+    "tags": [
+      "CoreMaster"
+    ]
+  },
+  {
+    "id": "core-014",
+    "strategy": "財政構造の強化・14",
+    "policy": "観光関連商品のEC販売促進に向けた収益基盤と財源構造の強化",
+    "kpi": "観光関連商品のEC収益拡大数値目標14",
+    "viewpoint": "顧客の視点",
+    "viewpointKey": "customer",
+    "note": "住民・観光客・取引先など外部の満足度や信頼の向上",
+    "tags": [
+      "CoreMaster"
+    ]
+  },
+  {
+    "id": "core-015",
+    "strategy": "財政構造の強化・15",
+    "policy": "観光関連商品のEC販売促進に向けた収益基盤と財源構造の強化",
+    "kpi": "観光関連商品のEC収益拡大数値目標15",
+    "viewpoint": "内部プロセスの視点",
+    "viewpointKey": "process",
+    "note": "業務の効率化やサービス品質の改善に関する活動",
+    "tags": [
+      "CoreMaster"
+    ]
+  },
+  {
+    "id": "core-016",
+    "strategy": "財政構造の強化・16",
+    "policy": "観光関連商品のEC販売促進に向けた収益基盤と財源構造の強化",
+    "kpi": "観光関連商品のEC収益拡大数値目標16",
+    "viewpoint": "学習と成長の視点",
+    "viewpointKey": "learning",
+    "note": "職員や地域全体のスキル・知識・文化の成長と革新性",
+    "tags": [
+      "CoreMaster"
+    ]
+  },
+  {
+    "id": "core-017",
+    "strategy": "財政構造の強化・17",
+    "policy": "観光関連商品のEC販売促進に向けた収益基盤と財源構造の強化",
+    "kpi": "観光関連商品のEC収益拡大数値目標17",
+    "viewpoint": "財務の視点",
+    "viewpointKey": "finance",
+    "note": "地域・企業が持続的に成長するための経済的成果や資源の最適化",
+    "tags": [
+      "CoreMaster"
+    ]
+  },
+  {
+    "id": "core-018",
+    "strategy": "財政構造の強化・18",
+    "policy": "観光関連商品のEC販売促進に向けた収益基盤と財源構造の強化",
+    "kpi": "観光関連商品のEC収益拡大数値目標18",
+    "viewpoint": "顧客の視点",
+    "viewpointKey": "customer",
+    "note": "住民・観光客・取引先など外部の満足度や信頼の向上",
+    "tags": [
+      "CoreMaster"
+    ]
+  },
+  {
+    "id": "core-019",
+    "strategy": "財政構造の強化・19",
+    "policy": "観光関連商品のEC販売促進に向けた収益基盤と財源構造の強化",
+    "kpi": "観光関連商品のEC収益拡大数値目標19",
+    "viewpoint": "内部プロセスの視点",
+    "viewpointKey": "process",
+    "note": "業務の効率化やサービス品質の改善に関する活動",
+    "tags": [
+      "CoreMaster"
+    ]
+  },
+  {
+    "id": "core-020",
+    "strategy": "財政構造の強化・20",
+    "policy": "観光関連商品のEC販売促進に向けた収益基盤と財源構造の強化",
+    "kpi": "観光関連商品のEC収益拡大数値目標20",
+    "viewpoint": "学習と成長の視点",
+    "viewpointKey": "learning",
+    "note": "職員や地域全体のスキル・知識・文化の成長と革新性",
+    "tags": [
+      "CoreMaster"
+    ]
+  }
+]
