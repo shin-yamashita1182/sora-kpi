@@ -97,7 +97,7 @@ function viewpointClass(viewpoint) {
       return "finance";
     case "顧客の視点":
       return "customer";
-    case "業務プロセスの視点":
+    case "内部プロセスの視点":
       return "process";
     case "学習と成長の視点":
       return "growth";
