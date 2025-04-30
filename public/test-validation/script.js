@@ -13,7 +13,6 @@ async function loadCategory(category) {
     const response = await fetch("../mind_trigger_kankou.json");
     const data = await response.json();
 
-    // ✅ 修正ポイント：「分類カテゴリ」に統一
     let filtered = data.filter(item => item["分類カテゴリ"] === category);
 
     if (filtered.length === 0) {
@@ -29,75 +28,55 @@ async function loadCategory(category) {
       header.className = "card-header";
 
       const tag = document.createElement("span");
-      tag.className = "viewpoint-tag " + viewpointClass(item.視点);
+      tag.className = "viewpoint-tag viewpoint-" + viewpointClass(item.視点);
       tag.innerText = item.視点;
 
       const desc = document.createElement("span");
       desc.className = "viewpoint-desc";
-      desc.innerText = viewpointDefinitions[item.視点] || ""
+      desc.innerText = viewpointDefinitions[item.視点] || "";
 
       header.appendChild(tag);
       header.appendChild(desc);
 
-      const body = document.createElement("div");
-      body.className = "card-body";
-
       const title = document.createElement("h2");
-      title.innerText = item["戦略目標"]; // 表に出す戦略タイトル
+      title.innerText = item.戦略名 || "戦略名なし";
 
       const detailButton = document.createElement("button");
       detailButton.className = "detail-button";
-      detailButton.innerText = "🔎 詳細を見る";
-      detailButton.onclick = function() {
-        openModal(item["戦略目標"], item["施策／活動案"], item["KPI案"]);
+      detailButton.innerText = "詳細を見る";
+      detailButton.onclick = () => {
+        openModal(item.戦略名, item.施策名, item.KPI);
       };
 
       const priorityButton = document.createElement("button");
       priorityButton.className = "add-priority-button";
-      priorityButton.innerText = "＋ 優先リストに追加";
-      priorityButton.onclick = function() {
+      priorityButton.innerText = "優先リストへ追加";
+      priorityButton.onclick = () => {
         addToPriorityList(item);
       };
 
-      body.appendChild(title);
-      body.appendChild(detailButton);
-      body.appendChild(priorityButton);
-
       card.appendChild(header);
-      card.appendChild(body);
+      card.appendChild(title);
+      card.appendChild(detailButton);
+      card.appendChild(priorityButton);
       container.appendChild(card);
     });
   } catch (error) {
-    console.error("JSON読み込みエラー:", error);
-    container.innerHTML = `<p style="text-align: center; margin-top: 50px;">データ読み込みに失敗しました</p>`;
+    console.error("データの読み込みエラー:", error);
   }
 }
 
-function viewpointClass(label) {
-  switch (label) {
-    case "財務の視点": return "viewpoint-finance";
-    case "顧客の視点": return "viewpoint-customer";
-    case "内部プロセスの視点": return "viewpoint-process";
-    case "学習と成長の視点": return "viewpoint-growth";
-    default: return "";
+function viewpointClass(viewpoint) {
+  switch (viewpoint) {
+    case "財務":
+      return "finance";
+    case "顧客":
+      return "customer";
+    case "業務プロセス":
+      return "process";
+    case "学習と成長":
+      return "growth";
+    default:
+      return "";
   }
 }
-
-function openModal(title, content, kpi) {
-  document.getElementById("modal-title").innerText = "戦略テーマ：" + title;
-  document.getElementById("modal-content").innerText = content;
-  document.getElementById("modal-kpi").innerText = "【KPI】" + (kpi ?? "設定なし");
-  document.getElementById("modal").style.display = "block";
-}
-
-function closeModal() {
-  document.getElementById("modal").style.display = "none";
-}
-
-function addToPriorityList(item) {
-  alert(`優先リストに追加しました：${item["戦略目標"]}`);
-}
-
-window.addEventListener("DOMContentLoaded", () => {
-  loadCategory("観光型");
-});
