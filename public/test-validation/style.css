@@ -194,3 +194,24 @@ h1 {
   vertical-align: middle;
   max-width: 280px;
 }
+.category-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 24px; /* カードとの余白確保 */
+  padding: 8px 0;
+}
+
+.category-buttons button {
+  padding: 6px 12px;
+  font-size: 0.95rem;
+  border-radius: 6px;
+  background-color: #f0f0f0;
+  border: 1px solid #ccc;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.category-buttons button:hover {
+  background-color: #e0e0e0;
+}
