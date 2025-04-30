@@ -1,4 +1,4 @@
-// script_coremaster.js（デバッグ完全版）
+// script_coremaster.js（Master Checker準拠・美麗カード描画版）
 
 console.log("✅ script_coremaster.js 読み込まれた！");
 
@@ -24,60 +24,52 @@ function renderStrategyCards(cards) {
     return;
   }
 
-  console.log("🎨 戦略カードを描画中... 件数:", cards.length);
-
   container.innerHTML = "";
-  cards.forEach((card, index) => {
+
+  cards.forEach((card) => {
     const div = document.createElement("div");
     div.className = "card";
 
-    const title = document.createElement("h3");
-    title.className = "card-title";
-    title.textContent = card.strategy || "戦略タイトル不明";
+    div.innerHTML = `
+      <div class="card-header">
+        <span class="viewpoint-tag viewpoint-${card.viewpointKey || 'generic'}">${card.viewpoint || '視点不明'}</span>
+        <span class="viewpoint-desc">${card.note || ''}</span>
+      </div>
+      <h2>${card.policy || card.strategy}</h2>
+      <button class="detail-button">詳細を見る</button>
+      <button class="add-priority-button">優先リストへ追加</button>
+    `;
 
-    const kpi = document.createElement("p");
-    kpi.innerHTML = `<strong>KPI:</strong> ${card.kpi || "未設定"}`;
-
-    const detailBtn = document.createElement("button");
-    detailBtn.className = "btn btn-detail";
-    detailBtn.textContent = "詳細";
+    // 詳細ボタンの挙動
+    const detailBtn = div.querySelector(".detail-button");
     detailBtn.onclick = () => openDetailModal(card);
 
-    div.appendChild(title);
-    div.appendChild(kpi);
-    div.appendChild(detailBtn);
+    // 優先リストボタン
+    const addBtn = div.querySelector(".add-priority-button");
+    addBtn.onclick = () => addToCompareList(card);
+
     container.appendChild(div);
   });
 }
 
 function openDetailModal(card) {
-  const modal = document.getElementById("detailModal");
-  const modalBody = document.getElementById("modalBody");
-  const closeBtn = document.getElementById("closeModal");
+  const modal = document.getElementById("detailModal") || document.getElementById("detail-modal");
+  const modalTitle = document.getElementById("modal-title");
+  const modalContent = document.getElementById("modal-content");
+  const modalKpi = document.getElementById("modal-kpi");
 
-  if (!modal || !modalBody) {
-    console.warn("⚠️ モーダル要素が見つかりません");
-    return;
-  }
+  if (!modal || !modalTitle || !modalContent || !modalKpi) return;
 
-  modalBody.innerHTML = `
-    <h2>${card.strategy}</h2>
-    <p><strong>施策概要:</strong> ${card.policy}</p>
-    <p><strong>目標KPI:</strong> ${card.kpi}</p>
-    <p><strong>分類視点:</strong> ${card.viewpoint}</p>
-    <p><strong>注釈:</strong> ${card.note}</p>
-    <button id="addToCompare" class="btn btn-add">比較リストに追加</button>
-  `;
-
+  modalTitle.textContent = card.viewpoint || "視点";
+  modalContent.textContent = card.policy || card.strategy;
+  modalKpi.textContent = "KPI: " + (card.kpi || "未設定");
   modal.style.display = "block";
-  closeBtn.onclick = () => (modal.style.display = "none");
+
+  const closeBtn = modal.querySelector(".close-button");
+  if (closeBtn) closeBtn.onclick = () => (modal.style.display = "none");
+
   window.onclick = (e) => {
     if (e.target === modal) modal.style.display = "none";
-  };
-
-  document.getElementById("addToCompare").onclick = () => {
-    addToCompareList(card);
-    modal.style.display = "none";
   };
 }
 
@@ -88,20 +80,12 @@ function addToCompareList(card) {
   const div = document.createElement("div");
   div.className = "card";
 
-  const title = document.createElement("h3");
-  title.className = "card-title";
-  title.textContent = card.strategy;
+  div.innerHTML = `
+    <h3>${card.strategy}</h3>
+    <p><strong>KPI:</strong> ${card.kpi || "未設定"}</p>
+    <button class="btn-remove">削除</button>
+  `;
 
-  const kpi = document.createElement("p");
-  kpi.innerHTML = `<strong>KPI:</strong> ${card.kpi}`;
-
-  const removeBtn = document.createElement("button");
-  removeBtn.className = "btn btn-remove";
-  removeBtn.textContent = "削除";
-  removeBtn.onclick = () => div.remove();
-
-  div.appendChild(title);
-  div.appendChild(kpi);
-  div.appendChild(removeBtn);
+  div.querySelector(".btn-remove").onclick = () => div.remove();
   container.appendChild(div);
 }
