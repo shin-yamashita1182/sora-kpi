@@ -82,8 +82,7 @@ document.addEventListener('DOMContentLoaded', () => {
         })
         .then(data => {
           const raw = data.result || "";
-          const items = raw.split(/[
-・。！？]/).filter(line => line.trim().length > 4);
+          const items = raw.split(/[・。！？]/).filter(line => line.trim().length > 4);
           infoList.innerHTML = "";
           items.forEach(text => {
             const li = document.createElement("li");
