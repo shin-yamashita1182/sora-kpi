@@ -105,3 +105,20 @@ function viewpointClass(viewpoint) {
       return "";
   }
 }
+
+
+function openModal(title, content, kpi) {
+  const modal = document.getElementById("detail-modal");
+  document.getElementById("modal-title").innerText = title;
+  document.getElementById("modal-content").innerText = content;
+  document.getElementById("modal-kpi").innerText = kpi;
+  modal.style.display = "block";
+}
+
+function closeModal() {
+  document.getElementById("detail-modal").style.display = "none";
+}
+
+function addToPriorityList(item) {
+  alert(`「${item["戦略目標"]}」を優先リストに追加しました。`);
+}
