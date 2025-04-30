@@ -1,130 +1,15 @@
-// ✅ SORA Dashboard Script Base - 完全版（NEXCO連動 + 課題抽出 + KPI分析 + 比較）
+// ✅ SORA Dashboard Script Base - CoreMaster専用簡略版（観光型廃止）
 document.addEventListener('DOMContentLoaded', () => {
   const modal = document.getElementById("detailModal");
   const modalBody = document.getElementById("modalBody");
   const closeBtn = document.getElementById("closeModal");
 
-  const mapModal = document.getElementById("mapModal");
-  const mapModalBody = document.getElementById("mapModalBody");
-  const closeMapBtn = document.getElementById("closeMapModal");
-
-  const fileInput = document.getElementById("fileInput");
-  const fileNameDisplay = document.getElementById("fileNameDisplay");
-
   const compareListContainer = document.getElementById("compareListContainer");
-  const resultsContainer = document.getElementById('resultsContainer');
-  const generateBtn = document.getElementById('generateBtn');
+
+  // 不要な旧UI要素を操作しない
+
+  // ✅ GPT課題抽出用処理はそのまま維持
   const analyzeBtn = document.getElementById('analyzeBtn');
-  const categorySelect = document.getElementById('category');
-
-  let currentMasterData = [];
-  let currentDetailIndex = null;
-
-  async function loadMasterData() {
-    const category = categorySelect.value;
-    if (category === "観光型") {
-      try {
-        const response = await fetch('coremaster_demo_20.json');
-        if (!response.ok) return;
-        currentMasterData = await response.json();
-      } catch (error) {
-        console.error('Error loading JSON:', error);
-      }
-    } else {
-      currentMasterData = []; 
-    }
-  }
-
-  generateBtn.addEventListener('click', async () => {
-    await loadMasterData();
-    resultsContainer.innerHTML = "";
-    if (currentMasterData.length === 0) return;
-    currentMasterData.forEach((item, index) => {
-      const card = document.createElement('div');
-      card.className = 'card';
-      card.setAttribute('data-index', index);
-      card.innerHTML = `
-        <h3>${item.title}</h3>
-        <p><strong>KPI:</strong> ${item.kpi}</p>
-        <button class="detail-btn">詳細</button>
-      `;
-      resultsContainer.appendChild(card);
-    });
-  });
-
-  document.body.addEventListener('click', (event) => {
-    if (event.target.classList.contains('detail-btn')) {
-      const parentCard = event.target.closest('.card');
-      const index = parentCard.getAttribute('data-index');
-      const item = currentMasterData[index];
-      currentDetailIndex = parseInt(index);
-
-      modalBody.innerHTML = `
-        <h2>${item.title}</h2>
-        <p><strong>施策概要:</strong> ${item.overview}</p>
-        <p><strong>目標KPI:</strong> ${item.kpi}</p>
-        <p><strong>想定主体:</strong> ${item.actor}</p>
-        <div style="margin-top: 20px; text-align: right;">
-          <button id="addToCompareBtn">比較リストに追加</button>
-        </div>
-      `;
-      modal.style.display = "block";
-    }
-  });
-
-  modalBody.addEventListener('click', (event) => {
-    if (event.target.id === 'addToCompareBtn' && currentDetailIndex !== null) {
-      const item = currentMasterData[currentDetailIndex];
-      const exists = [...compareListContainer.querySelectorAll('.card')]
-        .some(card => card.querySelector('h3')?.textContent === item.title);
-      if (!exists) {
-        const card = document.createElement('div');
-        card.className = 'card';
-        card.innerHTML = `
-          <h3>${item.title}</h3>
-          <p><strong>KPI:</strong> ${item.kpi}</p>
-          <div style="text-align: right;">
-            <button class="remove-btn">削除</button>
-          </div>
-        `;
-        compareListContainer.appendChild(card);
-      }
-      modal.style.display = "none";
-    }
-  });
-
-  compareListContainer.addEventListener('click', (event) => {
-    if (event.target.classList.contains('remove-btn')) {
-      const card = event.target.closest('.card');
-      if (card) card.remove();
-    }
-  });
-
-  closeBtn.addEventListener('click', () => {
-    modal.style.display = "none";
-  });
-
-  closeMapBtn.addEventListener('click', () => {
-    mapModal.style.display = "none";
-  });
-
-  window.addEventListener('click', (event) => {
-    if (event.target === modal) modal.style.display = "none";
-    if (event.target === mapModal) mapModal.style.display = "none";
-  });
-
-  const miniMap = document.getElementById('miniMap');
-  miniMap.addEventListener('click', () => {
-    mapModalBody.innerHTML = "<div style='width: 100%; height: 400px; background-color: #cce5ff; display: flex; align-items: center; justify-content: center;'>拡大地図エリア</div>";
-    mapModal.style.display = "block";
-  });
-
-  fileInput.addEventListener('change', (event) => {
-    fileNameDisplay.textContent = fileInput.files.length > 0
-      ? fileInput.files[0].name
-      : "ファイルを選択してください";
-  });
-
   analyzeBtn.addEventListener("click", async () => {
     const regionName = document.getElementById("regionName").value.trim();
     const userNote = document.getElementById("userNote").value.trim();
@@ -164,12 +49,11 @@ document.addEventListener('DOMContentLoaded', () => {
     canvasResult.innerText = data.result || "結果が取得できませんでした。";
   }
 
-  // ✅ NEXCO情報表示ボタン（取得・開閉トグル）
+  // ✅ 地図取得部分は維持
   const nexcoBtn = document.getElementById("toggleNexcoBtn");
   const infoBox = document.getElementById("nexcoInfoBox");
   const infoList = document.getElementById("nexcoInfoList");
   const statusBox = document.getElementById("nexcoStatus");
-
   let infoFetched = false;
   let isAccordionOpen = false;
   let isFetching = false;
@@ -198,7 +82,8 @@ document.addEventListener('DOMContentLoaded', () => {
         })
         .then(data => {
           const raw = data.result || "";
-          const items = raw.split(/[\n・。！？]/).filter(line => line.trim().length > 4);
+          const items = raw.split(/[
+・。！？]/).filter(line => line.trim().length > 4);
           infoList.innerHTML = "";
           items.forEach(text => {
             const li = document.createElement("li");
