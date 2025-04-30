@@ -1,31 +1,8 @@
+// 最終版 script.js（観光型マスター表示 + 視点注釈 + 優先リスト対応）
+
 let mindTriggerMaster = [];
 
-const viewpointOrder = ["財務", "顧客", "業務プロセス", "学習と成長"];
-
-// actor → 視点
-function getViewpoint(actor) {
-  switch (actor) {
-    case "自治体":
-    case "地域商社":
-      return "財務";
-    case "観光協会":
-    case "宿泊業者":
-    case "観光案内所":
-      return "顧客";
-    case "DMO":
-    case "観光施設運営者":
-      return "業務プロセス";
-    case "商工会":
-    case "教育機関":
-    case "NPO":
-    case "地域団体":
-      return "学習と成長";
-    default:
-      return "財務";
-  }
-}
-
-// 視点 → 注釈
+// ノートン＆キャプランに基づく注釈
 function getViewpointNote(viewpoint) {
   switch (viewpoint) {
     case "財務": return "成果・収益・費用など数値的成果";
@@ -36,7 +13,7 @@ function getViewpointNote(viewpoint) {
   }
 }
 
-// 視点 → CSS色
+// 視点に応じた色クラス
 function getViewpointClass(viewpoint) {
   switch (viewpoint) {
     case "財務": return "viewpoint-finance";
@@ -47,92 +24,72 @@ function getViewpointClass(viewpoint) {
   }
 }
 
-// JSONロード（観光型）
 async function loadCategory() {
   try {
-    const res = await fetch("../../kankou_master.json");
-    mindTriggerMaster = await res.json();
+    const response = await fetch("../mind_trigger_kankou.json");
+    const data = await response.json();
+    mindTriggerMaster = data;
     renderCards();
   } catch (error) {
-    console.error("読み込み失敗:", error);
+    console.error("データの読み込みに失敗しました", error);
   }
 }
 
-// カード描画（視点でソート済み）
 function renderCards() {
   const container = document.getElementById("card-container");
   container.innerHTML = "";
 
-  const sorted = [...mindTriggerMaster].sort((a, b) => {
-    const va = viewpointOrder.indexOf(getViewpoint(a.actor));
-    const vb = viewpointOrder.indexOf(getViewpoint(b.actor));
-    return va - vb;
-  });
-
-  sorted.forEach((item) => {
-    const viewpoint = getViewpoint(item.actor);
-    const note = getViewpointNote(viewpoint);
-    const cls = getViewpointClass(viewpoint);
-
+  mindTriggerMaster.forEach((item) => {
     const card = document.createElement("div");
     card.className = "card";
 
-    // 視点タグ＋注釈
-    const tagLine = document.createElement("div");
-    tagLine.style.display = "flex";
-    tagLine.style.alignItems = "center";
-    tagLine.style.gap = "8px";
+    const viewpoint = item["視点"].replace("の視点", "");
+    const viewpointTag = document.createElement("div");
+    viewpointTag.className = `viewpoint-tag ${getViewpointClass(viewpoint)}`;
+    viewpointTag.textContent = viewpoint;
 
-    const tag = document.createElement("div");
-    tag.className = `viewpoint-tag ${cls}`;
-    tag.textContent = viewpoint;
+    const viewpointNote = document.createElement("span");
+    viewpointNote.className = "viewpoint-desc";
+    viewpointNote.textContent = getViewpointNote(viewpoint);
 
-    const noteEl = document.createElement("div");
-    noteEl.className = "viewpoint-desc";
-    noteEl.textContent = note;
+    const tagRow = document.createElement("div");
+    tagRow.style.display = "flex";
+    tagRow.style.alignItems = "center";
+    tagRow.style.gap = "8px";
+    tagRow.appendChild(viewpointTag);
+    tagRow.appendChild(viewpointNote);
+    card.appendChild(tagRow);
 
-    tagLine.appendChild(tag);
-    tagLine.appendChild(noteEl);
-    card.appendChild(tagLine);
-
-    // 戦略テーマ（概要）
     const overview = document.createElement("div");
     overview.className = "overview";
-    overview.style.margin = "1rem 0";
-    overview.style.fontWeight = "bold";
-    overview.style.fontSize = "1rem";
-    overview.textContent = item.overview;
+    overview.textContent = item["戦略目標"];
     card.appendChild(overview);
 
-    // ボタンエリア
-    const btnArea = document.createElement("div");
-    btnArea.style.display = "flex";
-    btnArea.style.gap = "10px";
+    const buttonRow = document.createElement("div");
+    buttonRow.style.display = "flex";
+    buttonRow.style.gap = "10px";
 
-    // 詳細ボタン
-    const detailBtn = document.createElement("button");
-    detailBtn.className = "detail-button";
-    detailBtn.textContent = "詳細を見る";
-    detailBtn.onclick = () => openModal(item.title, item.overview, item.kpi);
+    const detailButton = document.createElement("button");
+    detailButton.className = "detail-button";
+    detailButton.textContent = "詳細を見る";
+    detailButton.onclick = () => openModal(item["施策／活動案"], item["戦略目標"], item["KPI案"]);
 
-    // 優先リストボタン
-    const priorityBtn = document.createElement("button");
-    priorityBtn.className = "priority-button";
-    priorityBtn.textContent = "優先リストに追加";
-    priorityBtn.onclick = () => {
-      console.log("優先リスト追加:", item.overview);
-      // TODO: 本番では localStorage か SORA連携
+    const priorityButton = document.createElement("button");
+    priorityButton.className = "priority-button";
+    priorityButton.textContent = "優先リストに追加";
+    priorityButton.onclick = () => {
+      console.log("優先追加:", item["戦略目標"]);
+      // TODO: 優先リスト保存処理
     };
 
-    btnArea.appendChild(detailBtn);
-    btnArea.appendChild(priorityBtn);
-    card.appendChild(btnArea);
+    buttonRow.appendChild(detailButton);
+    buttonRow.appendChild(priorityButton);
+    card.appendChild(buttonRow);
 
     container.appendChild(card);
   });
 }
 
-// モーダル
 function openModal(title, overview, kpi) {
   document.getElementById("modal-title").textContent = title;
   document.getElementById("modal-content").textContent = overview;
@@ -144,7 +101,6 @@ function closeModal() {
   document.getElementById("modal").style.display = "none";
 }
 
-// 初期読み込み
 window.onload = () => {
   loadCategory();
 };
