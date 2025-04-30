@@ -5,7 +5,7 @@ console.log("✅ script_coremaster.js 読み込まれた！");
 document.addEventListener("DOMContentLoaded", () => {
   console.log("✅ DOMContentLoaded 発火！");
 
-  fetch("coremaster_demo_20.json")
+ fetch("coremaster_real_20.json")
     .then((res) => {
       if (!res.ok) throw new Error("❌ JSON取得失敗: " + res.status);
       return res.json();
