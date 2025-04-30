@@ -1,4 +1,4 @@
-// 昨日のscript.jsにミニ注釈だけ追加した最終決定版
+// 観光型 最終確定版 script.js（昨日の構成＋ミニ注釈のみ追加）
 
 async function loadCategory(category) {
   const container = document.getElementById("card-container");
@@ -30,7 +30,7 @@ async function loadCategory(category) {
       tagRow.style.gap = "8px";
       tagRow.appendChild(tag);
 
-      // ✅ ミニ注釈（ノートン定義）追加部分
+      // ✅ ミニ注釈の追加（1行）
       const note = document.createElement("span");
       note.className = "viewpoint-desc";
       note.textContent = getViewpointNote(viewpoint);
@@ -78,6 +78,7 @@ function getViewpointClass(viewpoint) {
   }
 }
 
+// ✅ ミニ注釈関数の追加
 function getViewpointNote(viewpoint) {
   switch (viewpoint) {
     case "財務": return "成果・収益・費用など数値的成果";
