@@ -1,4 +1,4 @@
-// script_coremaster.js（Master Checker準拠・美麗カード描画版）
+// script_coremaster.js（Master Checker準拠・本番用CoreMaster連携）
 
 console.log("✅ script_coremaster.js 読み込まれた！");
 
