@@ -1,85 +1,116 @@
 document.addEventListener("DOMContentLoaded", () => {
-  const analyzeBtn = document.getElementById("analyzeBtn");
-  const regionInput = document.getElementById("regionName");
-  const userNoteInput = document.getElementById("userNote");
-  const canvasResult = document.getElementById("canvasResult");
-  const miniMap = document.getElementById("miniMap");
-  const nexcoToggleBtn = document.getElementById("toggleNexcoBtn");
-  const nexcoInfo = document.getElementById("nexcoInfo");
+  const resultsContainer = document.getElementById("resultsContainer");
+  const modal = document.getElementById("detailModal");
+  const modalBody = document.getElementById("modalBody");
+  const closeModalBtn = document.querySelector(".close-button");
 
-  let hasFetched = false;
+  const JSON_PATH = "coremaster_real_401cards.json";
 
-  analyzeBtn.addEventListener("click", async () => {
-    if (hasFetched) {
-      alert("すでに課題は抽出されています。ページを更新することで再実行できます。");
-      return;
-    }
+  fetch(JSON_PATH)
+    .then((res) => res.json())
+    .then((data) => {
+      data.forEach((item) => {
+        const card = document.createElement("div");
+        card.className = `card viewpoint-${item.viewpointKey}`;
 
-    const region = regionInput.value.trim();
-    const note = userNoteInput.value.trim();
+        const viewpointTag = document.createElement("div");
+        viewpointTag.className = "viewpoint-tag";
+        viewpointTag.textContent = item.viewpoint;
 
-    if (!region && !note) {
-      alert("地域名とテーマの両方を入力してください。");
-      return;
-    } else if (!region) {
-      alert("地域名を入力してください。");
-      return;
-    } else if (!note) {
-      alert("テーマや自由記述を入力してください。");
-      return;
-    }
+        const title = document.createElement("h3");
+        title.textContent = item.strategy;
 
-    hasFetched = true;
+        const policy = document.createElement("p");
+        policy.textContent = item.policy;
 
-    const prompt = `${region}について、テーマ「${note}」に基づく地域課題を抽出してください。`;
-    canvasResult.textContent = "課題抽出中...";
+        const kpi = document.createElement("p");
+        kpi.innerHTML = `<strong>KPI:</strong> ${item.kpi}`;
 
-    try {
-      const response = await fetch("https://sora-kpi.vercel.app/api/gpt", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ prompt })
+        const note = document.createElement("p");
+        note.className = "card-note";
+        note.textContent = item.note || "";
+
+        const detailBtn = document.createElement("button");
+        detailBtn.className = "detail-button";
+        detailBtn.textContent = "詳細を見る";
+        detailBtn.addEventListener("click", () => showDetailModal(item));
+
+        const addPriorityBtn = document.createElement("button");
+        addPriorityBtn.className = "add-priority-button";
+        addPriorityBtn.textContent = "優先に追加";
+        addPriorityBtn.addEventListener("click", () => addToCompareList(item));
+
+        card.appendChild(viewpointTag);
+        card.appendChild(title);
+        card.appendChild(policy);
+        card.appendChild(kpi);
+        card.appendChild(note);
+        card.appendChild(detailBtn);
+        card.appendChild(addPriorityBtn);
+
+        resultsContainer.appendChild(card);
       });
+    })
+    .catch((err) => console.error("\u274c JSON読み込みエラー:", err));
 
-      if (!response.ok) {
-        throw new Error(`ChatGPT APIエラー: ${response.status}`);
-      }
+  function showDetailModal(item) {
+    modalBody.innerHTML = `
+      <h2>${item.strategy}</h2>
+      <p><strong>施策:</strong> ${item.policy}</p>
+      <p><strong>KPI:</strong> ${item.kpi}</p>
+      <p><strong>注釈:</strong> ${item.note}</p>
+      <button class="add-priority-button" id="modalAddBtn">優先リストに追加</button>
+    `;
+    modal.style.display = "block";
 
-      const data = await response.json();
-      canvasResult.innerHTML = `<pre>${data.text}</pre>`;
+    document.getElementById("modalAddBtn").addEventListener("click", () => {
+      addToCompareList(item);
+    });
+  }
 
-      // 地図表示はGPT応答後にのみ行う
-      miniMap.innerHTML = `<iframe width="100%" height="200" frameborder="0" style="border:0" src="https://www.google.com/maps?q=${encodeURIComponent(region)}&output=embed" allowfullscreen></iframe>`;
-    } catch (error) {
-      canvasResult.textContent = "エラーが発生しました。";
-      console.error("ChatGPT APIエラー:", error);
-      alert("課題抽出中にエラーが発生しました。管理者に連絡してください。");
-      hasFetched = false; // エラー時は再試行を許可
+  closeModalBtn.addEventListener("click", () => {
+    modal.style.display = "none";
+  });
+
+  window.addEventListener("click", (event) => {
+    if (event.target === modal) {
+      modal.style.display = "none";
     }
   });
 
-  // NEXCO連動（表示/非表示トグル）
-  nexcoToggleBtn.addEventListener("click", async () => {
-    if (nexcoInfo.style.display === "block") {
-      nexcoInfo.style.display = "none";
-      nexcoToggleBtn.textContent = "NEXCO情報を表示";
-    } else {
-      nexcoInfo.textContent = "NEXCO情報を取得中...";
-      nexcoInfo.style.display = "block";
-      nexcoToggleBtn.textContent = "NEXCO情報を閉じる";
+  function addToCompareList(item) {
+    const compareList = document.getElementById("compareListContainer");
 
-      try {
-        const region = regionInput.value.trim();
-        const response = await fetch(`https://sora-kpi.vercel.app/api/nexco?region=${encodeURIComponent(region)}`);
-        if (!response.ok) throw new Error("NEXCO API応答エラー");
-        const data = await response.text();
-        nexcoInfo.innerHTML = `<pre>${data}</pre>`;
-      } catch (error) {
-        nexcoInfo.textContent = "NEXCO情報の取得に失敗しました。";
-        console.error("NEXCO APIエラー:", error);
-      }
+    if (document.getElementById(`compare-${item.id}`)) {
+      alert("この施策は既に優先リストに追加されています。");
+      return;
     }
-  });
+
+    const card = document.createElement("div");
+    card.className = `card viewpoint-${item.viewpointKey}`;
+    card.id = `compare-${item.id}`;
+
+    const title = document.createElement("h3");
+    title.textContent = item.strategy;
+
+    const policy = document.createElement("p");
+    policy.textContent = item.policy;
+
+    const kpi = document.createElement("p");
+    kpi.innerHTML = `<strong>KPI:</strong> ${item.kpi}`;
+
+    const removeBtn = document.createElement("button");
+    removeBtn.className = "remove-btn";
+    removeBtn.textContent = "削除";
+    removeBtn.addEventListener("click", () => {
+      compareList.removeChild(card);
+    });
+
+    card.appendChild(title);
+    card.appendChild(policy);
+    card.appendChild(kpi);
+    card.appendChild(removeBtn);
+
+    compareList.appendChild(card);
+  }
 });
