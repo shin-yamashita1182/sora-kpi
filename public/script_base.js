@@ -16,9 +16,11 @@ document.addEventListener('DOMContentLoaded', () => {
   const generateBtn = document.getElementById('generateBtn');
   const analyzeBtn = document.getElementById('analyzeBtn');
   const categorySelect = document.getElementById('category');
+  const coreMasterContainer = document.getElementById("coreMasterContainer");
 
   let currentMasterData = [];
   let currentDetailIndex = null;
+  let analysisDone = false;
 
   async function loadMasterData() {
     const category = categorySelect.value;
@@ -125,85 +127,73 @@ document.addEventListener('DOMContentLoaded', () => {
       : "ファイルを選択してください";
   });
 
-let analysisDone = false;
+  analyzeBtn.addEventListener("click", async () => {
+    if (analysisDone) {
+      alert("すでに課題抽出が完了しています。ページを更新するか、条件を変更してください。");
+      return;
+    }
 
-analyzeBtn.addEventListener("click", async () => {
-  if (analysisDone) {
-    alert("すでに課題抽出が完了しています。ページを更新するか、条件を変更してください。");
-    return;
-  }
+    const regionName = document.getElementById("regionName").value.trim();
+    const userNote = document.getElementById("userNote").value.trim();
 
-  const regionName = document.getElementById("regionName").value.trim();
-  const userNote = document.getElementById("userNote").value.trim();
+    if (!regionName) {
+      alert("地域名を入力してください。");
+      return;
+    }
 
-  // 入力チェック：どちらも必須
-  if (!regionName) {
-    alert("地域名を入力してください。");
-    return;
-  }
+    if (!userNote) {
+      alert("テーマや自由記述を入力してください。");
+      return;
+    }
 
-  if (!userNote) {
-    alert("テーマや自由記述を入力してください。");
-    return;
-  }
+    updateGoogleMap(regionName);
 
-  // 地図を初回だけ表示（多重防止付き）
-  updateGoogleMap(regionName);
+    const originalBtnText = analyzeBtn.innerText;
+    analyzeBtn.innerText = "課題抽出中…";
+    analyzeBtn.disabled = true;
 
-  const originalBtnText = analyzeBtn.innerText;
-  analyzeBtn.innerText = "課題抽出中…";
-  analyzeBtn.disabled = true;
+    const prompt = `${regionName}について、テーマ「${userNote}」に基づく地域課題を抽出してください。\n以下の内容について、最大トークン数500以内で、最大5つまでの地域課題を簡潔に挙げてください。各課題は1〜2文で記述し、原因や背景が簡潔に分かるようにしてください。`;
 
-  const prompt = `${regionName}について、テーマ「${userNote}」に基づく地域課題を抽出してください。\n以下の内容について、最大トークン数500以内で、最大5つまでの地域課題を簡潔に挙げてください。各課題は1〜2文で記述し、原因や背景が簡潔に分かるようにしてください。`;
+    try {
+      await fetchChatGPTResponse(prompt);
+      analysisDone = true;
 
-  try {
-    await fetchChatGPTResponse(prompt);
-    analysisDone = true; // ✅ ここで一度だけ実行済みに
-  } catch (error) {
-    console.error("抽出中に問題が発生しました:", error);
-    alert("課題抽出に失敗しました。");
-  } finally {
-// JSONファイルを読み込んでCoreMasterカードを描画
-try {
-  const response = await fetch("/json/coremaster_demo_20.json");
-  const data = await response.json();
-  const container = document.getElementById("coreMasterContainer");
-  container.innerHTML = "";
+      const response = await fetch("/json/coremaster_demo_20.json");
+      const data = await response.json();
+      coreMasterContainer.innerHTML = "";
 
-  data.forEach((item, index) => {
-    const card = document.createElement("div");
-    card.className = "card";
-    card.setAttribute("data-index", index);
+      data.forEach((item, index) => {
+        const card = document.createElement("div");
+        card.className = "card";
+        card.setAttribute("data-index", index);
 
-    let color = "#ccc";
-    if (item.perspective.includes("財務")) color = "#cce5ff";
-    else if (item.perspective.includes("顧客")) color = "#d4edda";
-    else if (item.perspective.includes("内部")) color = "#fff3cd";
-    else if (item.perspective.includes("学習")) color = "#f8d7da";
+        let color = "#ccc";
+        if (item.perspective.includes("財務")) color = "#cce5ff";
+        else if (item.perspective.includes("顧客")) color = "#d4edda";
+        else if (item.perspective.includes("内部")) color = "#fff3cd";
+        else if (item.perspective.includes("学習")) color = "#f8d7da";
 
-    card.innerHTML = `
-      <div style="padding: 10px; border-left: 6px solid ${color}; margin-bottom: 10px;">
-        <h3>${item.title}</h3>
-        <p><strong>KPI:</strong> ${item.kpi}</p>
-        <p style="font-size: 12px; color: #666;"><strong>${item.perspective}</strong> - ${item.note}</p>
-        <div style="text-align: center; margin-top: 10px;">
-          <button class="add-to-priority">優先に追加</button>
-        </div>
-      </div>
-    `;
+        card.innerHTML = `
+          <div style="padding: 10px; border-left: 6px solid ${color}; margin-bottom: 10px;">
+            <h3>${item.title}</h3>
+            <p><strong>KPI:</strong> ${item.kpi}</p>
+            <p style="font-size: 12px; color: #666;"><strong>${item.perspective}</strong> - ${item.note}</p>
+            <div style="text-align: center; margin-top: 10px;">
+              <button class="add-to-priority">優先に追加</button>
+            </div>
+          </div>
+        `;
 
-    container.appendChild(card);
+        coreMasterContainer.appendChild(card);
+      });
+    } catch (error) {
+      console.error("抽出中に問題が発生しました:", error);
+      alert("課題抽出に失敗しました。");
+    } finally {
+      analyzeBtn.innerText = originalBtnText;
+      analyzeBtn.disabled = false;
+    }
   });
-} catch (err) {
-  console.error("CoreMaster読み込みエラー:", err);
-}
-
-    analyzeBtn.innerText = originalBtnText;
-    analyzeBtn.disabled = false;
-  }
-});
-
-
 
   async function fetchChatGPTResponse(prompt) {
     const response = await fetch("/api/chatgpt", {
@@ -217,7 +207,6 @@ try {
     canvasResult.innerText = data.result || "結果が取得できませんでした。";
   }
 
-  // ✅ NEXCO情報表示ボタン（取得・開閉トグル）
   const nexcoBtn = document.getElementById("toggleNexcoBtn");
   const infoBox = document.getElementById("nexcoInfoBox");
   const infoList = document.getElementById("nexcoInfoList");
@@ -289,28 +278,28 @@ try {
       statusBox.textContent = isAccordionOpen ? "NEXCO情報を表示中" : "NEXCO情報を非表示にしました";
     }
   }
-});
-// 優先リストへの追加処理
-document.getElementById("coreMasterContainer").addEventListener("click", (event) => {
-  if (event.target.classList.contains("add-to-priority")) {
-    const cardEl = event.target.closest(".card");
-    const title = cardEl.querySelector("h3")?.textContent;
-    const kpi = cardEl.querySelector("p strong")?.textContent;
 
-    const exists = [...document.querySelectorAll("#compareListContainer .card")]
-      .some(card => card.querySelector("h3")?.textContent === title);
+  coreMasterContainer.addEventListener("click", (event) => {
+    if (event.target.classList.contains("add-to-priority")) {
+      const cardEl = event.target.closest(".card");
+      const title = cardEl.querySelector("h3")?.textContent;
+      const kpi = cardEl.querySelector("p strong")?.textContent;
 
-    if (!exists) {
-      const card = document.createElement("div");
-      card.className = "card";
-      card.innerHTML = `
-        <h3>${title}</h3>
-        <p><strong>KPI:</strong> ${kpi}</p>
-        <div style="text-align: right;">
-          <button class="remove-btn">削除</button>
-        </div>
-      `;
-      document.getElementById("compareListContainer").appendChild(card);
+      const exists = [...document.querySelectorAll("#compareListContainer .card")]
+        .some(card => card.querySelector("h3")?.textContent === title);
+
+      if (!exists) {
+        const card = document.createElement("div");
+        card.className = "card";
+        card.innerHTML = `
+          <h3>${title}</h3>
+          <p><strong>KPI:</strong> ${kpi}</p>
+          <div style="text-align: right;">
+            <button class="remove-btn">削除</button>
+          </div>
+        `;
+        document.getElementById("compareListContainer").appendChild(card);
+      }
     }
-  }
+  });
 });
