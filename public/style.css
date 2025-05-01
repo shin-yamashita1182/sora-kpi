@@ -397,3 +397,53 @@ footer {
 .viewpoint-growth .viewpoint-tag {
   background-color: #fd7e14;
 }
+
+/* ===== 修正スタイル追加: Mind Triggerカード用 ===== */
+
+/* 視点タグ（ラベル）全般 */
+.viewpoint-tag {
+  font-size: 13px;
+  font-weight: bold;
+  padding: 4px 8px;
+  color: white;
+  border-radius: 4px;
+  margin-bottom: 4px;
+  display: inline-block;
+}
+
+/* 個別視点の背景色 */
+.viewpoint-finance .viewpoint-tag {
+  background-color: #dc3545; /* 赤 */
+}
+.viewpoint-customer .viewpoint-tag {
+  background-color: #0d6efd; /* 青 */
+}
+.viewpoint-process .viewpoint-tag {
+  background-color: #198754; /* 緑 */
+}
+.viewpoint-growth .viewpoint-tag {
+  background-color: #fd7e14; /* オレンジ */
+}
+
+/* カード左線を無効化（旧スタイル削除） */
+.card.viewpoint-finance,
+.card.viewpoint-customer,
+.card.viewpoint-process,
+.card.viewpoint-growth {
+  border-left: none !important;
+}
+
+/* 注釈（note）の表示スタイル */
+.card-note {
+  font-size: 12px;
+  color: #6c757d;
+  margin-top: 6px;
+}
+
+/* ボタン縦並び＋中央寄せ */
+.card button.detail-button,
+.card button.add-priority-button {
+  display: block;
+  width: 80%;
+  margin: 10px auto 0 auto;
+}
