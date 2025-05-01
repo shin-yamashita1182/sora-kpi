@@ -4,18 +4,34 @@ document.addEventListener("DOMContentLoaded", () => {
   const modalBody = document.getElementById("modalBody");
   const closeModalBtn = document.querySelector(".close-button");
 
-  const JSON_PATH = "coremaster_real_401cards.json";
+  const JSON_PATH = "coremaster_real_20_refined.json";
 
   fetch(JSON_PATH)
     .then((res) => res.json())
     .then((data) => {
       data.forEach((item) => {
         const card = document.createElement("div");
-        card.className = `card viewpoint-${item.viewpointKey}`;
+        card.className = "card";
 
+        // 視点タグ
         const viewpointTag = document.createElement("div");
         viewpointTag.className = "viewpoint-tag";
         viewpointTag.textContent = item.viewpoint;
+
+        switch (item.viewpointKey) {
+          case "finance":
+            viewpointTag.classList.add("viewpoint-finance");
+            break;
+          case "customer":
+            viewpointTag.classList.add("viewpoint-customer");
+            break;
+          case "process":
+            viewpointTag.classList.add("viewpoint-process");
+            break;
+          case "learning":
+            viewpointTag.classList.add("viewpoint-growth");
+            break;
+        }
 
         const title = document.createElement("h3");
         title.textContent = item.strategy;
@@ -26,15 +42,13 @@ document.addEventListener("DOMContentLoaded", () => {
         const kpi = document.createElement("p");
         kpi.innerHTML = `<strong>KPI:</strong> ${item.kpi}`;
 
-        const note = document.createElement("p");
-        note.className = "card-note";
-        note.textContent = item.note || "";
-
+        // 詳細ボタン
         const detailBtn = document.createElement("button");
         detailBtn.className = "detail-button";
         detailBtn.textContent = "詳細を見る";
         detailBtn.addEventListener("click", () => showDetailModal(item));
 
+        // 優先追加ボタン
         const addPriorityBtn = document.createElement("button");
         addPriorityBtn.className = "add-priority-button";
         addPriorityBtn.textContent = "優先に追加";
@@ -44,28 +58,23 @@ document.addEventListener("DOMContentLoaded", () => {
         card.appendChild(title);
         card.appendChild(policy);
         card.appendChild(kpi);
-        card.appendChild(note);
         card.appendChild(detailBtn);
         card.appendChild(addPriorityBtn);
 
         resultsContainer.appendChild(card);
       });
     })
-    .catch((err) => console.error("\u274c JSON読み込みエラー:", err));
+    .catch((err) => console.error("❌ JSON読み込みエラー:", err));
 
+  // モーダル表示
   function showDetailModal(item) {
     modalBody.innerHTML = `
       <h2>${item.strategy}</h2>
       <p><strong>施策:</strong> ${item.policy}</p>
       <p><strong>KPI:</strong> ${item.kpi}</p>
       <p><strong>注釈:</strong> ${item.note}</p>
-      <button class="add-priority-button" id="modalAddBtn">優先リストに追加</button>
     `;
     modal.style.display = "block";
-
-    document.getElementById("modalAddBtn").addEventListener("click", () => {
-      addToCompareList(item);
-    });
   }
 
   closeModalBtn.addEventListener("click", () => {
@@ -78,39 +87,41 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  function addToCompareList(item) {
-    const compareList = document.getElementById("compareListContainer");
+  // 優先リストに追加
+function addToCompareList(item) {
+  const compareList = document.getElementById("compareListContainer");
 
-    if (document.getElementById(`compare-${item.id}`)) {
-      alert("この施策は既に優先リストに追加されています。");
-      return;
-    }
-
-    const card = document.createElement("div");
-    card.className = `card viewpoint-${item.viewpointKey}`;
-    card.id = `compare-${item.id}`;
-
-    const title = document.createElement("h3");
-    title.textContent = item.strategy;
-
-    const policy = document.createElement("p");
-    policy.textContent = item.policy;
-
-    const kpi = document.createElement("p");
-    kpi.innerHTML = `<strong>KPI:</strong> ${item.kpi}`;
-
-    const removeBtn = document.createElement("button");
-    removeBtn.className = "remove-btn";
-    removeBtn.textContent = "削除";
-    removeBtn.addEventListener("click", () => {
-      compareList.removeChild(card);
-    });
-
-    card.appendChild(title);
-    card.appendChild(policy);
-    card.appendChild(kpi);
-    card.appendChild(removeBtn);
-
-    compareList.appendChild(card);
+  if (document.getElementById(`compare-${item.id}`)) {
+    alert("この施策は既に優先リストに追加されています。");
+    return;
   }
+
+  const card = document.createElement("div");
+  card.className = "card";
+  card.id = `compare-${item.id}`;
+
+  const title = document.createElement("h3");
+  title.textContent = item.strategy;
+
+  const policy = document.createElement("p");
+  policy.textContent = item.policy;
+
+  const kpi = document.createElement("p");
+  kpi.innerHTML = `<strong>KPI:</strong> ${item.kpi}`;
+
+  // 削除ボタン
+  const removeBtn = document.createElement("button");
+  removeBtn.className = "remove-btn";
+  removeBtn.textContent = "削除";
+  removeBtn.addEventListener("click", () => {
+    compareList.removeChild(card);
+  });
+
+  card.appendChild(title);
+  card.appendChild(policy);
+  card.appendChild(kpi);
+  card.appendChild(removeBtn);
+
+  compareList.appendChild(card);
+}
 });
