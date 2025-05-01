@@ -230,6 +230,10 @@ button:hover {
     gap: 16px;
     margin-top: 15px;
 }
+#resultsContainer .card {
+  width: 100%;
+  box-sizing: border-box;
+}
 
 @media (max-width: 768px) {
     #resultsContainer,
@@ -254,7 +258,7 @@ button:hover {
 }
 
 .accordion-content .card {
-    width: calc(25% - 16px);
+    width: 100%;
     box-sizing: border-box;
     padding: 12px;
     border: 1px solid #ddd;
