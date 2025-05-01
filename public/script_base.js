@@ -131,6 +131,12 @@ document.addEventListener('DOMContentLoaded', () => {
     if (analysisDone) {
       alert("すでに課題抽出が完了しています。ページを更新するか、条件を変更してください。");
       return;
+    // 📍戦略リストをスムーズに表示エリアへスクロール
+document.getElementById("resultsContainer")?.scrollIntoView({ behavior: "smooth" });
+
+// 📍戦略リスト表示エリアにハイライト効果を一時的に付与
+resultsContainer.classList.add("highlight");
+setTimeout(() => resultsContainer.classList.remove("highlight"), 1500);
     }
 
     const regionName = document.getElementById("regionName").value.trim();
@@ -185,7 +191,11 @@ document.addEventListener('DOMContentLoaded', () => {
         `;
 
         coreMasterContainer.appendChild(card);
-      });
+        // 📍スクロール＆ハイライト表示
+document.getElementById("resultsContainer")?.scrollIntoView({ behavior: "smooth" });
+resultsContainer.classList.add("highlight");
+setTimeout(() => resultsContainer.classList.remove("highlight"), 1500);
+　});
     } catch (error) {
       console.error("抽出中に問題が発生しました:", error);
       alert("課題抽出に失敗しました。");
