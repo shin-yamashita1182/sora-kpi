@@ -1,49 +1,48 @@
-
-/* ====== SORA Dashboard CSS 完全版 ====== */
+/* ====== SORA Dashboard CSS 統一版 ====== */
 
 /* -------------------- 基本レイアウト -------------------- */
 body {
-    font-family: 'Segoe UI', sans-serif;
-    background-color: #f8f9fa;
-    margin: 0;
-    padding: 0;
+  font-family: 'Segoe UI', sans-serif;
+  background-color: #f8f9fa;
+  margin: 0;
+  padding: 0;
 }
 
 header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background-color: white;
-    padding: 10px 20px;
-    border-bottom: 1px solid #dee2e6;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: white;
+  padding: 10px 20px;
+  border-bottom: 1px solid #dee2e6;
 }
 
 .logo {
-    font-weight: bold;
-    font-size: 20px;
+  font-weight: bold;
+  font-size: 20px;
 }
 
 .user-info {
-    font-size: 14px;
+  font-size: 14px;
 }
 
 .container {
-    display: flex;
+  display: flex;
 }
 
 .sidebar {
-    width: 240px;
-    background-color: #ffffff;
-    border-right: 1px solid #dee2e6;
-    padding: 20px;
+  width: 240px;
+  background-color: #ffffff;
+  border-right: 1px solid #dee2e6;
+  padding: 20px;
 }
 
 .main-content {
-    flex-grow: 1;
-    padding: 20px;
-    max-width: calc(100% - 260px);
-    box-sizing: border-box;
-    overflow-x: auto;
+  flex-grow: 1;
+  padding: 20px;
+  max-width: calc(100% - 260px);
+  box-sizing: border-box;
+  overflow-x: auto;
 }
 
 /* -------------------- セクション共通 -------------------- */
@@ -51,92 +50,93 @@ header {
 .results-section,
 .compare-section,
 .canvas-section {
-    background-color: #ffffff;
-    border: 1px solid #dee2e6;
-    border-radius: 5px;
-    padding: 15px;
-    margin-bottom: 20px;
-    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+  background-color: #ffffff;
+  border: 1px solid #dee2e6;
+  border-radius: 5px;
+  padding: 15px;
+  margin-bottom: 20px;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.05);
 }
 
 /* -------------------- 入力フィールド -------------------- */
 .input-map-wrapper {
-    display: flex;
-    gap: 20px;
+  display: flex;
+  gap: 20px;
 }
 
 .input-fields {
-    flex: 2;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
+  flex: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
 .input-fields input,
 .input-fields select,
 .input-fields textarea {
-    height: 40px;
-    font-size: 16px;
-    padding: 8px;
-    border: 1px solid #ced4da;
-    border-radius: 4px;
+  height: 40px;
+  font-size: 16px;
+  padding: 8px;
+  border: 1px solid #ced4da;
+  border-radius: 4px;
 }
 
 .input-fields textarea {
-    height: 100px;
-    resize: vertical;
+  height: 100px;
+  resize: vertical;
 }
 
 .file-upload-wrapper {
-    display: flex;
-    align-items: center;
-    gap: 10px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
 .file-upload-wrapper span {
-    font-size: 14px;
-    color: #6c757d;
+  font-size: 14px;
+  color: #6c757d;
 }
 
 .mini-map {
-    flex: 1;
-    min-width: 250px;
-    min-height: 200px;
-    background-color: #e9ecef;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #6c757d;
-    cursor: pointer;
-    border-radius: 8px;
+  flex: 1;
+  min-width: 250px;
+  min-height: 200px;
+  background-color: #e9ecef;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #6c757d;
+  cursor: pointer;
+  border-radius: 8px;
 }
 
-/* -------------------- カードレイアウト -------------------- */
+/* -------------------- カード -------------------- */
 .card {
-    background-color: #ffffff;
-    padding: 16px;
-    margin-bottom: 16px;
-    border-radius: 8px;
-    border: 1px solid #dee2e6;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
+  background-color: #ffffff;
+  padding: 16px;
+  margin-bottom: 16px;
+  border-radius: 8px;
+  border: 1px solid #dee2e6;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-sizing: border-box;
 }
 
 .card h3 {
-    margin: 12px 0 8px;
-    font-size: 18px;
+  margin: 12px 0 8px;
+  font-size: 18px;
 }
 
 .viewpoint-tag {
-    font-size: 13px;
-    font-weight: bold;
-    padding: 4px 8px;
-    color: white;
-    border-radius: 4px;
-    display: inline-block;
-    margin-bottom: 4px;
+  font-size: 13px;
+  font-weight: bold;
+  padding: 4px 8px;
+  color: white;
+  border-radius: 4px;
+  display: inline-block;
+  margin-bottom: 4px;
 }
 
 .viewpoint-finance .viewpoint-tag { background-color: #dc3545; }
@@ -145,195 +145,176 @@ header {
 .viewpoint-growth .viewpoint-tag   { background-color: #fd7e14; }
 
 .card-note {
-    font-size: 13px;
-    color: #6c757d;
-    margin-top: 6px;
+  font-size: 13px;
+  color: #6c757d;
+  margin-top: 6px;
 }
 
-/* -------------------- ボタンスタイル -------------------- */
-button {
-    background-color: #007bff;
-    color: white;
-    padding: 6px 12px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    margin-right: 8px;
+.card-buttons {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  margin-top: 10px;
 }
 
-button:hover {
-    background-color: #0056b3;
+/* -------------------- ボタン -------------------- */
+button,
+.detail-button,
+.add-priority-button,
+.remove-btn {
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: bold;
 }
 
 .button-wrapper {
-    display: flex;
-    gap: 10px;
+  display: flex;
+  gap: 10px;
 }
 
 .button-wrapper button {
-    flex: 1;
-    padding: 10px;
-    font-size: 16px;
-    font-weight: bold;
+  flex: 1;
+  padding: 10px;
+  font-size: 16px;
+  font-weight: bold;
 }
 
-#generateBtn { background-color: #007bff; }
+#generateBtn { background-color: #007bff; color: white; }
 #generateBtn:hover { background-color: #0056b3; }
 
-#analyzeBtn { background-color: #28a745; }
+#analyzeBtn { background-color: #28a745; color: white; }
 #analyzeBtn:hover { background-color: #1e7e34; }
 
+.detail-button {
+  background-color: #28a745;
+  color: white;
+  width: 80%;
+  margin: 6px auto 0;
+  padding: 10px 12px;
+}
+
+.detail-button:hover {
+  background-color: #218838;
+}
+
+.add-priority-button {
+  background-color: #0d6efd;
+  color: white;
+  width: 80%;
+  margin: 6px auto 0;
+  padding: 10px 12px;
+}
+
+.add-priority-button:hover {
+  background-color: #0b5ed7;
+}
+
 .remove-btn {
-    background-color: #dc3545;
-    color: white;
-    padding: 6px 10px;
-    border-radius: 4px;
-    cursor: pointer;
+  background-color: #dc3545;
+  color: white;
+  padding: 6px 10px;
+  margin-top: 10px;
 }
 
 .remove-btn:hover {
-    background-color: #b02a37;
+  background-color: #b02a37;
 }
 
-.detail-button,
-.add-priority-button {
-    width: 80%;
-    padding: 10px 12px;
-    border: none;
-    border-radius: 4px;
-    font-size: 14px;
-    font-weight: bold;
-    cursor: pointer;
-    margin: 6px auto 0;
-    display: block;
-}
-
-.detail-button {
-    background-color: #28a745;
-}
-.detail-button:hover {
-    background-color: #218838;
-}
-
-.add-priority-button {
-    background-color: #0d6efd;
-}
-.add-priority-button:hover {
-    background-color: #0b5ed7;
-}
-
-/* -------------------- レスポンシブ -------------------- */
+/* -------------------- コンテナ表示 -------------------- */
 #resultsContainer,
 #compareListContainer {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 16px;
-    margin-top: 15px;
-}
-#resultsContainer .card {
-  width: 100%;
-  box-sizing: border-box;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-top: 15px;
 }
 
 @media (max-width: 768px) {
-    #resultsContainer,
-    #compareListContainer {
-        grid-template-columns: repeat(2, 1fr);
-    }
+  #resultsContainer,
+  #compareListContainer {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
 
 @media (max-width: 480px) {
-    #resultsContainer,
-    #compareListContainer {
-        grid-template-columns: 1fr;
-    }
-}
-
-/* -------------------- アコーディオン -------------------- */
-.accordion-content {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 16px;
-    justify-content: flex-start;
-}
-
-.accordion-content .card {
-    width: 100%;
-    box-sizing: border-box;
-    padding: 12px;
-    border: 1px solid #ddd;
-    border-radius: 8px;
+  #resultsContainer,
+  #compareListContainer {
+    grid-template-columns: 1fr;
+  }
 }
 
 /* -------------------- モーダル -------------------- */
 .modal {
-    display: none;
-    position: fixed;
-    z-index: 1000;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    overflow: auto;
-    background-color: rgba(0,0,0,0.5);
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0,0,0,0.5);
 }
 
 .modal-content {
-    background-color: #fff;
-    margin: 5% auto;
-    padding: 20px;
-    border: 1px solid #888;
-    width: 80%;
-    max-width: 600px;
-    border-radius: 8px;
+  background-color: #fff;
+  margin: 5% auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%;
+  max-width: 600px;
+  border-radius: 8px;
 }
 
 .close-button {
-    color: #aaa;
-    float: right;
-    font-size: 28px;
-    font-weight: bold;
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
 }
 
 .close-button:hover,
 .close-button:focus {
-    color: black;
-    cursor: pointer;
+  color: black;
+  cursor: pointer;
 }
 
 /* -------------------- キャンバス -------------------- */
 #canvasResult {
-    white-space: pre-wrap;
-    word-break: break-word;
-    padding: 16px;
-    min-height: 200px;
-    background-color: #f7f7f7;
-    border-radius: 8px;
-    line-height: 1.6;
-    font-size: 16px;
-    overflow-y: auto;
-    color: #000000;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  white-space: pre-wrap;
+  word-break: break-word;
+  padding: 16px;
+  min-height: 200px;
+  background-color: #f7f7f7;
+  border-radius: 8px;
+  line-height: 1.6;
+  font-size: 16px;
+  overflow-y: auto;
+  color: #000;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
 }
 
-/* -------------------- NEXCO表示 -------------------- */
+/* -------------------- NEXCO -------------------- */
 #nexcoInfoBox {
-    display: none !important;
-    max-height: 0;
-    overflow: hidden;
-    transition: max-height 0.4s ease-in-out;
-    background-color: #f8f9fa;
+  display: none !important;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s ease-in-out;
+  background-color: #f8f9fa;
 }
 
 #nexcoInfoBox.open {
-    display: block !important;
-    max-height: 1000px !important;
-    padding: 10px;
-    margin-bottom: 20px;
-    border: 1px solid #ccc;
+  display: block !important;
+  max-height: 1000px !important;
+  padding: 10px;
+  margin-bottom: 20px;
+  border: 1px solid #ccc;
 }
 
-/* -------------------- ハイライト効果 -------------------- */
+/* -------------------- ハイライト -------------------- */
 .highlight {
   animation: blink 1.5s ease-in-out;
   border: 2px solid #0d6efd;
@@ -341,16 +322,16 @@ button:hover {
 }
 
 @keyframes blink {
-  0% { background-color: #e6f7ff; }
-  50% { background-color: #cfe8ff; }
+  0%   { background-color: #e6f7ff; }
+  50%  { background-color: #cfe8ff; }
   100% { background-color: #e6f7ff; }
 }
 
 /* -------------------- フッター -------------------- */
 footer {
-    text-align: center;
-    font-size: 12px;
-    color: #6c757d;
-    padding: 15px 0;
-    border-top: 1px solid #dee2e6;
+  text-align: center;
+  font-size: 12px;
+  color: #6c757d;
+  padding: 15px 0;
+  border-top: 1px solid #dee2e6;
 }
