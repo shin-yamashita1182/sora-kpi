@@ -327,3 +327,20 @@ footer {
 .add-priority-button:hover {
   background-color: #0d47a1;
 }
+/* モーダル内の優先リスト追加ボタン */
+.modal-content .add-priority-button {
+  display: block;
+  margin-left: auto;
+  margin-top: 20px;
+  background-color: #0d6efd;
+  color: #fff;
+  border: none;
+  padding: 10px 14px;
+  border-radius: 4px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.modal-content .add-priority-button:hover {
+  background-color: #0b5ed7;
+}
