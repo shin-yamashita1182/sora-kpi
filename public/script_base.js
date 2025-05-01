@@ -67,15 +67,20 @@ document.addEventListener("DOMContentLoaded", () => {
     .catch((err) => console.error("❌ JSON読み込みエラー:", err));
 
   // モーダル表示
-  function showDetailModal(item) {
-    modalBody.innerHTML = `
-      <h2>${item.strategy}</h2>
-      <p><strong>施策:</strong> ${item.policy}</p>
-      <p><strong>KPI:</strong> ${item.kpi}</p>
-      <p><strong>注釈:</strong> ${item.note}</p>
-    `;
-    modal.style.display = "block";
-  }
+function showDetailModal(item) {
+  modalBody.innerHTML = `
+    <h2>${item.strategy}</h2>
+    <p><strong>施策:</strong> ${item.policy}</p>
+    <p><strong>KPI:</strong> ${item.kpi}</p>
+    <p><strong>注釈:</strong> ${item.note}</p>
+    <button class="add-priority-button" id="modalAddBtn">優先リストに追加</button>
+  `;
+  modal.style.display = "block";
+
+  document.getElementById("modalAddBtn").addEventListener("click", () => {
+    addToCompareList(item);
+  });
+}
 
   closeModalBtn.addEventListener("click", () => {
     modal.style.display = "none";
