@@ -198,7 +198,7 @@ setTimeout(() => resultsContainer.classList.remove("highlight"), 1500);
       analyzeBtn.innerText = originalBtnText;
       analyzeBtn.disabled = false;
     }
-  });
+});
 
   async function fetchChatGPTResponse(prompt) {
     const response = await fetch("/api/chatgpt", {
