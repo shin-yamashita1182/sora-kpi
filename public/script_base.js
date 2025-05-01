@@ -32,9 +32,8 @@ document.addEventListener("DOMContentLoaded", () => {
         body: JSON.stringify({ prompt })
       });
 
-      const contentType = response.headers.get("content-type");
-      if (!contentType || !contentType.includes("application/json")) {
-        throw new Error("ChatGPT APIが無効な応答を返しました。");
+      if (!response.ok) {
+        throw new Error(`ChatGPT APIエラー: ${response.status}`);
       }
 
       const data = await response.json();
