@@ -45,42 +45,38 @@
               <input type="file" id="fileInput" accept=".txt,.pdf,.docx">
               <span id="fileNameDisplay">ファイルを選択してください</span>
             </div>
-        
-            <!-- ★ ボタン2個に分割 -->
+
             <div class="button-wrapper">
               <button id="analyzeBtn">課題抽出</button>
               <button id="generateBtn">分析対策</button>
             </div>
-
           </div>
           <div class="mini-map" id="miniMap">地図表示エリア</div>
         </div>
       </section>
 
-      <!-- ★ SORA CANVAS（課題リスト） -->
       <section class="canvas-section">
         <h2>SORA CANVAS（課題リスト）</h2>
         <div id="gptResponse"></div>
         <div class="canvas-placeholder" id="canvasResult">ここにキャンバス課題リストを展開</div>
       </section>
 
-<!-- ✅ 1. ボタンを追加（SORA CANVASの中に配置） -->
-<div class="nexco-toggle-wrapper" style="margin-top: 10px; margin-bottom: 10px; text-align: right;">
-  <button id="toggleNexcoBtn">NEXCO情報を表示</button>
-  <div id="nexcoStatus" style="margin-top: 4px; font-size: 0.9em; color: #888;"></div>
-</div>
+      <div class="nexco-toggle-wrapper" style="margin-top: 10px; margin-bottom: 10px; text-align: right;">
+        <button id="toggleNexcoBtn">NEXCO情報を表示</button>
+        <div id="nexcoStatus" style="margin-top: 4px; font-size: 0.9em; color: #888;"></div>
+      </div>
 
-<!-- ✅ 2. アコーディオンエリア（最初は非表示） -->
-<div id="nexcoInfoBox">
-  <h3>NEXCO周辺施設・高速道路情報</h3>
-  <ul id="nexcoInfoList">
-    <!-- ChatGPTが返すSA・IC・PA情報をここに入れる予定 -->
-  </ul>
-</div>
- 
+      <div id="nexcoInfoBox">
+        <h3>NEXCO周辺施設・高速道路情報</h3>
+        <ul id="nexcoInfoList"></ul>
+      </div>
+
       <section class="results-section">
         <h2>戦略リスト（施策やKPI）</h2>
-        <div id="resultsContainer" class="card-container">
+        <div id="resultsContainer">
+          <div class="accordion-content">
+            <!-- カードはここに挿入されます -->
+          </div>
         </div>
       </section>
 
@@ -92,7 +88,6 @@
     </main>
   </div>
 
-  <!-- モーダル（詳細） -->
   <div id="detailModal" class="modal">
     <div class="modal-content">
       <span class="close-button" id="closeModal">&times;</span>
@@ -100,7 +95,6 @@
     </div>
   </div>
 
-  <!-- モーダル（地図拡大） -->
   <div id="mapModal" class="modal">
     <div class="modal-content">
       <span class="close-button" id="closeMapModal">&times;</span>
@@ -112,10 +106,7 @@
     <p>&copy; 2025 SORA Project</p>
   </footer>
 
-  <!-- スクリプト読み込み -->
   <script src="script_base.js" defer></script>
-  <!-- 🔵 これを追加！ -->
-<script src="map_controller.js" defer></script>
-
+  <script src="map_controller.js" defer></script>
 </body>
 </html>
