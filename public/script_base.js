@@ -69,6 +69,7 @@ document.addEventListener('DOMContentLoaded', () => {
     canvasResult.innerText = data.result || "結果が取得できませんでした。";
   }
 
+  // ✅ CoreMasterを戦略リスト（アコーディオン）内に20件挿入
   async function insertCoreMasterCards() {
     try {
       const response = await fetch("/json/coremaster_demo_20.json");
@@ -118,55 +119,4 @@ document.addEventListener('DOMContentLoaded', () => {
       console.error("CoreMaster読み込みエラー:", error);
     }
   }
-});
-// ✅ CoreMasterを戦略リスト（アコーディオン）内に20件挿入
-async function insertCoreMasterCards() {
-  try {
-    const response = await fetch("/json/coremaster_demo_20.json");
-    const data = await response.json();
-
-    const targetContainer =
-      document.querySelector("#resultsContainer .accordion-content") ||
-      document.querySelector("#resultsContainer .accordion-body") ||
-      document.querySelector("#resultsContainer .card-container");
-
-    if (!targetContainer) {
-      console.warn("カード挿入先のアコーディオンが見つかりませんでした");
-      return;
-    }
-
-    data.forEach(item => {
-      const card = document.createElement("div");
-      card.className = "card";
-      card.style.marginBottom = "10px";
-      card.style.border = "1px solid #ddd";
-      card.style.padding = "12px";
-      card.style.borderRadius = "8px";
-      card.style.background = "#fff";
-
-      let labelColor = "#ccc";
-      if (item.perspective.includes("財務")) labelColor = "#cce5ff";
-      else if (item.perspective.includes("顧客")) labelColor = "#d4edda";
-      else if (item.perspective.includes("内部")) labelColor = "#fff3cd";
-      else if (item.perspective.includes("学習")) labelColor = "#f8d7da";
-
-      card.innerHTML = `
-        <div style="font-size: 12px; background: ${labelColor}; display: inline-block; padding: 2px 6px; border-radius: 4px; margin-bottom: 6px;">
-          ${item.perspective}
-        </div>
-        <p style="font-size: 11px; color: #666; margin-top: 0;">${item.note}</p>
-        <h3 style="margin: 8px 0;">${item.title}</h3>
-        <p><strong>KPI:</strong> ${item.kpi}</p>
-        <div style="text-align: center; margin-top: 10px;">
-          <button class="add-to-priority">優先に追加</button>
-        </div>
-      `;
-
-      targetContainer.appendChild(card);
-    });
-
-  } catch (error) {
-    console.error("CoreMaster読み込みエラー:", error);
-  }
-}
 });
