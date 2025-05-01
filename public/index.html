@@ -1,122 +1,59 @@
+
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SORA Dashboard Refine</title>
-  <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>SORA Dashboard 完全復元</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <header>
-    <div class="logo">SORA Dashboard</div>
-    <div class="user-info">ユーザー情報 ▼</div>
+    <h1>SORA Dashboard</h1>
   </header>
 
   <div class="container">
-    <aside class="sidebar">
-      <h2>履歴一覧</h2>
-      <ul>
-        <li>履歴1</li>
-        <li>履歴2</li>
-        <li>履歴3</li>
-      </ul>
-    </aside>
+    <div class="input-section">
+      <input type="text" id="regionName" placeholder="地域名を入力" />
+      <input type="text" id="userNote" placeholder="テーマを入力（例：高齢化）" />
+      <div class="button-wrapper">
+        <button id="analyzeBtn" type="button">課題抽出</button>
+        <button id="generateBtn" type="button">分析対策</button>
+      </div>
+    </div>
 
-    <main class="main-content">
-      <section class="input-section">
-        <h2>地域情報入力</h2>
-        <div class="input-map-wrapper">
-          <div class="input-fields">
-            <input id="regionName" type="text" placeholder="地域名を入力">
-            <select id="category">
-              <option>観光型</option>
-              <option>離島型</option>
-              <option>中山間地域型</option>
-              <option>都市型</option>
-              <option>高齢化重点地域型</option>
-              <option>子育て・定住型</option>
-              <option>移住促進重点型</option>
-              <option>観光×農業ハイブリッド型</option>
-              <option>防災・災害対策型</option>
-              <option>デジタル活用先進地域型</option>
-            </select>
-            <textarea id="userNote" placeholder="テーマや自由記述を入力してください"></textarea>
-            <div class="file-upload-wrapper">
-              <input type="file" id="fileInput" accept=".txt,.pdf,.docx">
-              <span id="fileNameDisplay">ファイルを選択してください</span>
-            </div>
-        
-            <!-- ★ ボタン2個に分割 -->
-            <div class="button-wrapper">
-              <button id="analyzeBtn" type="button">課題抽出</button>
-              <button id="generateBtn" type="button">分析対策</button>
-            </div>
+    <div id="canvasResult" class="result-box"></div>
 
-          </div>
-          <div class="mini-map" id="miniMap">地図表示エリア</div>
-        </div>
-      </section>
+    <div id="resultsContainer" class="card-grid"></div>
 
-      <!-- ★ SORA CANVAS（課題リスト） -->
-      <section class="canvas-section">
-        <h2>SORA CANVAS（課題リスト）</h2>
-        <div id="gptResponse"></div>
-        <div class="canvas-placeholder" id="canvasResult">ここにキャンバス課題リストを展開</div>
-      </section>
+    <h2>優先リスト</h2>
+    <div id="compareListContainer" class="compare-list"></div>
 
-<!-- ✅ 1. ボタンを追加（SORA CANVASの中に配置） -->
-<div class="nexco-toggle-wrapper" style="margin-top: 10px; margin-bottom: 10px; text-align: right;">
-  <button id="toggleNexcoBtn">NEXCO情報を表示</button>
-  <div id="nexcoStatus" style="margin-top: 4px; font-size: 0.9em; color: #888;"></div>
-</div>
-
-<!-- ✅ 2. アコーディオンエリア（最初は非表示） -->
-<div id="nexcoInfoBox">
-  <h3>NEXCO周辺施設・高速道路情報</h3>
-  <ul id="nexcoInfoList">
-    <!-- ChatGPTが返すSA・IC・PA情報をここに入れる予定 -->
-  </ul>
-</div>
- 
-      <section class="results-section">
-        <h2>戦略リスト（施策やKPI）</h2>
-        <div id="resultsContainer" class="card-container">
-        </div>
-      </section>
-
-      <section class="compare-section">
-        <h2>優先リスト（重点実施）</h2>
-        <div id="compareListContainer" class="card-container">
-        </div>
-      </section>
-    </main>
+    <h2>NEXCO情報</h2>
+    <button id="toggleNexcoBtn" type="button">NEXCO情報を表示</button>
+    <div id="nexcoInfoBox" class="result-box">
+      <div id="nexcoStatus"></div>
+      <ul id="nexcoInfoList"></ul>
+    </div>
   </div>
 
-  <!-- モーダル（詳細） -->
   <div id="detailModal" class="modal">
     <div class="modal-content">
-      <span class="close-button" id="closeModal">&times;</span>
+      <span class="close-button">&times;</span>
       <div id="modalBody"></div>
     </div>
   </div>
 
-  <!-- モーダル（地図拡大） -->
   <div id="mapModal" class="modal">
     <div class="modal-content">
-      <span class="close-button" id="closeMapModal">&times;</span>
-      <div id="mapModalBody">拡大地図表示</div>
+      <span id="closeMapModal" class="close-button">&times;</span>
+      <div id="mapModalBody"></div>
     </div>
   </div>
 
-  <footer>
-    <p>&copy; 2025 SORA Project</p>
-  </footer>
+  <input type="file" id="fileInput" style="display:none" />
+  <div id="fileNameDisplay"></div>
 
-  <!-- スクリプト読み込み -->
   <script src="script_base.js" defer></script>
-  <script src="script_kankou.js" defer></script>
-<!-- 🔵 これを追加！ -->
-<script src="map_controller.js" defer></script>
-
 </body>
 </html>
