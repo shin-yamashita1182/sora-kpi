@@ -125,32 +125,41 @@ document.addEventListener('DOMContentLoaded', () => {
       : "ファイルを選択してください";
   });
 
-  analyzeBtn.addEventListener("click", async () => {
-    const regionName = document.getElementById("regionName").value.trim();
-    const userNote = document.getElementById("userNote").value.trim();
+analyzeBtn.addEventListener("click", async () => {
+  const regionName = document.getElementById("regionName").value.trim();
+  const userNote = document.getElementById("userNote").value.trim();
 
-    updateGoogleMap(regionName);
-    if (!regionName || !userNote) {
-      alert("地域名とテーマは両方入力してください。");
-      return;
-    }
+  // 入力チェック：どちらも必須
+  if (!regionName) {
+    alert("地域名を入力してください。");
+    return;
+  }
 
-    const originalBtnText = analyzeBtn.innerText;
-    analyzeBtn.innerText = "課題抽出中…";
-    analyzeBtn.disabled = true;
+  if (!userNote) {
+    alert("テーマや自由記述を入力してください。");
+    return;
+  }
 
-    const prompt = `${regionName}について、テーマ「${userNote}」に基づく地域課題を抽出してください。\n以下の内容について、最大トークン数500以内で、最大5つまでの地域課題を簡潔に挙げてください。各課題は1〜2文で記述し、原因や背景が簡潔に分かるようにしてください。`;
+  // 地図を初回だけ表示（多重防止付き）
+  updateGoogleMap(regionName);
 
-    try {
-      await fetchChatGPTResponse(prompt);
-    } catch (error) {
-      console.error("抽出中に問題が発生しました:", error);
-      alert("課題抽出に失敗しました。");
-    } finally {
-      analyzeBtn.innerText = originalBtnText;
-      analyzeBtn.disabled = false;
-    }
-  });
+  const originalBtnText = analyzeBtn.innerText;
+  analyzeBtn.innerText = "課題抽出中…";
+  analyzeBtn.disabled = true;
+
+  const prompt = `${regionName}について、テーマ「${userNote}」に基づく地域課題を抽出してください。\n以下の内容について、最大トークン数500以内で、最大5つまでの地域課題を簡潔に挙げてください。各課題は1〜2文で記述し、原因や背景が簡潔に分かるようにしてください。`;
+
+  try {
+    await fetchChatGPTResponse(prompt);
+  } catch (error) {
+    console.error("抽出中に問題が発生しました:", error);
+    alert("課題抽出に失敗しました。");
+  } finally {
+    analyzeBtn.innerText = originalBtnText;
+    analyzeBtn.disabled = false;
+  }
+});
+
 
   async function fetchChatGPTResponse(prompt) {
     const response = await fetch("/api/chatgpt", {
