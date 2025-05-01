@@ -1,3 +1,4 @@
+
 document.addEventListener("DOMContentLoaded", () => {
   const resultsContainer = document.getElementById("resultsContainer");
   const modal = document.getElementById("detailModal");
@@ -17,6 +18,10 @@ document.addEventListener("DOMContentLoaded", () => {
         viewpointTag.className = "viewpoint-tag";
         viewpointTag.textContent = item.viewpoint;
 
+        const note = document.createElement("p");
+        note.className = "card-note";
+        note.textContent = item.note || "";
+
         const title = document.createElement("h3");
         title.textContent = item.strategy;
 
@@ -25,10 +30,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
         const kpi = document.createElement("p");
         kpi.innerHTML = `<strong>KPI:</strong> ${item.kpi}`;
-
-        const note = document.createElement("p");
-        note.className = "card-note";
-        note.textContent = item.note || "";
 
         const detailBtn = document.createElement("button");
         detailBtn.className = "detail-button";
@@ -41,17 +42,17 @@ document.addEventListener("DOMContentLoaded", () => {
         addPriorityBtn.addEventListener("click", () => addToCompareList(item));
 
         card.appendChild(viewpointTag);
+        card.appendChild(note);
         card.appendChild(title);
         card.appendChild(policy);
         card.appendChild(kpi);
-        card.appendChild(note);
         card.appendChild(detailBtn);
         card.appendChild(addPriorityBtn);
 
         resultsContainer.appendChild(card);
       });
     })
-    .catch((err) => console.error("\u274c JSON読み込みエラー:", err));
+    .catch((err) => console.error("❌ JSON読み込みエラー:", err));
 
   function showDetailModal(item) {
     modalBody.innerHTML = `
@@ -62,7 +63,6 @@ document.addEventListener("DOMContentLoaded", () => {
       <button class="add-priority-button" id="modalAddBtn">優先リストに追加</button>
     `;
     modal.style.display = "block";
-
     document.getElementById("modalAddBtn").addEventListener("click", () => {
       addToCompareList(item);
     });
@@ -99,6 +99,10 @@ document.addEventListener("DOMContentLoaded", () => {
     const kpi = document.createElement("p");
     kpi.innerHTML = `<strong>KPI:</strong> ${item.kpi}`;
 
+    const note = document.createElement("p");
+    note.className = "card-note";
+    note.textContent = item.note || "";
+
     const removeBtn = document.createElement("button");
     removeBtn.className = "remove-btn";
     removeBtn.textContent = "削除";
@@ -109,6 +113,7 @@ document.addEventListener("DOMContentLoaded", () => {
     card.appendChild(title);
     card.appendChild(policy);
     card.appendChild(kpi);
+    card.appendChild(note);
     card.appendChild(removeBtn);
 
     compareList.appendChild(card);
