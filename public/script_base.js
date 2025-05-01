@@ -1,103 +1,127 @@
 document.addEventListener("DOMContentLoaded", () => {
-  const analyzeBtn = document.getElementById("analyzeBtn");
-  const regionInput = document.getElementById("regionName");
-  const userNoteInput = document.getElementById("userNote");
-  const canvasResult = document.getElementById("canvasResult");
-  const miniMap = document.getElementById("miniMap");
-  const nexcoToggleBtn = document.getElementById("toggleNexcoBtn");
-  const nexcoInfo = document.getElementById("nexcoInfo");
+  const resultsContainer = document.getElementById("resultsContainer");
+  const modal = document.getElementById("detailModal");
+  const modalBody = document.getElementById("modalBody");
+  const closeModalBtn = document.querySelector(".close-button");
 
-  // 画面上のアラート表示用エリア
-  const alertArea = document.getElementById("alertArea") || (() => {
-    const div = document.createElement("div");
-    div.id = "alertArea";
-    div.style.color = "red";
-    div.style.fontWeight = "bold";
-    div.style.padding = "0.5em";
-    div.style.marginBottom = "1em";
-    document.body.insertBefore(div, document.body.firstChild);
-    return div;
-  })();
+  const JSON_PATH = "coremaster_real_20_refined.json";
 
-  function showAlert(msg) {
-    alertArea.textContent = msg;
-    setTimeout(() => {
-      alertArea.textContent = "";
-    }, 4000);
+  fetch(JSON_PATH)
+    .then((res) => res.json())
+    .then((data) => {
+      data.forEach((item) => {
+        const card = document.createElement("div");
+        card.className = "card";
+
+        // 視点タグ
+        const viewpointTag = document.createElement("div");
+        viewpointTag.className = "viewpoint-tag";
+        viewpointTag.textContent = item.viewpoint;
+
+        switch (item.viewpointKey) {
+          case "finance":
+            viewpointTag.classList.add("viewpoint-finance");
+            break;
+          case "customer":
+            viewpointTag.classList.add("viewpoint-customer");
+            break;
+          case "process":
+            viewpointTag.classList.add("viewpoint-process");
+            break;
+          case "learning":
+            viewpointTag.classList.add("viewpoint-growth");
+            break;
+        }
+
+        const title = document.createElement("h3");
+        title.textContent = item.strategy;
+
+        const policy = document.createElement("p");
+        policy.textContent = item.policy;
+
+        const kpi = document.createElement("p");
+        kpi.innerHTML = `<strong>KPI:</strong> ${item.kpi}`;
+
+        // 詳細ボタン
+        const detailBtn = document.createElement("button");
+        detailBtn.className = "detail-button";
+        detailBtn.textContent = "詳細を見る";
+        detailBtn.addEventListener("click", () => showDetailModal(item));
+
+        // 優先追加ボタン
+        const addPriorityBtn = document.createElement("button");
+        addPriorityBtn.className = "add-priority-button";
+        addPriorityBtn.textContent = "優先に追加";
+        addPriorityBtn.addEventListener("click", () => addToCompareList(item));
+
+        card.appendChild(viewpointTag);
+        card.appendChild(title);
+        card.appendChild(policy);
+        card.appendChild(kpi);
+        card.appendChild(detailBtn);
+        card.appendChild(addPriorityBtn);
+
+        resultsContainer.appendChild(card);
+      });
+    })
+    .catch((err) => console.error("❌ JSON読み込みエラー:", err));
+
+  // モーダル表示
+  function showDetailModal(item) {
+    modalBody.innerHTML = `
+      <h2>${item.strategy}</h2>
+      <p><strong>施策:</strong> ${item.policy}</p>
+      <p><strong>KPI:</strong> ${item.kpi}</p>
+      <p><strong>注釈:</strong> ${item.note}</p>
+    `;
+    modal.style.display = "block";
   }
 
-  let hasFetched = false;
+  closeModalBtn.addEventListener("click", () => {
+    modal.style.display = "none";
+  });
 
-  analyzeBtn.addEventListener("click", async () => {
-    const region = regionInput.value.trim();
-    const note = userNoteInput.value.trim();
-
-    if (!region && !note) {
-      showAlert("地域名とテーマの両方を入力してください。");
-      return;
-    } else if (!region) {
-      showAlert("地域名を入力してください。");
-      return;
-    } else if (!note) {
-      showAlert("テーマや自由記述を入力してください。");
-      return;
-    }
-
-    if (hasFetched) {
-      showAlert("すでに課題は抽出されています。ページを更新することで再実行できます。");
-      return;
-    }
-
-    hasFetched = true;
-
-    const prompt = `${region}について、テーマ「${note}」に基づく地域課題を抽出してください。`;
-    canvasResult.textContent = "課題抽出中...";
-
-    try {
-      const response = await fetch("https://sora-kpi.vercel.app/api/gpt", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ prompt })
-      });
-
-      if (!response.ok) {
-        throw new Error(`ChatGPT APIエラー: ${response.status}`);
-      }
-
-      const data = await response.json();
-      canvasResult.innerHTML = `<pre>${data.text}</pre>`;
-
-      // GPT応答後に地図描画
-      miniMap.innerHTML = `<iframe width="100%" height="200" frameborder="0" style="border:0" src="https://www.google.com/maps?q=${encodeURIComponent(region)}&output=embed" allowfullscreen></iframe>`;
-    } catch (error) {
-      canvasResult.textContent = "エラーが発生しました。";
-      console.error("ChatGPT APIエラー:", error);
-      showAlert("課題抽出中にエラーが発生しました。管理者に連絡してください。");
+  window.addEventListener("click", (event) => {
+    if (event.target === modal) {
+      modal.style.display = "none";
     }
   });
 
-  // NEXCO連動（表示/非表示トグル）
-  nexcoToggleBtn.addEventListener("click", async () => {
-    if (nexcoInfo.style.display === "block") {
-      nexcoInfo.style.display = "none";
-      nexcoToggleBtn.textContent = "NEXCO情報を表示";
-    } else {
-      nexcoInfo.textContent = "NEXCO情報を取得中...";
-      nexcoInfo.style.display = "block";
-      nexcoToggleBtn.textContent = "NEXCO情報を閉じる";
+  // 優先リストに追加
+function addToCompareList(item) {
+  const compareList = document.getElementById("compareListContainer");
 
-      try {
-        const region = regionInput.value.trim();
-        const response = await fetch(`https://sora-kpi.vercel.app/api/nexco?region=${encodeURIComponent(region)}`);
-        if (!response.ok) throw new Error("NEXCO API応答エラー");
-        const data = await response.text();
-        nexcoInfo.innerHTML = `<pre>${data}</pre>`;
-      } catch (error) {
-        nexcoInfo.textContent = "NEXCO情報の取得に失敗しました。";
-        console.error("NEXCO APIエラー:", error);
-      }
-    }
+  if (document.getElementById(`compare-${item.id}`)) {
+    alert("この施策は既に優先リストに追加されています。");
+    return;
+  }
+
+  const card = document.createElement("div");
+  card.className = "card";
+  card.id = `compare-${item.id}`;
+
+  const title = document.createElement("h3");
+  title.textContent = item.strategy;
+
+  const policy = document.createElement("p");
+  policy.textContent = item.policy;
+
+  const kpi = document.createElement("p");
+  kpi.innerHTML = `<strong>KPI:</strong> ${item.kpi}`;
+
+  // 削除ボタン
+  const removeBtn = document.createElement("button");
+  removeBtn.className = "remove-btn";
+  removeBtn.textContent = "削除";
+  removeBtn.addEventListener("click", () => {
+    compareList.removeChild(card);
   });
+
+  card.appendChild(title);
+  card.appendChild(policy);
+  card.appendChild(kpi);
+  card.appendChild(removeBtn);
+
+  compareList.appendChild(card);
+}
 });
