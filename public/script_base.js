@@ -10,6 +10,11 @@ document.addEventListener("DOMContentLoaded", () => {
   let hasFetched = false;
 
   analyzeBtn.addEventListener("click", async () => {
+    if (hasFetched) {
+      alert("すでに課題は抽出されています。ページを更新することで再実行できます。");
+      return;
+    }
+
     const region = regionInput.value.trim();
     const note = userNoteInput.value.trim();
 
@@ -21,11 +26,6 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     } else if (!note) {
       alert("テーマや自由記述を入力してください。");
-      return;
-    }
-
-    if (hasFetched) {
-      alert("すでに課題は抽出されています。ページを更新することで再実行できます。");
       return;
     }
 
@@ -56,6 +56,7 @@ document.addEventListener("DOMContentLoaded", () => {
       canvasResult.textContent = "エラーが発生しました。";
       console.error("ChatGPT APIエラー:", error);
       alert("課題抽出中にエラーが発生しました。管理者に連絡してください。");
+      hasFetched = false; // エラー時は再試行を許可
     }
   });
 
