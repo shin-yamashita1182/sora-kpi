@@ -191,10 +191,6 @@ document.getElementById("resultsContainer")?.scrollIntoView({ behavior: "smooth"
 resultsContainer.classList.add("highlight");
 setTimeout(() => resultsContainer.classList.remove("highlight"), 1500);
         
-        // 📍スクロール＆ハイライト表示
-document.getElementById("resultsContainer")?.scrollIntoView({ behavior: "smooth" });
-resultsContainer.classList.add("highlight");
-setTimeout(() => resultsContainer.classList.remove("highlight"), 1500);
 　});
     } catch (error) {
       console.error("抽出中に問題が発生しました:", error);
