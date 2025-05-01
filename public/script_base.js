@@ -46,7 +46,7 @@ document.getElementById("analyzeBtn").addEventListener("click", () => {
   
   loadMap(region);
   fetchChatGPTResponse(prompt);
-  // === 追加: 多重呼び出し制御用フラグ ===
+// === 追加: 多重呼び出し制御用フラグ ===
 let chatInProgress = false;
 let mapLoaded = false;
 
@@ -98,4 +98,5 @@ document.getElementById("analyzeBtn").addEventListener("click", () => {
   loadMap(region);
   fetchChatGPTResponse(prompt);
 });
+
 });
