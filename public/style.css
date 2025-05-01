@@ -283,16 +283,15 @@ button:hover {
 
 /* -------------------- アコーディオン修正 -------------------- */
 .accordion-content {
-  display: none;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
   gap: 16px;
-  justify-content: flex-start;
-  transition: all 0.3s ease-in-out;
+  padding-top: 8px;
 }
 
-.accordion-content.open {
-  display: flex !important;
-  max-height: 3000px;
+.accordion-content .card {
+  width: 100%;
+  box-sizing: border-box;
 }
 
 /* -------------------- モーダル -------------------- */
