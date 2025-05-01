@@ -191,7 +191,6 @@ document.getElementById("resultsContainer")?.scrollIntoView({ behavior: "smooth"
 resultsContainer.classList.add("highlight");
 setTimeout(() => resultsContainer.classList.remove("highlight"), 1500);
         
-　});
     } catch (error) {
       console.error("抽出中に問題が発生しました:", error);
       alert("課題抽出に失敗しました。");
