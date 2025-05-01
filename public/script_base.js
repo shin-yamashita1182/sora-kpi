@@ -131,12 +131,6 @@ document.addEventListener('DOMContentLoaded', () => {
     if (analysisDone) {
       alert("すでに課題抽出が完了しています。ページを更新するか、条件を変更してください。");
       return;
-    // 📍戦略リストをスムーズに表示エリアへスクロール
-document.getElementById("resultsContainer")?.scrollIntoView({ behavior: "smooth" });
-
-// 📍戦略リスト表示エリアにハイライト効果を一時的に付与
-resultsContainer.classList.add("highlight");
-setTimeout(() => resultsContainer.classList.remove("highlight"), 1500);
     }
 
     const regionName = document.getElementById("regionName").value.trim();
@@ -169,28 +163,34 @@ setTimeout(() => resultsContainer.classList.remove("highlight"), 1500);
       coreMasterContainer.innerHTML = "";
 
       data.forEach((item, index) => {
-        const card = document.createElement("div");
-        card.className = "card";
-        card.setAttribute("data-index", index);
+  const card = document.createElement("div");
+  card.className = "card";
+  card.setAttribute("data-index", index);
 
-        let color = "#ccc";
-        if (item.perspective.includes("財務")) color = "#cce5ff";
-        else if (item.perspective.includes("顧客")) color = "#d4edda";
-        else if (item.perspective.includes("内部")) color = "#fff3cd";
-        else if (item.perspective.includes("学習")) color = "#f8d7da";
+  let color = "#ccc";
+  if (item.perspective.includes("財務")) color = "#cce5ff";
+  else if (item.perspective.includes("顧客")) color = "#d4edda";
+  else if (item.perspective.includes("内部")) color = "#fff3cd";
+  else if (item.perspective.includes("学習")) color = "#f8d7da";
 
-        card.innerHTML = `
-          <div style="padding: 10px; border-left: 6px solid ${color}; margin-bottom: 10px;">
-            <h3>${item.title}</h3>
-            <p><strong>KPI:</strong> ${item.kpi}</p>
-            <p style="font-size: 12px; color: #666;"><strong>${item.perspective}</strong> - ${item.note}</p>
-            <div style="text-align: center; margin-top: 10px;">
-              <button class="add-to-priority">優先に追加</button>
-            </div>
-          </div>
-        `;
+  card.innerHTML = `
+    <div style="padding: 10px; border-left: 6px solid ${color}; margin-bottom: 10px;">
+      <h3>${item.title}</h3>
+      <p><strong>KPI:</strong> ${item.kpi}</p>
+      <p style="font-size: 12px; color: #666;"><strong>${item.perspective}</strong> - ${item.note}</p>
+      <div style="text-align: center; margin-top: 10px;">
+        <button class="add-to-priority">優先に追加</button>
+      </div>
+    </div>
+  `;
+  coreMasterContainer.appendChild(card);
+});
 
-        coreMasterContainer.appendChild(card);
+// ✅ スクロール＋ハイライトをここに書く！
+document.getElementById("resultsContainer")?.scrollIntoView({ behavior: "smooth" });
+resultsContainer.classList.add("highlight");
+setTimeout(() => resultsContainer.classList.remove("highlight"), 1500);
+        
         // 📍スクロール＆ハイライト表示
 document.getElementById("resultsContainer")?.scrollIntoView({ behavior: "smooth" });
 resultsContainer.classList.add("highlight");
