@@ -447,3 +447,97 @@ footer {
   width: 80%;
   margin: 10px auto 0 auto;
 }
+/* ✅ 正しい Mind Trigger カードUI 用スタイル */
+
+.card {
+  background-color: #ffffff;
+  padding: 16px;
+  margin-bottom: 16px;
+  border-radius: 8px;
+  border: 1px solid #dee2e6;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.card h3 {
+  margin: 12px 0 8px;
+  font-size: 18px;
+}
+
+.card-note {
+  font-size: 13px;
+  color: #6c757d;
+  margin-top: 6px;
+}
+
+.viewpoint-tag {
+  font-size: 13px;
+  font-weight: bold;
+  padding: 4px 8px;
+  color: white;
+  border-radius: 4px;
+  display: inline-block;
+  margin-bottom: 4px;
+}
+
+.viewpoint-finance .viewpoint-tag {
+  background-color: #dc3545;
+}
+
+.viewpoint-customer .viewpoint-tag {
+  background-color: #0d6efd;
+}
+
+.viewpoint-process .viewpoint-tag {
+  background-color: #198754;
+}
+
+.viewpoint-growth .viewpoint-tag {
+  background-color: #fd7e14;
+}
+
+.card.viewpoint-finance,
+.card.viewpoint-customer,
+.card.viewpoint-process,
+.card.viewpoint-growth {
+  border-left: 6px solid #dee2e6;
+}
+
+.card-buttons {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.detail-button,
+.add-priority-button {
+  width: 80%;
+  padding: 10px 12px;
+  border: none;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.detail-button {
+  background-color: #28a745;
+  color: white;
+}
+
+.detail-button:hover {
+  background-color: #218838;
+}
+
+.add-priority-button {
+  background-color: #0d6efd;
+  color: white;
+}
+
+.add-priority-button:hover {
+  background-color: #0b5ed7;
+}
