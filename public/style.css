@@ -541,3 +541,6 @@ footer {
 .add-priority-button:hover {
   background-color: #0b5ed7;
 }
+.card { ... }
+.viewpoint-tag { ... }
+.detail-button { ... }
