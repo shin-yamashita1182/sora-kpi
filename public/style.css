@@ -344,3 +344,28 @@ footer {
 .modal-content .add-priority-button:hover {
   background-color: #0b5ed7;
 }
+
+/* カードの視点別背景色とスタイル */
+
+.card.viewpoint-finance {
+  border-left: 6px solid #dc3545; /* 赤 */
+}
+
+.card.viewpoint-customer {
+  border-left: 6px solid #0d6efd; /* 青 */
+}
+
+.card.viewpoint-process {
+  border-left: 6px solid #198754; /* 緑 */
+}
+
+.card.viewpoint-growth {
+  border-left: 6px solid #6f42c1; /* 紫 */
+}
+
+/* 注釈表示（小さく・グレー） */
+.card-note {
+  font-size: 12px;
+  color: #6c757d;
+  margin-top: 6px;
+}
