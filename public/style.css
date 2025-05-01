@@ -1,6 +1,6 @@
-/* ====== SORA Dashboard CSS 完全統合版（NEXCO + アコーディオン修正含む）====== */
+/* ====== SORA Dashboard 完全CSS統一版（2025-05-01） ====== */
 
-/* -------------------- 基本レイアウト -------------------- */
+/* ---------- 基本レイアウト ---------- */
 body {
   font-family: 'Segoe UI', sans-serif;
   background-color: #f8f9fa;
@@ -45,7 +45,7 @@ header {
   overflow-x: auto;
 }
 
-/* -------------------- セクション共通 -------------------- */
+/* ---------- セクション共通 ---------- */
 .input-section,
 .results-section,
 .compare-section,
@@ -55,10 +55,10 @@ header {
   border-radius: 5px;
   padding: 15px;
   margin-bottom: 20px;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 1px 2px rgba(0,0,0,0.05);
 }
 
-/* -------------------- 入力フィールド -------------------- */
+/* ---------- 入力フィールド ---------- */
 .input-map-wrapper {
   display: flex;
   gap: 20px;
@@ -110,14 +110,14 @@ header {
   border-radius: 8px;
 }
 
-/* -------------------- カードレイアウト -------------------- */
+/* ---------- カードレイアウト ---------- */
 .card {
   background-color: #ffffff;
   padding: 16px;
   margin-bottom: 16px;
   border-radius: 8px;
   border: 1px solid #dee2e6;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -138,21 +138,10 @@ header {
   margin-bottom: 4px;
 }
 
-.viewpoint-finance .viewpoint-tag {
-  background-color: #dc3545;
-}
-
-.viewpoint-customer .viewpoint-tag {
-  background-color: #0d6efd;
-}
-
-.viewpoint-process .viewpoint-tag {
-  background-color: #198754;
-}
-
-.viewpoint-growth .viewpoint-tag {
-  background-color: #fd7e14;
-}
+.viewpoint-finance .viewpoint-tag { background-color: #dc3545; }
+.viewpoint-customer .viewpoint-tag { background-color: #0d6efd; }
+.viewpoint-process .viewpoint-tag  { background-color: #198754; }
+.viewpoint-growth .viewpoint-tag   { background-color: #fd7e14; }
 
 .card-note {
   font-size: 13px;
@@ -160,7 +149,7 @@ header {
   margin-top: 6px;
 }
 
-/* -------------------- ボタンスタイル -------------------- */
+/* ---------- ボタンスタイル ---------- */
 button {
   background-color: #007bff;
   color: white;
@@ -172,6 +161,15 @@ button {
 }
 
 button:hover {
+  background-color: #0056b3;
+}
+
+#toggleNexcoBtn {
+  background-color: #007bff;
+  color: white;
+}
+
+#toggleNexcoBtn:hover {
   background-color: #0056b3;
 }
 
@@ -187,21 +185,11 @@ button:hover {
   font-weight: bold;
 }
 
-#generateBtn {
-  background-color: #007bff;
-}
+#generateBtn { background-color: #007bff; }
+#generateBtn:hover { background-color: #0056b3; }
 
-#generateBtn:hover {
-  background-color: #0056b3;
-}
-
-#analyzeBtn {
-  background-color: #28a745;
-}
-
-#analyzeBtn:hover {
-  background-color: #1e7e34;
-}
+#analyzeBtn { background-color: #28a745; }
+#analyzeBtn:hover { background-color: #1e7e34; }
 
 .remove-btn {
   background-color: #dc3545;
@@ -231,7 +219,6 @@ button:hover {
 .detail-button {
   background-color: #28a745;
 }
-
 .detail-button:hover {
   background-color: #218838;
 }
@@ -239,62 +226,45 @@ button:hover {
 .add-priority-button {
   background-color: #0d6efd;
 }
-
 .add-priority-button:hover {
   background-color: #0b5ed7;
 }
 
-#toggleNexcoBtn {
-  background-color: #0d6efd;
-  color: white;
-  font-weight: bold;
-  padding: 8px 14px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-#toggleNexcoBtn:hover {
-  background-color: #0b5ed7;
-}
-
-/* -------------------- レスポンシブ -------------------- */
-#resultsContainer,
-#compareListContainer {
+/* ---------- 戦略リスト（グリッド4列） ---------- */
+#coreMasterContainer {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 16px;
-  margin-top: 15px;
 }
 
+/* ---------- レスポンシブ対応 ---------- */
 @media (max-width: 768px) {
-  #resultsContainer,
-  #compareListContainer {
+  #coreMasterContainer {
     grid-template-columns: repeat(2, 1fr);
   }
 }
-
 @media (max-width: 480px) {
-  #resultsContainer,
-  #compareListContainer {
+  #coreMasterContainer {
     grid-template-columns: 1fr;
   }
 }
 
-/* -------------------- アコーディオン修正 -------------------- */
-/* 強制的に4列にする修正 */
+/* ---------- アコーディオン ---------- */
 .accordion-content {
-  display: grid !important;
-  grid-template-columns: repeat(4, 1fr) !important;
+  display: flex;
+  flex-wrap: wrap;
   gap: 16px;
+  justify-content: flex-start;
 }
 .accordion-content .card {
-  width: 100% !important;
+  width: 100%;
   box-sizing: border-box;
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
 }
 
-
-/* -------------------- モーダル -------------------- */
+/* ---------- モーダル ---------- */
 .modal {
   display: none;
   position: fixed;
@@ -304,7 +274,7 @@ button:hover {
   width: 100%;
   height: 100%;
   overflow: auto;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0,0,0,0.5);
 }
 
 .modal-content {
@@ -323,14 +293,13 @@ button:hover {
   font-size: 28px;
   font-weight: bold;
 }
-
 .close-button:hover,
 .close-button:focus {
   color: black;
   cursor: pointer;
 }
 
-/* -------------------- キャンバス -------------------- */
+/* ---------- キャンバス ---------- */
 #canvasResult {
   white-space: pre-wrap;
   word-break: break-word;
@@ -342,10 +311,10 @@ button:hover {
   font-size: 16px;
   overflow-y: auto;
   color: #000000;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
 }
 
-/* -------------------- NEXCO表示 -------------------- */
+/* ---------- NEXCO 表示 ---------- */
 #nexcoInfoBox {
   display: none !important;
   max-height: 0;
@@ -362,7 +331,7 @@ button:hover {
   border: 1px solid #ccc;
 }
 
-/* -------------------- ハイライト効果 -------------------- */
+/* ---------- ハイライト効果 ---------- */
 .highlight {
   animation: blink 1.5s ease-in-out;
   border: 2px solid #0d6efd;
@@ -375,7 +344,7 @@ button:hover {
   100% { background-color: #e6f7ff; }
 }
 
-/* -------------------- フッター -------------------- */
+/* ---------- フッター ---------- */
 footer {
   text-align: center;
   font-size: 12px;
