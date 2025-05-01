@@ -290,3 +290,27 @@ try {
     }
   }
 });
+// 優先リストへの追加処理
+document.getElementById("coreMasterContainer").addEventListener("click", (event) => {
+  if (event.target.classList.contains("add-to-priority")) {
+    const cardEl = event.target.closest(".card");
+    const title = cardEl.querySelector("h3")?.textContent;
+    const kpi = cardEl.querySelector("p strong")?.textContent;
+
+    const exists = [...document.querySelectorAll("#compareListContainer .card")]
+      .some(card => card.querySelector("h3")?.textContent === title);
+
+    if (!exists) {
+      const card = document.createElement("div");
+      card.className = "card";
+      card.innerHTML = `
+        <h3>${title}</h3>
+        <p><strong>KPI:</strong> ${kpi}</p>
+        <div style="text-align: right;">
+          <button class="remove-btn">削除</button>
+        </div>
+      `;
+      document.getElementById("compareListContainer").appendChild(card);
+    }
+  }
+});
