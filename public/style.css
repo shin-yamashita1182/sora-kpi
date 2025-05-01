@@ -544,3 +544,21 @@ footer {
 .card { ... }
 .viewpoint-tag { ... }
 .detail-button { ... }
+}
+
+                .accordion-content {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  justify-content: flex-start;
+}
+
+.accordion-content .card {
+  width: calc(25% - 16px); /* 4列分に調整 */
+  box-sizing: border-box;
+  background: white;
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.04);
+}
