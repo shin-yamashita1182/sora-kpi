@@ -295,4 +295,13 @@ document.addEventListener('DOMContentLoaded', () => {
       statusBox.textContent = isAccordionOpen ? "NEXCO情報を表示中" : "NEXCO情報を非表示にしました";
     }
   }
+document.getElementById("compareListContainer").addEventListener("click", (event) => {
+  if (event.target.classList.contains("detail-button")) {
+    alert("詳細モーダルを表示（仮動作）");
+  }
+  if (event.target.classList.contains("add-priority-button")) {
+    alert("マインドマップ生成！（仮動作）");
+  }
+});
+
 });
