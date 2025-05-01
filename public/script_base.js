@@ -101,8 +101,9 @@ function addToCompareList(item) {
     return;
   }
 
-  const card = document.createElement("div");
-  card.className = "card";
+  // ↓↓↓ ここをこのように変更！
+  card.className = `card viewpoint-${item.viewpointKey}`;
+
   card.id = `compare-${item.id}`;
 
   const title = document.createElement("h3");
@@ -128,5 +129,10 @@ function addToCompareList(item) {
   card.appendChild(removeBtn);
 
   compareList.appendChild(card);
+// 注釈の要素
+const note = document.createElement("p");
+note.className = "card-note";
+note.textContent = item.note || "";  // 空でもOK
+card.appendChild(note);
 }
 });
