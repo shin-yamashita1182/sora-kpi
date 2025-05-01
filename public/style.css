@@ -282,17 +282,17 @@ button:hover {
 }
 
 /* -------------------- アコーディオン修正 -------------------- */
+/* 強制的に4列にする修正 */
 .accordion-content {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  display: grid !important;
+  grid-template-columns: repeat(4, 1fr) !important;
   gap: 16px;
-  padding-top: 8px;
 }
-
 .accordion-content .card {
-  width: 100%;
+  width: 100% !important;
   box-sizing: border-box;
 }
+
 
 /* -------------------- モーダル -------------------- */
 .modal {
