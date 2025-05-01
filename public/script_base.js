@@ -125,7 +125,14 @@ document.addEventListener('DOMContentLoaded', () => {
       : "ファイルを選択してください";
   });
 
+let analysisDone = false;
+
 analyzeBtn.addEventListener("click", async () => {
+  if (analysisDone) {
+    alert("すでに課題抽出が完了しています。ページを更新するか、条件を変更してください。");
+    return;
+  }
+
   const regionName = document.getElementById("regionName").value.trim();
   const userNote = document.getElementById("userNote").value.trim();
 
@@ -151,6 +158,7 @@ analyzeBtn.addEventListener("click", async () => {
 
   try {
     await fetchChatGPTResponse(prompt);
+    analysisDone = true; // ✅ ここで一度だけ実行済みに
   } catch (error) {
     console.error("抽出中に問題が発生しました:", error);
     alert("課題抽出に失敗しました。");
@@ -159,6 +167,7 @@ analyzeBtn.addEventListener("click", async () => {
     analyzeBtn.disabled = false;
   }
 });
+
 
 
   async function fetchChatGPTResponse(prompt) {
