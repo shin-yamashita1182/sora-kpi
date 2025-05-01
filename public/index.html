@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>SORA Dashboard Refine</title>
   <link rel="stylesheet" href="style.css">
-  <link rel="stylesheet" href="coremaster_style.css">
 </head>
 <body>
   <header>
@@ -85,9 +84,6 @@
         </div>
       </section>
 
-      <!-- 戦略カードを表示する領域 -->
-<div id="resultsContainer"></div>
-      
       <section class="compare-section">
         <h2>優先リスト（重点実施）</h2>
         <div id="compareListContainer" class="card-container">
@@ -98,13 +94,11 @@
 
   <!-- モーダル（詳細） -->
   <div id="detailModal" class="modal">
-  <div class="modal-content">
-    <span class="close-button" id="closeModal">&times;</span>
-    <small id="modal-title" class="modal-subtitle"></small>
-    <h2 id="modal-content" class="modal-maintext"></h2>
-    <p id="modal-kpi" class="modal-kpi"></p>
+    <div class="modal-content">
+      <span class="close-button" id="closeModal">&times;</span>
+      <div id="modalBody"></div>
+    </div>
   </div>
-</div>
 
   <!-- モーダル（地図拡大） -->
   <div id="mapModal" class="modal">
@@ -120,11 +114,9 @@
 
   <!-- スクリプト読み込み -->
   <script src="script_base.js" defer></script>
-  
+  <script src="script_kankou.js" defer></script>
 <!-- 🔵 これを追加！ -->
 <script src="map_controller.js" defer></script>
-<script src="mindmap_controller.js" defer></script>
-<script src="script_coremaster.js" defer></script> <!-- ← これを追加！ -->
 
 </body>
 </html>
