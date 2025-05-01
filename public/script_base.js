@@ -7,19 +7,44 @@ document.addEventListener("DOMContentLoaded", () => {
   const nexcoToggleBtn = document.getElementById("toggleNexcoBtn");
   const nexcoInfo = document.getElementById("nexcoInfo");
 
+  // アラート表示エリアの自動生成
+  const alertArea = document.getElementById("alertArea") || (() => {
+    const div = document.createElement("div");
+    div.id = "alertArea";
+    div.style.color = "red";
+    div.style.fontWeight = "bold";
+    div.style.padding = "0.5em";
+    div.style.marginBottom = "1em";
+    document.body.insertBefore(div, document.body.firstChild);
+    return div;
+  })();
+
+  function showAlert(msg) {
+    alertArea.textContent = msg;
+    setTimeout(() => {
+      alertArea.textContent = "";
+    }, 4000);
+  }
+
   let hasFetched = false;
 
   analyzeBtn.addEventListener("click", async () => {
     const region = regionInput.value.trim();
     const note = userNoteInput.value.trim();
 
-    if (!region || !note) {
-      alert("地域名とテーマを両方入力してください。");
+    if (!region && !note) {
+      showAlert("地域名とテーマの両方を入力してください。");
+      return;
+    } else if (!region) {
+      showAlert("地域名を入力してください。");
+      return;
+    } else if (!note) {
+      showAlert("テーマや自由記述を入力してください。");
       return;
     }
 
     if (hasFetched) {
-      alert("すでに課題は抽出されています。ページを更新して再実行してください。");
+      showAlert("すでに課題は抽出されています。ページを更新することで再実行できます。");
       return;
     }
 
@@ -44,12 +69,12 @@ document.addEventListener("DOMContentLoaded", () => {
       const data = await response.json();
       canvasResult.innerHTML = `<pre>${data.text}</pre>`;
 
-      // ChatGPT応答後に初めて地図を表示
+      // 地図表示はGPT応答後にのみ行う
       miniMap.innerHTML = `<iframe width="100%" height="200" frameborder="0" style="border:0" src="https://www.google.com/maps?q=${encodeURIComponent(region)}&output=embed" allowfullscreen></iframe>`;
-
     } catch (error) {
       canvasResult.textContent = "エラーが発生しました。";
       console.error("ChatGPT APIエラー:", error);
+      showAlert("課題抽出中にエラーが発生しました。管理者に連絡してください。");
     }
   });
 
@@ -76,3 +101,4 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 });
+
