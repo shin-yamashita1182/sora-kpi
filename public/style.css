@@ -369,3 +369,31 @@ footer {
   color: #6c757d;
   margin-top: 6px;
 }
+
+/* 既存のCSSコード（省略済）... */
+
+
+/* 視点タグ（ラベル）スタイル */
+.viewpoint-tag {
+  font-size: 13px;
+  font-weight: bold;
+  padding: 4px 8px;
+  color: white;
+  border-radius: 4px;
+  margin-bottom: 4px;
+  display: inline-block;
+}
+
+/* 個別視点の背景色（ラベル） */
+.viewpoint-finance .viewpoint-tag {
+  background-color: #dc3545;
+}
+.viewpoint-customer .viewpoint-tag {
+  background-color: #0d6efd;
+}
+.viewpoint-process .viewpoint-tag {
+  background-color: #198754;
+}
+.viewpoint-growth .viewpoint-tag {
+  background-color: #fd7e14;
+}
