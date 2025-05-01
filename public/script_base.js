@@ -8,8 +8,14 @@ document.addEventListener("DOMContentLoaded", () => {
     const region = regionInput.value.trim();
     const note = userNoteInput.value.trim();
 
-    if (!region || !note) {
-      alert("地域名とテーマを入力してください。");
+    if (!region && !note) {
+      alert("地域名とテーマの両方を入力してください。");
+      return;
+    } else if (!region) {
+      alert("地域名を入力してください。");
+      return;
+    } else if (!note) {
+      alert("テーマや自由記述を入力してください。");
       return;
     }
 
@@ -25,6 +31,11 @@ document.addEventListener("DOMContentLoaded", () => {
         },
         body: JSON.stringify({ prompt })
       });
+
+      const contentType = response.headers.get("content-type");
+      if (!contentType || !contentType.includes("application/json")) {
+        throw new Error("ChatGPT APIが無効な応答を返しました。");
+      }
 
       const data = await response.json();
       canvasResult.innerHTML = `<pre>${data.text}</pre>`;
