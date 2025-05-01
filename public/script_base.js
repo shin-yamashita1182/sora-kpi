@@ -83,10 +83,13 @@ document.addEventListener('DOMContentLoaded', () => {
         const card = document.createElement('div');
         card.className = 'card';
         card.innerHTML = `
+          <span class="viewpoint-tag">${item.perspective}</span>
           <h3>${item.title}</h3>
           <p><strong>KPI:</strong> ${item.kpi}</p>
-          <div style="text-align: right;">
-            <button class="remove-btn">削除</button>
+          <p class="card-note">${item.note}</p>
+          <div class="card-buttons">
+            <button class="detail-button">詳細</button>
+            <button class="add-priority-button">マインドマップ</button>
           </div>
         `;
         compareListContainer.appendChild(card);
@@ -163,34 +166,34 @@ document.addEventListener('DOMContentLoaded', () => {
       coreMasterContainer.innerHTML = "";
 
       data.forEach((item, index) => {
-  const card = document.createElement("div");
-  card.className = "card";
-  card.setAttribute("data-index", index);
+        const card = document.createElement("div");
+        card.className = "card";
+        card.setAttribute("data-index", index);
 
-  let color = "#ccc";
-  if (item.perspective.includes("財務")) color = "#cce5ff";
-  else if (item.perspective.includes("顧客")) color = "#d4edda";
-  else if (item.perspective.includes("内部")) color = "#fff3cd";
-  else if (item.perspective.includes("学習")) color = "#f8d7da";
+        let color = "#ccc";
+        if (item.perspective.includes("財務")) color = "#cce5ff";
+        else if (item.perspective.includes("顧客")) color = "#d4edda";
+        else if (item.perspective.includes("内部")) color = "#fff3cd";
+        else if (item.perspective.includes("学習")) color = "#f8d7da";
 
-  card.innerHTML = `
-    <div style="padding: 10px; border-left: 6px solid ${color}; margin-bottom: 10px;">
-      <h3>${item.title}</h3>
-      <p><strong>KPI:</strong> ${item.kpi}</p>
-      <p style="font-size: 12px; color: #666;"><strong>${item.perspective}</strong> - ${item.note}</p>
-      <div style="text-align: center; margin-top: 10px;">
-        <button class="add-to-priority">優先に追加</button>
-      </div>
-    </div>
-  `;
-  coreMasterContainer.appendChild(card);
-});
+        card.innerHTML = `
+          <div style="padding: 10px; border-left: 6px solid ${color}; margin-bottom: 10px;">
+            <h3>${item.title}</h3>
+            <p><strong>KPI:</strong> ${item.kpi}</p>
+            <p style="font-size: 12px; color: #666;"><strong>${item.perspective}</strong> - ${item.note}</p>
+            <div style="text-align: center; margin-top: 10px;">
+              <button class="add-to-priority">優先に追加</button>
+            </div>
+          </div>
+        `;
 
-// ✅ スクロール＋ハイライトをここに書く！
-document.getElementById("resultsContainer")?.scrollIntoView({ behavior: "smooth" });
-resultsContainer.classList.add("highlight");
-setTimeout(() => resultsContainer.classList.remove("highlight"), 1500);
-        
+        coreMasterContainer.appendChild(card);
+      });
+
+      document.getElementById("resultsContainer")?.scrollIntoView({ behavior: "smooth" });
+      resultsContainer.classList.add("highlight");
+      setTimeout(() => resultsContainer.classList.remove("highlight"), 1500);
+
     } catch (error) {
       console.error("抽出中に問題が発生しました:", error);
       alert("課題抽出に失敗しました。");
@@ -198,7 +201,7 @@ setTimeout(() => resultsContainer.classList.remove("highlight"), 1500);
       analyzeBtn.innerText = originalBtnText;
       analyzeBtn.disabled = false;
     }
-});
+  });
 
   async function fetchChatGPTResponse(prompt) {
     const response = await fetch("/api/chatgpt", {
@@ -283,28 +286,4 @@ setTimeout(() => resultsContainer.classList.remove("highlight"), 1500);
       statusBox.textContent = isAccordionOpen ? "NEXCO情報を表示中" : "NEXCO情報を非表示にしました";
     }
   }
-
-  coreMasterContainer.addEventListener("click", (event) => {
-    if (event.target.classList.contains("add-to-priority")) {
-      const cardEl = event.target.closest(".card");
-      const title = cardEl.querySelector("h3")?.textContent;
-      const kpi = cardEl.querySelector("p strong")?.textContent;
-
-      const exists = [...document.querySelectorAll("#compareListContainer .card")]
-        .some(card => card.querySelector("h3")?.textContent === title);
-
-      if (!exists) {
-        const card = document.createElement("div");
-        card.className = "card";
-        card.innerHTML = `
-          <h3>${title}</h3>
-          <p><strong>KPI:</strong> ${kpi}</p>
-          <div style="text-align: right;">
-            <button class="remove-btn">削除</button>
-          </div>
-        `;
-        document.getElementById("compareListContainer").appendChild(card);
-      }
-    }
-  });
 });
