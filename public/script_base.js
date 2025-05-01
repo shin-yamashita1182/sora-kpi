@@ -7,25 +7,6 @@ document.addEventListener("DOMContentLoaded", () => {
   const nexcoToggleBtn = document.getElementById("toggleNexcoBtn");
   const nexcoInfo = document.getElementById("nexcoInfo");
 
-  // アラート表示エリアの自動生成
-  const alertArea = document.getElementById("alertArea") || (() => {
-    const div = document.createElement("div");
-    div.id = "alertArea";
-    div.style.color = "red";
-    div.style.fontWeight = "bold";
-    div.style.padding = "0.5em";
-    div.style.marginBottom = "1em";
-    document.body.insertBefore(div, document.body.firstChild);
-    return div;
-  })();
-
-  function showAlert(msg) {
-    alertArea.textContent = msg;
-    setTimeout(() => {
-      alertArea.textContent = "";
-    }, 4000);
-  }
-
   let hasFetched = false;
 
   analyzeBtn.addEventListener("click", async () => {
@@ -33,18 +14,18 @@ document.addEventListener("DOMContentLoaded", () => {
     const note = userNoteInput.value.trim();
 
     if (!region && !note) {
-      showAlert("地域名とテーマの両方を入力してください。");
+      alert("地域名とテーマの両方を入力してください。");
       return;
     } else if (!region) {
-      showAlert("地域名を入力してください。");
+      alert("地域名を入力してください。");
       return;
     } else if (!note) {
-      showAlert("テーマや自由記述を入力してください。");
+      alert("テーマや自由記述を入力してください。");
       return;
     }
 
     if (hasFetched) {
-      showAlert("すでに課題は抽出されています。ページを更新することで再実行できます。");
+      alert("すでに課題は抽出されています。ページを更新することで再実行できます。");
       return;
     }
 
@@ -74,7 +55,7 @@ document.addEventListener("DOMContentLoaded", () => {
     } catch (error) {
       canvasResult.textContent = "エラーが発生しました。";
       console.error("ChatGPT APIエラー:", error);
-      showAlert("課題抽出中にエラーが発生しました。管理者に連絡してください。");
+      alert("課題抽出中にエラーが発生しました。管理者に連絡してください。");
     }
   });
 
@@ -101,4 +82,3 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 });
-
