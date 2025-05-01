@@ -75,28 +75,37 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   modalBody.addEventListener('click', (event) => {
-    if (event.target.id === 'addToCompareBtn' && currentDetailIndex !== null) {
-      const item = currentMasterData[currentDetailIndex];
-      const exists = [...compareListContainer.querySelectorAll('.card')]
-        .some(card => card.querySelector('h3')?.textContent === item.title);
-      if (!exists) {
-        const card = document.createElement('div');
-        card.className = 'card';
-        card.innerHTML = `
-          <span class="viewpoint-tag">${item.perspective}</span>
-          <h3>${item.title}</h3>
-          <p><strong>KPI:</strong> ${item.kpi}</p>
-          <p class="card-note">${item.note}</p>
-          <div class="card-buttons">
-            <button class="detail-button">詳細</button>
-            <button class="add-priority-button">マインドマップ</button>
-          </div>
-        `;
-        compareListContainer.appendChild(card);
-      }
-      modal.style.display = "none";
+  if (event.target.id === 'addToCompareBtn' && currentDetailIndex !== null) {
+    const item = currentMasterData[currentDetailIndex];
+    const exists = [...compareListContainer.querySelectorAll('.card')]
+      .some(card => card.querySelector('h3')?.textContent === item.title);
+
+    if (!exists) {
+      const card = document.createElement('div');
+      card.className = 'card';
+      card.innerHTML = `
+        <span class="viewpoint-tag">${item.perspective}</span>
+        <h3>${item.title}</h3>
+        <p><strong>KPI:</strong> ${item.kpi}</p>
+        <p class="card-note">${item.note}</p>
+        <div class="card-buttons">
+          <button class="detail-button">詳細</button>
+          <button class="add-priority-button">マインドマップ</button>
+        </div>
+      `;
+      compareListContainer.appendChild(card);
+
+      // ✅ 強制的にリストを表示しスクロールとハイライトを適用
+      compareListContainer.style.display = 'grid';
+      compareListContainer.scrollIntoView({ behavior: "smooth" });
+      compareListContainer.classList.add("highlight");
+      setTimeout(() => compareListContainer.classList.remove("highlight"), 1500);
     }
-  });
+
+    modal.style.display = "none";
+  }
+});
+
 
   compareListContainer.addEventListener('click', (event) => {
     if (event.target.classList.contains('remove-btn')) {
