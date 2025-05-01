@@ -88,31 +88,40 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   // 優先リストに追加
-  function addToCompareList(item) {
-    const compareList = document.getElementById("compareListContainer");
+function addToCompareList(item) {
+  const compareList = document.getElementById("compareListContainer");
 
-    if (document.getElementById(`compare-${item.id}`)) {
-      alert("この施策は既に優先リストに追加されています。");
-      return;
-    }
-
-    const card = document.createElement("div");
-    card.className = "card";
-    card.id = `compare-${item.id}`;
-
-    const title = document.createElement("h3");
-    title.textContent = item.strategy;
-
-    const policy = document.createElement("p");
-    policy.textContent = item.policy;
-
-    const kpi = document.createElement("p");
-    kpi.innerHTML = `<strong>KPI:</strong> ${item.kpi}`;
-
-    card.appendChild(title);
-    card.appendChild(policy);
-    card.appendChild(kpi);
-
-    compareList.appendChild(card);
+  if (document.getElementById(`compare-${item.id}`)) {
+    alert("この施策は既に優先リストに追加されています。");
+    return;
   }
+
+  const card = document.createElement("div");
+  card.className = "card";
+  card.id = `compare-${item.id}`;
+
+  const title = document.createElement("h3");
+  title.textContent = item.strategy;
+
+  const policy = document.createElement("p");
+  policy.textContent = item.policy;
+
+  const kpi = document.createElement("p");
+  kpi.innerHTML = `<strong>KPI:</strong> ${item.kpi}`;
+
+  // 削除ボタン
+  const removeBtn = document.createElement("button");
+  removeBtn.className = "remove-btn";
+  removeBtn.textContent = "削除";
+  removeBtn.addEventListener("click", () => {
+    compareList.removeChild(card);
+  });
+
+  card.appendChild(title);
+  card.appendChild(policy);
+  card.appendChild(kpi);
+  card.appendChild(removeBtn);
+
+  compareList.appendChild(card);
+}
 });
