@@ -163,6 +163,41 @@ analyzeBtn.addEventListener("click", async () => {
     console.error("抽出中に問題が発生しました:", error);
     alert("課題抽出に失敗しました。");
   } finally {
+// JSONファイルを読み込んでCoreMasterカードを描画
+try {
+  const response = await fetch("/json/coremaster_demo_20.json");
+  const data = await response.json();
+  const container = document.getElementById("coreMasterContainer");
+  container.innerHTML = "";
+
+  data.forEach((item, index) => {
+    const card = document.createElement("div");
+    card.className = "card";
+    card.setAttribute("data-index", index);
+
+    let color = "#ccc";
+    if (item.perspective.includes("財務")) color = "#cce5ff";
+    else if (item.perspective.includes("顧客")) color = "#d4edda";
+    else if (item.perspective.includes("内部")) color = "#fff3cd";
+    else if (item.perspective.includes("学習")) color = "#f8d7da";
+
+    card.innerHTML = `
+      <div style="padding: 10px; border-left: 6px solid ${color}; margin-bottom: 10px;">
+        <h3>${item.title}</h3>
+        <p><strong>KPI:</strong> ${item.kpi}</p>
+        <p style="font-size: 12px; color: #666;"><strong>${item.perspective}</strong> - ${item.note}</p>
+        <div style="text-align: center; margin-top: 10px;">
+          <button class="add-to-priority">優先に追加</button>
+        </div>
+      </div>
+    `;
+
+    container.appendChild(card);
+  });
+} catch (err) {
+  console.error("CoreMaster読み込みエラー:", err);
+}
+
     analyzeBtn.innerText = originalBtnText;
     analyzeBtn.disabled = false;
   }
