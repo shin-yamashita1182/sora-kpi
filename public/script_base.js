@@ -1,7 +1,7 @@
 document.addEventListener("DOMContentLoaded", () => {
   const resultsContainer = document.getElementById("resultsContainer");
   const modal = document.getElementById("detailModal");
-  const modalContent = document.getElementById("modalContent");
+  const modalBody = document.getElementById("modalBody");
   const closeModalBtn = document.querySelector(".close-button");
 
   const JSON_PATH = "coremaster_real_20_refined.json";
@@ -60,12 +60,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // モーダル表示処理
   function showDetailModal(item) {
-    modalContent.innerHTML = `
-      <h2>${item.strategy}</h2>
-      <p><strong>施策:</strong> ${item.policy}</p>
-      <p><strong>KPI:</strong> ${item.kpi}</p>
-      <p><strong>注釈:</strong> ${item.note}</p>
-    `;
+    modalBody.innerHTML = `
+  <h2>${item.strategy}</h2>
+  <p><strong>施策:</strong> ${item.policy}</p>
+  <p><strong>KPI:</strong> ${item.kpi}</p>
+  <p><strong>注釈:</strong> ${item.note}</p>
+`;
     modal.style.display = "block";
   }
 
