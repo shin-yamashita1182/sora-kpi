@@ -1,10 +1,14 @@
+
 document.addEventListener("DOMContentLoaded", () => {
   const resultsContainer = document.getElementById("resultsContainer");
   const modal = document.getElementById("detailModal");
   const modalBody = document.getElementById("modalBody");
   const closeModalBtn = document.querySelector(".close-button");
+  const compareList = document.getElementById("compareListContainer");
+  const analyzeBtn = document.getElementById("analyzeBtn");
+  const canvas = document.getElementById("canvasResult");
 
-  const JSON_PATH = "coremaster_real_20_refined.json";
+  const JSON_PATH = "coremaster_real_401cards.json";
 
   fetch(JSON_PATH)
     .then((res) => res.json())
@@ -16,9 +20,9 @@ document.addEventListener("DOMContentLoaded", () => {
         // 視点タグ
         const viewpointTag = document.createElement("div");
         viewpointTag.className = "viewpoint-tag";
-        viewpointTag.textContent = item.viewpoint;
+        viewpointTag.textContent = item.viewpointLabel;
 
-        switch (item.viewpointKey) {
+        switch (item.viewpoint) {
           case "finance":
             viewpointTag.classList.add("viewpoint-finance");
             break;
@@ -34,21 +38,20 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         const title = document.createElement("h3");
-        title.textContent = item.strategy;
+        title.textContent = item.title;
 
-        const policy = document.createElement("p");
-        policy.textContent = item.policy;
+        const note = document.createElement("div");
+        note.className = "card-note";
+        note.textContent = item.note;
 
         const kpi = document.createElement("p");
         kpi.innerHTML = `<strong>KPI:</strong> ${item.kpi}`;
 
-        // 詳細ボタン
         const detailBtn = document.createElement("button");
         detailBtn.className = "detail-button";
         detailBtn.textContent = "詳細を見る";
         detailBtn.addEventListener("click", () => showDetailModal(item));
 
-        // 優先追加ボタン
         const addPriorityBtn = document.createElement("button");
         addPriorityBtn.className = "add-priority-button";
         addPriorityBtn.textContent = "優先に追加";
@@ -56,7 +59,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         card.appendChild(viewpointTag);
         card.appendChild(title);
-        card.appendChild(policy);
+        card.appendChild(note);
         card.appendChild(kpi);
         card.appendChild(detailBtn);
         card.appendChild(addPriorityBtn);
@@ -66,10 +69,9 @@ document.addEventListener("DOMContentLoaded", () => {
     })
     .catch((err) => console.error("❌ JSON読み込みエラー:", err));
 
-  // モーダル表示
   function showDetailModal(item) {
     modalBody.innerHTML = `
-      <h2>${item.strategy}</h2>
+      <h2>${item.title}</h2>
       <p><strong>施策:</strong> ${item.policy}</p>
       <p><strong>KPI:</strong> ${item.kpi}</p>
       <p><strong>注釈:</strong> ${item.note}</p>
@@ -87,53 +89,30 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  // 優先リストに追加
-function addToCompareList(item) {
-  const compareList = document.getElementById("compareListContainer");
+  function addToCompareList(item) {
+    const card = document.createElement("div");
+    card.className = "card";
 
-  if (document.getElementById(`compare-${item.id}`)) {
-    alert("この施策は既に優先リストに追加されています。");
-    return;
+    const title = document.createElement("h3");
+    title.textContent = item.title;
+
+    const note = document.createElement("div");
+    note.className = "card-note";
+    note.textContent = item.note;
+
+    const kpi = document.createElement("p");
+    kpi.innerHTML = `<strong>KPI:</strong> ${item.kpi}`;
+
+    card.appendChild(title);
+    card.appendChild(note);
+    card.appendChild(kpi);
+    compareList.appendChild(card);
   }
 
-  const card = document.createElement("div");
-  card.className = "card";
-  card.id = `compare-${item.id}`;
-
-  const title = document.createElement("h3");
-  title.textContent = item.strategy;
-
-  const policy = document.createElement("p");
-  policy.textContent = item.policy;
-
-  const kpi = document.createElement("p");
-  kpi.innerHTML = `<strong>KPI:</strong> ${item.kpi}`;
-
-  // 削除ボタン
-  const removeBtn = document.createElement("button");
-  removeBtn.className = "remove-btn";
-  removeBtn.textContent = "削除";
-  removeBtn.addEventListener("click", () => {
-    compareList.removeChild(card);
-  });
-
-  card.appendChild(title);
-  card.appendChild(policy);
-  card.appendChild(kpi);
-  card.appendChild(removeBtn);
-
-  compareList.appendChild(card);
-}
-});
-
-
-  // ✅ ChatGPTによる課題抽出連携処理
-  const analyzeBtn = document.getElementById("analyzeBtn");
-
+  // ✅ ChatGPT課題抽出
   analyzeBtn.addEventListener("click", async () => {
     const region = document.getElementById("regionName").value.trim();
     const userNote = document.getElementById("userNote").value.trim();
-    const canvas = document.getElementById("canvasResult");
 
     if (!region || !userNote) {
       alert("地域名とテーマを両方入力してください。");
@@ -161,7 +140,6 @@ function addToCompareList(item) {
 
       const data = await res.json();
       canvas.innerText = data.result || "ChatGPTからの応答がありませんでした。";
-
     } catch (err) {
       console.error("ChatGPT連携エラー:", err);
       canvas.innerText = "エラーが発生しました。";
@@ -170,3 +148,4 @@ function addToCompareList(item) {
       analyzeBtn.innerText = "課題抽出";
     }
   });
+});
