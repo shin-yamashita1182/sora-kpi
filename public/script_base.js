@@ -4,7 +4,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const modalBody = document.getElementById("modalBody");
   const closeModalBtn = document.querySelector(".close-button");
 
-  const JSON_PATH = "coremaster_real_20_refined.json";
+  const JSON_PATH = "coremaster_real_401cards.json";
 
   fetch(JSON_PATH)
     .then((res) => res.json())
