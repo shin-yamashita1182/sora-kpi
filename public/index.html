@@ -1,59 +1,44 @@
-
 <!DOCTYPE html>
 <html lang="ja">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>SORA Dashboard 完全復元</title>
-  <link rel="stylesheet" href="style.css" />
+  <title>SORA Dashboard</title>
+  <link rel="stylesheet" href="coremaster_style.css" />
 </head>
 <body>
-  <header>
-    <h1>SORA Dashboard</h1>
-  </header>
+  <header><h1>SORA Dashboard</h1></header>
+  <main>
+    <section class="input-section">
+      <input id="regionName" type="text" placeholder="地域名を入力"/>
+      <textarea id="userNote" placeholder="テーマを入力"></textarea>
+      <button id="analyzeBtn">課題抽出</button>
+      <button id="generateBtn">分析対策</button>
+    </section>
 
-  <div class="container">
-    <div class="input-section">
-      <input type="text" id="regionName" placeholder="地域名を入力" />
-      <input type="text" id="userNote" placeholder="テーマを入力（例：高齢化）" />
-      <div class="button-wrapper">
-        <button id="analyzeBtn" type="button">課題抽出</button>
-        <button id="generateBtn" type="button">分析対策</button>
-      </div>
-    </div>
+    <section id="canvasResult">ここにChatGPTからの結果が表示されます</section>
 
-    <div id="canvasResult" class="result-box"></div>
+    <section class="results-section">
+      <h2>戦略リスト</h2>
+      <div id="resultsContainer" class="card-container"></div>
+    </section>
 
-    <div id="resultsContainer" class="card-grid"></div>
-
-    <h2>優先リスト</h2>
-    <div id="compareListContainer" class="compare-list"></div>
-
-    <h2>NEXCO情報</h2>
-    <button id="toggleNexcoBtn" type="button">NEXCO情報を表示</button>
-    <div id="nexcoInfoBox" class="result-box">
-      <div id="nexcoStatus"></div>
-      <ul id="nexcoInfoList"></ul>
-    </div>
-  </div>
+    <section class="compare-section">
+      <h2>優先リスト</h2>
+      <div id="compareListContainer" class="card-container"></div>
+    </section>
+  </main>
 
   <div id="detailModal" class="modal">
     <div class="modal-content">
-      <span class="close-button">&times;</span>
-      <div id="modalBody"></div>
+      <span class="close-button" id="closeModal">&times;</span>
+      <small id="modal-title" class="modal-subtitle"></small>
+      <h2 id="modal-content" class="modal-maintext"></h2>
+      <p id="modal-kpi" class="modal-kpi"></p>
     </div>
   </div>
-
-  <div id="mapModal" class="modal">
-    <div class="modal-content">
-      <span id="closeMapModal" class="close-button">&times;</span>
-      <div id="mapModalBody"></div>
-    </div>
-  </div>
-
-  <input type="file" id="fileInput" style="display:none" />
-  <div id="fileNameDisplay"></div>
 
   <script src="script_base.js" defer></script>
+  <script src="script_coremaster.js" defer></script>
 </body>
 </html>
