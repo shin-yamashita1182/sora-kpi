@@ -1,7 +1,7 @@
+
 let chatInProgress = false;
 let mapLoaded = false;
 
-// 地図表示（1回だけ）
 function loadMap(region) {
   if (mapLoaded) return;
   const mapElement = document.getElementById("miniMap");
@@ -9,7 +9,6 @@ function loadMap(region) {
   mapLoaded = true;
 }
 
-// ChatGPTへ問い合わせ（多重防止）
 async function fetchChatGPTResponse(prompt) {
   if (chatInProgress) return;
   chatInProgress = true;
@@ -32,7 +31,6 @@ async function fetchChatGPTResponse(prompt) {
   }
 }
 
-// ボタンイベント接続
 document.getElementById("analyzeBtn").addEventListener("click", () => {
   const region = document.getElementById("regionName").value.trim();
   const note = document.getElementById("userNote").value.trim();
@@ -45,7 +43,7 @@ document.getElementById("analyzeBtn").addEventListener("click", () => {
   alert("ChatGPTが課題を抽出します");
 
   const prompt = `地域名: ${region}\nテーマや自由記述: ${note}\nこの情報に基づき、地域課題を抽出してください。`;
-
+  
   loadMap(region);
   fetchChatGPTResponse(prompt);
 });
