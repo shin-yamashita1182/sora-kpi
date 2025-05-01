@@ -314,3 +314,16 @@ footer {
   max-width: 600px;
   border-radius: 12px;
 }
+.add-priority-button {
+  background-color: #1976d2;
+  color: white;
+  padding: 6px 10px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-top: 8px;
+}
+
+.add-priority-button:hover {
+  background-color: #0d47a1;
+}
