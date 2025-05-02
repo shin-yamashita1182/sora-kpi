@@ -152,14 +152,14 @@ header {
   font-size: 13px;
   font-style: italic;
   color: #555;
-  margin-bottom: 8px;
+  margin-bottom: 4px;
 }
 
 .card .button-area {
   display: flex;
   flex-direction: column;
   gap: 8px;
-  margin-top: 1rem;
+  margin-top: 0.5rem;
 }
 
 .card .detail-button,
