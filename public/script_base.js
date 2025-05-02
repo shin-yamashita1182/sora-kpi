@@ -75,7 +75,6 @@ generateBtn.addEventListener('click', async () => {
     console.log("追加したカード:", card);  // 追加されたカードをログで確認
   });
 });
-  }
 
   // currentMasterDataの各アイテムを表示する部分
   currentMasterData.forEach((item, index) => {
