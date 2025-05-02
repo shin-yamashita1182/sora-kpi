@@ -204,16 +204,13 @@ coreMasterContainer.addEventListener("click", (event) => {
     const originalCard = event.target.closest(".card");
     if (!originalCard) return;
 
-    // 内側の構造だけ取得
-    const inner = originalCard.querySelector("div");
-    if (!inner) return;
+    // .cardの中身のみ取り出してクローン（重複防止のため）
+    const cardContent = originalCard.innerHTML;
 
-    // 新しい.card を再生成
     const cloned = document.createElement("div");
     cloned.className = "card";
-    cloned.innerHTML = inner.outerHTML;
+    cloned.innerHTML = cardContent;
 
-    // ボタン修正（追加済みに変更）
     const btn = cloned.querySelector(".add-to-priority");
     if (btn) {
       btn.textContent = "追加済み";
@@ -226,7 +223,6 @@ coreMasterContainer.addEventListener("click", (event) => {
     compareListContainer.scrollIntoView({ behavior: "smooth" });
   }
 });
-
   
       document.getElementById("resultsContainer")?.scrollIntoView({ behavior: "smooth" });
       resultsContainer.classList.add("highlight");
