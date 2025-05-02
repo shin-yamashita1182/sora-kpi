@@ -248,7 +248,13 @@ button:hover {
     grid-template-columns: 1fr;
   }
 }
-
+/* ✅ 優先リスト（比較リスト）を横並びに整列 */
+#compareListContainer {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+  padding: 10px;
+}
 /* ---------- アコーディオン ---------- */
 .accordion-content {
   display: flex;
