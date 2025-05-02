@@ -340,14 +340,10 @@ window.addEventListener("click", (event) => {
     mindMapModal.style.display = "none";
   }
 });
-
   
 document.getElementById("compareListContainer").addEventListener("click", (event) => {
   if (event.target.classList.contains("detail-button")) {
     alert("詳細モーダルを表示（仮動作）");
-  }
-  if (event.target.classList.contains("add-priority-button")) {
-    alert("マインドマップ生成！（仮動作）");
   }
 });
 
