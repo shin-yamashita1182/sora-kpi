@@ -37,49 +37,42 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-generateBtn.addEventListener('click', async () => {
-  await loadMasterData();
-  console.log("✅ loaded:", currentMasterData);
-
-  resultsContainer.innerHTML = "";
-  if (currentMasterData.length === 0) return;
-
-  currentMasterData.forEach((item, index) => {
-    const card = document.createElement('div');
-    card.className = 'card';
-    card.setAttribute('data-index', index);
-    card.innerHTML = `
-      <h3>${item.strategy}</h3>
-      <p><strong>KPI:</strong> ${item.kpi}</p>
-      <button class="detail-btn">詳細</button>
-    `;
-    resultsContainer.appendChild(card);
+  generateBtn.addEventListener('click', async () => {
+    await loadMasterData();
+    resultsContainer.innerHTML = "";
+    if (currentMasterData.length === 0) return;
+    currentMasterData.forEach((item, index) => {
+      const card = document.createElement('div');
+      card.className = 'card';
+      card.setAttribute('data-index', index);
+      card.innerHTML = `
+        <h3>${item.title}</h3>
+        <p><strong>KPI:</strong> ${item.kpi}</p>
+        <button class="detail-btn">詳細</button>
+      `;
+      resultsContainer.appendChild(card);
+    });
   });
-});
 
+  document.body.addEventListener('click', (event) => {
+    if (event.target.classList.contains('detail-btn')) {
+      const parentCard = event.target.closest('.card');
+      const index = parentCard.getAttribute('data-index');
+      const item = currentMasterData[index];
+      currentDetailIndex = parseInt(index);
 
-document.body.addEventListener('click', (event) => {
-  if (event.target.classList.contains('detail-btn')) {
-    const parentCard = event.target.closest('.card');
-    const index = parentCard.getAttribute('data-index');
-    const item = currentMasterData[index];
-    currentDetailIndex = parseInt(index);
-
-    modalBody.innerHTML = `
-      <h2>🧠 ${item.strategy}</h2>
-      <div style="margin-top: 12px;">
-        <h3 style="font-size: 16px;">📌 施策内容</h3>
-        <p style="font-size: 15px; line-height: 1.6;">${item.policy}</p>
-      </div>
-      <div style="margin-top: 10px;">
-        <p><strong>📊 KPI:</strong> ${item.kpi}</p>
-        <p><strong>🔍 視点:</strong> ${item.viewpoint}</p>
-        <p><strong>📝 注釈:</strong> ${item.note}</p>
-      </div>
-    `;
-    modal.style.display = "block";
-  }
-});
+      modalBody.innerHTML = `
+        <h2>${item.title}</h2>
+        <p><strong>施策概要:</strong> ${item.overview}</p>
+        <p><strong>目標KPI:</strong> ${item.kpi}</p>
+        <p><strong>想定主体:</strong> ${item.actor}</p>
+        <div style="margin-top: 20px; text-align: right;">
+          <button id="addToCompareBtn">比較リストに追加</button>
+        </div>
+      `;
+      modal.style.display = "block";
+    }
+  });
 
   modalBody.addEventListener('click', (event) => {
   if (event.target.id === 'addToCompareBtn' && currentDetailIndex !== null) {
