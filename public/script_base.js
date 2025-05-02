@@ -349,7 +349,7 @@ setTimeout(() => compareListContainer.classList.remove("highlight"), 1500);
             infoList.appendChild(li);
           });
           coreMasterContainer.classList.remove("highlight"); // ✅ 強制ハイライト解除
-        }) 
+
           infoFetched = true;
           isFetching = false;
           infoBox.classList.add("open");
