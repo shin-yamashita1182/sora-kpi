@@ -46,7 +46,7 @@ document.addEventListener('DOMContentLoaded', () => {
       card.className = 'card';
       card.setAttribute('data-index', index);
       card.innerHTML = `
-        <h3>${item.title}</h3>
+        <h3>${item.strategy}</h3> → ✅
         <p><strong>KPI:</strong> ${item.kpi}</p>
         <button class="detail-btn">詳細</button>
       `;
@@ -61,15 +61,15 @@ document.addEventListener('DOMContentLoaded', () => {
       const item = currentMasterData[index];
       currentDetailIndex = parseInt(index);
 
-      modalBody.innerHTML = `
-        <h2>${item.title}</h2>
-        <p><strong>施策概要:</strong> ${item.overview}</p>
-        <p><strong>目標KPI:</strong> ${item.kpi}</p>
-        <p><strong>想定主体:</strong> ${item.actor}</p>
-        <div style="margin-top: 20px; text-align: right;">
-          <button id="addToCompareBtn">比較リストに追加</button>
-        </div>
-      `;
+  modalBody.innerHTML = `
+  <h2>${item.strategy}</h2>
+  <p><strong>施策概要:</strong> ${item.policy}</p>
+  <p><strong>目標KPI:</strong> ${item.kpi}</p>
+  <p><strong>注釈:</strong> ${item.note}</p>
+  <div style="margin-top: 20px; text-align: right;">
+    <button id="addToCompareBtn">比較リストに追加</button>
+  </div>
+`;
       modal.style.display = "block";
     }
   });
