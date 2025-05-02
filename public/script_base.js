@@ -198,14 +198,14 @@ try {
     else if (item.viewpoint.includes("学習")) labelClass = "learning";
 
     card.innerHTML = `
-      <div class="viewpoint-tag ${labelClass}">${item.viewpoint}</div>
-      <div class="viewpoint-note">${item.note || "(注釈なし)"}</div>
-      <h3>${item.strategy}</h3>
-      <div class="button-area">
-        <button class="detail-button">詳細</button>
-        <button class="add-to-priority">優先リストに追加</button>
-      </div>
-    `;
+  <div class="viewpoint-tag ${labelClass}">${item.viewpoint}</div>
+  <div class="viewpoint-desc">${item.note || "(注釈なし)"}</div>
+  <h3>${item.strategy}</h3>
+  <div class="button-area">
+    <button class="detail-button">詳細</button>
+    <button class="add-priority-button">優先リストに追加</button>
+  </div>
+`;
     coreMasterContainer.appendChild(card);
   });
 } catch (error) {
@@ -245,9 +245,9 @@ const noteText = originalCard.querySelector(".viewpoint-note")?.textContent || "
 const cloned = document.createElement("div");
 cloned.className = "card";
 cloned.innerHTML = `
-  <span class="label viewpoint-tag ${labelClass}">${perspectiveText}</span>
+  <span class="viewpoint-tag ${labelClass}">${perspectiveText}</span>
+  <div class="viewpoint-desc">${noteText}</div>
   <h3>${titleText}</h3>
-  <div class="note">${noteText}</div>
   <div class="button-area">
     <button class="openMindMapBtn">マインドマップ</button>
   </div>
