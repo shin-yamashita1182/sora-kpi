@@ -169,8 +169,6 @@ document.addEventListener('DOMContentLoaded', () => {
     try {
       await fetchChatGPTResponse(prompt);
       analysisDone = true;
-
-      // 🔧 自動カード展開を無効化（分析対策ボタンで実行）
       const data = await response.json();
       coreMasterContainer.innerHTML = "";
 
@@ -270,10 +268,33 @@ setTimeout(() => compareListContainer.classList.remove("highlight"), 1500);
     }
   });
 
-  async function fetchChatGPTResponse(prompt) {
+  
+async function fetchChatGPTResponse(prompt) {
+  try {
     const response = await fetch("/api/chatgpt", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ prompt })
+    });
+
+    if (!response.ok) throw new Error("ChatGPT APIエラー");
+
+    const data = await response.json();
+    const canvasResult = document.getElementById("canvasResult");
+
+    if (!data.result || data.result.trim() === "") {
+      canvasResult.innerText = "（応答が空でした）";
+      console.warn("⚠️ ChatGPTの応答が空でした");
+    } else {
+      canvasResult.innerText = data.result;
+      console.log("✅ ChatGPT応答:", data.result);
+    }
+  } catch (error) {
+    console.error("❌ ChatGPT fetch error:", error);
+    alert("ChatGPT連携に一時的に失敗しました。応答が出ているか確認してください。");
+  }
+}
+    ,
       body: JSON.stringify({ prompt })
     });
     if (!response.ok) throw new Error("ChatGPT APIエラー");
@@ -384,5 +405,35 @@ document.getElementById("compareListContainer").addEventListener("click", (event
     alert("詳細モーダルを表示（仮動作）");
   }
 });
+
+
+  generateBtn.addEventListener('click', async () => {
+    const response = await fetch("/json/coremaster_demo_20.json");
+    const data = await response.json();
+    coreMasterContainer.innerHTML = "";
+
+    data.forEach((item, index) => {
+      const card = document.createElement("div");
+      card.className = "card";
+      card.setAttribute("data-index", index);
+
+      let labelClass = "";
+      if (item.perspective.includes("財務")) labelClass = "finance";
+      else if (item.perspective.includes("顧客")) labelClass = "customer";
+      else if (item.perspective.includes("内部")) labelClass = "process";
+      else if (item.perspective.includes("学習")) labelClass = "learning";
+
+      card.innerHTML = `
+        <div class="viewpoint-tag ${labelClass}">${item.perspective}</div>
+        <div class="viewpoint-note">${item.note}</div>
+        <h3>${item.title}</h3>
+        <div class="button-area">
+          <button class="detail-button">詳細</button>
+          <button class="add-to-priority">優先リストに追加</button>
+        </div>
+      `;
+      coreMasterContainer.appendChild(card);
+    });
+  });
 
 });
