@@ -54,7 +54,7 @@ document.addEventListener('DOMContentLoaded', () => {
     resultsContainer.style.display = "block";
 
     try {
-      const response = await fetch("/json/coremaster_demo_20.json");
+      const response = await fetch("/coremaster_demo_20.json");
       const data = await response.json();
       currentMasterData = data;
       coreMasterContainer.innerHTML = "";
