@@ -209,7 +209,10 @@ coreMasterContainer.addEventListener("click", (event) => {
     // ✅ 重複チェック：compareListContainer に同じタイトルがある場合は追加しない
     const isDuplicated = [...compareListContainer.querySelectorAll("h3")]
       .some(h3 => h3.textContent.trim() === title);
-    if (isDuplicated) return;
+    if (isDuplicated) {
+  alert("このカードはすでに優先リストに追加されています。");
+  return;
+   }
 
     // ✅ カードの中身だけ複製
     const cardContent = originalCard.innerHTML;
