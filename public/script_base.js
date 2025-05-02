@@ -15,6 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const resultsContainer = document.getElementById('resultsContainer');
   const generateBtn = document.getElementById('generateBtn');
   const analyzeBtn = document.getElementById('analyzeBtn');
+console.log("🧪 analyzeBtn=", analyzeBtn);
   const categorySelect = document.getElementById('category');
   const coreMasterContainer = document.getElementById("coreMasterContainer");
 
