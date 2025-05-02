@@ -142,8 +142,6 @@ coreMasterContainer.addEventListener("click", (event) => {
   if (event.target.classList.contains("add-to-priority")) {
     const originalCard = event.target.closest(".card");
     if (!originalCard) return;
-// ✅ ←ここに入れてください！
-  console.log("originalCard HTML:", originalCard.innerHTML);
 
     const title = originalCard.querySelector("h3")?.textContent.trim();
     if (!title) return;
