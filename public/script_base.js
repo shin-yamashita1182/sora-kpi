@@ -1,5 +1,3 @@
-console.log("✅ script_base.js 読み込まれたよ！");
-
 // ✅ SORA Dashboard Script Base - 完全版（NEXCO連動 + 課題抽出 + KPI分析 + 比較）
 document.addEventListener('DOMContentLoaded', () => {
   const modal = document.getElementById("detailModal");
@@ -142,85 +140,78 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   analyzeBtn.addEventListener("click", async () => {
-  if (analysisDone) {
-    alert("すでに課題抽出が完了しています。ページを更新するか、条件を変更してください。");
-    return;
-  }
+    if (analysisDone) {
+      alert("すでに課題抽出が完了しています。ページを更新するか、条件を変更してください。");
+      return;
+    }
 
-  const regionName = document.getElementById("regionName").value.trim();
-  const userNote = document.getElementById("userNote").value.trim();
+    const regionName = document.getElementById("regionName").value.trim();
+    const userNote = document.getElementById("userNote").value.trim();
 
-  if (!regionName) {
-    alert("地域名を入力してください。");
-    return;
-  }
+    if (!regionName) {
+      alert("地域名を入力してください。");
+      return;
+    }
 
-  if (!userNote) {
-    alert("テーマや自由記述を入力してください。");
-    return;
-  }
+    if (!userNote) {
+      alert("テーマや自由記述を入力してください。");
+      return;
+    }
 
-  updateGoogleMap(regionName);
+    updateGoogleMap(regionName);
 
-  const originalBtnText = analyzeBtn.innerText;
-  analyzeBtn.innerText = "課題抽出中…";
-  analyzeBtn.disabled = true;
+    const originalBtnText = analyzeBtn.innerText;
+    analyzeBtn.innerText = "課題抽出中…";
+    analyzeBtn.disabled = true;
 
-  const prompt = `${regionName}について、テーマ「${userNote}」に基づく地域課題を抽出してください。\n以下の内容について、最大トークン数500以内で、最大5つまでの地域課題を簡潔に挙げてください。各課題は1〜2文で記述し、原因や背景が簡潔に分かるようにしてください。`;
+    const prompt = `${regionName}について、テーマ「${userNote}」に基づく地域課題を抽出してください。\n以下の内容について、最大トークン数500以内で、最大5つまでの地域課題を簡潔に挙げてください。各課題は1〜2文で記述し、原因や背景が簡潔に分かるようにしてください。`;
 
-  try {
-    await fetchChatGPTResponse(prompt);
-    analysisDone = true;
-  } catch (error) {
-    console.error("ChatGPTエラー:", error);
-    alert("課題抽出に失敗しました。");
-    analyzeBtn.innerText = originalBtnText;
-    analyzeBtn.disabled = false;
-    return;
-  }
+    try {
+      await fetchChatGPTResponse(prompt);
+      analysisDone = true;
 
-  try {
-    const response = await fetch("/json/coremaster_real_20_refined.json");
-    if (!response.ok) throw new Error("カードデータ取得失敗");
+    try {
+  await fetchChatGPTResponse(prompt);
+  analysisDone = true;
+} catch (error) {
+  alert("ChatGPTの応答に失敗しました。");
+  console.error(error);
+  return;
+}
 
-    const data = await response.json();
-    coreMasterContainer.innerHTML = "";
+try {
+  const response = await fetch("/json/coremaster_real_20_refined.json");
+  if (!response.ok) throw new Error("カードデータ取得失敗");
 
-    data.forEach((item, index) => {
-      const card = document.createElement("div");
-      card.className = "card";
-      card.setAttribute("data-index", index);
+  const data = await response.json();
+  coreMasterContainer.innerHTML = "";
 
-      let labelClass = "";
-      if (item.viewpoint.includes("財務")) labelClass = "finance";
-      else if (item.viewpoint.includes("顧客")) labelClass = "customer";
-      else if (item.viewpoint.includes("内部")) labelClass = "process";
-      else if (item.viewpoint.includes("学習")) labelClass = "learning";
+  data.forEach((item, index) => {
+    const card = document.createElement("div");
+    card.className = "card";
+    card.setAttribute("data-index", index);
 
-      card.innerHTML = `
-        <div class="viewpoint-tag ${labelClass}">${item.viewpoint}</div>
-        <div class="viewpoint-desc">${item.note || "(注釈なし)"}</div>
-        <h3>${item.strategy}</h3>
-        <div class="button-area">
-          <button class="detail-button">詳細</button>
-          <button class="add-to-priority">優先リストに追加</button>
-        </div>
-      `;
-      coreMasterContainer.appendChild(card);
-    });
+    let labelClass = "";
+    if (item.viewpoint.includes("財務")) labelClass = "finance";
+    else if (item.viewpoint.includes("顧客")) labelClass = "customer";
+    else if (item.viewpoint.includes("内部")) labelClass = "process";
+    else if (item.viewpoint.includes("学習")) labelClass = "learning";
 
-    coreMasterContainer.scrollIntoView({ behavior: "smooth" });
-    coreMasterContainer.classList.add("highlight");
-    setTimeout(() => coreMasterContainer.classList.remove("highlight"), 1500);
-  } catch (error) {
-    console.error("カード読み込みエラー:", error);
-    alert("カードデータの読み込みに失敗しました。");
-  } finally {
-    analyzeBtn.innerText = originalBtnText;
-    analyzeBtn.disabled = false;
-  }
-});
-
+    card.innerHTML = `
+      <div class="viewpoint-tag ${labelClass}">${item.viewpoint}</div>
+      <div class="viewpoint-note">${item.note || "(注釈なし)"}</div>
+      <h3>${item.strategy}</h3>
+      <div class="button-area">
+        <button class="detail-button">詳細</button>
+        <button class="add-to-priority">優先リストに追加</button>
+      </div>
+    `;
+    coreMasterContainer.appendChild(card);
+  });
+} catch (error) {
+  alert("カードデータの読み込みに失敗しました。");
+  console.error(error);
+}
 
       // ✅ 正しい位置（forEachの外！）
 coreMasterContainer.addEventListener("click", (event) => {
@@ -254,9 +245,9 @@ const noteText = originalCard.querySelector(".viewpoint-note")?.textContent || "
 const cloned = document.createElement("div");
 cloned.className = "card";
 cloned.innerHTML = `
-  <span class="viewpoint-tag ${labelClass}">${perspectiveText}</span>
-  <div class="viewpoint-desc">${noteText}</div>
+  <span class="label viewpoint-tag ${labelClass}">${perspectiveText}</span>
   <h3>${titleText}</h3>
+  <div class="note">${noteText}</div>
   <div class="button-area">
     <button class="openMindMapBtn">マインドマップ</button>
   </div>
@@ -349,7 +340,7 @@ setTimeout(() => compareListContainer.classList.remove("highlight"), 1500);
             infoList.appendChild(li);
           });
           coreMasterContainer.classList.remove("highlight"); // ✅ 強制ハイライト解除
-
+        }) 
           infoFetched = true;
           isFetching = false;
           infoBox.classList.add("open");
