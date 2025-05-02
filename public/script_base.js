@@ -207,7 +207,6 @@ coreMasterContainer.addEventListener("click", (event) => {
     const title = originalCard.querySelector("h3")?.textContent.trim();
     if (!title) return;
 
-    // ✅ 重複チェック：compareListContainer に同じタイトルがある場合は追加しない
     const isDuplicated = [...compareListContainer.querySelectorAll("h3")]
       .some(h3 => h3.textContent.trim() === title);
     if (isDuplicated) {
@@ -215,22 +214,28 @@ coreMasterContainer.addEventListener("click", (event) => {
       return;
     }
 
-    // ✅ 情報抽出
-    const label = originalCard.querySelector(".label")?.outerHTML || "";
+    // ✅ .label クラスを再構成（必ず .finance などが付くように）
+    const perspectiveText = originalCard.querySelector(".label")?.textContent || "";
+    let labelClass = "";
+    if (perspectiveText.includes("財務")) labelClass = "finance";
+    else if (perspectiveText.includes("顧客")) labelClass = "customer";
+    else if (perspectiveText.includes("内部")) labelClass = "process";
+    else if (perspectiveText.includes("学習")) labelClass = "learning";
+
+    const labelHTML = `<span class="label ${labelClass}">${perspectiveText}</span>`;
     const note = originalCard.querySelector(".note")?.outerHTML || "";
     const h3 = originalCard.querySelector("h3")?.outerHTML || "";
 
-    // ✅ 優先リスト用カードを構築（ボタンはマインドマップのみ）
     const cloned = document.createElement("div");
     cloned.className = "card";
-    cloned.innerHTML = 
-      ${label}
+    cloned.innerHTML = `
+      ${labelHTML}
       ${h3}
       ${note}
       <div class="button-area">
         <button class="add-priority-button">マインドマップ</button>
       </div>
-    ;
+    `;
 
     compareListContainer.appendChild(cloned);
     compareListContainer.scrollIntoView({ behavior: "smooth" });
