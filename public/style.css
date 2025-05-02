@@ -159,7 +159,7 @@ header {
   display: flex;
   flex-direction: column;
   gap: 8px;
-  margin-top: 0.5rem;
+  margin-top: 1rem;
 }
 
 .card .detail-button,
