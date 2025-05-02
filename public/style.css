@@ -140,11 +140,13 @@ header {
   display: inline-block;
   margin-bottom: 8px;
   color: white;
-  white-space: nowrap;         /* ← 折り返し防止 */
-  max-width: 100%;             /* ← はみ出し防止 */
-  overflow: hidden;            /* ← はみ出し隠す */
-  text-overflow: ellipsis;     /* ← 必要に応じて「…」表示 */
+  white-space: nowrap;         /* ← 改行を防ぐ */
+  overflow: hidden;            /* ← はみ出しを防ぐ */
+  text-overflow: ellipsis;     /* ← 必要に応じて「…」を表示 */
+  max-width: 100%;             /* ← コンテナを超えない */
+  text-align: center;
 }
+
 
 /* 各視点に応じた色ラベル */
 .label.finance  { background-color: #dc3545; } /* 財務の視点 */
