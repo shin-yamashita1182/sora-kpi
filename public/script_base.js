@@ -222,20 +222,36 @@ else if (perspectiveText.includes("顧客")) labelClass = "customer";
 else if (perspectiveText.includes("内部")) labelClass = "process";
 else if (perspectiveText.includes("学習")) labelClass = "learning";
 
-const labelHTML = `<span class="label ${labelClass}">${perspectiveText}</span>`;
 const titleText = originalCard.querySelector("h3")?.textContent || "";
 const noteText = originalCard.querySelector(".note")?.textContent || "";
 
 const cloned = document.createElement("div");
 cloned.className = "card";
 cloned.innerHTML = `
-  ${labelHTML}
+  <span class="label viewpoint-tag ${labelClass}">${perspectiveText}</span>
+  <div class="note">${noteText}</div>
   <h3>${titleText}</h3>
-  <p class="note">${noteText}</p>
   <div class="button-area">
-    <button class="add-priority-button">マインドマップ</button>
+    <button class="detail-button">詳細</button>
+    <button class="openMindMapBtn">マインドマップ</button>
   </div>
 `;
+
+// ✅ 詳細モーダル（共通処理を呼び出す or 内容差し込み）
+cloned.querySelector(".detail-button").addEventListener("click", () => {
+  const modal = document.getElementById("detailModal");
+  const body = document.getElementById("modalBody");
+  body.innerHTML = `<p><strong>${titleText}</strong><br>${noteText}</p>`;
+  modal.style.display = "block";
+});
+
+// ✅ マインドマップモーダル（仮）
+cloned.querySelector(".openMindMapBtn").addEventListener("click", () => {
+  const modal = document.getElementById("mindMapModal");
+  const body = document.getElementById("mindMapContent");
+  body.innerHTML = `<p>🧠 「${titleText}」のマインドマップをここに表示します（仮）</p>`;
+  modal.style.display = "block";
+});
 
 compareListContainer.appendChild(cloned);
 compareListContainer.scrollIntoView({ behavior: "smooth" });
