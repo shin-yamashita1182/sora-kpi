@@ -169,12 +169,22 @@ header {
 }
 
 /* ✅ ボタン配置 */
-.card .button-area,
-.card .card-buttons {
+.card .button-area {
   display: flex;
   flex-direction: column;
   gap: 8px;
   margin-top: 1rem;
+}
+
+.card .button-area button {
+  width: 100%;
+  padding: 10px;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+  box-sizing: border-box; /* ✅ これが幅ズレ対策のポイント */
 }
 
 .card .detail-button,
@@ -212,13 +222,15 @@ header {
 .viewpoint-tag {
   font-size: 0.75rem;
   font-weight: bold;
-  padding: 2px 6px;
+  padding: 4px 8px;
   border-radius: 6px;
-  display: inline-block;
+  color: white;
+  display: inline-block;       /* ✅ 横幅に合わせる */
+  max-width: fit-content;      /* ✅ 最小限に収める */
   text-align: center;
   margin-bottom: 6px;
-  color: white !important;
 }
+
 .viewpoint-title {
   font-size: 13px;
   font-weight: bold;
