@@ -37,23 +37,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  generateBtn.addEventListener('click', async () => {
-    await loadMasterData();
-    resultsContainer.innerHTML = "";
-    if (currentMasterData.length === 0) return;
-    currentMasterData.forEach((item, index) => {
-      const card = document.createElement('div');
-      card.className = 'card';
-      card.setAttribute('data-index', index);
-      card.innerHTML = `
-        <h3>${item.title}</h3>
-        <p><strong>KPI:</strong> ${item.kpi}</p>
-        <button class="detail-btn">詳細</button>
-      `;
-      resultsContainer.appendChild(card);
-    });
-  });
-
   document.body.addEventListener('click', (event) => {
     if (event.target.classList.contains('detail-btn')) {
       const parentCard = event.target.closest('.card');
@@ -385,7 +368,8 @@ document.getElementById("compareListContainer").addEventListener("click", (event
 
 
   generateBtn.addEventListener('click', async () => {
-    const response = await fetch("/json/coremaster_demo_20.json");
+  document.getElementById("resultsContainer").style.display = "block"; // ★ここ！  
+const response = await fetch("/json/coremaster_demo_20.json");
     const data = await response.json();
     coreMasterContainer.innerHTML = "";
 
