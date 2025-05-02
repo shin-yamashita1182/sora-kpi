@@ -1,0 +1,242 @@
+[
+  {
+    "id": "demo-001",
+    "strategy": "戦略テーマ 1",
+    "policy": "これはデモ用の施策内容 1 です。",
+    "kpi": "KPI 1",
+    "viewpoint": "財務の視点",
+    "viewpointKey": "finance",
+    "note": "地域・企業が持続的に成長するための経済的成果や資源の最適化",
+    "tags": [
+      "Demo"
+    ]
+  },
+  {
+    "id": "demo-002",
+    "strategy": "戦略テーマ 2",
+    "policy": "これはデモ用の施策内容 2 です。",
+    "kpi": "KPI 2",
+    "viewpoint": "顧客の視点",
+    "viewpointKey": "customer",
+    "note": "地域住民・来訪者・事業者にとっての満足度と信頼の向上",
+    "tags": [
+      "Demo"
+    ]
+  },
+  {
+    "id": "demo-003",
+    "strategy": "戦略テーマ 3",
+    "policy": "これはデモ用の施策内容 3 です。",
+    "kpi": "KPI 3",
+    "viewpoint": "内部プロセスの視点",
+    "viewpointKey": "process",
+    "note": "行政・組織・地域の運営効率化と構造的改善",
+    "tags": [
+      "Demo"
+    ]
+  },
+  {
+    "id": "demo-004",
+    "strategy": "戦略テーマ 4",
+    "policy": "これはデモ用の施策内容 4 です。",
+    "kpi": "KPI 4",
+    "viewpoint": "学習と成長の視点",
+    "viewpointKey": "learning",
+    "note": "人材育成・組織文化・技術基盤の強化",
+    "tags": [
+      "Demo"
+    ]
+  },
+  {
+    "id": "demo-005",
+    "strategy": "戦略テーマ 5",
+    "policy": "これはデモ用の施策内容 5 です。",
+    "kpi": "KPI 5",
+    "viewpoint": "財務の視点",
+    "viewpointKey": "finance",
+    "note": "地域・企業が持続的に成長するための経済的成果や資源の最適化",
+    "tags": [
+      "Demo"
+    ]
+  },
+  {
+    "id": "demo-006",
+    "strategy": "戦略テーマ 6",
+    "policy": "これはデモ用の施策内容 6 です。",
+    "kpi": "KPI 6",
+    "viewpoint": "顧客の視点",
+    "viewpointKey": "customer",
+    "note": "地域住民・来訪者・事業者にとっての満足度と信頼の向上",
+    "tags": [
+      "Demo"
+    ]
+  },
+  {
+    "id": "demo-007",
+    "strategy": "戦略テーマ 7",
+    "policy": "これはデモ用の施策内容 7 です。",
+    "kpi": "KPI 7",
+    "viewpoint": "内部プロセスの視点",
+    "viewpointKey": "process",
+    "note": "行政・組織・地域の運営効率化と構造的改善",
+    "tags": [
+      "Demo"
+    ]
+  },
+  {
+    "id": "demo-008",
+    "strategy": "戦略テーマ 8",
+    "policy": "これはデモ用の施策内容 8 です。",
+    "kpi": "KPI 8",
+    "viewpoint": "学習と成長の視点",
+    "viewpointKey": "learning",
+    "note": "人材育成・組織文化・技術基盤の強化",
+    "tags": [
+      "Demo"
+    ]
+  },
+  {
+    "id": "demo-009",
+    "strategy": "戦略テーマ 9",
+    "policy": "これはデモ用の施策内容 9 です。",
+    "kpi": "KPI 9",
+    "viewpoint": "財務の視点",
+    "viewpointKey": "finance",
+    "note": "地域・企業が持続的に成長するための経済的成果や資源の最適化",
+    "tags": [
+      "Demo"
+    ]
+  },
+  {
+    "id": "demo-010",
+    "strategy": "戦略テーマ 10",
+    "policy": "これはデモ用の施策内容 10 です。",
+    "kpi": "KPI 10",
+    "viewpoint": "顧客の視点",
+    "viewpointKey": "customer",
+    "note": "地域住民・来訪者・事業者にとっての満足度と信頼の向上",
+    "tags": [
+      "Demo"
+    ]
+  },
+  {
+    "id": "demo-011",
+    "strategy": "戦略テーマ 11",
+    "policy": "これはデモ用の施策内容 11 です。",
+    "kpi": "KPI 11",
+    "viewpoint": "内部プロセスの視点",
+    "viewpointKey": "process",
+    "note": "行政・組織・地域の運営効率化と構造的改善",
+    "tags": [
+      "Demo"
+    ]
+  },
+  {
+    "id": "demo-012",
+    "strategy": "戦略テーマ 12",
+    "policy": "これはデモ用の施策内容 12 です。",
+    "kpi": "KPI 12",
+    "viewpoint": "学習と成長の視点",
+    "viewpointKey": "learning",
+    "note": "人材育成・組織文化・技術基盤の強化",
+    "tags": [
+      "Demo"
+    ]
+  },
+  {
+    "id": "demo-013",
+    "strategy": "戦略テーマ 13",
+    "policy": "これはデモ用の施策内容 13 です。",
+    "kpi": "KPI 13",
+    "viewpoint": "財務の視点",
+    "viewpointKey": "finance",
+    "note": "地域・企業が持続的に成長するための経済的成果や資源の最適化",
+    "tags": [
+      "Demo"
+    ]
+  },
+  {
+    "id": "demo-014",
+    "strategy": "戦略テーマ 14",
+    "policy": "これはデモ用の施策内容 14 です。",
+    "kpi": "KPI 14",
+    "viewpoint": "顧客の視点",
+    "viewpointKey": "customer",
+    "note": "地域住民・来訪者・事業者にとっての満足度と信頼の向上",
+    "tags": [
+      "Demo"
+    ]
+  },
+  {
+    "id": "demo-015",
+    "strategy": "戦略テーマ 15",
+    "policy": "これはデモ用の施策内容 15 です。",
+    "kpi": "KPI 15",
+    "viewpoint": "内部プロセスの視点",
+    "viewpointKey": "process",
+    "note": "行政・組織・地域の運営効率化と構造的改善",
+    "tags": [
+      "Demo"
+    ]
+  },
+  {
+    "id": "demo-016",
+    "strategy": "戦略テーマ 16",
+    "policy": "これはデモ用の施策内容 16 です。",
+    "kpi": "KPI 16",
+    "viewpoint": "学習と成長の視点",
+    "viewpointKey": "learning",
+    "note": "人材育成・組織文化・技術基盤の強化",
+    "tags": [
+      "Demo"
+    ]
+  },
+  {
+    "id": "demo-017",
+    "strategy": "戦略テーマ 17",
+    "policy": "これはデモ用の施策内容 17 です。",
+    "kpi": "KPI 17",
+    "viewpoint": "財務の視点",
+    "viewpointKey": "finance",
+    "note": "地域・企業が持続的に成長するための経済的成果や資源の最適化",
+    "tags": [
+      "Demo"
+    ]
+  },
+  {
+    "id": "demo-018",
+    "strategy": "戦略テーマ 18",
+    "policy": "これはデモ用の施策内容 18 です。",
+    "kpi": "KPI 18",
+    "viewpoint": "顧客の視点",
+    "viewpointKey": "customer",
+    "note": "地域住民・来訪者・事業者にとっての満足度と信頼の向上",
+    "tags": [
+      "Demo"
+    ]
+  },
+  {
+    "id": "demo-019",
+    "strategy": "戦略テーマ 19",
+    "policy": "これはデモ用の施策内容 19 です。",
+    "kpi": "KPI 19",
+    "viewpoint": "内部プロセスの視点",
+    "viewpointKey": "process",
+    "note": "行政・組織・地域の運営効率化と構造的改善",
+    "tags": [
+      "Demo"
+    ]
+  },
+  {
+    "id": "demo-020",
+    "strategy": "戦略テーマ 20",
+    "policy": "これはデモ用の施策内容 20 です。",
+    "kpi": "KPI 20",
+    "viewpoint": "学習と成長の視点",
+    "viewpointKey": "learning",
+    "note": "人材育成・組織文化・技術基盤の強化",
+    "tags": [
+      "Demo"
+    ]
+  }
+]
