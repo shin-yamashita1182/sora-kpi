@@ -22,37 +22,54 @@ document.addEventListener('DOMContentLoaded', () => {
   let currentDetailIndex = null;
   let analysisDone = false;
 
-  async function loadMasterData() {
-    const category = categorySelect.value;
-    if (category === "観光型") {
-      try {
-        const response = await fetch('coremaster_demo_20.json');
-        if (!response.ok) return;
-        currentMasterData = await response.json();
-      } catch (error) {
-        console.error('Error loading JSON:', error);
+async function loadMasterData() {
+  const category = categorySelect.value;
+  if (category === "観光型") {
+    try {
+      const response = await fetch('/json/coremaster_demo_20.json'); // 正しいパスで読み込む
+      console.log("レスポンスコード:", response.status);  // レスポンスコードを確認
+
+      if (!response.ok) {
+        throw new Error(`エラー：${response.status} ${response.statusText}`);
       }
-    } else {
-      currentMasterData = []; 
+
+      const data = await response.json();
+      console.log("取得したデータ:", data);  // データ内容を確認
+
+      currentMasterData = data;  // データ格納
+    } catch (error) {
+      console.error('JSONの読み込みエラー:', error);
+      alert('JSONの読み込みに失敗しました');
     }
+  } else {
+    currentMasterData = []; 
+  }
+}
+
+generateBtn.addEventListener('click', async () => {
+  await loadMasterData();
+  resultsContainer.innerHTML = "";
+  
+  if (currentMasterData.length === 0) {
+    console.log("データが空です");
+    return;  // データが空の場合は何もしない
   }
 
-  generateBtn.addEventListener('click', async () => {
-    await loadMasterData();
-    resultsContainer.innerHTML = "";
-    if (currentMasterData.length === 0) return;
-    currentMasterData.forEach((item, index) => {
-      const card = document.createElement('div');
-      card.className = 'card';
-      card.setAttribute('data-index', index);
-      card.innerHTML = `
-        <h3>${item.title}</h3>
-        <p><strong>KPI:</strong> ${item.kpi}</p>
-        <button class="detail-btn">詳細</button>
-      `;
-      resultsContainer.appendChild(card);
-    });
+  currentMasterData.forEach((item, index) => {
+    console.log(`アイテム[${index}]:`, item);  // 各アイテムの詳細をログに表示
+
+    const card = document.createElement('div');
+    card.className = 'card';
+    card.setAttribute('data-index', index);
+    card.innerHTML = `
+      <h3>${item.strategy}</h3>  <!-- title → strategy -->
+      <p><strong>KPI:</strong> ${item.kpi}</p>
+      <button class="detail-btn">詳細</button>
+    `;
+    resultsContainer.appendChild(card);
   });
+});
+
 
   document.body.addEventListener('click', (event) => {
     if (event.target.classList.contains('detail-btn')) {
