@@ -170,47 +170,6 @@ document.addEventListener('DOMContentLoaded', () => {
       await fetchChatGPTResponse(prompt);
       analysisDone = true;
 
-  // 課題抽出が完了した後に戦略リストを表示
-    await displayStrategyList();  // 戦略リストを表示する関数呼び出し
-  } catch (error) {
-    console.error("課題抽出に失敗しました:", error);
-    alert("課題抽出に失敗しました。");
-  } finally {
-    analyzeBtn.innerText = originalBtnText;
-    analyzeBtn.disabled = false;
-  }
-});
-
-// 戦略リストを表示する関数
-async function displayStrategyList() {
-  try {
-    // 戦略リストの取得
-    const response = await fetch("/json/coremaster_demo_20.json");
-    const data = await response.json();
-
-    // 戦略リストの表示
-    const strategyListContainer = document.getElementById("coreMasterContainer");
-    strategyListContainer.innerHTML = "";  // 既存のリストをクリア
-
-    data.forEach((item, index) => {
-      const card = document.createElement("div");
-      card.className = "card";
-      card.setAttribute("data-index", index);
-      card.innerHTML = `
-        <h3>${item.title}</h3>
-        <p><strong>KPI:</strong> ${item.kpi}</p>
-        <button class="detail-btn">詳細</button>
-      `;
-      strategyListContainer.appendChild(card);
-    });
-  } catch (error) {
-    console.error("戦略リストの取得に失敗:", error);
-  }
-}
-
-// ここで呼び出し
-await displayStrategyList(); // この部分をanalyzeBtnの中に入れる
-      
       const response = await fetch("/json/coremaster_demo_20.json");
       const data = await response.json();
       coreMasterContainer.innerHTML = "";
