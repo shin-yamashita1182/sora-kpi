@@ -277,6 +277,16 @@ button:hover {
   text-align: center;
   margin-top: 10px;
 }
+#compareListContainer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: flex-start;
+}
+#compareListContainer .card {
+  width: 300px;
+  margin: 10px;
+}
 
 /* ---------- アコーディオン ---------- */
 .accordion-content {
