@@ -203,8 +203,6 @@ coreMasterContainer.addEventListener("click", (event) => {
   if (event.target.classList.contains("add-to-priority")) {
     const originalCard = event.target.closest(".card");
     if (!originalCard) return;
-// ✅ ←ここに入れてください！
-  console.log("originalCard HTML:", originalCard.innerHTML);
 
     const title = originalCard.querySelector("h3")?.textContent.trim();
     if (!title) return;
@@ -217,37 +215,27 @@ coreMasterContainer.addEventListener("click", (event) => {
     }
 
     // ✅ 視点ラベル再生成（classをつけ直す）
-const perspectiveText = originalCard.querySelector(".viewpoint-tag")?.textContent || "";
+const perspectiveText = originalCard.querySelector(".label")?.textContent || "";
 let labelClass = "";
 if (perspectiveText.includes("財務")) labelClass = "finance";
 else if (perspectiveText.includes("顧客")) labelClass = "customer";
 else if (perspectiveText.includes("内部")) labelClass = "process";
 else if (perspectiveText.includes("学習")) labelClass = "learning";
 
+const labelHTML = `<span class="label ${labelClass}">${perspectiveText}</span>`;
 const titleText = originalCard.querySelector("h3")?.textContent || "";
-const noteText = originalCard.querySelector(".viewpoint-note")?.textContent || "";
+const noteText = originalCard.querySelector(".note")?.textContent || "";
 
 const cloned = document.createElement("div");
 cloned.className = "card";
 cloned.innerHTML = `
-  <span class="label viewpoint-tag ${labelClass}">${perspectiveText}</span>
+  ${labelHTML}
   <h3>${titleText}</h3>
-  <div class="note">${noteText}</div>
+  <p class="note">${noteText}</p>
   <div class="button-area">
-    <button class="openMindMapBtn">マインドマップ</button>
+    <button class="add-priority-button">マインドマップ</button>
   </div>
 `;
-
-cloned.querySelector(".openMindMapBtn").addEventListener("click", () => {
-  const modal = document.getElementById("mindMapModal");
-  const body = document.getElementById("mindMapContent");
-  body.innerHTML = `
-    <h2>🧠 ${titleText}</h2>
-    <p>${noteText}</p>
-  `;
-  modal.style.display = "block";
-});
-
 
 compareListContainer.appendChild(cloned);
 compareListContainer.scrollIntoView({ behavior: "smooth" });
