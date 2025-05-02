@@ -139,7 +139,62 @@ document.addEventListener('DOMContentLoaded', () => {
       : "ファイルを選択してください";
   });
 
-  
+  analyzeBtn.addEventListener("click", async () => {
+    if (analysisDone) {
+      alert("すでに課題抽出が完了しています。ページを更新するか、条件を変更してください。");
+      return;
+    }
+
+    const regionName = document.getElementById("regionName").value.trim();
+    const userNote = document.getElementById("userNote").value.trim();
+
+    if (!regionName) {
+      alert("地域名を入力してください。");
+      return;
+    }
+
+    if (!userNote) {
+      alert("テーマや自由記述を入力してください。");
+      return;
+    }
+
+    updateGoogleMap(regionName);
+
+    const originalBtnText = analyzeBtn.innerText;
+    analyzeBtn.innerText = "課題抽出中…";
+    analyzeBtn.disabled = true;
+
+    const prompt = `${regionName}について、テーマ「${userNote}」に基づく地域課題を抽出してください。\n以下の内容について、最大トークン数500以内で、最大5つまでの地域課題を簡潔に挙げてください。各課題は1〜2文で記述し、原因や背景が簡潔に分かるようにしてください。`;
+
+    try {
+      await fetchChatGPTResponse(prompt);
+      analysisDone = true;
+      const data = await response.json();
+      coreMasterContainer.innerHTML = "";
+
+data.forEach((item, index) => {
+  const card = document.createElement("div");
+  card.className = "card";
+  card.setAttribute("data-index", index);
+
+let labelClass = "";
+if (item.perspective.includes("財務")) labelClass = "finance";
+else if (item.perspective.includes("顧客")) labelClass = "customer";
+else if (item.perspective.includes("内部")) labelClass = "process";
+else if (item.perspective.includes("学習")) labelClass = "learning";
+
+card.innerHTML = `
+  <div class="viewpoint-tag ${labelClass}">${item.perspective}</div>
+  <div class="viewpoint-note">${item.note || ""}</div>
+  <h3>${item.strategy || "（戦略名未設定）"}</h3>
+  <div class="button-area">
+    <button class="detail-button">詳細</button>
+    <button class="add-to-priority">優先リストに追加</button>
+  </div>
+`;
+
+  coreMasterContainer.appendChild(card);
+});
 
       // ✅ 正しい位置（forEachの外！）
 coreMasterContainer.addEventListener("click", (event) => {
@@ -358,23 +413,4 @@ document.getElementById("compareListContainer").addEventListener("click", (event
     });
   });
 
-});
-
-
-const coreMasterContainer = document.getElementById("coreMasterContainer");
-const analyzeBtn = document.getElementById("generateBtn");
-
-let isExpanded = false;
-
-analyzeBtn.addEventListener("click", async () => {
-  if (isExpanded) {
-    coreMasterContainer.innerHTML = "";
-    isExpanded = false;
-  } else {
-    const prompt = getPrompt(); // 地域名や記述からプロンプト生成（定義済み前提）
-    const response = await fetchChatGPTResponse(prompt);  // ChatGPTへ投げる
-    const results = await fetchAndMatchCards(response);   // 類似カード抽出
-    displayResults(results);                               // 戦略カード表示
-    isExpanded = true;
-  }
 });
