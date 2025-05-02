@@ -1,202 +1,242 @@
 [
   {
-    "id": "core-091",
-    "strategy": "老朽インフラ更新にかかる財政負担を平準化する",
-    "policy": "橋梁・水道などインフラ修繕の長期財政計画を策定",
-    "kpi": "老朽施設の修繕完了率／予算消化率",
-    "note": "",
+    "id": "demo-001",
+    "strategy": "戦略テーマ 1",
+    "policy": "これはデモ用の施策内容 1 です。",
+    "kpi": "KPI 1",
     "viewpoint": "財務の視点",
     "viewpointKey": "finance",
-    "category": "中山間地域型"
+    "note": "地域・企業が持続的に成長するための経済的成果や資源の最適化",
+    "tags": [
+      "Demo"
+    ]
   },
   {
-    "id": "core-212",
-    "strategy": "空き家改修や住宅取得支援に必要な予算を平準化する",
-    "policy": "空き家バンク改修費補助金の年度配分計画と積算モデルの整備",
-    "kpi": "改修補助件数／予算消化率",
-    "note": "",
+    "id": "demo-002",
+    "strategy": "戦略テーマ 2",
+    "policy": "これはデモ用の施策内容 2 です。",
+    "kpi": "KPI 2",
+    "viewpoint": "顧客の視点",
+    "viewpointKey": "customer",
+    "note": "地域住民・来訪者・事業者にとっての満足度と信頼の向上",
+    "tags": [
+      "Demo"
+    ]
+  },
+  {
+    "id": "demo-003",
+    "strategy": "戦略テーマ 3",
+    "policy": "これはデモ用の施策内容 3 です。",
+    "kpi": "KPI 3",
+    "viewpoint": "内部プロセスの視点",
+    "viewpointKey": "process",
+    "note": "行政・組織・地域の運営効率化と構造的改善",
+    "tags": [
+      "Demo"
+    ]
+  },
+  {
+    "id": "demo-004",
+    "strategy": "戦略テーマ 4",
+    "policy": "これはデモ用の施策内容 4 です。",
+    "kpi": "KPI 4",
+    "viewpoint": "学習と成長の視点",
+    "viewpointKey": "learning",
+    "note": "人材育成・組織文化・技術基盤の強化",
+    "tags": [
+      "Demo"
+    ]
+  },
+  {
+    "id": "demo-005",
+    "strategy": "戦略テーマ 5",
+    "policy": "これはデモ用の施策内容 5 です。",
+    "kpi": "KPI 5",
     "viewpoint": "財務の視点",
     "viewpointKey": "finance",
-    "category": "移住促進重点型"
+    "note": "地域・企業が持続的に成長するための経済的成果や資源の最適化",
+    "tags": [
+      "Demo"
+    ]
   },
   {
-    "id": "core-180",
-    "strategy": "観光・農業連携型の地方創生交付金申請スキームを整備する",
-    "policy": "交付金申請サポート体制と成果報告書モデルの提供",
-    "kpi": "交付金申請件数／採択率",
-    "note": "",
+    "id": "demo-006",
+    "strategy": "戦略テーマ 6",
+    "policy": "これはデモ用の施策内容 6 です。",
+    "kpi": "KPI 6",
+    "viewpoint": "顧客の視点",
+    "viewpointKey": "customer",
+    "note": "地域住民・来訪者・事業者にとっての満足度と信頼の向上",
+    "tags": [
+      "Demo"
+    ]
+  },
+  {
+    "id": "demo-007",
+    "strategy": "戦略テーマ 7",
+    "policy": "これはデモ用の施策内容 7 です。",
+    "kpi": "KPI 7",
+    "viewpoint": "内部プロセスの視点",
+    "viewpointKey": "process",
+    "note": "行政・組織・地域の運営効率化と構造的改善",
+    "tags": [
+      "Demo"
+    ]
+  },
+  {
+    "id": "demo-008",
+    "strategy": "戦略テーマ 8",
+    "policy": "これはデモ用の施策内容 8 です。",
+    "kpi": "KPI 8",
+    "viewpoint": "学習と成長の視点",
+    "viewpointKey": "learning",
+    "note": "人材育成・組織文化・技術基盤の強化",
+    "tags": [
+      "Demo"
+    ]
+  },
+  {
+    "id": "demo-009",
+    "strategy": "戦略テーマ 9",
+    "policy": "これはデモ用の施策内容 9 です。",
+    "kpi": "KPI 9",
     "viewpoint": "財務の視点",
     "viewpointKey": "finance",
-    "category": "観光×農業ハイブリッド型"
+    "note": "地域・企業が持続的に成長するための経済的成果や資源の最適化",
+    "tags": [
+      "Demo"
+    ]
   },
   {
-    "id": "core-372",
-    "strategy": "避難所整備・老朽化対策の財源確保を中長期で構築する",
-    "policy": "避難所耐震化計画と改修費の5年計画化",
-    "kpi": "改修済施設数／耐震化率",
-    "note": "",
+    "id": "demo-010",
+    "strategy": "戦略テーマ 10",
+    "policy": "これはデモ用の施策内容 10 です。",
+    "kpi": "KPI 10",
+    "viewpoint": "顧客の視点",
+    "viewpointKey": "customer",
+    "note": "地域住民・来訪者・事業者にとっての満足度と信頼の向上",
+    "tags": [
+      "Demo"
+    ]
+  },
+  {
+    "id": "demo-011",
+    "strategy": "戦略テーマ 11",
+    "policy": "これはデモ用の施策内容 11 です。",
+    "kpi": "KPI 11",
+    "viewpoint": "内部プロセスの視点",
+    "viewpointKey": "process",
+    "note": "行政・組織・地域の運営効率化と構造的改善",
+    "tags": [
+      "Demo"
+    ]
+  },
+  {
+    "id": "demo-012",
+    "strategy": "戦略テーマ 12",
+    "policy": "これはデモ用の施策内容 12 です。",
+    "kpi": "KPI 12",
+    "viewpoint": "学習と成長の視点",
+    "viewpointKey": "learning",
+    "note": "人材育成・組織文化・技術基盤の強化",
+    "tags": [
+      "Demo"
+    ]
+  },
+  {
+    "id": "demo-013",
+    "strategy": "戦略テーマ 13",
+    "policy": "これはデモ用の施策内容 13 です。",
+    "kpi": "KPI 13",
     "viewpoint": "財務の視点",
     "viewpointKey": "finance",
-    "category": "防災・災害対策型"
+    "note": "地域・企業が持続的に成長するための経済的成果や資源の最適化",
+    "tags": [
+      "Demo"
+    ]
   },
   {
-    "id": "core-009",
-    "strategy": "観光投資の回収率向上に向けた収益基盤と財源構造の強化",
-    "policy": "投資対効果の事前評価とレビュー制度を通じた収益性向上と財務基盤の安定化",
-    "kpi": "ROI（投資回収率）",
-    "note": "",
+    "id": "demo-014",
+    "strategy": "戦略テーマ 14",
+    "policy": "これはデモ用の施策内容 14 です。",
+    "kpi": "KPI 14",
+    "viewpoint": "顧客の視点",
+    "viewpointKey": "customer",
+    "note": "地域住民・来訪者・事業者にとっての満足度と信頼の向上",
+    "tags": [
+      "Demo"
+    ]
+  },
+  {
+    "id": "demo-015",
+    "strategy": "戦略テーマ 15",
+    "policy": "これはデモ用の施策内容 15 です。",
+    "kpi": "KPI 15",
+    "viewpoint": "内部プロセスの視点",
+    "viewpointKey": "process",
+    "note": "行政・組織・地域の運営効率化と構造的改善",
+    "tags": [
+      "Demo"
+    ]
+  },
+  {
+    "id": "demo-016",
+    "strategy": "戦略テーマ 16",
+    "policy": "これはデモ用の施策内容 16 です。",
+    "kpi": "KPI 16",
+    "viewpoint": "学習と成長の視点",
+    "viewpointKey": "learning",
+    "note": "人材育成・組織文化・技術基盤の強化",
+    "tags": [
+      "Demo"
+    ]
+  },
+  {
+    "id": "demo-017",
+    "strategy": "戦略テーマ 17",
+    "policy": "これはデモ用の施策内容 17 です。",
+    "kpi": "KPI 17",
     "viewpoint": "財務の視点",
     "viewpointKey": "finance",
-    "category": "観光型"
+    "note": "地域・企業が持続的に成長するための経済的成果や資源の最適化",
+    "tags": [
+      "Demo"
+    ]
   },
   {
-    "id": "core-387",
-    "strategy": "子ども・若者の防災意識向上を学校や家庭と連携して推進する",
-    "policy": "小中高連携の防災授業と家庭学習支援教材の配布",
-    "kpi": "授業実施件数／家庭利用率",
-    "note": "",
+    "id": "demo-018",
+    "strategy": "戦略テーマ 18",
+    "policy": "これはデモ用の施策内容 18 です。",
+    "kpi": "KPI 18",
     "viewpoint": "顧客の視点",
     "viewpointKey": "customer",
-    "category": "防災・災害対策型"
+    "note": "地域住民・来訪者・事業者にとっての満足度と信頼の向上",
+    "tags": [
+      "Demo"
+    ]
   },
   {
-    "id": "core-342",
-    "strategy": "子育て・教育支援に関するサービスの利便性を向上させる",
-    "policy": "保育園・小学校ポータルの統合とオンライン予約機能拡充",
-    "kpi": "オンライン予約利用率／施設利用者満足度",
-    "note": "",
-    "viewpoint": "顧客の視点",
-    "viewpointKey": "customer",
-    "category": "都市型"
-  },
-  {
-    "id": "core-265",
-    "strategy": "地域とのつながりを実感できる子育て支援サービスを拡充する",
-    "policy": "地域子育て拠点施設の増設と交流イベントの定例開催",
-    "kpi": "拠点施設来訪者数／イベント参加率",
-    "note": "",
-    "viewpoint": "顧客の視点",
-    "viewpointKey": "customer",
-    "category": "子育て・定住型"
-  },
-  {
-    "id": "core-023",
-    "strategy": "訪日外国人向けサービス強化に向けた地域施策の体系的展開",
-    "policy": "外国人観光客向けに多言語表示とスマート決済の環境整備を推進",
-    "kpi": "外国人観光客満足度調査結果",
-    "note": "",
-    "viewpoint": "顧客の視点",
-    "viewpointKey": "customer",
-    "category": "観光型"
-  },
-  {
-    "id": "core-301",
-    "strategy": "高齢者の外出・移動の自由を確保する",
-    "policy": "コミュニティバス・乗合タクシー制度の拡充と運行補助制度",
-    "kpi": "移動支援利用件数／高齢者の外出頻度",
-    "note": "",
-    "viewpoint": "顧客の視点",
-    "viewpointKey": "customer",
-    "category": "高齢化重点地域型"
-  },
-  {
-    "id": "core-279",
-    "strategy": "地域子育て拠点の運営事務を効率化・外部委託する",
-    "policy": "運営委託ガイドライン策定と契約管理支援システムの導入",
-    "kpi": "委託業務コスト削減額／契約遵守率",
-    "note": "",
+    "id": "demo-019",
+    "strategy": "戦略テーマ 19",
+    "policy": "これはデモ用の施策内容 19 です。",
+    "kpi": "KPI 19",
     "viewpoint": "内部プロセスの視点",
     "viewpointKey": "process",
-    "category": "子育て・定住型"
+    "note": "行政・組織・地域の運営効率化と構造的改善",
+    "tags": [
+      "Demo"
+    ]
   },
   {
-    "id": "core-078",
-    "strategy": "水道・電力インフラの定期点検業務を最適化する",
-    "policy": "検針・点検スケジュールの最適化と業務委託の電子化",
-    "kpi": "委託業務の電子管理率／点検漏れ率の低下",
-    "note": "",
-    "viewpoint": "内部プロセスの視点",
-    "viewpointKey": "process",
-    "category": "離島型"
-  },
-  {
-    "id": "core-353",
-    "strategy": "ゴミ収集・清掃業務のスマート化を推進する",
-    "policy": "IoTゴミ箱導入と収集ルート最適化システムの導入",
-    "kpi": "収集効率／市民満足度スコア／回収頻度最適化率",
-    "note": "",
-    "viewpoint": "内部プロセスの視点",
-    "viewpointKey": "process",
-    "category": "都市型"
-  },
-  {
-    "id": "core-236",
-    "strategy": "移住関連制度の更新・周知を自動化する",
-    "policy": "制度一覧自動更新＋WEB反映ツールの運用開始",
-    "kpi": "制度周知率／更新遅延件数",
-    "note": "",
-    "viewpoint": "内部プロセスの視点",
-    "viewpointKey": "process",
-    "category": "移住促進重点型"
-  },
-  {
-    "id": "core-040",
-    "strategy": "地域資源データベースの整備に向けた実行体制と業務設計の高度化",
-    "policy": "観光スポットや伝統資源のDB構築の具体化と再設計による業務効率・品質の向上",
-    "kpi": "データ登録件数",
-    "note": "",
-    "viewpoint": "内部プロセスの視点",
-    "viewpointKey": "process",
-    "category": "観光型"
-  },
-  {
-    "id": "core-047",
-    "strategy": "DXリテラシーの向上を実現するための人材・仕組み・環境の構築",
-    "policy": "観光・地域産業に関わる人材を対象とした体系的な研修プログラムの設計と運営",
-    "kpi": "DX研修修了率",
-    "note": "",
+    "id": "demo-020",
+    "strategy": "戦略テーマ 20",
+    "policy": "これはデモ用の施策内容 20 です。",
+    "kpi": "KPI 20",
     "viewpoint": "学習と成長の視点",
     "viewpointKey": "learning",
-    "category": "観光型"
-  },
-  {
-    "id": "core-207",
-    "strategy": "観光農業関連のデジタルスキル研修を導入する",
-    "policy": "SNS活用・ネット販売・デジタル観光案内の講座整備",
-    "kpi": "講座参加者数／業務活用率",
-    "note": "",
-    "viewpoint": "学習と成長の視点",
-    "viewpointKey": "learning",
-    "category": "観光×農業ハイブリッド型"
-  },
-  {
-    "id": "core-083",
-    "strategy": "若手職員の育成とキャリアパスを明確にする",
-    "policy": "若手職員のメンター制度導入と異動サイクルの柔軟化",
-    "kpi": "育成職員数／離職率の低下",
-    "note": "",
-    "viewpoint": "学習と成長の視点",
-    "viewpointKey": "learning",
-    "category": "離島型"
-  },
-  {
-    "id": "core-362",
-    "strategy": "DX人材・デジタルリテラシー教育を体系化する",
-    "policy": "市内小中高での情報リテラシー指導者研修と授業導入",
-    "kpi": "情報教育導入校数／リテラシーテスト平均点",
-    "note": "",
-    "viewpoint": "学習と成長の視点",
-    "viewpointKey": "learning",
-    "category": "都市型"
-  },
-  {
-    "id": "core-082",
-    "strategy": "デジタルスキルの基礎を地域住民に普及させる",
-    "policy": "公民館・自治会館にてスマホ・PC講座の定期実施",
-    "kpi": "講座開催回数／参加率／満足度",
-    "note": "",
-    "viewpoint": "学習と成長の視点",
-    "viewpointKey": "learning",
-    "category": "離島型"
+    "note": "人材育成・組織文化・技術基盤の強化",
+    "tags": [
+      "Demo"
+    ]
   }
 ]
