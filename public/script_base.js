@@ -204,9 +204,15 @@ coreMasterContainer.addEventListener("click", (event) => {
     const originalCard = event.target.closest(".card");
     if (!originalCard) return;
 
-    // .cardの中身のみ取り出してクローン（重複防止のため）
-    const cardContent = originalCard.innerHTML;
+    const title = originalCard.querySelector("h3")?.textContent.trim();
 
+    // ✅ 重複チェック：compareListContainer に同じタイトルがある場合は追加しない
+    const isDuplicated = [...compareListContainer.querySelectorAll("h3")]
+      .some(h3 => h3.textContent.trim() === title);
+    if (isDuplicated) return;
+
+    // ✅ カードの中身だけ複製
+    const cardContent = originalCard.innerHTML;
     const cloned = document.createElement("div");
     cloned.className = "card";
     cloned.innerHTML = cardContent;
