@@ -151,10 +151,10 @@ header {
 
 
 /* 各視点に応じた色ラベル */
-.label.finance  { background-color: #dc3545; white-space: nowrap; }/* 財務の視点 */
-.label.customer { background-color: #0d6efd; white-space: nowrap; }/* 顧客の視点 */
-.label.process  { background-color: #ffc107; white-space: nowrap; }/* 内部プロセスの視点 */
-.label.learning { background-color: #fd7e14; white-space: nowrap; }/* 学習と成長の視点 */
+.viewpoint-tag.finance  { background-color: #dc3545; } /* 財務の視点 */
+.viewpoint-tag.customer { background-color: #0d6efd; } /* 顧客の視点 */
+.viewpoint-tag.process  { background-color: #ffc107; color: #000; } /* 内部プロセス */
+.viewpoint-tag.learning { background-color: #fd7e14; color: #000; } /* 学習と成長 */
 
 .card .note {
   font-size: 13px;
