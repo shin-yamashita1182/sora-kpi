@@ -179,22 +179,22 @@ document.addEventListener('DOMContentLoaded', () => {
         card.className = "card";
         card.setAttribute("data-index", index);
     
-        let color = "#ccc";
-        if (item.perspective.includes("財務")) color = "#cce5ff";
-        else if (item.perspective.includes("顧客")) color = "#d4edda";
-        else if (item.perspective.includes("内部")) color = "#fff3cd";
-        else if (item.perspective.includes("学習")) color = "#f8d7da";
+let labelClass = "";
+if (item.perspective.includes("財務")) labelClass = "finance";
+else if (item.perspective.includes("顧客")) labelClass = "customer";
+else if (item.perspective.includes("内部")) labelClass = "process";
+else if (item.perspective.includes("学習")) labelClass = "learning";
 
-        card.innerHTML = `
-          <div style="padding: 10px; border-left: 6px solid ${color}; margin-bottom: 10px;">
-            <h3>${item.title}</h3>
-            <p><strong>KPI:</strong> ${item.kpi}</p>
-            <p style="font-size: 12px; color: #666;"><strong>${item.perspective}</strong> - ${item.note}</p>
-            <div style="text-align: center; margin-top: 10px;">
-              <button class="add-to-priority">優先に追加</button>
-            </div>
-          </div>
-        `;
+card.innerHTML = `
+  <span class="label ${labelClass}">${item.perspective}</span>
+  <h3>${item.title}</h3>
+  <p class="note">${item.note}</p>
+  <div class="button-area">
+    <button class="detail-button">詳細</button>
+    <button class="add-to-priority">優先リストに追加</button>
+  </div>
+`;
+
 
         coreMasterContainer.appendChild(card);
       });
@@ -205,31 +205,37 @@ coreMasterContainer.addEventListener("click", (event) => {
     if (!originalCard) return;
 
     const title = originalCard.querySelector("h3")?.textContent.trim();
+    if (!title) return;
 
     // ✅ 重複チェック：compareListContainer に同じタイトルがある場合は追加しない
     const isDuplicated = [...compareListContainer.querySelectorAll("h3")]
       .some(h3 => h3.textContent.trim() === title);
     if (isDuplicated) {
-  alert("このカードはすでに優先リストに追加されています。");
-  return;
-   }
+      alert("すでに優先リストに追加されています。");
+      return;
+    }
 
-    // ✅ カードの中身だけ複製
-    const cardContent = originalCard.innerHTML;
+    // ✅ 情報抽出
+    const label = originalCard.querySelector(".label")?.outerHTML || "";
+    const note = originalCard.querySelector(".note")?.outerHTML || "";
+    const h3 = originalCard.querySelector("h3")?.outerHTML || "";
+
+    // ✅ 優先リスト用カードを構築（ボタンはマインドマップのみ）
     const cloned = document.createElement("div");
     cloned.className = "card";
-    cloned.innerHTML = cardContent;
-
-    const btn = cloned.querySelector(".add-to-priority");
-    if (btn) {
-      btn.textContent = "追加済み";
-      btn.disabled = true;
-      btn.classList.remove("add-to-priority");
-      btn.classList.add("add-priority-button");
-    }
+    cloned.innerHTML = 
+      ${label}
+      ${h3}
+      ${note}
+      <div class="button-area">
+        <button class="add-priority-button">マインドマップ</button>
+      </div>
+    ;
 
     compareListContainer.appendChild(cloned);
     compareListContainer.scrollIntoView({ behavior: "smooth" });
+    compareListContainer.classList.add("highlight");
+    setTimeout(() => compareListContainer.classList.remove("highlight"), 1500);
   }
 });
   
