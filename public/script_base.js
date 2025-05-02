@@ -186,10 +186,8 @@ else if (item.perspective.includes("内部")) labelClass = "process";
 else if (item.perspective.includes("学習")) labelClass = "learning";
 
 card.innerHTML = `
-  <div class="viewpoint-tag viewpoint-${labelClass}">
-    <div class="viewpoint-title">${item.perspective}</div>
-    <div class="viewpoint-note">${item.note}</div>
-  </div>
+  <div class="viewpoint-tag ${labelClass}">${item.perspective}</div>
+  <div class="viewpoint-note">${item.note}</div>
   <h3>${item.title}</h3>
   <div class="button-area">
     <button class="detail-button">詳細</button>
