@@ -152,13 +152,13 @@ header {
 
 /* 各視点に応じた色ラベル */
 .label.finance,
-.viewpoint-tag.finance { background-color: #dc3545; }
+.viewpoint-tag.finance { background-color: #c62828; }
 .label.customer,
-.viewpoint-tag.customer { background-color: #0d6efd; }
+.viewpoint-tag.customer { background-color: #1565c0; }
 .label.process,
-.viewpoint-tag.process { background-color: #ffc107;  }
+.viewpoint-tag.process { background-color: #2e7d32;  }
 .label.learning,
-.viewpoint-tag.learning { background-color: #fd7e14; }
+.viewpoint-tag.learning { background-color: #f9a825; }
 
 /* ✅ 注釈（視点の下） */
 .card .note {
@@ -249,10 +249,10 @@ header {
 }
 
 /* 各視点の色背景 */
-.viewpoint-finance  { background-color: #dc3545; }
-.viewpoint-customer { background-color: #0d6efd; }
-.viewpoint-process  { background-color: #ffc107; color: #fff; }
-.viewpoint-learning { background-color: #fd7e14; }
+.viewpoint-finance  { background-color: #c62828; }
+.viewpoint-customer { background-color: #1565c0; }
+.viewpoint-process  { background-color: #2e7d32; color: #fff; }
+.viewpoint-learning { background-color: #f9a825; }
 
 /* ---------- ボタンスタイル ---------- */
 button {
