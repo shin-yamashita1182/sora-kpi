@@ -170,34 +170,33 @@ document.addEventListener('DOMContentLoaded', () => {
       await fetchChatGPTResponse(prompt);
       analysisDone = true;
 
-      const response = await fetch("/json/coremaster_demo_20.json");
-      const data = await response.json();
-      coreMasterContainer.innerHTML = "";
+     const response = await fetch("/json/coremaster_real_20_refined.json");
+const data = await response.json();
+coreMasterContainer.innerHTML = "";
 
 data.forEach((item, index) => {
   const card = document.createElement("div");
   card.className = "card";
   card.setAttribute("data-index", index);
 
-let labelClass = "";
-if (item.perspective.includes("財務")) labelClass = "finance";
-else if (item.perspective.includes("顧客")) labelClass = "customer";
-else if (item.perspective.includes("内部")) labelClass = "process";
-else if (item.perspective.includes("学習")) labelClass = "learning";
+  let labelClass = "";
+  if (item.viewpoint.includes("財務")) labelClass = "finance";
+  else if (item.viewpoint.includes("顧客")) labelClass = "customer";
+  else if (item.viewpoint.includes("内部")) labelClass = "process";
+  else if (item.viewpoint.includes("学習")) labelClass = "learning";
 
-card.innerHTML = `
-  <div class="viewpoint-tag ${labelClass}">${item.perspective}</div>
-  <div class="viewpoint-note">${item.note}</div>
-  <h3>${item.title}</h3>
-  <div class="button-area">
-    <button class="detail-button">詳細</button>
-    <button class="add-to-priority">優先リストに追加</button>
-  </div>
-`;
+  card.innerHTML = `
+    <div class="viewpoint-tag ${labelClass}">${item.viewpoint}</div>
+    <div class="viewpoint-note">${item.note || "(注釈なし)"}</div>
+    <h3>${item.strategy}</h3>
+    <div class="button-area">
+      <button class="detail-button">詳細</button>
+      <button class="add-to-priority">優先リストに追加</button>
+    </div>
+  `;
 
   coreMasterContainer.appendChild(card);
 });
-
       // ✅ 正しい位置（forEachの外！）
 coreMasterContainer.addEventListener("click", (event) => {
   if (event.target.classList.contains("add-to-priority")) {
