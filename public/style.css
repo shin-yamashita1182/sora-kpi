@@ -140,19 +140,21 @@ header {
   display: inline-block;
   margin-bottom: 8px;
   color: white;
-  white-space: nowrap;         /* ← 改行を防ぐ */
-  overflow: hidden;            /* ← はみ出しを防ぐ */
-  text-overflow: ellipsis;     /* ← 必要に応じて「…」を表示 */
-  max-width: 100%;             /* ← コンテナを超えない */
+  white-space: nowrap;         /* 改行を防ぐ */
+  overflow: hidden;            /* はみ出しを防ぐ */
+  text-overflow: ellipsis;     /* 必要に応じて「…」 */
+  max-width: 100%;
   text-align: center;
+  line-height: 1.2;            /* ← ✅これが足りないと折り返される場合あり */
 }
 
 
+
 /* 各視点に応じた色ラベル */
-.label.finance  { background-color: #dc3545; } /* 財務の視点 */
-.label.customer { background-color: #0d6efd; } /* 顧客の視点 */
-.label.process  { background-color: #ffc107; } /* 内部プロセスの視点 */
-.label.learning { background-color: #fd7e14; } /* 学習と成長の視点 */
+.label.finance  { background-color: #dc3545; white-space: nowrap; }/* 財務の視点 */
+.label.customer { background-color: #0d6efd; white-space: nowrap; }/* 顧客の視点 */
+.label.process  { background-color: #ffc107; white-space: nowrap; }/* 内部プロセスの視点 */
+.label.learning { background-color: #fd7e14; white-space: nowrap; }/* 学習と成長の視点 */
 
 .card .note {
   font-size: 13px;
