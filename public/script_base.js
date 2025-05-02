@@ -37,42 +37,49 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  generateBtn.addEventListener('click', async () => {
-    await loadMasterData();
-    resultsContainer.innerHTML = "";
-    if (currentMasterData.length === 0) return;
-    currentMasterData.forEach((item, index) => {
-      const card = document.createElement('div');
-      card.className = 'card';
-      card.setAttribute('data-index', index);
-      card.innerHTML = `
-        <h3>${item.title}</h3>
-        <p><strong>KPI:</strong> ${item.kpi}</p>
-        <button class="detail-btn">詳細</button>
-      `;
-      resultsContainer.appendChild(card);
-    });
-  });
+generateBtn.addEventListener('click', async () => {
+  await loadMasterData();
+  console.log("✅ loaded:", currentMasterData);
 
-  document.body.addEventListener('click', (event) => {
-    if (event.target.classList.contains('detail-btn')) {
-      const parentCard = event.target.closest('.card');
-      const index = parentCard.getAttribute('data-index');
-      const item = currentMasterData[index];
-      currentDetailIndex = parseInt(index);
+  resultsContainer.innerHTML = "";
+  if (currentMasterData.length === 0) return;
 
-      modalBody.innerHTML = `
-        <h2>${item.title}</h2>
-        <p><strong>施策概要:</strong> ${item.overview}</p>
-        <p><strong>目標KPI:</strong> ${item.kpi}</p>
-        <p><strong>想定主体:</strong> ${item.actor}</p>
-        <div style="margin-top: 20px; text-align: right;">
-          <button id="addToCompareBtn">比較リストに追加</button>
-        </div>
-      `;
-      modal.style.display = "block";
-    }
+  currentMasterData.forEach((item, index) => {
+    const card = document.createElement('div');
+    card.className = 'card';
+    card.setAttribute('data-index', index);
+    card.innerHTML = 
+      <h3>${item.strategy}</h3>
+      <p><strong>KPI:</strong> ${item.kpi}</p>
+      <button class="detail-btn">詳細</button>
+    ;
+    resultsContainer.appendChild(card);
   });
+});
+
+
+document.body.addEventListener('click', (event) => {
+  if (event.target.classList.contains('detail-btn')) {
+    const parentCard = event.target.closest('.card');
+    const index = parentCard.getAttribute('data-index');
+    const item = currentMasterData[index];
+    currentDetailIndex = parseInt(index);
+
+    modalBody.innerHTML = 
+      <h2>🧠 ${item.strategy}</h2>
+      <div style="margin-top: 12px;">
+        <h3 style="font-size: 16px;">📌 施策内容</h3>
+        <p style="font-size: 15px; line-height: 1.6;">${item.policy}</p>
+      </div>
+      <div style="margin-top: 10px;">
+        <p><strong>📊 KPI:</strong> ${item.kpi}</p>
+        <p><strong>🔍 視点:</strong> ${item.viewpoint}</p>
+        <p><strong>📝 注釈:</strong> ${item.note}</p>
+      </div>
+    ;
+    modal.style.display = "block";
+  }
+});
 
   modalBody.addEventListener('click', (event) => {
   if (event.target.id === 'addToCompareBtn' && currentDetailIndex !== null) {
@@ -83,7 +90,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!exists) {
       const card = document.createElement('div');
       card.className = 'card';
-      card.innerHTML = `
+      card.innerHTML = 
         <span class="viewpoint-tag">${item.perspective}</span>
         <h3>${item.title}</h3>
         <p><strong>KPI:</strong> ${item.kpi}</p>
@@ -92,7 +99,7 @@ document.addEventListener('DOMContentLoaded', () => {
           <button class="detail-button">詳細</button>
           <button class="add-priority-button">マインドマップ</button>
         </div>
-      `;
+      ;
       compareListContainer.appendChild(card);
 
       // ✅ 強制的にリストを表示しスクロールとハイライトを適用
@@ -164,7 +171,7 @@ document.addEventListener('DOMContentLoaded', () => {
     analyzeBtn.innerText = "課題抽出中…";
     analyzeBtn.disabled = true;
 
-    const prompt = `${regionName}について、テーマ「${userNote}」に基づく地域課題を抽出してください。\n以下の内容について、最大トークン数500以内で、最大5つまでの地域課題を簡潔に挙げてください。各課題は1〜2文で記述し、原因や背景が簡潔に分かるようにしてください。`;
+    const prompt = ${regionName}について、テーマ「${userNote}」に基づく地域課題を抽出してください。\n以下の内容について、最大トークン数500以内で、最大5つまでの地域課題を簡潔に挙げてください。各課題は1〜2文で記述し、原因や背景が簡潔に分かるようにしてください。;
 
     try {
       await fetchChatGPTResponse(prompt);
@@ -185,7 +192,7 @@ else if (item.perspective.includes("顧客")) labelClass = "customer";
 else if (item.perspective.includes("内部")) labelClass = "process";
 else if (item.perspective.includes("学習")) labelClass = "learning";
 
-card.innerHTML = `
+card.innerHTML = 
   <div class="viewpoint-tag ${labelClass}">${item.perspective}</div>
   <div class="viewpoint-note">${item.note}</div>
   <h3>${item.title}</h3>
@@ -193,7 +200,7 @@ card.innerHTML = `
     <button class="detail-button">詳細</button>
     <button class="add-to-priority">優先リストに追加</button>
   </div>
-`;
+;
 
   coreMasterContainer.appendChild(card);
 });
@@ -203,6 +210,8 @@ coreMasterContainer.addEventListener("click", (event) => {
   if (event.target.classList.contains("add-to-priority")) {
     const originalCard = event.target.closest(".card");
     if (!originalCard) return;
+// ✅ ←ここに入れてください！
+  console.log("originalCard HTML:", originalCard.innerHTML);
 
     const title = originalCard.querySelector("h3")?.textContent.trim();
     if (!title) return;
@@ -215,27 +224,37 @@ coreMasterContainer.addEventListener("click", (event) => {
     }
 
     // ✅ 視点ラベル再生成（classをつけ直す）
-const perspectiveText = originalCard.querySelector(".label")?.textContent || "";
+const perspectiveText = originalCard.querySelector(".viewpoint-tag")?.textContent || "";
 let labelClass = "";
 if (perspectiveText.includes("財務")) labelClass = "finance";
 else if (perspectiveText.includes("顧客")) labelClass = "customer";
 else if (perspectiveText.includes("内部")) labelClass = "process";
 else if (perspectiveText.includes("学習")) labelClass = "learning";
 
-const labelHTML = `<span class="label ${labelClass}">${perspectiveText}</span>`;
 const titleText = originalCard.querySelector("h3")?.textContent || "";
-const noteText = originalCard.querySelector(".note")?.textContent || "";
+const noteText = originalCard.querySelector(".viewpoint-note")?.textContent || "";
 
 const cloned = document.createElement("div");
 cloned.className = "card";
-cloned.innerHTML = `
-  ${labelHTML}
+cloned.innerHTML = 
+  <span class="label viewpoint-tag ${labelClass}">${perspectiveText}</span>
   <h3>${titleText}</h3>
-  <p class="note">${noteText}</p>
+  <div class="note">${noteText}</div>
   <div class="button-area">
-    <button class="add-priority-button">マインドマップ</button>
+    <button class="openMindMapBtn">マインドマップ</button>
   </div>
-`;
+;
+
+cloned.querySelector(".openMindMapBtn").addEventListener("click", () => {
+  const modal = document.getElementById("mindMapModal");
+  const body = document.getElementById("mindMapContent");
+  body.innerHTML = 
+    <h2>🧠 ${titleText}</h2>
+    <p>${noteText}</p>
+  ;
+  modal.style.display = "block";
+});
+
 
 compareListContainer.appendChild(cloned);
 compareListContainer.scrollIntoView({ behavior: "smooth" });
@@ -290,7 +309,7 @@ setTimeout(() => compareListContainer.classList.remove("highlight"), 1500);
       isFetching = true;
       nexcoBtn.textContent = "NEXCO情報 取得中…";
 
-      const prompt = `${region}周辺の高速道路に関する、主なインターチェンジ、サービスエリア、パーキングエリアを最大5〜7件程度、リスト形式で簡潔にまとめてください。各施設名と簡単な特徴（例：トイレ、飲食、ガソリン有無など）だけを記載してください。それ以外の情報は不要です。`;
+      const prompt = ${region}周辺の高速道路に関する、主なインターチェンジ、サービスエリア、パーキングエリアを最大5〜7件程度、リスト形式で簡潔にまとめてください。各施設名と簡単な特徴（例：トイレ、飲食、ガソリン有無など）だけを記載してください。それ以外の情報は不要です。;
 
       fetch("/api/chatgpt", {
         method: "POST",
@@ -348,11 +367,11 @@ const mindMapContent = document.getElementById("mindMapContent");
 compareListContainer.addEventListener("click", (event) => {
   if (event.target.classList.contains("add-priority-button")) {
     const titles = [...compareListContainer.querySelectorAll("h3")].map(el => el.textContent.trim());
-    mindMapContent.innerHTML = `
+    mindMapContent.innerHTML = 
       <ul style="list-style: none; padding-left: 0;">
-        ${titles.map(title => `<li style="margin-bottom: 10px;">🟢 ${title}</li>`).join("")}
+        ${titles.map(title => <li style="margin-bottom: 10px;">🟢 ${title}</li>).join("")}
       </ul>
-    `;
+    ;
     mindMapModal.style.display = "block";
   }
 });
