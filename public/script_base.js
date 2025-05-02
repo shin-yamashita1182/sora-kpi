@@ -78,7 +78,7 @@ document.addEventListener('DOMContentLoaded', () => {
   if (event.target.id === 'addToCompareBtn' && currentDetailIndex !== null) {
     const item = currentMasterData[currentDetailIndex];
     const exists = [...compareListContainer.querySelectorAll('.card')]
-      .some(card => card.querySelector('h3')?.textContent === item.title);
+    .some(card => card.querySelector('h3')?.textContent === item.strategy); // ← ✅ これで完全修正
 
     if (!exists) {
       const card = document.createElement('div');
