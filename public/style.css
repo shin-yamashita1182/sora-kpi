@@ -162,7 +162,7 @@ header {
 
 /* ✅ 注釈（視点の下） */
 .card .note {
-  font-size: 13px;
+  font-size: 10px;
   font-style: italic;
   color: #555;
   margin-bottom: 4px;
