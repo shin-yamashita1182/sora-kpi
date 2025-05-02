@@ -151,11 +151,16 @@ header {
 
 
 /* 各視点に応じた色ラベル */
-.viewpoint-tag.finance  { background-color: #dc3545; color: #000; } /* 財務の視点 */
-.viewpoint-tag.customer { background-color: #0d6efd; color: #000; } /* 顧客の視点 */
-.viewpoint-tag.process  { background-color: #ffc107; color: #000; } /* 内部プロセス */
-.viewpoint-tag.learning { background-color: #fd7e14; color: #000; } /* 学習と成長 */
+.label.finance,
+.viewpoint-tag.finance { background-color: #dc3545; }
+.label.customer,
+.viewpoint-tag.customer { background-color: #0d6efd; }
+.label.process,
+.viewpoint-tag.process { background-color: #ffc107;  }
+.label.learning,
+.viewpoint-tag.learning { background-color: #fd7e14; }
 
+/* ✅ 注釈（視点の下） */
 .card .note {
   font-size: 13px;
   font-style: italic;
@@ -205,19 +210,15 @@ header {
 }
 .label,
 .viewpoint-tag {
-  display: block;
-  width: 100%;
-  text-align: center;
-  font-size: 13px;
+  font-size: 0.75rem;
   font-weight: bold;
-  padding: 6px 0;
-  border-radius: 6px 6px 0 0;
-  color: white;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  padding: 2px 6px;
+  border-radius: 6px;
+  display: inline-block;
+  text-align: center;
+  margin-bottom: 6px;
+  color: white !important;
 }
-
 .viewpoint-title {
   font-size: 13px;
   font-weight: bold;
@@ -228,7 +229,7 @@ header {
 /* ✅ 注釈（視点の下） */
 .card .note,
 .card .card-note {
-  font-size: 13px;
+  font-size: 10px;
   font-style: italic;
   color: #555;
   margin-bottom: 8px;
@@ -238,7 +239,7 @@ header {
 /* 各視点の色背景 */
 .viewpoint-finance  { background-color: #dc3545; }
 .viewpoint-customer { background-color: #0d6efd; }
-.viewpoint-process  { background-color: #ffc107; color: #000; }
+.viewpoint-process  { background-color: #ffc107; color: #fff; }
 .viewpoint-learning { background-color: #fd7e14; }
 
 /* ---------- ボタンスタイル ---------- */
