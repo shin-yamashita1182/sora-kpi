@@ -1,242 +1,202 @@
 [
   {
-    "id": "core-001",
-    "strategy": "財政構造の強化・1",
-    "policy": "観光関連商品のEC販売促進に向けた収益基盤と財源構造の強化",
-    "kpi": "観光関連商品のEC収益拡大数値目標1",
+    "id": "core-091",
+    "strategy": "老朽インフラ更新にかかる財政負担を平準化する",
+    "policy": "橋梁・水道などインフラ修繕の長期財政計画を策定",
+    "kpi": "老朽施設の修繕完了率／予算消化率",
+    "note": "",
     "viewpoint": "財務の視点",
     "viewpointKey": "finance",
-    "note": "地域・企業が持続的に成長するための経済的成果や資源の最適化",
-    "tags": [
-      "CoreMaster"
-    ]
+    "category": "中山間地域型"
   },
   {
-    "id": "core-002",
-    "strategy": "財政構造の強化・2",
-    "policy": "観光関連商品のEC販売促進に向けた収益基盤と財源構造の強化",
-    "kpi": "観光関連商品のEC収益拡大数値目標2",
-    "viewpoint": "顧客の視点",
-    "viewpointKey": "customer",
-    "note": "住民・観光客・取引先など外部の満足度や信頼の向上",
-    "tags": [
-      "CoreMaster"
-    ]
-  },
-  {
-    "id": "core-003",
-    "strategy": "財政構造の強化・3",
-    "policy": "観光関連商品のEC販売促進に向けた収益基盤と財源構造の強化",
-    "kpi": "観光関連商品のEC収益拡大数値目標3",
-    "viewpoint": "内部プロセスの視点",
-    "viewpointKey": "process",
-    "note": "業務の効率化やサービス品質の改善に関する活動",
-    "tags": [
-      "CoreMaster"
-    ]
-  },
-  {
-    "id": "core-004",
-    "strategy": "財政構造の強化・4",
-    "policy": "観光関連商品のEC販売促進に向けた収益基盤と財源構造の強化",
-    "kpi": "観光関連商品のEC収益拡大数値目標4",
-    "viewpoint": "学習と成長の視点",
-    "viewpointKey": "learning",
-    "note": "職員や地域全体のスキル・知識・文化の成長と革新性",
-    "tags": [
-      "CoreMaster"
-    ]
-  },
-  {
-    "id": "core-005",
-    "strategy": "財政構造の強化・5",
-    "policy": "観光関連商品のEC販売促進に向けた収益基盤と財源構造の強化",
-    "kpi": "観光関連商品のEC収益拡大数値目標5",
+    "id": "core-212",
+    "strategy": "空き家改修や住宅取得支援に必要な予算を平準化する",
+    "policy": "空き家バンク改修費補助金の年度配分計画と積算モデルの整備",
+    "kpi": "改修補助件数／予算消化率",
+    "note": "",
     "viewpoint": "財務の視点",
     "viewpointKey": "finance",
-    "note": "地域・企業が持続的に成長するための経済的成果や資源の最適化",
-    "tags": [
-      "CoreMaster"
-    ]
+    "category": "移住促進重点型"
   },
   {
-    "id": "core-006",
-    "strategy": "財政構造の強化・6",
-    "policy": "観光関連商品のEC販売促進に向けた収益基盤と財源構造の強化",
-    "kpi": "観光関連商品のEC収益拡大数値目標6",
-    "viewpoint": "顧客の視点",
-    "viewpointKey": "customer",
-    "note": "住民・観光客・取引先など外部の満足度や信頼の向上",
-    "tags": [
-      "CoreMaster"
-    ]
+    "id": "core-180",
+    "strategy": "観光・農業連携型の地方創生交付金申請スキームを整備する",
+    "policy": "交付金申請サポート体制と成果報告書モデルの提供",
+    "kpi": "交付金申請件数／採択率",
+    "note": "",
+    "viewpoint": "財務の視点",
+    "viewpointKey": "finance",
+    "category": "観光×農業ハイブリッド型"
   },
   {
-    "id": "core-007",
-    "strategy": "財政構造の強化・7",
-    "policy": "観光関連商品のEC販売促進に向けた収益基盤と財源構造の強化",
-    "kpi": "観光関連商品のEC収益拡大数値目標7",
-    "viewpoint": "内部プロセスの視点",
-    "viewpointKey": "process",
-    "note": "業務の効率化やサービス品質の改善に関する活動",
-    "tags": [
-      "CoreMaster"
-    ]
-  },
-  {
-    "id": "core-008",
-    "strategy": "財政構造の強化・8",
-    "policy": "観光関連商品のEC販売促進に向けた収益基盤と財源構造の強化",
-    "kpi": "観光関連商品のEC収益拡大数値目標8",
-    "viewpoint": "学習と成長の視点",
-    "viewpointKey": "learning",
-    "note": "職員や地域全体のスキル・知識・文化の成長と革新性",
-    "tags": [
-      "CoreMaster"
-    ]
+    "id": "core-372",
+    "strategy": "避難所整備・老朽化対策の財源確保を中長期で構築する",
+    "policy": "避難所耐震化計画と改修費の5年計画化",
+    "kpi": "改修済施設数／耐震化率",
+    "note": "",
+    "viewpoint": "財務の視点",
+    "viewpointKey": "finance",
+    "category": "防災・災害対策型"
   },
   {
     "id": "core-009",
-    "strategy": "財政構造の強化・9",
-    "policy": "観光関連商品のEC販売促進に向けた収益基盤と財源構造の強化",
-    "kpi": "観光関連商品のEC収益拡大数値目標9",
+    "strategy": "観光投資の回収率向上に向けた収益基盤と財源構造の強化",
+    "policy": "投資対効果の事前評価とレビュー制度を通じた収益性向上と財務基盤の安定化",
+    "kpi": "ROI（投資回収率）",
+    "note": "",
     "viewpoint": "財務の視点",
     "viewpointKey": "finance",
-    "note": "地域・企業が持続的に成長するための経済的成果や資源の最適化",
-    "tags": [
-      "CoreMaster"
-    ]
+    "category": "観光型"
   },
   {
-    "id": "core-010",
-    "strategy": "財政構造の強化・10",
-    "policy": "観光関連商品のEC販売促進に向けた収益基盤と財源構造の強化",
-    "kpi": "観光関連商品のEC収益拡大数値目標10",
+    "id": "core-387",
+    "strategy": "子ども・若者の防災意識向上を学校や家庭と連携して推進する",
+    "policy": "小中高連携の防災授業と家庭学習支援教材の配布",
+    "kpi": "授業実施件数／家庭利用率",
+    "note": "",
     "viewpoint": "顧客の視点",
     "viewpointKey": "customer",
-    "note": "住民・観光客・取引先など外部の満足度や信頼の向上",
-    "tags": [
-      "CoreMaster"
-    ]
+    "category": "防災・災害対策型"
   },
   {
-    "id": "core-011",
-    "strategy": "財政構造の強化・11",
-    "policy": "観光関連商品のEC販売促進に向けた収益基盤と財源構造の強化",
-    "kpi": "観光関連商品のEC収益拡大数値目標11",
-    "viewpoint": "内部プロセスの視点",
-    "viewpointKey": "process",
-    "note": "業務の効率化やサービス品質の改善に関する活動",
-    "tags": [
-      "CoreMaster"
-    ]
-  },
-  {
-    "id": "core-012",
-    "strategy": "財政構造の強化・12",
-    "policy": "観光関連商品のEC販売促進に向けた収益基盤と財源構造の強化",
-    "kpi": "観光関連商品のEC収益拡大数値目標12",
-    "viewpoint": "学習と成長の視点",
-    "viewpointKey": "learning",
-    "note": "職員や地域全体のスキル・知識・文化の成長と革新性",
-    "tags": [
-      "CoreMaster"
-    ]
-  },
-  {
-    "id": "core-013",
-    "strategy": "財政構造の強化・13",
-    "policy": "観光関連商品のEC販売促進に向けた収益基盤と財源構造の強化",
-    "kpi": "観光関連商品のEC収益拡大数値目標13",
-    "viewpoint": "財務の視点",
-    "viewpointKey": "finance",
-    "note": "地域・企業が持続的に成長するための経済的成果や資源の最適化",
-    "tags": [
-      "CoreMaster"
-    ]
-  },
-  {
-    "id": "core-014",
-    "strategy": "財政構造の強化・14",
-    "policy": "観光関連商品のEC販売促進に向けた収益基盤と財源構造の強化",
-    "kpi": "観光関連商品のEC収益拡大数値目標14",
+    "id": "core-342",
+    "strategy": "子育て・教育支援に関するサービスの利便性を向上させる",
+    "policy": "保育園・小学校ポータルの統合とオンライン予約機能拡充",
+    "kpi": "オンライン予約利用率／施設利用者満足度",
+    "note": "",
     "viewpoint": "顧客の視点",
     "viewpointKey": "customer",
-    "note": "住民・観光客・取引先など外部の満足度や信頼の向上",
-    "tags": [
-      "CoreMaster"
-    ]
+    "category": "都市型"
   },
   {
-    "id": "core-015",
-    "strategy": "財政構造の強化・15",
-    "policy": "観光関連商品のEC販売促進に向けた収益基盤と財源構造の強化",
-    "kpi": "観光関連商品のEC収益拡大数値目標15",
-    "viewpoint": "内部プロセスの視点",
-    "viewpointKey": "process",
-    "note": "業務の効率化やサービス品質の改善に関する活動",
-    "tags": [
-      "CoreMaster"
-    ]
-  },
-  {
-    "id": "core-016",
-    "strategy": "財政構造の強化・16",
-    "policy": "観光関連商品のEC販売促進に向けた収益基盤と財源構造の強化",
-    "kpi": "観光関連商品のEC収益拡大数値目標16",
-    "viewpoint": "学習と成長の視点",
-    "viewpointKey": "learning",
-    "note": "職員や地域全体のスキル・知識・文化の成長と革新性",
-    "tags": [
-      "CoreMaster"
-    ]
-  },
-  {
-    "id": "core-017",
-    "strategy": "財政構造の強化・17",
-    "policy": "観光関連商品のEC販売促進に向けた収益基盤と財源構造の強化",
-    "kpi": "観光関連商品のEC収益拡大数値目標17",
-    "viewpoint": "財務の視点",
-    "viewpointKey": "finance",
-    "note": "地域・企業が持続的に成長するための経済的成果や資源の最適化",
-    "tags": [
-      "CoreMaster"
-    ]
-  },
-  {
-    "id": "core-018",
-    "strategy": "財政構造の強化・18",
-    "policy": "観光関連商品のEC販売促進に向けた収益基盤と財源構造の強化",
-    "kpi": "観光関連商品のEC収益拡大数値目標18",
+    "id": "core-265",
+    "strategy": "地域とのつながりを実感できる子育て支援サービスを拡充する",
+    "policy": "地域子育て拠点施設の増設と交流イベントの定例開催",
+    "kpi": "拠点施設来訪者数／イベント参加率",
+    "note": "",
     "viewpoint": "顧客の視点",
     "viewpointKey": "customer",
-    "note": "住民・観光客・取引先など外部の満足度や信頼の向上",
-    "tags": [
-      "CoreMaster"
-    ]
+    "category": "子育て・定住型"
   },
   {
-    "id": "core-019",
-    "strategy": "財政構造の強化・19",
-    "policy": "観光関連商品のEC販売促進に向けた収益基盤と財源構造の強化",
-    "kpi": "観光関連商品のEC収益拡大数値目標19",
+    "id": "core-023",
+    "strategy": "訪日外国人向けサービス強化に向けた地域施策の体系的展開",
+    "policy": "外国人観光客向けに多言語表示とスマート決済の環境整備を推進",
+    "kpi": "外国人観光客満足度調査結果",
+    "note": "",
+    "viewpoint": "顧客の視点",
+    "viewpointKey": "customer",
+    "category": "観光型"
+  },
+  {
+    "id": "core-301",
+    "strategy": "高齢者の外出・移動の自由を確保する",
+    "policy": "コミュニティバス・乗合タクシー制度の拡充と運行補助制度",
+    "kpi": "移動支援利用件数／高齢者の外出頻度",
+    "note": "",
+    "viewpoint": "顧客の視点",
+    "viewpointKey": "customer",
+    "category": "高齢化重点地域型"
+  },
+  {
+    "id": "core-279",
+    "strategy": "地域子育て拠点の運営事務を効率化・外部委託する",
+    "policy": "運営委託ガイドライン策定と契約管理支援システムの導入",
+    "kpi": "委託業務コスト削減額／契約遵守率",
+    "note": "",
     "viewpoint": "内部プロセスの視点",
     "viewpointKey": "process",
-    "note": "業務の効率化やサービス品質の改善に関する活動",
-    "tags": [
-      "CoreMaster"
-    ]
+    "category": "子育て・定住型"
   },
   {
-    "id": "core-020",
-    "strategy": "財政構造の強化・20",
-    "policy": "観光関連商品のEC販売促進に向けた収益基盤と財源構造の強化",
-    "kpi": "観光関連商品のEC収益拡大数値目標20",
+    "id": "core-078",
+    "strategy": "水道・電力インフラの定期点検業務を最適化する",
+    "policy": "検針・点検スケジュールの最適化と業務委託の電子化",
+    "kpi": "委託業務の電子管理率／点検漏れ率の低下",
+    "note": "",
+    "viewpoint": "内部プロセスの視点",
+    "viewpointKey": "process",
+    "category": "離島型"
+  },
+  {
+    "id": "core-353",
+    "strategy": "ゴミ収集・清掃業務のスマート化を推進する",
+    "policy": "IoTゴミ箱導入と収集ルート最適化システムの導入",
+    "kpi": "収集効率／市民満足度スコア／回収頻度最適化率",
+    "note": "",
+    "viewpoint": "内部プロセスの視点",
+    "viewpointKey": "process",
+    "category": "都市型"
+  },
+  {
+    "id": "core-236",
+    "strategy": "移住関連制度の更新・周知を自動化する",
+    "policy": "制度一覧自動更新＋WEB反映ツールの運用開始",
+    "kpi": "制度周知率／更新遅延件数",
+    "note": "",
+    "viewpoint": "内部プロセスの視点",
+    "viewpointKey": "process",
+    "category": "移住促進重点型"
+  },
+  {
+    "id": "core-040",
+    "strategy": "地域資源データベースの整備に向けた実行体制と業務設計の高度化",
+    "policy": "観光スポットや伝統資源のDB構築の具体化と再設計による業務効率・品質の向上",
+    "kpi": "データ登録件数",
+    "note": "",
+    "viewpoint": "内部プロセスの視点",
+    "viewpointKey": "process",
+    "category": "観光型"
+  },
+  {
+    "id": "core-047",
+    "strategy": "DXリテラシーの向上を実現するための人材・仕組み・環境の構築",
+    "policy": "観光・地域産業に関わる人材を対象とした体系的な研修プログラムの設計と運営",
+    "kpi": "DX研修修了率",
+    "note": "",
     "viewpoint": "学習と成長の視点",
     "viewpointKey": "learning",
-    "note": "職員や地域全体のスキル・知識・文化の成長と革新性",
-    "tags": [
-      "CoreMaster"
-    ]
+    "category": "観光型"
+  },
+  {
+    "id": "core-207",
+    "strategy": "観光農業関連のデジタルスキル研修を導入する",
+    "policy": "SNS活用・ネット販売・デジタル観光案内の講座整備",
+    "kpi": "講座参加者数／業務活用率",
+    "note": "",
+    "viewpoint": "学習と成長の視点",
+    "viewpointKey": "learning",
+    "category": "観光×農業ハイブリッド型"
+  },
+  {
+    "id": "core-083",
+    "strategy": "若手職員の育成とキャリアパスを明確にする",
+    "policy": "若手職員のメンター制度導入と異動サイクルの柔軟化",
+    "kpi": "育成職員数／離職率の低下",
+    "note": "",
+    "viewpoint": "学習と成長の視点",
+    "viewpointKey": "learning",
+    "category": "離島型"
+  },
+  {
+    "id": "core-362",
+    "strategy": "DX人材・デジタルリテラシー教育を体系化する",
+    "policy": "市内小中高での情報リテラシー指導者研修と授業導入",
+    "kpi": "情報教育導入校数／リテラシーテスト平均点",
+    "note": "",
+    "viewpoint": "学習と成長の視点",
+    "viewpointKey": "learning",
+    "category": "都市型"
+  },
+  {
+    "id": "core-082",
+    "strategy": "デジタルスキルの基礎を地域住民に普及させる",
+    "policy": "公民館・自治会館にてスマホ・PC講座の定期実施",
+    "kpi": "講座開催回数／参加率／満足度",
+    "note": "",
+    "viewpoint": "学習と成長の視点",
+    "viewpointKey": "learning",
+    "category": "離島型"
   }
 ]
