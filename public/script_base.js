@@ -217,7 +217,7 @@ coreMasterContainer.addEventListener("click", (event) => {
     }
 
     // ✅ 視点ラベル再生成（classをつけ直す）
-const perspectiveText = originalCard.querySelector(".label")?.textContent || "";
+const perspectiveText = originalCard.querySelector(".viewpoint-tag")?.textContent || "";
 let labelClass = "";
 if (perspectiveText.includes("財務")) labelClass = "finance";
 else if (perspectiveText.includes("顧客")) labelClass = "customer";
@@ -225,9 +225,8 @@ else if (perspectiveText.includes("内部")) labelClass = "process";
 else if (perspectiveText.includes("学習")) labelClass = "learning";
 
 const titleText = originalCard.querySelector("h3")?.textContent || "";
-const noteText = originalCard.querySelector(".note")?.textContent || "";
+const noteText = originalCard.querySelector(".viewpoint-note")?.textContent || "";
 
-// ✅ カード要素生成（構造は戦略リストと完全一致）
 const cloned = document.createElement("div");
 cloned.className = "card";
 cloned.innerHTML = `
@@ -239,14 +238,12 @@ cloned.innerHTML = `
   </div>
 `;
 
-// ✅ モーダル連携（マインドマップ）
 cloned.querySelector(".openMindMapBtn").addEventListener("click", () => {
   const modal = document.getElementById("mindMapModal");
   const body = document.getElementById("mindMapContent");
   body.innerHTML = `
-    <h2>🧠 ${titleText} のマインドマップ</h2>
+    <h2>🧠 ${titleText}</h2>
     <p>${noteText}</p>
-    <p>（ここにマインド構造や関連施策を後で展開）</p>
   `;
   modal.style.display = "block";
 });
