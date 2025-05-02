@@ -1,4 +1,3 @@
-console.log("✅ script_base.js 読み込まれたよ！");
 // ✅ SORA Dashboard Script Base - 完全版（NEXCO連動 + 課題抽出 + KPI分析 + 比較）
 document.addEventListener('DOMContentLoaded', () => {
   const modal = document.getElementById("detailModal");
@@ -27,7 +26,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const category = categorySelect.value;
     if (category === "観光型") {
       try {
-        const response = await fetch('coremaster_real_20_refined.json');
+        const response = await fetch('coremaster_demo_20.json');
         if (!response.ok) return;
         currentMasterData = await response.json();
       } catch (error) {
@@ -47,7 +46,7 @@ document.addEventListener('DOMContentLoaded', () => {
       card.className = 'card';
       card.setAttribute('data-index', index);
       card.innerHTML = `
-        <h3>${item.strategy}</h3> → ✅
+        <h3>${item.title}</h3>
         <p><strong>KPI:</strong> ${item.kpi}</p>
         <button class="detail-btn">詳細</button>
       `;
@@ -62,15 +61,15 @@ document.addEventListener('DOMContentLoaded', () => {
       const item = currentMasterData[index];
       currentDetailIndex = parseInt(index);
 
-  modalBody.innerHTML = `
-  <h2>${item.strategy}</h2>
-  <p><strong>施策概要:</strong> ${item.policy}</p>
-  <p><strong>目標KPI:</strong> ${item.kpi}</p>
-  <p><strong>注釈:</strong> ${item.note}</p>
-  <div style="margin-top: 20px; text-align: right;">
-    <button id="addToCompareBtn">比較リストに追加</button>
-  </div>
-`;
+      modalBody.innerHTML = `
+        <h2>${item.title}</h2>
+        <p><strong>施策概要:</strong> ${item.overview}</p>
+        <p><strong>目標KPI:</strong> ${item.kpi}</p>
+        <p><strong>想定主体:</strong> ${item.actor}</p>
+        <div style="margin-top: 20px; text-align: right;">
+          <button id="addToCompareBtn">比較リストに追加</button>
+        </div>
+      `;
       modal.style.display = "block";
     }
   });
@@ -79,7 +78,7 @@ document.addEventListener('DOMContentLoaded', () => {
   if (event.target.id === 'addToCompareBtn' && currentDetailIndex !== null) {
     const item = currentMasterData[currentDetailIndex];
     const exists = [...compareListContainer.querySelectorAll('.card')]
-    .some(card => card.querySelector('h3')?.textContent === item.strategy); // ← ✅ これで完全修正
+      .some(card => card.querySelector('h3')?.textContent === item.title);
 
     if (!exists) {
       const card = document.createElement('div');
@@ -171,48 +170,33 @@ document.addEventListener('DOMContentLoaded', () => {
       await fetchChatGPTResponse(prompt);
       analysisDone = true;
 
-    try {
-  await fetchChatGPTResponse(prompt);
-  analysisDone = true;
-} catch (error) {
-  alert("ChatGPTの応答に失敗しました。");
-  console.error(error);
-  return;
-}
+      const response = await fetch("/json/coremaster_demo_20.json");
+      const data = await response.json();
+      coreMasterContainer.innerHTML = "";
 
-try {
-  const response = await fetch("/json/coremaster_real_20_refined.json");
-  if (!response.ok) throw new Error("カードデータ取得失敗");
+data.forEach((item, index) => {
+  const card = document.createElement("div");
+  card.className = "card";
+  card.setAttribute("data-index", index);
 
-  const data = await response.json();
-  coreMasterContainer.innerHTML = "";
+let labelClass = "";
+if (item.perspective.includes("財務")) labelClass = "finance";
+else if (item.perspective.includes("顧客")) labelClass = "customer";
+else if (item.perspective.includes("内部")) labelClass = "process";
+else if (item.perspective.includes("学習")) labelClass = "learning";
 
-  data.forEach((item, index) => {
-    const card = document.createElement("div");
-    card.className = "card";
-    card.setAttribute("data-index", index);
+card.innerHTML = `
+  <div class="viewpoint-tag ${labelClass}">${item.perspective}</div>
+  <div class="viewpoint-note">${item.note}</div>
+  <h3>${item.title}</h3>
+  <div class="button-area">
+    <button class="detail-button">詳細</button>
+    <button class="add-to-priority">優先リストに追加</button>
+  </div>
+`;
 
-    let labelClass = "";
-    if (item.viewpoint.includes("財務")) labelClass = "finance";
-    else if (item.viewpoint.includes("顧客")) labelClass = "customer";
-    else if (item.viewpoint.includes("内部")) labelClass = "process";
-    else if (item.viewpoint.includes("学習")) labelClass = "learning";
-
-    card.innerHTML = `
-      <div class="viewpoint-tag ${labelClass}">${item.viewpoint}</div>
-      <div class="viewpoint-note">${item.note || "(注釈なし)"}</div>
-      <h3>${item.strategy}</h3>
-      <div class="button-area">
-        <button class="detail-button">詳細</button>
-        <button class="add-to-priority">優先リストに追加</button>
-      </div>
-    `;
-    coreMasterContainer.appendChild(card);
-  });
-} catch (error) {
-  alert("カードデータの読み込みに失敗しました。");
-  console.error(error);
-}
+  coreMasterContainer.appendChild(card);
+});
 
       // ✅ 正しい位置（forEachの外！）
 coreMasterContainer.addEventListener("click", (event) => {
@@ -273,11 +257,9 @@ setTimeout(() => compareListContainer.classList.remove("highlight"), 1500);
 });
 
   
-      if (analysisDone) {
-  coreMasterContainer.scrollIntoView({ behavior: "smooth" });
-  coreMasterContainer.classList.add("highlight");
-  setTimeout(() => coreMasterContainer.classList.remove("highlight"), 1500);
-}
+      document.getElementById("resultsContainer")?.scrollIntoView({ behavior: "smooth" });
+      resultsContainer.classList.add("highlight");
+      setTimeout(() => resultsContainer.classList.remove("highlight"), 1500);
 
     } catch (error) {
       console.error("抽出中に問題が発生しました:", error);
@@ -340,8 +322,7 @@ setTimeout(() => compareListContainer.classList.remove("highlight"), 1500);
             li.textContent = text.trim();
             infoList.appendChild(li);
           });
-          coreMasterContainer.classList.remove("highlight"); // ✅ 強制ハイライト解除
-        }) 
+
           infoFetched = true;
           isFetching = false;
           infoBox.classList.add("open");
