@@ -170,6 +170,31 @@ document.addEventListener('DOMContentLoaded', () => {
       await fetchChatGPTResponse(prompt);
       analysisDone = true;
 
+      // 戦略リストの取得と展開
+  await displayStrategyList();
+});
+      async function displayStrategyList() {
+  const response = await fetch("/json/coremaster_demo_20.json");
+  const data = await response.json();
+
+  const strategyListContainer = document.getElementById("coreMasterContainer");
+  strategyListContainer.innerHTML = "";  // 既存のリストをクリア
+
+  data.forEach((item, index) => {
+    const card = document.createElement("div");
+    card.className = "card";
+    card.setAttribute("data-index", index);
+    
+    card.innerHTML = `
+      <h3>${item.title}</h3>
+      <p><strong>KPI:</strong> ${item.kpi}</p>
+      <button class="detail-btn">詳細</button>
+    `;
+
+    strategyListContainer.appendChild(card);
+  });
+}
+      
       const response = await fetch("/json/coremaster_demo_20.json");
       const data = await response.json();
       coreMasterContainer.innerHTML = "";
