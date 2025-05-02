@@ -140,78 +140,85 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   analyzeBtn.addEventListener("click", async () => {
-    if (analysisDone) {
-      alert("すでに課題抽出が完了しています。ページを更新するか、条件を変更してください。");
-      return;
-    }
+  if (analysisDone) {
+    alert("すでに課題抽出が完了しています。ページを更新するか、条件を変更してください。");
+    return;
+  }
 
-    const regionName = document.getElementById("regionName").value.trim();
-    const userNote = document.getElementById("userNote").value.trim();
+  const regionName = document.getElementById("regionName").value.trim();
+  const userNote = document.getElementById("userNote").value.trim();
 
-    if (!regionName) {
-      alert("地域名を入力してください。");
-      return;
-    }
+  if (!regionName) {
+    alert("地域名を入力してください。");
+    return;
+  }
 
-    if (!userNote) {
-      alert("テーマや自由記述を入力してください。");
-      return;
-    }
+  if (!userNote) {
+    alert("テーマや自由記述を入力してください。");
+    return;
+  }
 
-    updateGoogleMap(regionName);
+  updateGoogleMap(regionName);
 
-    const originalBtnText = analyzeBtn.innerText;
-    analyzeBtn.innerText = "課題抽出中…";
-    analyzeBtn.disabled = true;
+  const originalBtnText = analyzeBtn.innerText;
+  analyzeBtn.innerText = "課題抽出中…";
+  analyzeBtn.disabled = true;
 
-    const prompt = `${regionName}について、テーマ「${userNote}」に基づく地域課題を抽出してください。\n以下の内容について、最大トークン数500以内で、最大5つまでの地域課題を簡潔に挙げてください。各課題は1〜2文で記述し、原因や背景が簡潔に分かるようにしてください。`;
+  const prompt = `${regionName}について、テーマ「${userNote}」に基づく地域課題を抽出してください。\n以下の内容について、最大トークン数500以内で、最大5つまでの地域課題を簡潔に挙げてください。各課題は1〜2文で記述し、原因や背景が簡潔に分かるようにしてください。`;
 
-    try {
-      await fetchChatGPTResponse(prompt);
-      analysisDone = true;
+  try {
+    await fetchChatGPTResponse(prompt);
+    analysisDone = true;
+  } catch (error) {
+    console.error("ChatGPTエラー:", error);
+    alert("課題抽出に失敗しました。");
+    analyzeBtn.innerText = originalBtnText;
+    analyzeBtn.disabled = false;
+    return;
+  }
 
-    try {
-  await fetchChatGPTResponse(prompt);
-  analysisDone = true;
-} catch (error) {
-  alert("ChatGPTの応答に失敗しました。");
-  console.error(error);
-  return;
-}
+  try {
+    const response = await fetch("/json/coremaster_real_20_refined.json");
+    if (!response.ok) throw new Error("カードデータ取得失敗");
 
-try {
-  const response = await fetch("/json/coremaster_real_20_refined.json");
-  if (!response.ok) throw new Error("カードデータ取得失敗");
+    const data = await response.json();
+    coreMasterContainer.innerHTML = "";
 
-  const data = await response.json();
-  coreMasterContainer.innerHTML = "";
+    data.forEach((item, index) => {
+      const card = document.createElement("div");
+      card.className = "card";
+      card.setAttribute("data-index", index);
 
-  data.forEach((item, index) => {
-    const card = document.createElement("div");
-    card.className = "card";
-    card.setAttribute("data-index", index);
+      let labelClass = "";
+      if (item.viewpoint.includes("財務")) labelClass = "finance";
+      else if (item.viewpoint.includes("顧客")) labelClass = "customer";
+      else if (item.viewpoint.includes("内部")) labelClass = "process";
+      else if (item.viewpoint.includes("学習")) labelClass = "learning";
 
-    let labelClass = "";
-    if (item.viewpoint.includes("財務")) labelClass = "finance";
-    else if (item.viewpoint.includes("顧客")) labelClass = "customer";
-    else if (item.viewpoint.includes("内部")) labelClass = "process";
-    else if (item.viewpoint.includes("学習")) labelClass = "learning";
+      card.innerHTML = `
+        <div class="viewpoint-tag ${labelClass}">${item.viewpoint}</div>
+        <div class="viewpoint-desc">${item.note || "(注釈なし)"}</div>
+        <h3>${item.strategy}</h3>
+        <div class="button-area">
+          <button class="detail-button">詳細</button>
+          <button class="add-to-priority">優先リストに追加</button>
+        </div>
+      `;
+      coreMasterContainer.appendChild(card);
+    });
 
-    card.innerHTML = `
-  <div class="viewpoint-tag ${labelClass}">${item.viewpoint}</div>
-  <div class="viewpoint-desc">${item.note || "(注釈なし)"}</div>
-  <h3>${item.strategy}</h3>
-  <div class="button-area">
-    <button class="detail-button">詳細</button>
-    <button class="add-priority-button">優先リストに追加</button>
-  </div>
-`;
-    coreMasterContainer.appendChild(card);
-  });
-} catch (error) {
-  alert("カードデータの読み込みに失敗しました。");
-  console.error(error);
-}
+    coreMasterContainer.scrollIntoView({ behavior: "smooth" });
+    coreMasterContainer.classList.add("highlight");
+    setTimeout(() => coreMasterContainer.classList.remove("highlight"), 1500);
+  } catch (error) {
+    console.error("カード読み込みエラー:", error);
+    alert("カードデータの読み込みに失敗しました。");
+  } finally {
+    analyzeBtn.innerText = originalBtnText;
+    analyzeBtn.disabled = false;
+  }
+});
+
 
       // ✅ 正しい位置（forEachの外！）
 coreMasterContainer.addEventListener("click", (event) => {
