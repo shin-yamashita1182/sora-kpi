@@ -1,3 +1,4 @@
+console.log("✅ script_base.js 読み込まれたよ！");
 // ✅ SORA Dashboard Script Base - 完全版（NEXCO連動 + 課題抽出 + KPI分析 + 比較）
 document.addEventListener('DOMContentLoaded', () => {
   const modal = document.getElementById("detailModal");
