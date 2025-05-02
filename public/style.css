@@ -111,7 +111,7 @@ header {
 }
 
 /* ---------- カードレイアウト ---------- */
-.card {
+#coreMasterContainer .card {
   background-color: white;
   border-left: 8px solid #ccc;
   padding: 1rem;
@@ -125,14 +125,15 @@ header {
   position: relative;
 }
 
-.card h3 {
+/* タイトル */
+#coreMasterContainer .card h3 {
   margin-top: 0.5rem;
   font-size: 18px;
   font-weight: bold;
   text-align: center;
 }
 
-.card .label {
+#coreMasterContainer .card .label {
   font-size: 13px;
   font-weight: bold;
   padding: 4px 8px;
@@ -161,22 +162,24 @@ header {
 .viewpoint-tag.learning { background-color: #f9a825; }
 
 /* ✅ 注釈（視点の下） */
-.card .note {
+#coreMasterContainer .note {
   font-size: 9px !important;
   font-style: italic;
   color: #555;
-  margin-bottom: 4px;
+  margin-top: 4px;
+  margin-bottom: 6px;
+  line-height: 1.3;
 }
 
 /* ✅ ボタン配置 */
-.card .button-area {
+#coreMasterContainer .button-area {
   display: flex;
   flex-direction: column;
   gap: 8px;
   margin-top: 1rem;
 }
 
-.card .button-area button {
+#coreMasterContainer .button-area button {
   width: 100%;
   padding: 10px;
   border: none;
@@ -187,8 +190,8 @@ header {
   box-sizing: border-box; /* ✅ これが幅ズレ対策のポイント */
 }
 
-.card .detail-button,
-.card .add-priority-button {
+#coreMasterContainer .card .detail-button,
+#coreMasterContainer .card .add-priority-button {
   width: 100% !important;
   padding: 10px;
   border: none;
@@ -201,25 +204,25 @@ header {
 }
 
 
-.card .detail-button {
+#coreMasterContainer .detail-button {
   background-color: #28a745;
   color: white;
 }
 
-.card .detail-button:hover {
+#coreMasterContainer .detail-button:hover {
   background-color: #218838;
 }
 
-.card .add-priority-button {
+#coreMasterContainer .add-priority-button {
   background-color: #0d6efd;
   color: white;
 }
 
-.card .add-priority-button:hover {
+#coreMasterContainer .add-priority-button:hover {
   background-color: #0b5ed7;
 }
-.label,
-.viewpoint-tag {
+#coreMasterContainer .label,
+#coreMasterContainer .viewpoint-tag {
   font-size: 0.75rem;
   font-weight: bold;
   padding: 4px 8px;
@@ -239,8 +242,8 @@ header {
 }
 
 /* ✅ 注釈（視点の下） */
-.card .note,
-.card .card-note {
+#coreMasterContainer .card .note,
+#coreMasterContainer .card .card-note {
   font-size: 10px;
   font-style: italic;
   color: #555;
