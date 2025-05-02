@@ -201,12 +201,20 @@ document.addEventListener('DOMContentLoaded', () => {
       // ✅ 正しい位置（forEachの外！）
 coreMasterContainer.addEventListener("click", (event) => {
   if (event.target.classList.contains("add-to-priority")) {
-    const card = event.target.closest(".card");
-    if (!card) return;
+    const originalCard = event.target.closest(".card");
+    if (!originalCard) return;
 
-    const cloned = card.cloneNode(true);
+    // 内側の構造だけ取得
+    const inner = originalCard.querySelector("div");
+    if (!inner) return;
+
+    // 新しい.card を再生成
+    const cloned = document.createElement("div");
+    cloned.className = "card";
+    cloned.innerHTML = inner.outerHTML;
+
+    // ボタン修正（追加済みに変更）
     const btn = cloned.querySelector(".add-to-priority");
-
     if (btn) {
       btn.textContent = "追加済み";
       btn.disabled = true;
@@ -218,6 +226,7 @@ coreMasterContainer.addEventListener("click", (event) => {
     compareListContainer.scrollIntoView({ behavior: "smooth" });
   }
 });
+
   
       document.getElementById("resultsContainer")?.scrollIntoView({ behavior: "smooth" });
       resultsContainer.classList.add("highlight");
