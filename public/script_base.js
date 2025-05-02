@@ -39,6 +39,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   generateBtn.addEventListener('click', async () => {
     await loadMasterData();
+console.log("✅ loaded:", currentMasterData);  // ←これを追加して試してみて！
     resultsContainer.innerHTML = "";
     if (currentMasterData.length === 0) return;
     currentMasterData.forEach((item, index) => {
