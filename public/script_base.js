@@ -46,7 +46,7 @@ document.addEventListener('DOMContentLoaded', () => {
       card.className = 'card';
       card.setAttribute('data-index', index);
       card.innerHTML = `
-        <h3>${item.title}</h3>
+        <h3>${item.strategy || "（戦略名未設定）"}</h3>
         <p><strong>KPI:</strong> ${item.kpi}</p>
         <button class="detail-btn">詳細</button>
       `;
@@ -62,7 +62,7 @@ document.addEventListener('DOMContentLoaded', () => {
       currentDetailIndex = parseInt(index);
 
       modalBody.innerHTML = `
-        <h2>${item.title}</h2>
+        <h2>${item.strategy || "（戦略名未設定）"}</h2>
         <p><strong>施策概要:</strong> ${item.overview}</p>
         <p><strong>目標KPI:</strong> ${item.kpi}</p>
         <p><strong>想定主体:</strong> ${item.actor}</p>
@@ -78,16 +78,16 @@ document.addEventListener('DOMContentLoaded', () => {
   if (event.target.id === 'addToCompareBtn' && currentDetailIndex !== null) {
     const item = currentMasterData[currentDetailIndex];
     const exists = [...compareListContainer.querySelectorAll('.card')]
-      .some(card => card.querySelector('h3')?.textContent === item.title);
+      .some(card => card.querySelector('h3')?.textContent === item.strategy || "（戦略名未設定）");
 
     if (!exists) {
       const card = document.createElement('div');
       card.className = 'card';
       card.innerHTML = `
         <span class="viewpoint-tag">${item.perspective}</span>
-        <h3>${item.title}</h3>
+        <h3>${item.strategy || "（戦略名未設定）"}</h3>
         <p><strong>KPI:</strong> ${item.kpi}</p>
-        <p class="card-note">${item.note}</p>
+        <p class="card-note">${item.note || ""}</p>
         <div class="card-buttons">
           <button class="detail-button">詳細</button>
           <button class="add-priority-button">マインドマップ</button>
@@ -185,8 +185,8 @@ else if (item.perspective.includes("学習")) labelClass = "learning";
 
 card.innerHTML = `
   <div class="viewpoint-tag ${labelClass}">${item.perspective}</div>
-  <div class="viewpoint-note">${item.note}</div>
-  <h3>${item.title}</h3>
+  <div class="viewpoint-note">${item.note || ""}</div>
+  <h3>${item.strategy || "（戦略名未設定）"}</h3>
   <div class="button-area">
     <button class="detail-button">詳細</button>
     <button class="add-to-priority">優先リストに追加</button>
@@ -402,8 +402,8 @@ document.getElementById("compareListContainer").addEventListener("click", (event
 
       card.innerHTML = `
         <div class="viewpoint-tag ${labelClass}">${item.perspective}</div>
-        <div class="viewpoint-note">${item.note}</div>
-        <h3>${item.title}</h3>
+        <div class="viewpoint-note">${item.note || ""}</div>
+        <h3>${item.strategy || "（戦略名未設定）"}</h3>
         <div class="button-area">
           <button class="detail-button">詳細</button>
           <button class="add-to-priority">優先リストに追加</button>
