@@ -352,3 +352,19 @@ footer {
   padding: 15px 0;
   border-top: 1px solid #dee2e6;
 }
+/* 戦略リストと優先リストのカードに共通のデザインを適用 */
+#compareListContainer .card {
+  width: 300px;
+  padding: 15px;
+  margin: 10px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: #fff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+/* ボタン配置を中央に整える（戦略リストと揃える） */
+#compareListContainer .card-buttons {
+  text-align: center;
+  margin-top: 10px;
+}
