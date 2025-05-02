@@ -1,4 +1,4 @@
-// ✅ SORA Dashboard Script Base - 復旧版（ChatGPT課題抽出 → 分析対策で戦略展開）
+// ✅ SORA Dashboard Script Base - 完全版（NEXCO連動 + 課題抽出 + KPI分析 + 比較）
 document.addEventListener('DOMContentLoaded', () => {
   const modal = document.getElementById("detailModal");
   const modalBody = document.getElementById("modalBody");
@@ -15,7 +15,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const resultsContainer = document.getElementById('resultsContainer');
   const generateBtn = document.getElementById('generateBtn');
   const analyzeBtn = document.getElementById('analyzeBtn');
-console.log("🧪 analyzeBtn=", analyzeBtn);
   const categorySelect = document.getElementById('category');
   const coreMasterContainer = document.getElementById("coreMasterContainer");
 
@@ -24,74 +23,39 @@ console.log("🧪 analyzeBtn=", analyzeBtn);
   let analysisDone = false;
 
   async function loadMasterData() {
-    try {
-      const response = await fetch('/json/coremaster_demo_20.json');
-      if (!response.ok) throw new Error('データ読み込み失敗');
-      currentMasterData = await response.json();
-    } catch (error) {
-      console.error('Error loading master data:', error);
-      currentMasterData = [];
+    const category = categorySelect.value;
+    if (category === "観光型") {
+      try {
+        const response = await fetch('coremaster_demo_20.json');
+        if (!response.ok) return;
+        currentMasterData = await response.json();
+      } catch (error) {
+        console.error('Error loading JSON:', error);
+      }
+    } else {
+      currentMasterData = []; 
     }
   }
 
-  analyzeBtn.addEventListener("click", async () => {
-    if (analysisDone) {
-      alert("すでに課題抽出が完了しています。ページを更新するか、条件を変更してください。");
-      return;
-    }
-
-    const regionName = document.getElementById("regionName").value.trim();
-    const userNote = document.getElementById("userNote").value.trim();
-
-    if (!regionName || !userNote) {
-      alert("地域名とテーマを入力してください。");
-      return;
-    }
-
-    updateGoogleMap(regionName);
-
-    const prompt = `${regionName}について、テーマ「${userNote}」に基づく地域課題を抽出してください。\n以下の内容について、最大トークン数500以内で、最大5つまでの地域課題を簡潔に挙げてください。各課題は1〜2文で記述し、原因や背景が簡潔に分かるようにしてください。`;
-
-    try {
-      await fetchChatGPTResponse(prompt);
-      analysisDone = true;
-    } catch (error) {
-      console.error('ChatGPT fetch error:', error);
-    }
-  });
-
   generateBtn.addEventListener('click', async () => {
     await loadMasterData();
-    coreMasterContainer.innerHTML = "";
+    resultsContainer.innerHTML = "";
     if (currentMasterData.length === 0) return;
-
     currentMasterData.forEach((item, index) => {
-      const card = document.createElement("div");
-      card.className = "card";
-      card.setAttribute("data-index", index);
-
-      let labelClass = "";
-      if (item.perspective.includes("財務")) labelClass = "finance";
-      else if (item.perspective.includes("顧客")) labelClass = "customer";
-      else if (item.perspective.includes("内部")) labelClass = "process";
-      else if (item.perspective.includes("学習")) labelClass = "learning";
-
+      const card = document.createElement('div');
+      card.className = 'card';
+      card.setAttribute('data-index', index);
       card.innerHTML = `
-        <div class="viewpoint-tag ${labelClass}">${item.perspective}</div>
-        <div class="viewpoint-note">${item.note}</div>
         <h3>${item.title}</h3>
-        <div class="button-area">
-          <button class="detail-button">詳細</button>
-          <button class="add-to-priority">優先リストに追加</button>
-        </div>
+        <p><strong>KPI:</strong> ${item.kpi}</p>
+        <button class="detail-btn">詳細</button>
       `;
-
-      coreMasterContainer.appendChild(card);
+      resultsContainer.appendChild(card);
     });
   });
 
   document.body.addEventListener('click', (event) => {
-    if (event.target.classList.contains('detail-button')) {
+    if (event.target.classList.contains('detail-btn')) {
       const parentCard = event.target.closest('.card');
       const index = parentCard.getAttribute('data-index');
       const item = currentMasterData[index];
@@ -103,7 +67,7 @@ console.log("🧪 analyzeBtn=", analyzeBtn);
         <p><strong>目標KPI:</strong> ${item.kpi}</p>
         <p><strong>想定主体:</strong> ${item.actor}</p>
         <div style="margin-top: 20px; text-align: right;">
-          <button id="addToCompareBtn">優先リストに追加</button>
+          <button id="addToCompareBtn">比較リストに追加</button>
         </div>
       `;
       modal.style.display = "block";
@@ -111,38 +75,136 @@ console.log("🧪 analyzeBtn=", analyzeBtn);
   });
 
   modalBody.addEventListener('click', (event) => {
-    if (event.target.id === 'addToCompareBtn' && currentDetailIndex !== null) {
-      const item = currentMasterData[currentDetailIndex];
-      const exists = [...compareListContainer.querySelectorAll('.card')]
-        .some(card => card.querySelector('h3')?.textContent === item.title);
+  if (event.target.id === 'addToCompareBtn' && currentDetailIndex !== null) {
+    const item = currentMasterData[currentDetailIndex];
+    const exists = [...compareListContainer.querySelectorAll('.card')]
+      .some(card => card.querySelector('h3')?.textContent === item.title);
 
-      if (!exists) {
-        const card = document.createElement('div');
-        card.className = 'card';
-        card.innerHTML = `
-          <div class="viewpoint-tag">${item.perspective}</div>
-          <div class="viewpoint-note">${item.note}</div>
-          <h3>${item.title}</h3>
-          <p><strong>KPI:</strong> ${item.kpi}</p>
-          <div class="card-buttons">
-            <button class="detail-button">詳細</button>
-            <button class="add-priority-button">マインドマップ</button>
-          </div>
-        `;
-        compareListContainer.appendChild(card);
-        compareListContainer.scrollIntoView({ behavior: "smooth" });
-      }
-      modal.style.display = "none";
+    if (!exists) {
+      const card = document.createElement('div');
+      card.className = 'card';
+      card.innerHTML = `
+        <span class="viewpoint-tag">${item.perspective}</span>
+        <h3>${item.title}</h3>
+        <p><strong>KPI:</strong> ${item.kpi}</p>
+        <p class="card-note">${item.note}</p>
+        <div class="card-buttons">
+          <button class="detail-button">詳細</button>
+          <button class="add-priority-button">マインドマップ</button>
+        </div>
+      `;
+      compareListContainer.appendChild(card);
+
+      // ✅ 強制的にリストを表示しスクロールとハイライトを適用
+      compareListContainer.style.display = 'grid';
+      compareListContainer.scrollIntoView({ behavior: "smooth" });
+      compareListContainer.classList.add("highlight");
+      setTimeout(() => compareListContainer.classList.remove("highlight"), 1500);
     }
-  });
+
+    modal.style.display = "none";
+  }
 });
 
+
+  compareListContainer.addEventListener('click', (event) => {
+    if (event.target.classList.contains('remove-btn')) {
+      const card = event.target.closest('.card');
+      if (card) card.remove();
+    }
+  });
+
+  closeBtn.addEventListener('click', () => {
+    modal.style.display = "none";
+  });
+
+  closeMapBtn.addEventListener('click', () => {
+    mapModal.style.display = "none";
+  });
+
+  window.addEventListener('click', (event) => {
+    if (event.target === modal) modal.style.display = "none";
+    if (event.target === mapModal) mapModal.style.display = "none";
+  });
+
+  const miniMap = document.getElementById('miniMap');
+  miniMap.addEventListener('click', () => {
+    mapModalBody.innerHTML = "<div style='width: 100%; height: 400px; background-color: #cce5ff; display: flex; align-items: center; justify-content: center;'>拡大地図エリア</div>";
+    mapModal.style.display = "block";
+  });
+
+  fileInput.addEventListener('change', (event) => {
+    fileNameDisplay.textContent = fileInput.files.length > 0
+      ? fileInput.files[0].name
+      : "ファイルを選択してください";
+  });
+
+  analyzeBtn.addEventListener("click", async () => {
+    if (analysisDone) {
+      alert("すでに課題抽出が完了しています。ページを更新するか、条件を変更してください。");
+      return;
+    }
+
+    const regionName = document.getElementById("regionName").value.trim();
+    const userNote = document.getElementById("userNote").value.trim();
+
+    if (!regionName) {
+      alert("地域名を入力してください。");
+      return;
+    }
+
+    if (!userNote) {
+      alert("テーマや自由記述を入力してください。");
+      return;
+    }
+
+    updateGoogleMap(regionName);
+
+    const originalBtnText = analyzeBtn.innerText;
+    analyzeBtn.innerText = "課題抽出中…";
+    analyzeBtn.disabled = true;
+
+    const prompt = `${regionName}について、テーマ「${userNote}」に基づく地域課題を抽出してください。\n以下の内容について、最大トークン数500以内で、最大5つまでの地域課題を簡潔に挙げてください。各課題は1〜2文で記述し、原因や背景が簡潔に分かるようにしてください。`;
+
+    try {
+      await fetchChatGPTResponse(prompt);
+      analysisDone = true;
+
+      // 🔧 自動カード展開を無効化（分析対策ボタンで実行）
+      const data = await response.json();
+      coreMasterContainer.innerHTML = "";
+
+data.forEach((item, index) => {
+  const card = document.createElement("div");
+  card.className = "card";
+  card.setAttribute("data-index", index);
+
+let labelClass = "";
+if (item.perspective.includes("財務")) labelClass = "finance";
+else if (item.perspective.includes("顧客")) labelClass = "customer";
+else if (item.perspective.includes("内部")) labelClass = "process";
+else if (item.perspective.includes("学習")) labelClass = "learning";
+
+card.innerHTML = `
+  <div class="viewpoint-tag ${labelClass}">${item.perspective}</div>
+  <div class="viewpoint-note">${item.note}</div>
+  <h3>${item.title}</h3>
+  <div class="button-area">
+    <button class="detail-button">詳細</button>
+    <button class="add-to-priority">優先リストに追加</button>
+  </div>
+`;
+
+  coreMasterContainer.appendChild(card);
+});
 
       // ✅ 正しい位置（forEachの外！）
 coreMasterContainer.addEventListener("click", (event) => {
   if (event.target.classList.contains("add-to-priority")) {
     const originalCard = event.target.closest(".card");
     if (!originalCard) return;
+// ✅ ←ここに入れてください！
+  console.log("originalCard HTML:", originalCard.innerHTML);
 
     const title = originalCard.querySelector("h3")?.textContent.trim();
     if (!title) return;
