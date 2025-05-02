@@ -198,6 +198,31 @@ header {
 .card .add-priority-button:hover {
   background-color: #0b5ed7;
 }
+.viewpoint-tag {
+  border-radius: 6px;
+  padding: 6px 8px;
+  margin-bottom: 8px;
+  color: #fff;
+}
+
+.viewpoint-title {
+  font-size: 13px;
+  font-weight: bold;
+  margin-bottom: 4px;
+  white-space: nowrap;
+}
+
+.viewpoint-note {
+  font-size: 11px;
+  line-height: 1.3;
+  opacity: 0.9;
+}
+
+/* 各視点の色背景 */
+.viewpoint-finance  { background-color: #dc3545; }
+.viewpoint-customer { background-color: #0d6efd; }
+.viewpoint-process  { background-color: #ffc107; color: #000; }
+.viewpoint-learning { background-color: #fd7e14; }
 
 /* ---------- ボタンスタイル ---------- */
 button {
