@@ -175,6 +175,24 @@ document.addEventListener('DOMContentLoaded', () => {
       coreMasterContainer.innerHTML = "";
 
       data.forEach((item, index) => {
+        // ここが CoreMaster カードを生成し終えた直後の位置！
+coreMasterContainer.addEventListener("click", (event) => {
+  if (event.target.classList.contains("add-to-priority")) {
+    const card = event.target.closest(".card");
+    if (!card) return;
+
+    const cloned = card.cloneNode(true);
+    cloned.querySelector(".add-to-priority").textContent = "追加済み";
+    cloned.querySelector(".add-to-priority").disabled = true;
+
+    const btn = cloned.querySelector(".add-to-priority");
+    btn.classList.remove("add-to-priority");
+    btn.classList.add("add-priority-button");
+
+    compareListContainer.appendChild(cloned);
+    compareListContainer.scrollIntoView({ behavior: "smooth" });
+  }
+});
         const card = document.createElement("div");
         card.className = "card";
         card.setAttribute("data-index", index);
@@ -198,26 +216,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         coreMasterContainer.appendChild(card);
       });
-      
-// ここが CoreMaster カードを生成し終えた直後の位置！
-coreMasterContainer.addEventListener("click", (event) => {
-  if (event.target.classList.contains("add-to-priority")) {
-    const card = event.target.closest(".card");
-    if (!card) return;
-
-    const cloned = card.cloneNode(true);
-    cloned.querySelector(".add-to-priority").textContent = "追加済み";
-    cloned.querySelector(".add-to-priority").disabled = true;
-
-    const btn = cloned.querySelector(".add-to-priority");
-    btn.classList.remove("add-to-priority");
-    btn.classList.add("add-priority-button");
-
-    compareListContainer.appendChild(cloned);
-    compareListContainer.scrollIntoView({ behavior: "smooth" });
-  }
-});
-      
+        
       document.getElementById("resultsContainer")?.scrollIntoView({ behavior: "smooth" });
       resultsContainer.classList.add("highlight");
       setTimeout(() => resultsContainer.classList.remove("highlight"), 1500);
