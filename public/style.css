@@ -140,6 +140,10 @@ header {
   display: inline-block;
   margin-bottom: 8px;
   color: white;
+  white-space: nowrap;         /* ← 折り返し防止 */
+  max-width: 100%;             /* ← はみ出し防止 */
+  overflow: hidden;            /* ← はみ出し隠す */
+  text-overflow: ellipsis;     /* ← 必要に応じて「…」表示 */
 }
 
 /* 各視点に応じた色ラベル */
