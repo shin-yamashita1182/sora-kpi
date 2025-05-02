@@ -272,9 +272,11 @@ setTimeout(() => compareListContainer.classList.remove("highlight"), 1500);
 });
 
   
-      document.getElementById("resultsContainer")?.scrollIntoView({ behavior: "smooth" });
-      resultsContainer.classList.add("highlight");
-      setTimeout(() => resultsContainer.classList.remove("highlight"), 1500);
+      if (analysisDone) {
+  coreMasterContainer.scrollIntoView({ behavior: "smooth" });
+  coreMasterContainer.classList.add("highlight");
+  setTimeout(() => coreMasterContainer.classList.remove("highlight"), 1500);
+}
 
     } catch (error) {
       console.error("抽出中に問題が発生しました:", error);
@@ -337,7 +339,8 @@ setTimeout(() => compareListContainer.classList.remove("highlight"), 1500);
             li.textContent = text.trim();
             infoList.appendChild(li);
           });
-
+          coreMasterContainer.classList.remove("highlight"); // ✅ 強制ハイライト解除
+        }) 
           infoFetched = true;
           isFetching = false;
           infoBox.classList.add("open");
