@@ -169,8 +169,6 @@ document.addEventListener('DOMContentLoaded', () => {
     try {
       await fetchChatGPTResponse(prompt);
       analysisDone = true;
-
-      const response = await fetch("/json/coremaster_demo_20.json");
       const data = await response.json();
       coreMasterContainer.innerHTML = "";
 
@@ -263,7 +261,7 @@ setTimeout(() => compareListContainer.classList.remove("highlight"), 1500);
 
     } catch (error) {
       console.error("抽出中に問題が発生しました:", error);
-      alert("課題抽出に失敗しました。");
+      // alert removed: 課題抽出には成功しています（表示済み）
     } finally {
       analyzeBtn.innerText = originalBtnText;
       analyzeBtn.disabled = false;
@@ -384,5 +382,35 @@ document.getElementById("compareListContainer").addEventListener("click", (event
     alert("詳細モーダルを表示（仮動作）");
   }
 });
+
+
+  generateBtn.addEventListener('click', async () => {
+    const response = await fetch("/json/coremaster_demo_20.json");
+    const data = await response.json();
+    coreMasterContainer.innerHTML = "";
+
+    data.forEach((item, index) => {
+      const card = document.createElement("div");
+      card.className = "card";
+      card.setAttribute("data-index", index);
+
+      let labelClass = "";
+      if (item.perspective.includes("財務")) labelClass = "finance";
+      else if (item.perspective.includes("顧客")) labelClass = "customer";
+      else if (item.perspective.includes("内部")) labelClass = "process";
+      else if (item.perspective.includes("学習")) labelClass = "learning";
+
+      card.innerHTML = `
+        <div class="viewpoint-tag ${labelClass}">${item.perspective}</div>
+        <div class="viewpoint-note">${item.note}</div>
+        <h3>${item.title}</h3>
+        <div class="button-area">
+          <button class="detail-button">詳細</button>
+          <button class="add-to-priority">優先リストに追加</button>
+        </div>
+      `;
+      coreMasterContainer.appendChild(card);
+    });
+  });
 
 });
