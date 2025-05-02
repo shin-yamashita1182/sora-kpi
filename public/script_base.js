@@ -26,7 +26,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const category = categorySelect.value;
     if (category === "観光型") {
       try {
-        const response = await fetch('coremaster_demo_20.json');
+        const response = await fetch('coremaster_real_20_refined.json');
         if (!response.ok) return;
         currentMasterData = await response.json();
       } catch (error) {
