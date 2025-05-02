@@ -359,38 +359,79 @@ button:hover {
     grid-template-columns: 1fr;
   }
 }
-/* ✅ 優先リスト（比較リスト）を横並びに整列 */
+/* ✅ 優先リストを戦略リストと同じデザインに統一 */
 #compareListContainer {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 20px;
-  padding: 10px;
-}
-/* 戦略リストと優先リストのカードに共通のデザインを適用 */
-#compareListContainer .card {
-  width: 300px;
-  padding: 15px;
-  margin: 10px;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  background-color: #fff;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  padding: 20px;
 }
 
-/* ボタン配置を中央に整える（戦略リストと揃える） */
-#compareListContainer .card-buttons {
-  text-align: center;
-  margin-top: 10px;
+@media (max-width: 768px) {
+  #compareListContainer {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
-#compareListContainer {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 20px;
-  justify-content: flex-start;
+
+@media (max-width: 480px) {
+  #compareListContainer {
+    grid-template-columns: 1fr;
+  }
 }
+
+/* ✅ 優先リストのカードデザイン（戦略カードと統一） */
 #compareListContainer .card {
-  width: 300px;
-  margin: 10px;
+  background-color: white;
+  border-left: 8px solid #ccc;
+  padding: 1rem;
+  border-radius: 6px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+  transition: 0.2s;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  position: relative;
+  width: 100%;
+}
+
+#compareListContainer .card h3 {
+  margin-top: 0.5rem;
+  font-size: 18px;
+  font-weight: bold;
+  text-align: center;
+}
+
+#compareListContainer .button-area {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 1rem;
+}
+
+#compareListContainer .button-area button {
+  width: 100%;
+  padding: 10px;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+#compareListContainer .detail-button {
+  background-color: #28a745;
+  color: white;
+}
+#compareListContainer .detail-button:hover {
+  background-color: #218838;
+}
+
+#compareListContainer .openMindMapBtn {
+  background-color: #0d6efd;
+  color: white;
+}
+#compareListContainer .openMindMapBtn:hover {
+  background-color: #0b5ed7;
 }
 
 /* ---------- アコーディオン ---------- */
