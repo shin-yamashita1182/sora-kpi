@@ -366,13 +366,15 @@ const analyzeBtn = document.getElementById("generateBtn");
 
 let isExpanded = false;
 
-analyzeBtn.addEventListener("click", () => {
+analyzeBtn.addEventListener("click", async () => {
   if (isExpanded) {
     coreMasterContainer.innerHTML = "";
     isExpanded = false;
   } else {
-    // ChatGPT連携による課題抽出が済んだ後、カードを生成する処理
-    fetchAndRenderCards();  // ← この関数名は既存の戦略カード表示処理に合わせてください
+    const prompt = getPrompt(); // 地域名や記述からプロンプト生成（定義済み前提）
+    const response = await fetchChatGPTResponse(prompt);  // ChatGPTへ投げる
+    const results = await fetchAndMatchCards(response);   // 類似カード抽出
+    displayResults(results);                               // 戦略カード表示
     isExpanded = true;
   }
 });
