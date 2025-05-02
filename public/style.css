@@ -151,8 +151,8 @@ header {
 
 
 /* 各視点に応じた色ラベル */
-.viewpoint-tag.finance  { background-color: #dc3545; } /* 財務の視点 */
-.viewpoint-tag.customer { background-color: #0d6efd; } /* 顧客の視点 */
+.viewpoint-tag.finance  { background-color: #dc3545; color: #000; } /* 財務の視点 */
+.viewpoint-tag.customer { background-color: #0d6efd; color: #000; } /* 顧客の視点 */
 .viewpoint-tag.process  { background-color: #ffc107; color: #000; } /* 内部プロセス */
 .viewpoint-tag.learning { background-color: #fd7e14; color: #000; } /* 学習と成長 */
 
