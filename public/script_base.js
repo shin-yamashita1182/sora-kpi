@@ -174,30 +174,29 @@ document.addEventListener('DOMContentLoaded', () => {
       const data = await response.json();
       coreMasterContainer.innerHTML = "";
 
-      data.forEach((item, index) => {      
-        const card = document.createElement("div");
-        card.className = "card";
-        card.setAttribute("data-index", index);
-    
-let labelClass = "";
-if (item.perspective.includes("財務")) labelClass = "finance";
-else if (item.perspective.includes("顧客")) labelClass = "customer";
-else if (item.perspective.includes("内部")) labelClass = "process";
-else if (item.perspective.includes("学習")) labelClass = "learning";
+data.forEach((item, index) => {
+  const card = document.createElement("div");
+  card.className = "card";
+  card.setAttribute("data-index", index);
 
-card.innerHTML = `
-  <span class="label ${labelClass}">${item.perspective}</span>
-  <h3>${item.title}</h3>
-  <p class="note">${item.note}</p>
-  <div class="button-area">
-    <button class="detail-button">詳細</button>
-    <button class="add-to-priority">優先リストに追加</button>
-  </div>
-`;
+  let labelClass = "";
+  if (item.perspective.includes("財務")) labelClass = "finance";
+  else if (item.perspective.includes("顧客")) labelClass = "customer";
+  else if (item.perspective.includes("内部")) labelClass = "process";
+  else if (item.perspective.includes("学習")) labelClass = "learning";
 
+  card.innerHTML = `
+    <span class="label ${labelClass}">${item.perspective}</span>
+    <h3>${item.title}</h3>
+    <p class="note">${item.note}</p>
+    <div class="button-area">
+      <button class="detail-button">詳細</button>
+      <button class="add-to-priority">優先リストに追加</button>
+    </div>
+  `;
+  coreMasterContainer.appendChild(card);
+});
 
-        coreMasterContainer.appendChild(card);
-      });
       // ✅ 正しい位置（forEachの外！）
 coreMasterContainer.addEventListener("click", (event) => {
   if (event.target.classList.contains("add-to-priority")) {
@@ -214,7 +213,7 @@ coreMasterContainer.addEventListener("click", (event) => {
       return;
     }
 
-    // ✅ .label クラスを再構成（必ず .finance などが付くように）
+    // ✅ 視点ラベル再生成（classをつけ直す）
     const perspectiveText = originalCard.querySelector(".label")?.textContent || "";
     let labelClass = "";
     if (perspectiveText.includes("財務")) labelClass = "finance";
@@ -243,6 +242,7 @@ coreMasterContainer.addEventListener("click", (event) => {
     setTimeout(() => compareListContainer.classList.remove("highlight"), 1500);
   }
 });
+
   
       document.getElementById("resultsContainer")?.scrollIntoView({ behavior: "smooth" });
       resultsContainer.classList.add("highlight");
