@@ -359,6 +359,8 @@ button:hover {
     grid-template-columns: 1fr;
   }
 }
+
+/* ---------- 優先リスト ---------- */
 /* ✅ 優先リストを戦略リストと同じデザインに統一 */
 #compareListContainer {
   display: grid;
@@ -432,6 +434,23 @@ button:hover {
 }
 #compareListContainer .openMindMapBtn:hover {
   background-color: #0b5ed7;
+}
+#compareListContainer .card {
+  width: 300px;
+  max-width: 100%;
+}
+
+.label,
+.viewpoint-tag {
+  font-size: 0.75rem;
+  padding: 4px 8px;
+  max-width: 90%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: center;
+  margin: 0 auto 8px;
+  display: inline-block;
 }
 
 /* ---------- アコーディオン ---------- */
