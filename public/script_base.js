@@ -179,21 +179,24 @@ data.forEach((item, index) => {
   card.className = "card";
   card.setAttribute("data-index", index);
 
-  let labelClass = "";
-  if (item.perspective.includes("財務")) labelClass = "finance";
-  else if (item.perspective.includes("顧客")) labelClass = "customer";
-  else if (item.perspective.includes("内部")) labelClass = "process";
-  else if (item.perspective.includes("学習")) labelClass = "learning";
+let labelClass = "";
+if (item.perspective.includes("財務")) labelClass = "finance";
+else if (item.perspective.includes("顧客")) labelClass = "customer";
+else if (item.perspective.includes("内部")) labelClass = "process";
+else if (item.perspective.includes("学習")) labelClass = "learning";
 
-  card.innerHTML = `
-    <span class="label ${labelClass}">${item.perspective}</span>
-    <h3>${item.title}</h3>
-    <p class="note">${item.note}</p>
-    <div class="button-area">
-      <button class="detail-button">詳細</button>
-      <button class="add-to-priority">優先リストに追加</button>
-    </div>
-  `;
+card.innerHTML = `
+  <div class="viewpoint-tag viewpoint-${labelClass}">
+    <div class="viewpoint-title">${item.perspective}</div>
+    <div class="viewpoint-note">${item.note}</div>
+  </div>
+  <h3>${item.title}</h3>
+  <div class="button-area">
+    <button class="detail-button">詳細</button>
+    <button class="add-to-priority">優先リストに追加</button>
+  </div>
+`;
+
   coreMasterContainer.appendChild(card);
 });
 
