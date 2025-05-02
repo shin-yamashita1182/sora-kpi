@@ -314,6 +314,32 @@ coreMasterContainer.addEventListener("click", (event) => {
     if (statusBox) {
       statusBox.textContent = isAccordionOpen ? "NEXCO情報を表示中" : "NEXCO情報を非表示にしました";
     }
+ const mindMapModal = document.getElementById("mindMapModal");
+const closeMindMapBtn = document.getElementById("closeMindMapModal");
+const mindMapContent = document.getElementById("mindMapContent");
+
+compareListContainer.addEventListener("click", (event) => {
+  if (event.target.classList.contains("add-priority-button")) {
+    const titles = [...compareListContainer.querySelectorAll("h3")].map(el => el.textContent.trim());
+    mindMapContent.innerHTML = `
+      <ul style="list-style: none; padding-left: 0;">
+        ${titles.map(title => `<li style="margin-bottom: 10px;">🟢 ${title}</li>`).join("")}
+      </ul>
+    `;
+    mindMapModal.style.display = "block";
+  }
+});
+
+closeMindMapBtn.addEventListener("click", () => {
+  mindMapModal.style.display = "none";
+});
+
+window.addEventListener("click", (event) => {
+  if (event.target === mindMapModal) {
+    mindMapModal.style.display = "none";
+  }
+});
+
   }
 document.getElementById("compareListContainer").addEventListener("click", (event) => {
   if (event.target.classList.contains("detail-button")) {
