@@ -314,6 +314,7 @@ coreMasterContainer.addEventListener("click", (event) => {
     if (statusBox) {
       statusBox.textContent = isAccordionOpen ? "NEXCO情報を表示中" : "NEXCO情報を非表示にしました";
     }
+  }
  const mindMapModal = document.getElementById("mindMapModal");
 const closeMindMapBtn = document.getElementById("closeMindMapModal");
 const mindMapContent = document.getElementById("mindMapContent");
@@ -340,7 +341,7 @@ window.addEventListener("click", (event) => {
   }
 });
 
-  }
+  
 document.getElementById("compareListContainer").addEventListener("click", (event) => {
   if (event.target.classList.contains("detail-button")) {
     alert("詳細モーダルを表示（仮動作）");
