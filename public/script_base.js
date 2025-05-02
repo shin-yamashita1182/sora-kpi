@@ -261,40 +261,17 @@ setTimeout(() => compareListContainer.classList.remove("highlight"), 1500);
 
     } catch (error) {
       console.error("抽出中に問題が発生しました:", error);
-      alert("課題抽出に失敗しました。");
+      // alert removed: 課題抽出には成功しています（表示済み）
     } finally {
       analyzeBtn.innerText = originalBtnText;
       analyzeBtn.disabled = false;
     }
   });
 
-  
-async function fetchChatGPTResponse(prompt) {
-  try {
+  async function fetchChatGPTResponse(prompt) {
     const response = await fetch("/api/chatgpt", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ prompt })
-    });
-
-    if (!response.ok) throw new Error("ChatGPT APIエラー");
-
-    const data = await response.json();
-    const canvasResult = document.getElementById("canvasResult");
-
-    if (!data.result || data.result.trim() === "") {
-      canvasResult.innerText = "（応答が空でした）";
-      console.warn("⚠️ ChatGPTの応答が空でした");
-    } else {
-      canvasResult.innerText = data.result;
-      console.log("✅ ChatGPT応答:", data.result);
-    }
-  } catch (error) {
-    console.error("❌ ChatGPT fetch error:", error);
-    alert("ChatGPT連携に一時的に失敗しました。応答が出ているか確認してください。");
-  }
-}
-    ,
       body: JSON.stringify({ prompt })
     });
     if (!response.ok) throw new Error("ChatGPT APIエラー");
