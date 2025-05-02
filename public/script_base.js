@@ -414,3 +414,29 @@ document.getElementById("compareListContainer").addEventListener("click", (event
   });
 
 });
+
+
+const coreMasterContainer = document.getElementById("coreMasterContainer");
+const generateBtn = document.getElementById("generateBtn");
+
+let isExpanded = false;
+
+generateBtn.addEventListener("click", async () => {
+  if (isExpanded) {
+    coreMasterContainer.innerHTML = "";
+    isExpanded = false;
+  } else {
+    const region = document.getElementById("regionName").value || "地域名未入力";
+    const theme = document.getElementById("userNote").value || "自由記述なし";
+    const prompt = `${region}について、以下のテーマに関する課題を抽出してください：${theme}`;
+    try {
+      const gptResponse = await fetchChatGPTResponse(prompt);
+      const matchedCards = await fetchAndMatchCards(gptResponse);
+      displayResults(matchedCards);
+      isExpanded = true;
+    } catch (err) {
+      console.error("分析対策中にエラー:", err);
+      alert("分析対策に失敗しました。もう一度お試しください。");
+    }
+  }
+});
