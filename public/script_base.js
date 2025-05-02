@@ -215,32 +215,32 @@ coreMasterContainer.addEventListener("click", (event) => {
     }
 
     // ✅ 視点ラベル再生成（classをつけ直す）
-    const perspectiveText = originalCard.querySelector(".label")?.textContent || "";
-    let labelClass = "";
-    if (perspectiveText.includes("財務")) labelClass = "finance";
-    else if (perspectiveText.includes("顧客")) labelClass = "customer";
-    else if (perspectiveText.includes("内部")) labelClass = "process";
-    else if (perspectiveText.includes("学習")) labelClass = "learning";
+const perspectiveText = originalCard.querySelector(".label")?.textContent || "";
+let labelClass = "";
+if (perspectiveText.includes("財務")) labelClass = "finance";
+else if (perspectiveText.includes("顧客")) labelClass = "customer";
+else if (perspectiveText.includes("内部")) labelClass = "process";
+else if (perspectiveText.includes("学習")) labelClass = "learning";
 
-    const labelHTML = `<span class="label ${labelClass}">${perspectiveText}</span>`;
-    const note = originalCard.querySelector(".note")?.outerHTML || "";
-    const h3 = originalCard.querySelector("h3")?.outerHTML || "";
+const labelHTML = `<span class="label ${labelClass}">${perspectiveText}</span>`;
+const titleText = originalCard.querySelector("h3")?.textContent || "";
+const noteText = originalCard.querySelector(".note")?.textContent || "";
 
-    const cloned = document.createElement("div");
-    cloned.className = "card";
-    cloned.innerHTML = `
-      ${labelHTML}
-      ${h3}
-      ${note}
-      <div class="button-area">
-        <button class="add-priority-button">マインドマップ</button>
-      </div>
-    `;
+const cloned = document.createElement("div");
+cloned.className = "card";
+cloned.innerHTML = `
+  ${labelHTML}
+  <h3>${titleText}</h3>
+  <p class="note">${noteText}</p>
+  <div class="button-area">
+    <button class="add-priority-button">マインドマップ</button>
+  </div>
+`;
 
-    compareListContainer.appendChild(cloned);
-    compareListContainer.scrollIntoView({ behavior: "smooth" });
-    compareListContainer.classList.add("highlight");
-    setTimeout(() => compareListContainer.classList.remove("highlight"), 1500);
+compareListContainer.appendChild(cloned);
+compareListContainer.scrollIntoView({ behavior: "smooth" });
+compareListContainer.classList.add("highlight");
+setTimeout(() => compareListContainer.classList.remove("highlight"), 1500);
   }
 });
 
