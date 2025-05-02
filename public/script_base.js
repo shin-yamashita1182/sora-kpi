@@ -179,6 +179,26 @@ document.addEventListener('DOMContentLoaded', () => {
         card.className = "card";
         card.setAttribute("data-index", index);
 
+// ここが CoreMaster カードを生成し終えた直後の位置！
+coreMasterContainer.addEventListener("click", (event) => {
+  if (event.target.classList.contains("add-to-priority")) {
+    const card = event.target.closest(".card");
+    if (!card) return;
+
+    const cloned = card.cloneNode(true);
+    cloned.querySelector(".add-to-priority").textContent = "追加済み";
+    cloned.querySelector(".add-to-priority").disabled = true;
+
+    const btn = cloned.querySelector(".add-to-priority");
+    btn.classList.remove("add-to-priority");
+    btn.classList.add("add-priority-button");
+
+    compareListContainer.appendChild(cloned);
+    compareListContainer.scrollIntoView({ behavior: "smooth" });
+  }
+});
+
+        
         let color = "#ccc";
         if (item.perspective.includes("財務")) color = "#cce5ff";
         else if (item.perspective.includes("顧客")) color = "#d4edda";
