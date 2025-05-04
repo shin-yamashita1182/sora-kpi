@@ -45,92 +45,94 @@
               <input type="file" id="fileInput" accept=".txt,.pdf,.docx">
               <span id="fileNameDisplay">ファイルを選択してください</span>
             </div>
-        
-            <!-- ★ ボタン2個に分割 -->
             <div class="button-wrapper">
               <button id="analyzeBtn">課題抽出</button>
               <button id="generateBtn">分析対策</button>
             </div>
-
           </div>
           <div class="mini-map" id="miniMap">地図表示エリア</div>
         </div>
       </section>
 
-      <!-- ★ SORA CANVAS（課題リスト） -->
       <section class="canvas-section">
         <h2>SORA CANVAS（課題リスト）</h2>
         <div id="gptResponse"></div>
         <div class="canvas-placeholder" id="canvasResult">ここにキャンバス課題リストを展開</div>
       </section>
 
-<!-- ✅ 1. ボタンを追加（SORA CANVASの中に配置） -->
-<div class="nexco-toggle-wrapper" style="margin-top: 10px; margin-bottom: 10px; text-align: right;">
-  <button id="toggleNexcoBtn">NEXCO情報を表示</button>
-  <div id="nexcoStatus" style="margin-top: 4px; font-size: 0.9em; color: #888;"></div>
-</div>
+      <div class="nexco-toggle-wrapper" style="margin-top: 10px; margin-bottom: 10px; text-align: right;">
+        <button id="toggleNexcoBtn">NEXCO情報を表示</button>
+        <div id="nexcoStatus" style="margin-top: 4px; font-size: 0.9em; color: #888;"></div>
+      </div>
 
-<!-- ✅ 2. アコーディオンエリア（最初は非表示） -->
-<div id="nexcoInfoBox">
-  <h3>NEXCO周辺施設・高速道路情報</h3>
-  <ul id="nexcoInfoList">
-    <!-- ChatGPTが返すSA・IC・PA情報をここに入れる予定 -->
-  </ul>
-</div>
- 
-      <section class="results-section">
-        <h2>戦略リスト（施策やKPI）</h2>
-        <div id="resultsContainer" class="card-container">
-          <div id="coreMasterContainer"></div>
-        </div>
-      </section>
+      <div id="nexcoInfoBox">
+        <h3>NEXCO周辺施設・高速道路情報</h3>
+        <ul id="nexcoInfoList"></ul>
+      </div>
 
-      <section class="compare-section">
-        <h2>優先リスト（重点実施）</h2>
-        <div id="compareListContainer" class="card-container">
-        </div>
+      <!-- 🔴 不要エリア（戦略リスト・比較リスト）を削除し、ThinkingZoneへ置換 -->
+      <section class="thinking-zone" style="margin-top: 40px; padding: 20px; background-color: #f9f9f9; border-top: 2px solid #ccc;">
+        <h2>🧠 課題に対する考察とマインドマップ生成</h2>
+        <div id="thinkingContainer"></div>
       </section>
     </main>
   </div>
 
   <!-- モーダル（詳細） -->
-  <div id="detailModal" class="modal">
-    <div class="modal-content">
-      <span class="close-button" id="closeModal">&times;</span>
-      <div id="modalBody"></div>
-    </div>
-  </div>
+  <!-- 削除済み：#detailModal -->
 
   <!-- モーダル（地図拡大） -->
-  <div id="mapModal" class="modal">
-    <div class="modal-content">
-      <span class="close-button" id="closeMapModal">&times;</span>
-      <div id="mapModalBody">拡大地図表示</div>
-    </div>
-  </div>
+  <!-- 削除済み：#mapModal -->
 
   <footer>
     <p>&copy; 2025 SORA Project</p>
   </footer>
 
-  <!-- スクリプト読み込み -->
   <script src="script_base.js"></script>
-  <!-- 🔵 これを追加！ -->
-<script src="map_controller.js"></script>
-<script src="card_renderer_mindtrigger.js"></script>
+  <script src="map_controller.js"></script>
+  <script src="card_renderer_mindtrigger.js"></script>
 
-  <!-- ✅ マインドマップ モーダル -->
-<div id="mindMapModal" class="modal">
-  <div class="modal-content">
-    <span class="close-button" id="closeMindMapModal">&times;</span>
-    <div id="mindMapBody">
-      <h2>🧠 マインドマップ（仮）</h2>
-      <div id="mindMapContent">選択された施策から生成されたマップをここに表示します。</div>
-    </div>
-  </div>
-</div>
+  <!-- ✅ ThinkingZoneスクリプト -->
+  <script>
+    document.getElementById("generateBtn").addEventListener("click", () => {
+      const thinkingContainer = document.getElementById("thinkingContainer");
+      thinkingContainer.innerHTML = "";
 
+      const sampleTasks = [
+        "観光客の減少が著しい",
+        "老朽インフラの更新が進まない",
+        "若手職員の離職が多い",
+        "移住促進制度が浸透しない",
+        "避難所の整備計画が遅れている"
+      ];
 
+      sampleTasks.forEach((task, index) => {
+        const block = document.createElement("div");
+        block.className = "thinking-block";
+        block.style.marginBottom = "30px";
+
+        block.innerHTML = `
+          <p><strong>課題${index + 1}:</strong> ${task}</p>
+          <textarea placeholder="この課題について、考えていることや背景を入力してください…" rows="4" style="width: 100%;"></textarea>
+          <br>
+          <button class="generateMindMapBtn" style="margin-top: 10px;">マインドマップを生成</button>
+          <div class="mindmap-area" style="margin-top: 15px; background: #fff; border: 1px solid #ccc; padding: 10px;"></div>
+        `;
+
+        thinkingContainer.appendChild(block);
+
+        const button = block.querySelector(".generateMindMapBtn");
+        const output = block.querySelector(".mindmap-area");
+        button.addEventListener("click", () => {
+          const inputText = block.querySelector("textarea").value.trim();
+          if (!inputText) {
+            output.innerHTML = '<em>入力がありません</em>';
+            return;
+          }
+          output.innerHTML = `<strong>マインドマップ生成（仮）:</strong><br><ul><li>課題: ${task}</li><li>考察: ${inputText}</li><li>対策候補: ChatGPT連携予定</li></ul>`;
+        });
+      });
+    });
+  </script>
 </body>
 </html>
-
