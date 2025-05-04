@@ -351,12 +351,3 @@ JSON形式で、MindElixirで描画可能な階層構造（topic と children �
     alert("ChatGPTによるマインドマップ生成に失敗しました。");
   }
 }
-
-
-// 📌 モーダルを開いたときにマインドマップ描画を実行
-if (generateAllBtn) {
-  generateAllBtn.addEventListener("click", () => {
-    drawMindMapFromInputs(); // 🧠描画呼び出し
-    mindMapModal.classList.remove("hidden");
-  });
-}
