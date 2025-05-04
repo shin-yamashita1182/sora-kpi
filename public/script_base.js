@@ -148,32 +148,34 @@ analysisDone = true;
     });
   }
 
-  // 🧠 ThinkingZone展開切替
-  if (generateBtn) {
-    generateBtn.addEventListener("click", () => {
-      if (isThinkingVisible) {
-        thinkingContainer.innerHTML = "";
-        isThinkingVisible = false;
-        return;
-      }
+// 🧠 ThinkingZone展開切替（5件のみ・重複なし）
+if (generateBtn) {
+  generateBtn.addEventListener("click", () => {
+    if (isThinkingVisible) {
+      thinkingContainer.innerHTML = "";
+      isThinkingVisible = false;
+      return;
+    }
 
-      const tasks = [
-        "観光客の減少が著しい",
-        "老朽インフラの更新が進まない",
-        "若手職員の離職が多い",
-        "移住促進制度が浸透しない",
-        "避難所の整備計画が遅れている"
-      ];
+    const tasks = [
+      "観光客の減少が著しい",
+      "老朽インフラの更新が進まない",
+      "若手職員の離職が多い",
+      "移住促進制度が浸透しない",
+      "避難所の整備計画が遅れている"
+    ];
 
-      tasks.forEach((task, i) => {
-        const block = document.createElement("div");
-        block.className = "thinking-block";
-        block.innerHTML = `<p><strong>課題${i + 1}:</strong> ${task}</p><textarea rows="3" placeholder="考えや背景を入力してください"></textarea>`;
-        thinkingContainer.appendChild(block);
-      });
-      isThinkingVisible = true;
+    thinkingContainer.innerHTML = "";
+    tasks.forEach((task, i) => {
+      const block = document.createElement("div");
+      block.className = "thinking-block";
+      block.innerHTML = `<p><strong>課題${i + 1}:</strong> ${task}</p><textarea rows="3" placeholder="考えや背景を入力してください"></textarea>`;
+      thinkingContainer.appendChild(block);
     });
-  }
+    isThinkingVisible = true;
+  });
+}
+
 
   // 🧠 一括マインドマップモーダル出力
   if (generateAllBtn) {
