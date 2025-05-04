@@ -287,7 +287,7 @@ function drawMindMapFromInputs() {
 
   mind.init();
 }
-// 🧠 ChatGPTから課題＋考察ベースのマインドマップを生成（今後拡張予定）
+// 🧠 ChatGPTから課題＋考察ベースのマインドマップを生成
 async function generateMindMapFromGPT() {
   console.log("🧠 generateMindMapFromGPTが呼び出されました");
 
@@ -300,7 +300,6 @@ async function generateMindMapFromGPT() {
     return;
   }
 
-  // 🔗 課題＋考察をまとめてプロンプト生成
   let combinedText = `【地域名】：${region}\n【テーマ】：${theme}\n\n以下は課題と住民の考察です。\n`;
   blocks.forEach((block, i) => {
     const task = block.querySelector("p").innerText;
@@ -308,56 +307,50 @@ async function generateMindMapFromGPT() {
     combinedText += `【${i + 1}】${task}\n考察：${opinion || "（未記入）"}\n`;
   });
 
-const prompt = `
+  const prompt = `
 以下は、地域課題とそれに対する住民の考察です。これをもとに、中心テーマを「五島市：人口減少と高齢化への対策」とした放射状マインドマップ構造を構築してください。
 
 JSON形式で、MindElixirで描画可能な階層構造（topic と children を持つツリー）にしてください。
 日本語を使い、重要な項目は深掘りし、3階層以上の構造になるよう意識してください。
 
-【地域名】五島市
-【課題】人口減少と高齢化によって産業が衰退している
-【住民の考察】若者が戻らない、介護人材が不足、観光資源が眠っている
+${combinedText}
 `;
 
+  try {
+    const res = await fetch("/api/chatgpt", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ prompt })
+    });
 
-try {
-  const res = await fetch("/api/chatgpt", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ prompt })
-  });
-  const data = await res.json();
+    const data = await res.json();
+    console.log("🔍 GPT返答:", data.result);
 
-  console.log("🔍 GPT返答:", data.result);
+    let cleaned = data.result.trim();
+    if (cleaned.startsWith("```json") || cleaned.startsWith("```") || cleaned.startsWith("json")) {
+      cleaned = cleaned.replace(/^```json|^```|^json|```$/g, "").trim();
+    }
 
-  // 🔥 ← ココが修正ポイント
-let cleaned = data.result.trim();
+    const parsed = JSON.parse(cleaned);
 
-// 修正①: 最初に "```json" や "```" ではなく "json\n" で始まるパターンもカバー
-if (cleaned.startsWith("```") || cleaned.startsWith("json")) {
-  cleaned = cleaned.replace(/^```json|^```|^json|```$/g, "").trim();
-}
+    const mind = new MindElixir({
+      el: "#mindmapContainer",
+      direction: MindElixir.RIGHT,
+      data: {
+        nodeData: parsed
+      },
+      draggable: true,
+      contextMenu: true,
+      toolBar: true,
+      nodeMenu: true,
+      keypress: true
+    });
 
-const parsed = JSON.parse(cleaned);
+    mind.init();
+    document.getElementById("mapModal").classList.remove("hidden");
 
-  const mind = new MindElixir({
-    el: "#mindmapContainer",
-    direction: MindElixir.RIGHT,
-    data: {
-      nodeData: parsed
-    },
-    draggable: true,
-    contextMenu: true,
-    toolBar: true,
-    nodeMenu: true,
-    keypress: true
-  });
-
-  mind.init();
-  document.getElementById("mapModal").classList.remove("hidden");
-
-} catch (err) {
-  console.error("🧠 マインドマップ生成エラー:", err);
-  alert("ChatGPTによるマインドマップ生成に失敗しました。");
-}
+  } catch (err) {
+    console.error("🧠 マインドマップ生成エラー:", err);
+    alert("ChatGPTによるマインドマップ生成に失敗しました。");
+  }
 }
