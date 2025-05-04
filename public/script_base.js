@@ -126,9 +126,10 @@ const prompt = `あなたは地域課題に精通した専門家です。地域�
 const data = await res.json();
 const canvasResult = document.getElementById("canvasResult");
 canvasResult.innerText = data.result || "課題が取得できませんでした。";
-canvasResult.style.textAlign = "left";
-canvasResult.style.maxWidth = "80%";
-canvasResult.style.margin = "20px auto";
+canvasResult.style.maxWidth = "100%"; // または必要なら "95%" 程度に調整可
+canvasResult.style.margin = "20px 0"; // auto を削除し左右寄せ防止
+canvasResult.style.textAlign = "left"; // このままでOK
+
 analysisDone = true;
 
       } catch (err) {
