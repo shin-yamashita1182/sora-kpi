@@ -233,3 +233,15 @@ if (generateBtn) {
     if (e.target === mindMapModal) mindMapModal.classList.add("hidden");
   });
 });
+async function extractTextFromPDF(file) {
+  const pdfData = await file.arrayBuffer();
+  const pdf = await pdfjsLib.getDocument({ data: pdfData }).promise;
+
+  let fullText = '';
+  for (let i = 1; i <= pdf.numPages; i++) {
+    const page = await pdf.getPage(i);
+    const content = await page.getTextContent();
+    fullText += content.items.map(item => item.str).join(' ') + '\n';
+  }
+  return fullText;
+}
