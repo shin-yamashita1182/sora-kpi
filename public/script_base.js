@@ -1,4 +1,4 @@
-// ✅ SORA Dashboard Script Base - 最小構成版（NEXCO連動 + ChatGPT課題抽出 + ThinkingZoneマインドマップ）
+// ✅ SORA Dashboard Script Base - 最小構成版（NEXCO連動 + ChatGPT課題抽出 + ThinkingZoneマインドマップ + Google地図）
 document.addEventListener("DOMContentLoaded", () => {
   const fileInput = document.getElementById("fileInput");
   const fileNameDisplay = document.getElementById("fileNameDisplay");
@@ -19,19 +19,76 @@ document.addEventListener("DOMContentLoaded", () => {
   const mindMapContent = document.getElementById("mindmapContainer");
   const closeMindMapBtn = document.getElementById("closeMapModal");
 
+  const miniMap = document.getElementById("miniMap");
+
   let isThinkingVisible = false;
   let infoFetched = false;
   let isAccordionOpen = false;
   let isFetching = false;
   let analysisDone = false;
 
+  // 📁 ファイル選択表示
   fileInput.addEventListener("change", () => {
     fileNameDisplay.textContent = fileInput.files.length > 0
       ? fileInput.files[0].name
       : "ファイルを選択してください";
   });
 
-  // 🚗 NEXCO情報表示/取得
+  // 🗺️ Google Map更新処理（元の構成に戻す）
+  function updateGoogleMap(regionName) {
+    if (!regionName || !miniMap) return;
+    const geocoder = new google.maps.Geocoder();
+    geocoder.geocode({ address: regionName }, (results, status) => {
+      if (status === "OK" && results[0]) {
+        const map = new google.maps.Map(miniMap, {
+          zoom: 10,
+          center: results[0].geometry.location
+        });
+        new google.maps.Marker({
+          map: map,
+          position: results[0].geometry.location
+        });
+      } else {
+        console.error("地図取得エラー:", status);
+      }
+    });
+  }
+
+  // 💬 ChatGPT連携：課題抽出
+  analyzeBtn.addEventListener("click", async () => {
+    if (analysisDone) {
+      alert("すでに課題抽出が完了しています。ページを更新するか、条件を変更してください。");
+      return;
+    }
+    const region = regionInput.value.trim();
+    const theme = noteInput.value.trim();
+    if (!region || !theme) return alert("地域名とテーマを入力してください。 ※どちらかが未記入です");
+
+    updateGoogleMap(region);
+
+    const prompt = `${region}について、テーマ「${theme}」に基づく地域課題を抽出してください。\n以下の内容について、最大トークン数500以内で、最大5つまでの地域課題を簡潔に挙げてください。各課題は1〜2文で記述し、原因や背景が簡潔に分かるようにしてください。`;
+    analyzeBtn.disabled = true;
+    analyzeBtn.textContent = "抽出中…";
+
+    try {
+      const res = await fetch("/api/chatgpt", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ prompt })
+      });
+      const data = await res.json();
+      canvasResult.innerText = data.result || "課題が取得できませんでした。";
+      analysisDone = true;
+    } catch (err) {
+      console.error("課題抽出エラー:", err);
+      alert("ChatGPTへの接続に失敗しました。もう一度お試しください。");
+    } finally {
+      analyzeBtn.disabled = false;
+      analyzeBtn.textContent = "課題抽出";
+    }
+  });
+
+  // 🚗 NEXCO情報表示/取得（元の構成を維持）
   toggleNexcoBtn.addEventListener("click", () => {
     const region = regionInput.value.trim();
     if (!region) return alert("地域名を入力してください！");
@@ -81,37 +138,8 @@ document.addEventListener("DOMContentLoaded", () => {
     nexcoStatus.textContent = isAccordionOpen ? "NEXCO情報を表示中" : "NEXCO情報を非表示にしました";
   }
 
-  // 💬 ChatGPT連携：課題抽出
-  analyzeBtn.addEventListener("click", async () => {
-    if (analysisDone) {
-      alert("すでに課題抽出が完了しています。ページを更新するか、条件を変更してください。");
-      return;
-    }
-    const region = regionInput.value.trim();
-    const theme = noteInput.value.trim();
-    if (!region || !theme) return alert("地域名とテーマを入力してください。 ※どちらかが未記入です");
-
-    const prompt = `${region}について、テーマ「${theme}」に基づく地域課題を抽出してください。\n以下の内容について、最大トークン数500以内で、最大5つまでの地域課題を簡潔に挙げてください。各課題は1〜2文で記述し、原因や背景が簡潔に分かるようにしてください。`;
-    analyzeBtn.disabled = true;
-    analyzeBtn.textContent = "抽出中…";
-
-    try {
-      const res = await fetch("/api/chatgpt", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ prompt })
-      });
-      const data = await res.json();
-      canvasResult.innerText = data.result || "課題が取得できませんでした。";
-      analysisDone = true;
-    } catch (err) {
-      console.error("課題抽出エラー:", err);
-      alert("ChatGPTへの接続に失敗しました。もう一度お試しください。");
-    } finally {
-      analyzeBtn.disabled = false;
-      analyzeBtn.textContent = "課題抽出";
-    }
-  });
+  // 👇 以下：ThinkingZone・マインドマップ処理（この下は変更しません）
+  // ※ 既に完成しているとのことなので、そのまま維持
 
   // 🧠 ThinkingZone展開切替
   generateBtn.addEventListener("click", () => {
