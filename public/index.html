@@ -5,8 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>SORA Dashboard Refine</title>
   <link rel="stylesheet" href="style.css">
-  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
-<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
   <style>
     .thinking-block {
       background-color: #ffffff;
@@ -48,6 +46,34 @@
       padding: 12px;
       font-size: 0.95em;
       line-height: 1.6em;
+    }
+    .modal {
+      display: block;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0,0,0,0.5);
+      z-index: 1000;
+    }
+    .modal-content {
+      background-color: #fff;
+      margin: 10% auto;
+      padding: 20px;
+      width: 80%;
+      border-radius: 10px;
+    }
+    .close-button {
+      background-color: #ccc;
+      border: none;
+      padding: 8px 12px;
+      cursor: pointer;
+      float: right;
+      margin-top: 10px;
+    }
+    .hidden {
+      display: none;
     }
   </style>
 </head>
@@ -95,7 +121,7 @@
               <button id="generateBtn">分析対策（展開/閉じる）</button>
             </div>
           </div>
-          <div class="mini-map" id="miniMap">地図表示エリア</div>
+          <div class="mini-map" id="miniMap">Googleマップ表示エリア</div>
         </div>
       </section>
 
@@ -120,6 +146,7 @@
         <div id="thinkingContainer"></div>
         <button id="generateAllBtn" class="generateAllMindMapBtn" style="float: right;">🧠 一括マインドマップ生成</button>
         <div id="allMindMapResult" class="mindmap-area"></div>
+        <button id="openMapModal" style="margin-top: 30px;">🧠 マインドマップモーダルを開く</button>
       </section>
     </main>
   </div>
@@ -132,61 +159,23 @@
   <script src="map_controller.js"></script>
   <script src="card_renderer_mindtrigger.js"></script>
 
-  <script>
-    let isThinkingVisible = false;
-
-    document.getElementById("generateBtn").addEventListener("click", () => {
-      const thinkingContainer = document.getElementById("thinkingContainer");
-      if (isThinkingVisible) {
-        thinkingContainer.innerHTML = "";
-        document.getElementById("allMindMapResult").innerHTML = "";
-        isThinkingVisible = false;
-        return;
-      }
-
-      const sampleTasks = [
-        "観光客の減少が著しい",
-        "老朽インフラの更新が進まない",
-        "若手職員の離職が多い",
-        "移住促進制度が浸透しない",
-        "避難所の整備計画が遅れている"
-      ];
-
-      sampleTasks.forEach((task, index) => {
-        const block = document.createElement("div");
-        block.className = "thinking-block";
-
-        block.innerHTML = `
-          <p><strong>課題${index + 1}:</strong> ${task}</p>
-          <textarea placeholder="この課題について、考えていることや背景を入力してください…" rows="4"></textarea>
-        `;
-
-        thinkingContainer.appendChild(block);
-      });
-      isThinkingVisible = true;
-    });
-
-    document.getElementById("generateAllBtn").addEventListener("click", () => {
-      const blocks = document.querySelectorAll(".thinking-block");
-      const resultArea = document.getElementById("allMindMapResult");
-      let output = "<strong>🧠 一括マインドマップ出力（仮）</strong><ul>";
-      blocks.forEach((block, index) => {
-        const task = block.querySelector("p").innerText;
-        const opinion = block.querySelector("textarea").value.trim();
-        output += `<li><strong>${task}</strong><br>考察: ${opinion || "（未記入）"}</li>`;
-      });
-      output += "</ul><p>※ChatGPT連携により対策提案予定</p>";
-      resultArea.innerHTML = output;
-    });
-
-  </script>
-<!-- 🧠 マインドマップモーダル（追加部分） -->
-<div id="mapModal" class="modal hidden">
-  <div class="modal-content">
-    <h2 id="mapModalTitle">🧠 マインドマップ（課題全体）</h2>
-    <div id="mindmapContainer" style="width: 100%; height: 600px;"></div>
-    <button id="closeMapModal" class="close-button">閉じる</button>
+  <!-- 🧠 マインドマップモーダル -->
+  <div id="mapModal" class="modal hidden">
+    <div class="modal-content">
+      <h2 id="mapModalTitle">🧠 マインドマップ（課題全体）</h2>
+      <div id="mindmapContainer" style="width: 100%; height: 600px;"></div>
+      <button id="closeMapModal" class="close-button">閉じる</button>
+    </div>
   </div>
-</div>
+
+  <script>
+    // モーダル開閉ロジック
+    document.getElementById("openMapModal").addEventListener("click", () => {
+      document.getElementById("mapModal").classList.remove("hidden");
+    });
+    document.getElementById("closeMapModal").addEventListener("click", () => {
+      document.getElementById("mapModal").classList.add("hidden");
+    });
+  </script>
 </body>
 </html>
