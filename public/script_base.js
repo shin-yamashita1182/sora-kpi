@@ -329,7 +329,10 @@ JSON形式で、MindElixirで描画可能な階層構造（topic と children �
     const data = await res.json();
 // 🔍 ← この行をここに追加！
 console.log("🔍 GPT返答:", data.result);
-    const parsed = JSON.parse(data.result); // ← ChatGPT側の出力が JSON 文字列であることが前提
+    // 🔧 JSONだけを抽出してからパース
+const cleanResult = data.result.trim().replace(/^.*?(\{[\s\S]*)$/, '$1');
+const parsed = JSON.parse(cleanResult);
+
 
     const mind = new MindElixir({
       el: "#mindmapContainer",
