@@ -346,6 +346,11 @@ const endIndex = cleaned.lastIndexOf("}");
 if (endIndex !== -1) {
   cleaned = cleaned.slice(0, endIndex + 1);
 }
+if (!cleaned.trim().startsWith("{")) {
+  console.error("🧠 GPT返答がJSONではありません:", cleaned);
+  alert("ChatGPTの返答が正しいJSON形式ではありませんでした。もう一度お試しください。");
+  return;
+}
 
 // ✅ JSONが壊れていたらクラッシュせず止める
 let parsed;
