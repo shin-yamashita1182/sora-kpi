@@ -620,3 +620,22 @@ footer {
   border-radius: 8px;
   cursor: pointer;
 }
+/* --- 既存のスタイル群 --- */
+
+/* === MindMap用モーダル強化スタイル === */
+#mapModal .modal-content {
+  width: 90vw !important;
+  height: 80vh !important;
+  max-width: 1200px !important;
+  padding: 1rem;
+  background-color: #fff;
+  border-radius: 12px;
+  overflow: auto;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+#mindmapContainer {
+  width: 100% !important;
+  height: 100% !important;
+  min-height: 600px !important;
+}
