@@ -1,4 +1,3 @@
-// ✅ SORA Dashboard Script Base - 統合版（NEXCO連動 + ChatGPT課題抽出 + ThinkingZoneマインドマップ／安定運用構成）
 document.addEventListener("DOMContentLoaded", () => {
   const fileInput = document.getElementById("fileInput");
   const fileNameDisplay = document.getElementById("fileNameDisplay");
@@ -85,9 +84,21 @@ document.addEventListener("DOMContentLoaded", () => {
     nexcoStatus.textContent = isAccordionOpen ? "NEXCO情報を表示中" : "NEXCO情報を非表示にしました";
   }
 
-// 💬 ChatGPT連携：課題抽出
+  // 💬 ChatGPT連携：課題抽出（1回のみ定義）
 if (analyzeBtn) {
+  let isAnalyzing = false;
+
   analyzeBtn.addEventListener("click", async () => {
+    if (isAnalyzing) {
+      alert("すでに課題抽出を実行中です。少々お待ちください。");
+      return;
+    }
+
+    if (canvasResult.innerText && canvasResult.innerText.trim().length > 0) {
+      alert("すでに課題抽出が完了しています。ページを更新するか、条件を変更してください。");
+      return;
+    }
+
     const region = regionInput.value.trim();
     const theme = noteInput.value.trim();
     if (!region || !theme) return alert("地域名とテーマを入力してください。");
@@ -107,6 +118,7 @@ if (analyzeBtn) {
 2. 若年層の流出が続き、地域社会の持続性に懸念がある。
 `;
 
+    isAnalyzing = true;
     analyzeBtn.disabled = true;
     analyzeBtn.textContent = "抽出中…";
 
@@ -120,7 +132,9 @@ if (analyzeBtn) {
       canvasResult.innerText = data.result || "課題が取得できませんでした。";
     } catch (err) {
       console.error("課題抽出エラー:", err);
+      alert("課題抽出中にエラーが発生しました。");
     } finally {
+      isAnalyzing = false;
       analyzeBtn.disabled = false;
       analyzeBtn.textContent = "課題抽出";
     }
