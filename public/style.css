@@ -687,3 +687,15 @@ footer {
   margin: 5% auto;
   transition: all 0.2s ease-in-out;
 }
+/* モーダルの中央寄せ補正 */
+#mapModal {
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+}
+
+#mapModal .modal-content {
+  margin: 0 auto !important;
+  left: 0;
+  right: 0;
+}
