@@ -128,6 +128,8 @@ canvasResult.style.maxWidth = "100%"; // または必要なら "95%" 程度に�
 canvasResult.style.margin = "20px 0"; // auto を削除し左右寄せ防止
 canvasResult.style.textAlign = "left"; // このままでOK
 
+initMapWithRegion(region);
+    
 analysisDone = true;
 
       } catch (err) {
