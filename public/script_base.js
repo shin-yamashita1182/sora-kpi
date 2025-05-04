@@ -332,9 +332,12 @@ try {
 
   // 🔥 ← ココが修正ポイント
 let cleaned = data.result.trim();
-if (cleaned.startsWith("```")) {
-  cleaned = cleaned.replace(/^```json|^```|```$/g, "").trim();
+
+// 修正①: 最初に "```json" や "```" ではなく "json\n" で始まるパターンもカバー
+if (cleaned.startsWith("```") || cleaned.startsWith("json")) {
+  cleaned = cleaned.replace(/^```json|^```|^json|```$/g, "").trim();
 }
+
 const parsed = JSON.parse(cleaned);
 
   const mind = new MindElixir({
