@@ -227,7 +227,7 @@ if (generateBtn) {
 if (generateMindMapGPTBtn) {
   generateMindMapGPTBtn.addEventListener("click", async () => {
     generateMindMapGPTBtn.disabled = true;
-    generateMindMapGPTBtn.textContent = "生成中…";
+    generateMindMapGPTBtn.textContent = "マインドマップ生成中…";
 
     try {
       await generateMindMapFromGPT();
