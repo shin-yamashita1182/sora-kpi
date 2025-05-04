@@ -312,7 +312,7 @@ async function generateMindMapFromGPT() {
 
 JSON形式で、MindElixirで描画可能な階層構造（topic と children を持つツリー）にしてください。
 日本語を使い、重要な項目は深掘りし、3階層以上の構造になるよう意識してください。
-
+出力はJSONオブジェクトのみとし、コードブロックや説明文は一切含めないでください。
 ${combinedText}
 `;
 
@@ -326,22 +326,29 @@ ${combinedText}
     const data = await res.json();
     console.log("🔍 GPT返答:", data.result);
 
-    let cleaned = data.result.trim();
+let cleaned = data.result.trim();
 
-    // 🧼 コードブロックの除去
-    if (cleaned.startsWith("```json") || cleaned.startsWith("```") || cleaned.startsWith("json")) {
-      cleaned = cleaned.replace(/^```json|^```|^json|```$/g, "").trim();
-    }
+// 🧼 コードブロックの除去
+if (cleaned.startsWith("```json") || cleaned.startsWith("```") || cleaned.startsWith("json")) {
+  cleaned = cleaned.replace(/^```json|^```|^json|```$/g, "").trim();
+}
 
-    // ✅ JSONが壊れていたらクラッシュせず止める
-    let parsed;
-    try {
-      parsed = JSON.parse(cleaned);
-    } catch (parseErr) {
-      console.error("🧠 JSONパースエラー:", parseErr);
-      alert("GPTからの返答が壊れていたため、マインドマップの描画に失敗しました。もう一度お試しください。");
-      return;
-    }
+// 🧹 JSONの末尾以降の説明文などを切り捨て
+const endIndex = cleaned.lastIndexOf("}");
+if (endIndex !== -1) {
+  cleaned = cleaned.slice(0, endIndex + 1);
+}
+
+// ✅ JSONが壊れていたらクラッシュせず止める
+let parsed;
+try {
+  parsed = JSON.parse(cleaned);
+} catch (parseErr) {
+  console.error("🧠 JSONパースエラー:", parseErr);
+  alert("GPTからの返答が壊れていたため、マインドマップの描画に失敗しました。もう一度お試しください。");
+  return;
+}
+
 
     const mind = new MindElixir({
       el: "#mindmapContainer",
