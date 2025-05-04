@@ -287,6 +287,18 @@ function drawMindMapFromInputs() {
 
   mind.init();
 }
+// 🧠 ChatGPTから課題＋考察ベースのマインドマップを生成（今後拡張予定）
+async function generateMindMapFromGPT() {
+  console.log("🧠 generateMindMapFromGPTが呼び出されました（今後の実装箇所）");
+
+  // ここに ChatGPT への POST 送信と、戻り値で MindElixir に渡す処理を実装予定
+  // 例：
+  // const prompt = `以下は課題と考察のセットです。...`;
+  // const res = await fetch("/api/chatgpt", {...});
+  // const data = await res.json();
+  // const mindData = transformToMindElixir(data.result);
+  // mind.init(mindData);
+}
 
 // 📌 モーダルを開いたときにマインドマップ描画を実行
 if (generateAllBtn) {
