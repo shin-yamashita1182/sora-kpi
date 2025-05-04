@@ -86,24 +86,25 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // 💬 ChatGPT連携：課題抽出（1回のみ定義）
 if (analyzeBtn) {
-  let isAnalyzing = false;
+let analysisDone = false;
+let isAnalyzing = false;
 
-  analyzeBtn.addEventListener("click", async () => {
-    if (isAnalyzing) {
-      alert("すでに課題抽出を実行中です。少々お待ちください。");
-      return;
-    }
+analyzeBtn.addEventListener("click", async () => {
+  if (isAnalyzing) {
+    alert("すでに課題抽出を実行中です。少々お待ちください。");
+    return;
+  }
 
-    if (canvasResult.innerText && canvasResult.innerText.trim().length > 0) {
-      alert("すでに課題抽出が完了しています。ページを更新するか、条件を変更してください。");
-      return;
-    }
+  if (analysisDone) {
+    alert("すでに課題抽出が完了しています。ページを更新するか、条件を変更してください。");
+    return;
+  }
 
-    const region = regionInput.value.trim();
-    const theme = noteInput.value.trim();
-    if (!region || !theme) return alert("地域名とテーマを入力してください。");
+  const region = regionInput.value.trim();
+  const theme = noteInput.value.trim();
+  if (!region || !theme) return alert("地域名とテーマを入力してください。");
 
-    const prompt = `地域名「${region}」において、テーマ「${theme}」に基づき、現在想定される地域課題を抽出してください。
+  const prompt = `地域名「${region}」において、テーマ「${theme}」に基づき、現在想定される地域課題を抽出してください。
 以下の条件に従って、最大5件まで簡潔に提示してください。
 
 【出力条件】
@@ -118,28 +119,29 @@ if (analyzeBtn) {
 2. 若年層の流出が続き、地域社会の持続性に懸念がある。
 `;
 
-    isAnalyzing = true;
-    analyzeBtn.disabled = true;
-    analyzeBtn.textContent = "抽出中…";
+  isAnalyzing = true;
+  analyzeBtn.disabled = true;
+  analyzeBtn.textContent = "抽出中…";
 
-    try {
-      const res = await fetch("/api/chatgpt", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ prompt })
-      });
-      const data = await res.json();
-      canvasResult.innerText = data.result || "課題が取得できませんでした。";
-    } catch (err) {
-      console.error("課題抽出エラー:", err);
-      alert("課題抽出中にエラーが発生しました。");
-    } finally {
-      isAnalyzing = false;
-      analyzeBtn.disabled = false;
-      analyzeBtn.textContent = "課題抽出";
-    }
-  });
-}
+  try {
+    const res = await fetch("/api/chatgpt", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ prompt })
+    });
+    const data = await res.json();
+    canvasResult.innerText = data.result || "課題が取得できませんでした。";
+    analysisDone = true; // ✅ ここで完了フラグを立てる
+  } catch (err) {
+    console.error("課題抽出エラー:", err);
+    alert("課題抽出中にエラーが発生しました。");
+  } finally {
+    isAnalyzing = false;
+    analyzeBtn.disabled = false;
+    analyzeBtn.textContent = "課題抽出";
+  }
+});
+
 
 
   // 🧠 ThinkingZone展開切替
