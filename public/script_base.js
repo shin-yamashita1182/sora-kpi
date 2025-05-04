@@ -247,7 +247,7 @@ if (generateMindMapGPTBtn) {
       mindMapModal.classList.add("hidden");
     });
   }
-});
+
 
   // ✅ 🆕 全画面トグル機能（追加ここ）
   const toggleFullscreenBtn = document.getElementById("toggleFullscreenMap");
