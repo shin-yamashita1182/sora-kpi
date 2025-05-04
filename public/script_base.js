@@ -378,14 +378,13 @@ ${combinedText}
 const mind = new MindElixir({
   el: "#mindmapContainer",
   direction: MindElixir.RIGHT,
-  data: {
-    nodeData: parsed
-  },
+  data: { nodeData: parsed },
   draggable: true,
   contextMenu: true,
   toolBar: true,
   nodeMenu: true,
-  keypress: true
+  keypress: true,
+    
 // ✅ 日本語化オプション追加
   contextMenuOption: {
     addChild: '子ノードを追加',
