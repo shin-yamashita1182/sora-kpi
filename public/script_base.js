@@ -189,11 +189,11 @@ if (generateBtn) {
     }
 
     const tasks = [
-      "観光客の減少が著しい",
-      "老朽インフラの更新が進まない",
-      "若手職員の離職が多い",
-      "移住促進制度が浸透しない",
-      "避難所の整備計画が遅れている"
+      "例：観光客の減少が著しい",
+      "例：老朽インフラの更新が進まない",
+      "例：若手職員の離職が多い",
+      "例：移住促進制度が浸透しない",
+      "例：避難所の整備計画が遅れている"
     ];
 
     thinkingContainer.innerHTML = "";
@@ -264,22 +264,17 @@ function drawMindMapFromInputs() {
     });
   });
 
-  const mind = new MindElixir({
-    el: '#mindmapContainer',
-    direction: MindElixir.RIGHT,
-    data: {
-      nodeData: {
-        id: 'root',
-        topic: '課題マップ',
-        children: children
-      }
-    },
-    draggable: true,
-    contextMenu: true,
-    toolBar: true,
-    nodeMenu: true,
-    keypress: true
-  });
+const mind = new MindElixir({
+  el: '#mindmapContainer',
+  direction: MindElixir.RIGHT,
+  data: parsed,  // ← GPTが返す形式に合わせる
+  draggable: true,
+  contextMenu: true,
+  toolBar: true,
+  nodeMenu: true,
+  keypress: true
+});
+
 
   mind.init();
 }
