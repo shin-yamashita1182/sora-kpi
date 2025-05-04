@@ -25,15 +25,27 @@ document.addEventListener("DOMContentLoaded", () => {
   let isAccordionOpen = false;
   let isFetching = false;
   let analysisDone = false;
+// 📝 議事録ファイルの読み取り結果を保持
+  let uploadedTextContent = "";
   let isAnalyzing = false;
 
   // 📁 ファイル選択表示
   if (fileInput) {
-    fileInput.addEventListener("change", () => {
-      fileNameDisplay.textContent = fileInput.files.length > 0
-        ? fileInput.files[0].name
-        : "ファイルを選択してください";
-    });
+ fileInput.addEventListener("change", async () => {
+  const file = fileInput.files[0];
+  if (!file) return;
+
+  if (file.type === "text/plain") {
+    uploadedTextContent = await file.text();
+  } else if (file.type === "application/pdf") {
+    uploadedTextContent = await extractTextFromPDF(file);
+  } else {
+    alert("対応ファイル形式は .txt または .pdf のみです。");
+    uploadedTextContent = "";
+  }
+
+  fileNameDisplay.textContent = file.name ? `アップロード済み：${file.name}` : "ファイルを選択してください";
+});
   }
 
   // 🚗 NEXCO情報表示/取得
@@ -127,6 +139,11 @@ const prompt = `
 【参考資料】：
 {{minutesText}}
 `;
+
+const prompt = promptTemplate
+  .replace("{{region}}", region)
+  .replace("{{theme}}", theme)
+  .replace("{{minutesText}}", uploadedTextContent || "");
 
       isAnalyzing = true;
       analyzeBtn.disabled = true;
