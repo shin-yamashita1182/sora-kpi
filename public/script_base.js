@@ -360,7 +360,16 @@ try {
     });
 
     mind.init();
-    
+    // 🧠 中央ノードのスタイル調整で「巨大化」を防ぐ
+const rootNode = document.querySelector("#mindmapContainer .root-node");
+if (rootNode) {
+  rootNode.style.fontSize = "14px";          // フォントサイズを控えめに
+  rootNode.style.maxWidth = "260px";         // 幅を制限（長文対策）
+  rootNode.style.whiteSpace = "normal";      // 折り返し許可
+  rootNode.style.padding = "6px 10px";       // パディング調整
+  rootNode.style.lineHeight = "1.4";         // 行間を調整して読みやすく
+}
+
 
   } catch (err) {
     console.error("🧠 マインドマップ生成エラー:", err);
