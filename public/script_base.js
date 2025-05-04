@@ -109,6 +109,8 @@ document.addEventListener("DOMContentLoaded", () => {
         return;
       }
 
+const region = regionInput.value.trim();
+const theme = noteInput.value.trim();
 const prompt = `あなたは地域課題に精通した専門家です。地域名「${regionName}」、テーマ「${userNote}」に基づいて、現在想定される地域課題を日本語で5件、簡潔に抽出してください。各課題は1～2文で背景や原因がわかるよう記述し、箇条書き（番号付き）で出力してください。トークン数は最大800以内でお願いします。`;
 
       isAnalyzing = true;
@@ -129,7 +131,6 @@ canvasResult.style.maxWidth = "80%";
 canvasResult.style.margin = "20px auto";
 analysisDone = true;
 
-        analysisDone = true;
       } catch (err) {
         console.error("課題抽出エラー:", err);
         alert("課題抽出に失敗しました。");
