@@ -360,3 +360,4 @@ const parsed = JSON.parse(cleaned);
   console.error("🧠 マインドマップ生成エラー:", err);
   alert("ChatGPTによるマインドマップ生成に失敗しました。");
 }
+}
