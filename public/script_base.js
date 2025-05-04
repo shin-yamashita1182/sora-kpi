@@ -360,17 +360,27 @@ try {
     document.getElementById("mapModal").classList.remove("hidden");
 
     const mind = new MindElixir({
-      el: "#mindmapContainer",
-      direction: MindElixir.RIGHT,
-      data: {
-        nodeData: parsed
-      },
-      draggable: true,
-      contextMenu: true,
-      toolBar: true,
-      nodeMenu: true,
-      keypress: true
-    });
+  el: '#mindmapContainer',
+  direction: MindElixir.LEFT,
+  contextMenuOption: {
+    focus: 'フォーカス',
+    link: 'リンク',
+    copy: 'コピー',
+    cut: 'カット',
+    paste: '貼り付け',
+    delete: '削除',
+    addChild: '子ノードを追加',
+    addSibling: '関連ノードを追加',  // ← ここを日本語化（兄弟 → 関連）
+    edit: '編集',
+    moveUp: '上へ移動',
+    moveDown: '下へ移動',
+    cancelFocus: 'フォーカス解除'
+  },
+  toolBar: true,
+  nodeMenu: true,
+  keypress: true,
+})
+
 
     mind.init();
     mind.scale(0.75);          // ← 追加する！ここで全体を縮小
