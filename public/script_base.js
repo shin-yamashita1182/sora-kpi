@@ -320,38 +320,41 @@ JSON形式で、MindElixirで描画可能な階層構造（topic と children �
 `;
 
 
-  try {
-    const res = await fetch("/api/chatgpt", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ prompt })
-    });
-    const data = await res.json();
-// 🔍 ← この行をここに追加！
-console.log("🔍 GPT返答:", data.result);
-    // 🔧 JSONだけを抽出してからパース
-const cleanResult = data.result.trim().replace(/^.*?(\{[\s\S]*)$/, '$1');
-const parsed = JSON.parse(cleanResult);
+try {
+  const res = await fetch("/api/chatgpt", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ prompt })
+  });
+  const data = await res.json();
 
+  console.log("🔍 GPT返答:", data.result);
 
-    const mind = new MindElixir({
-      el: "#mindmapContainer",
-      direction: MindElixir.RIGHT,
-      data: {
-        nodeData: parsed
-      },
-      draggable: true,
-      contextMenu: true,
-      toolBar: true,
-      nodeMenu: true,
-      keypress: true
-    });
-
-    mind.init();
-    document.getElementById("mapModal").classList.remove("hidden");
-
-  } catch (err) {
-    console.error("🧠 マインドマップ生成エラー:", err);
-    alert("ChatGPTによるマインドマップ生成に失敗しました。");
+  // 🔥 ← ココが修正ポイント
+  let cleaned = data.result.trim();
+  if (cleaned.startsWith("```json") || cleaned.startsWith("```")) {
+    cleaned = cleaned.replace(/```json|```/g, "").trim();
   }
+
+  const parsed = JSON.parse(cleaned);
+
+  const mind = new MindElixir({
+    el: "#mindmapContainer",
+    direction: MindElixir.RIGHT,
+    data: {
+      nodeData: parsed
+    },
+    draggable: true,
+    contextMenu: true,
+    toolBar: true,
+    nodeMenu: true,
+    keypress: true
+  });
+
+  mind.init();
+  document.getElementById("mapModal").classList.remove("hidden");
+
+} catch (err) {
+  console.error("🧠 マインドマップ生成エラー:", err);
+  alert("ChatGPTによるマインドマップ生成に失敗しました。");
 }
