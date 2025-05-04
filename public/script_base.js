@@ -378,25 +378,16 @@ ${combinedText}
 const mind = new MindElixir({
   el: "#mindmapContainer",
   direction: MindElixir.RIGHT,
-  data: { nodeData: parsed },
+  data: {
+    nodeData: parsed
+  },
   draggable: true,
   contextMenu: true,
   toolBar: true,
   nodeMenu: true,
-  keypress: true,
-    
-// ✅ 日本語化オプション追加
-  contextMenuOption: {
-    addChild: '子ノードを追加',
-    addSibling: '兄弟ノードを追加',
-    remove node deleete 'ノードを削除',
-    focus mode 'フォーカス',
-    cancel focus mode 'フォーカス解除',
-    moveUp: '上へ移動', 
-    moveDown: '下へ移動',
-    link: 'リンク',
-  }
+  keypress: true
 });
+
  
     mind.init();
     mind.scale(0.75);
