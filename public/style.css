@@ -665,8 +665,3 @@ footer {
 #closeMapModal:hover {
   background-color: #0056b3;
 }
-#mapModal {
-  position: relative;  /* ← これがないと絶対位置が効かない！ */
-}
-#generateMindMapGPTBtn {
-  min-width: 180px;
