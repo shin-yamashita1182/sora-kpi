@@ -331,12 +331,11 @@ try {
   console.log("🔍 GPT返答:", data.result);
 
   // 🔥 ← ココが修正ポイント
-  let cleaned = data.result.trim();
-  if (cleaned.startsWith("```json") || cleaned.startsWith("```")) {
-    cleaned = cleaned.replace(/```json|```/g, "").trim();
-  }
-
-  const parsed = JSON.parse(cleaned);
+let cleaned = data.result.trim();
+if (cleaned.startsWith("```")) {
+  cleaned = cleaned.replace(/^```json|^```|```$/g, "").trim();
+}
+const parsed = JSON.parse(cleaned);
 
   const mind = new MindElixir({
     el: "#mindmapContainer",
