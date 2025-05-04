@@ -109,7 +109,7 @@ document.addEventListener("DOMContentLoaded", () => {
         return;
       }
 
-      const prompt = `地域名「${region}」において、テーマ「${theme}」に基づき、現在想定される地域課題を抽出してください。
+const prompt = `地域名「${regionName}」において、テーマ「${userNote}」に基づき、現在想定される地域課題を抽出してください。
 以下の条件に従って、最大5件まで簡潔に提示してください。
 
 【出力条件】
@@ -117,12 +117,11 @@ document.addEventListener("DOMContentLoaded", () => {
 - 原因や背景が簡潔にわかるように説明
 - 箇条書き形式（番号付き）で記載
 - 専門用語や冗長な表現を避ける
-- トークン数は最大500まで
+- トークン数は最大800まで
 
 【出力形式例】
 1. ○○産業の担い手不足により、地域経済の活性化が停滞している。
-2. 若年層の流出が続き、地域社会の持続性に懸念がある。
-`;
+2. 若年層の流出が続き、地域社会の持続性に懸念がある。`;
 
       isAnalyzing = true;
       analyzeBtn.disabled = true;
@@ -134,8 +133,14 @@ document.addEventListener("DOMContentLoaded", () => {
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ prompt })
         });
-        const data = await res.json();
-        canvasResult.innerText = data.result || "課題が取得できませんでした。";
+const data = await res.json();
+const canvasResult = document.getElementById("canvasResult");
+canvasResult.innerText = data.result || "課題が取得できませんでした。";
+canvasResult.style.textAlign = "left";
+canvasResult.style.maxWidth = "80%";
+canvasResult.style.margin = "20px auto";
+analysisDone = true;
+
         analysisDone = true;
       } catch (err) {
         console.error("課題抽出エラー:", err);
