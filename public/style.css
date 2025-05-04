@@ -646,3 +646,25 @@ footer {
   font-size: 16px;
   padding: 6px 10px;
 }
+/* === MindMap用モーダル強化スタイル2 === */
+#closeMapModal {
+  position: absolute;
+  bottom: 16px;
+  right: 20px;
+  background-color: #007BFF;  /* ブルー */
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 6px 12px;
+  font-size: 13px;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+  transition: background-color 0.2s ease;
+}
+
+#closeMapModal:hover {
+  background-color: #0056b3;
+}
+#mapModal {
+  position: relative;  /* ← これがないと絶対位置が効かない！ */
+}
