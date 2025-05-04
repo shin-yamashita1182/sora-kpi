@@ -5,77 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>SORA Dashboard Refine</title>
   <link rel="stylesheet" href="style.css">
-  <style>
-    .thinking-block {
-      background-color: #ffffff;
-      border: 1px solid #ccc;
-      border-radius: 10px;
-      padding: 16px;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-      margin-bottom: 20px;
-    }
-    .thinking-block p {
-      font-weight: bold;
-      margin-bottom: 6px;
-    }
-    .thinking-block textarea {
-      margin-bottom: 10px;
-      resize: vertical;
-      border-radius: 6px;
-      border: 1px solid #ccc;
-      padding: 8px;
-      width: 100%;
-    }
-    .generateAllMindMapBtn {
-      background-color: #2a9d8f;
-      color: white;
-      padding: 10px 20px;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-      margin-top: 20px;
-      font-size: 1em;
-    }
-    .generateAllMindMapBtn:hover {
-      background-color: #21867a;
-    }
-    .mindmap-area {
-      margin-top: 20px;
-      background-color: #f8f9fa;
-      border-left: 4px solid #2a9d8f;
-      padding: 12px;
-      font-size: 0.95em;
-      line-height: 1.6em;
-    }
-    .modal {
-      display: block;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-color: rgba(0,0,0,0.5);
-      z-index: 1000;
-    }
-    .modal-content {
-      background-color: #fff;
-      margin: 10% auto;
-      padding: 20px;
-      width: 80%;
-      border-radius: 10px;
-    }
-    .close-button {
-      background-color: #ccc;
-      border: none;
-      padding: 8px 12px;
-      cursor: pointer;
-      float: right;
-      margin-top: 10px;
-    }
-    .hidden {
-      display: none;
-    }
-  </style>
 </head>
 <body>
   <header>
@@ -116,66 +45,92 @@
               <input type="file" id="fileInput" accept=".txt,.pdf,.docx">
               <span id="fileNameDisplay">ファイルを選択してください</span>
             </div>
+        
+            <!-- ★ ボタン2個に分割 -->
             <div class="button-wrapper">
               <button id="analyzeBtn">課題抽出</button>
-              <button id="generateBtn">分析対策（展開/閉じる）</button>
+              <button id="generateBtn">分析対策</button>
             </div>
+
           </div>
-          <div class="mini-map" id="miniMap">Googleマップ表示エリア</div>
+          <div class="mini-map" id="miniMap">地図表示エリア</div>
         </div>
       </section>
 
+      <!-- ★ SORA CANVAS（課題リスト） -->
       <section class="canvas-section">
         <h2>SORA CANVAS（課題リスト）</h2>
         <div id="gptResponse"></div>
         <div class="canvas-placeholder" id="canvasResult">ここにキャンバス課題リストを展開</div>
       </section>
 
-      <div class="nexco-toggle-wrapper" style="margin-top: 10px; margin-bottom: 10px; text-align: right;">
-        <button id="toggleNexcoBtn">NEXCO情報を表示</button>
-        <div id="nexcoStatus" style="margin-top: 4px; font-size: 0.9em; color: #888;"></div>
-      </div>
+<!-- ✅ 1. ボタンを追加（SORA CANVASの中に配置） -->
+<div class="nexco-toggle-wrapper" style="margin-top: 10px; margin-bottom: 10px; text-align: right;">
+  <button id="toggleNexcoBtn">NEXCO情報を表示</button>
+  <div id="nexcoStatus" style="margin-top: 4px; font-size: 0.9em; color: #888;"></div>
+</div>
 
-      <div id="nexcoInfoBox">
-        <h3>NEXCO周辺施設・高速道路情報</h3>
-        <ul id="nexcoInfoList"></ul>
-      </div>
+<!-- ✅ 2. アコーディオンエリア（最初は非表示） -->
+<div id="nexcoInfoBox">
+  <h3>NEXCO周辺施設・高速道路情報</h3>
+  <ul id="nexcoInfoList">
+    <!-- ChatGPTが返すSA・IC・PA情報をここに入れる予定 -->
+  </ul>
+</div>
+ 
+      <section class="results-section">
+        <h2>戦略リスト（施策やKPI）</h2>
+        <div id="resultsContainer" class="card-container">
+          <div id="coreMasterContainer"></div>
+        </div>
+      </section>
 
-      <section class="thinking-zone" style="margin-top: 40px; padding: 20px; background-color: #f9f9f9; border-top: 2px solid #ccc;">
-        <h2>🧠 課題に対する考察とマインドマップ生成</h2>
-        <div id="thinkingContainer"></div>
-        <button id="generateAllBtn" class="generateAllMindMapBtn" style="float: right;">🧠 一括マインドマップ生成</button>
-        <div id="allMindMapResult" class="mindmap-area"></div>
-        <button id="openMapModal" style="margin-top: 30px;">🧠 マインドマップモーダルを開く</button>
+      <section class="compare-section">
+        <h2>優先リスト（重点実施）</h2>
+        <div id="compareListContainer" class="card-container">
+        </div>
       </section>
     </main>
+  </div>
+
+  <!-- モーダル（詳細） -->
+  <div id="detailModal" class="modal">
+    <div class="modal-content">
+      <span class="close-button" id="closeModal">&times;</span>
+      <div id="modalBody"></div>
+    </div>
+  </div>
+
+  <!-- モーダル（地図拡大） -->
+  <div id="mapModal" class="modal">
+    <div class="modal-content">
+      <span class="close-button" id="closeMapModal">&times;</span>
+      <div id="mapModalBody">拡大地図表示</div>
+    </div>
   </div>
 
   <footer>
     <p>&copy; 2025 SORA Project</p>
   </footer>
 
+  <!-- スクリプト読み込み -->
   <script src="script_base.js"></script>
-  <script src="map_controller.js"></script>
-  <script src="card_renderer_mindtrigger.js"></script>
+  <!-- 🔵 これを追加！ -->
+<script src="map_controller.js"></script>
+<script src="card_renderer_mindtrigger.js"></script>
 
-  <!-- 🧠 マインドマップモーダル -->
-  <div id="mapModal" class="modal hidden">
-    <div class="modal-content">
-      <h2 id="mapModalTitle">🧠 マインドマップ（課題全体）</h2>
-      <div id="mindmapContainer" style="width: 100%; height: 600px;"></div>
-      <button id="closeMapModal" class="close-button">閉じる</button>
+  <!-- ✅ マインドマップ モーダル -->
+<div id="mindMapModal" class="modal">
+  <div class="modal-content">
+    <span class="close-button" id="closeMindMapModal">&times;</span>
+    <div id="mindMapBody">
+      <h2>🧠 マインドマップ（仮）</h2>
+      <div id="mindMapContent">選択された施策から生成されたマップをここに表示します。</div>
     </div>
   </div>
+</div>
 
-  <script>
-    // モーダル開閉ロジック
-    document.getElementById("openMapModal").addEventListener("click", () => {
-      document.getElementById("mapModal").classList.remove("hidden");
-    });
-    document.getElementById("closeMapModal").addEventListener("click", () => {
-      document.getElementById("mapModal").classList.add("hidden");
-    });
-  </script>
+
 </body>
 </html>
+
