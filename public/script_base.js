@@ -248,6 +248,23 @@ if (generateMindMapGPTBtn) {
     });
   }
 });
+
+  // ✅ 🆕 全画面トグル機能（追加ここ）
+  const toggleFullscreenBtn = document.getElementById("toggleFullscreenMap");
+  const mapModalContent = document.querySelector("#mapModal .modal-content");
+
+  if (toggleFullscreenBtn && mapModalContent) {
+    let isFullscreen = false;
+
+    toggleFullscreenBtn.addEventListener("click", () => {
+      isFullscreen = !isFullscreen;
+      mapModalContent.classList.toggle("fullscreen-modal", isFullscreen);
+      toggleFullscreenBtn.textContent = isFullscreen ? "🗗" : "🔳";
+      toggleFullscreenBtn.title = isFullscreen ? "元に戻す" : "全画面化";
+    });
+  }
+});
+
 async function extractTextFromPDF(file) {
   const pdfData = await file.arrayBuffer();
   const pdf = await pdfjsLib.getDocument({ data: pdfData }).promise;
