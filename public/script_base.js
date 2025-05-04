@@ -235,10 +235,6 @@ if (generateMindMapGPTBtn) {
     });
   }
 
-  window.addEventListener("click", (e) => {
-    if (e.target === mindMapModal) mindMapModal.classList.add("hidden");
-  });
-});
 async function extractTextFromPDF(file) {
   const pdfData = await file.arrayBuffer();
   const pdf = await pdfjsLib.getDocument({ data: pdfData }).promise;
