@@ -360,6 +360,8 @@ try {
     });
 
     mind.init();
+    mind.scale(0.75);          // ← 追加する！ここで全体を縮小
+
     // 🧠 中央ノードのスタイル調整で「巨大化」を防ぐ
 const rootNode = document.querySelector("#mindmapContainer .root-node");
 if (rootNode) {
