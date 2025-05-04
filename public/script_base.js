@@ -92,12 +92,6 @@ document.addEventListener("DOMContentLoaded", () => {
       const theme = noteInput.value.trim();
       if (!region || !theme) return alert("地域名とテーマを入力してください。");
 
-if (analyzeBtn) {
-  analyzeBtn.addEventListener("click", async () => {
-    const region = regionInput.value.trim();
-    const theme = noteInput.value.trim();
-    if (!region || !theme) return alert("地域名とテーマを入力してください。");
-
     const prompt = `地域名「${region}」において、テーマ「${theme}」に基づき、現在想定される地域課題を抽出してください。
 以下の条件に従って、最大5件まで簡潔に提示してください。
 
