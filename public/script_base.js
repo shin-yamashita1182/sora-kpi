@@ -234,7 +234,7 @@ if (generateMindMapGPTBtn) {
       mindMapModal.classList.add("hidden");
     });
   }
-
+});
 async function extractTextFromPDF(file) {
   const pdfData = await file.arrayBuffer();
   const pdf = await pdfjsLib.getDocument({ data: pdfData }).promise;
