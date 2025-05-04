@@ -1,4 +1,4 @@
-// ✅ SORA Dashboard Script Base - 最小構成＋安定性復元（地図＋アラート＋ChatGPT制御＋ThinkingZone）
+// ✅ SORA Dashboard Script Base - 最小構成版（NEXCO連動 + ChatGPT課題抽出 + ThinkingZoneマインドマップ + 地図表示）
 document.addEventListener("DOMContentLoaded", () => {
   const fileInput = document.getElementById("fileInput");
   const fileNameDisplay = document.getElementById("fileNameDisplay");
@@ -19,22 +19,30 @@ document.addEventListener("DOMContentLoaded", () => {
   const mindMapContent = document.getElementById("mindmapContainer");
   const closeMindMapBtn = document.getElementById("closeMapModal");
 
-  const mapModal = document.getElementById("mapModal");
-  const mapModalBody = document.getElementById("mapModalBody");
-  const closeMapBtn = document.getElementById("closeMapModal");
+  const miniMap = document.getElementById("miniMap");
 
   let isThinkingVisible = false;
   let infoFetched = false;
   let isAccordionOpen = false;
   let isFetching = false;
-  let analysisDone = false; // ✅ 2回抽出防止
+  let analysisDone = false;
 
+  // ✅ 地図表示（簡易版、OpenStreetMapベース）
+  if (typeof L !== 'undefined' && miniMap) {
+    const map = L.map(miniMap).setView([33.0, 129.0], 10);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; OpenStreetMap contributors'
+    }).addTo(map);
+  }
+
+  // 📁 ファイル選択表示
   fileInput.addEventListener("change", () => {
     fileNameDisplay.textContent = fileInput.files.length > 0
       ? fileInput.files[0].name
       : "ファイルを選択してください";
   });
 
+  // 🚗 NEXCO情報表示/取得
   toggleNexcoBtn.addEventListener("click", () => {
     const region = regionInput.value.trim();
     if (!region) return alert("地域名を入力してください！");
@@ -84,6 +92,7 @@ document.addEventListener("DOMContentLoaded", () => {
     nexcoStatus.textContent = isAccordionOpen ? "NEXCO情報を表示中" : "NEXCO情報を非表示にしました";
   }
 
+  // 💬 ChatGPT連携：課題抽出（再抽出防止）
   analyzeBtn.addEventListener("click", async () => {
     if (analysisDone) {
       alert("すでに課題抽出が完了しています。ページを更新するか、条件を変更してください。");
@@ -91,7 +100,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
     const region = regionInput.value.trim();
     const theme = noteInput.value.trim();
-    if (!region || !theme) return alert("地域名とテーマを入力してください。");
+    if (!region || !theme) return alert("地域名とテーマを入力してください。 ※どちらかが未記入です");
 
     const prompt = `${region}について、テーマ「${theme}」に基づく地域課題を抽出してください。最大5つ、1〜2文で簡潔に。`;
     analyzeBtn.disabled = true;
@@ -108,13 +117,14 @@ document.addEventListener("DOMContentLoaded", () => {
       analysisDone = true;
     } catch (err) {
       console.error("課題抽出エラー:", err);
-      alert("課題の取得に失敗しました。");
+      alert("ChatGPTへの接続に失敗しました。もう一度お試しください。")
     } finally {
       analyzeBtn.disabled = false;
       analyzeBtn.textContent = "課題抽出";
     }
   });
 
+  // 🧠 ThinkingZone展開切替
   generateBtn.addEventListener("click", () => {
     if (isThinkingVisible) {
       thinkingContainer.innerHTML = "";
@@ -139,6 +149,7 @@ document.addEventListener("DOMContentLoaded", () => {
     isThinkingVisible = true;
   });
 
+  // 🧠 一括マインドマップモーダル出力
   generateAllBtn.addEventListener("click", () => {
     const blocks = document.querySelectorAll(".thinking-block");
     let output = "<ul style='list-style:none;padding-left:0;'>";
@@ -152,11 +163,11 @@ document.addEventListener("DOMContentLoaded", () => {
     mindMapModal.classList.remove("hidden");
   });
 
-  closeMapBtn.addEventListener("click", () => {
-    mapModal.classList.add("hidden");
+  closeMindMapBtn.addEventListener("click", () => {
+    mindMapModal.classList.add("hidden");
   });
 
   window.addEventListener("click", (e) => {
-    if (e.target === mapModal) mapModal.classList.add("hidden");
+    if (e.target === mindMapModal) mindMapModal.classList.add("hidden");
   });
 });
