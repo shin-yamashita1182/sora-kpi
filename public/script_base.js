@@ -308,14 +308,17 @@ async function generateMindMapFromGPT() {
     combinedText += `【${i + 1}】${task}\n考察：${opinion || "（未記入）"}\n`;
   });
 
-  const prompt = `
-以下は、地域課題とそれに対する住民の考察です。これをもとに、中心テーマを「${theme}」とした放射状マインドマップ構造を構築してください。
+const prompt = `
+以下は、地域課題とそれに対する住民の考察です。これをもとに、中心テーマを「五島市：人口減少と高齢化への対策」とした放射状マインドマップ構造を構築してください。
 
 JSON形式で、MindElixirで描画可能な階層構造（topic と children を持つツリー）にしてください。
 日本語を使い、重要な項目は深掘りし、3階層以上の構造になるよう意識してください。
 
-${combinedText}
+【地域名】五島市
+【課題】人口減少と高齢化によって産業が衰退している
+【住民の考察】若者が戻らない、介護人材が不足、観光資源が眠っている
 `;
+
 
   try {
     const res = await fetch("/api/chatgpt", {
