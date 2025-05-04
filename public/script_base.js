@@ -1,5 +1,4 @@
-// ✅ SORA Dashboard Script Base - 安定動作ベース + ThinkingZone追加
-
+// ✅ SORA Dashboard Script Base - 最小構成＋安定性復元（地図＋アラート＋ChatGPT制御＋ThinkingZone）
 document.addEventListener("DOMContentLoaded", () => {
   const fileInput = document.getElementById("fileInput");
   const fileNameDisplay = document.getElementById("fileNameDisplay");
@@ -16,14 +15,19 @@ document.addEventListener("DOMContentLoaded", () => {
   const thinkingContainer = document.getElementById("thinkingContainer");
   const generateBtn = document.getElementById("generateBtn");
   const generateAllBtn = document.getElementById("generateAllBtn");
+  const mindMapModal = document.getElementById("mapModal");
+  const mindMapContent = document.getElementById("mindmapContainer");
+  const closeMindMapBtn = document.getElementById("closeMapModal");
+
   const mapModal = document.getElementById("mapModal");
-  const mapModalBody = document.getElementById("mindmapContainer");
+  const mapModalBody = document.getElementById("mapModalBody");
   const closeMapBtn = document.getElementById("closeMapModal");
 
+  let isThinkingVisible = false;
   let infoFetched = false;
   let isAccordionOpen = false;
   let isFetching = false;
-  let isThinkingVisible = false;
+  let analysisDone = false; // ✅ 2回抽出防止
 
   fileInput.addEventListener("change", () => {
     fileNameDisplay.textContent = fileInput.files.length > 0
@@ -81,6 +85,10 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   analyzeBtn.addEventListener("click", async () => {
+    if (analysisDone) {
+      alert("すでに課題抽出が完了しています。ページを更新するか、条件を変更してください。");
+      return;
+    }
     const region = regionInput.value.trim();
     const theme = noteInput.value.trim();
     if (!region || !theme) return alert("地域名とテーマを入力してください。");
@@ -97,9 +105,10 @@ document.addEventListener("DOMContentLoaded", () => {
       });
       const data = await res.json();
       canvasResult.innerText = data.result || "課題が取得できませんでした。";
+      analysisDone = true;
     } catch (err) {
       console.error("課題抽出エラー:", err);
-      canvasResult.innerText = "エラーが発生しました。";
+      alert("課題の取得に失敗しました。");
     } finally {
       analyzeBtn.disabled = false;
       analyzeBtn.textContent = "課題抽出";
@@ -139,8 +148,8 @@ document.addEventListener("DOMContentLoaded", () => {
       output += `<li style='margin-bottom:10px;'>🟢 <strong>${task}</strong><br>考察: ${opinion || "（未記入）"}</li>`;
     });
     output += "</ul><p style='margin-top:1em;'>※ChatGPT連携による対策提案予定</p>";
-    mapModalBody.innerHTML = output;
-    mapModal.classList.remove("hidden");
+    mindMapContent.innerHTML = output;
+    mindMapModal.classList.remove("hidden");
   });
 
   closeMapBtn.addEventListener("click", () => {
