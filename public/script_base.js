@@ -223,11 +223,24 @@ if (generateBtn) {
       mindMapModal.classList.remove("hidden");
     });
   }
+
 if (generateMindMapGPTBtn) {
   generateMindMapGPTBtn.addEventListener("click", async () => {
-    await generateMindMapFromGPT();
+    generateMindMapGPTBtn.disabled = true;
+    generateMindMapGPTBtn.textContent = "生成中…";
+
+    try {
+      await generateMindMapFromGPT();
+    } catch (err) {
+      console.error("⚠️ マインドマップ生成中にエラー:", err);
+      alert("マインドマップ生成に失敗しました。");
+    }
+
+    generateMindMapGPTBtn.textContent = "マインドマップを生成";
+    generateMindMapGPTBtn.disabled = false;
   });
 }
+
 
   if (closeMindMapBtn) {
     closeMindMapBtn.addEventListener("click", () => {
