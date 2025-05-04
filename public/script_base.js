@@ -1,4 +1,4 @@
-// ✅ SORA Dashboard Script Base - 最小構成版（NEXCO連動 + ChatGPT課題抽出 + ThinkingZoneマインドマップ + 地図表示）
+// ✅ SORA Dashboard Script Base - 最小構成版（NEXCO連動 + ChatGPT課題抽出 + ThinkingZoneマインドマップ）
 document.addEventListener("DOMContentLoaded", () => {
   const fileInput = document.getElementById("fileInput");
   const fileNameDisplay = document.getElementById("fileNameDisplay");
@@ -18,7 +18,6 @@ document.addEventListener("DOMContentLoaded", () => {
   const mindMapModal = document.getElementById("mapModal");
   const mindMapContent = document.getElementById("mindmapContainer");
   const closeMindMapBtn = document.getElementById("closeMapModal");
-
   const miniMap = document.getElementById("miniMap");
 
   let isThinkingVisible = false;
@@ -26,14 +25,7 @@ document.addEventListener("DOMContentLoaded", () => {
   let isAccordionOpen = false;
   let isFetching = false;
   let analysisDone = false;
-
-  // ✅ 地図表示（簡易版、OpenStreetMapベース）
-  if (typeof L !== 'undefined' && miniMap) {
-    const map = L.map(miniMap).setView([33.0, 129.0], 10);
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: '&copy; OpenStreetMap contributors'
-    }).addTo(map);
-  }
+  let map;
 
   // 📁 ファイル選択表示
   fileInput.addEventListener("change", () => {
@@ -60,7 +52,7 @@ document.addEventListener("DOMContentLoaded", () => {
       })
         .then(res => res.json())
         .then(data => {
-          const items = (data.result || "").split(/\n|・|。|！|？/).filter(line => line.trim().length > 4);
+          const items = (data.result || "").split(/[\n・。！？]/).filter(line => line.trim().length > 4);
           nexcoInfoList.innerHTML = "";
           items.forEach(text => {
             const li = document.createElement("li");
@@ -92,6 +84,27 @@ document.addEventListener("DOMContentLoaded", () => {
     nexcoStatus.textContent = isAccordionOpen ? "NEXCO情報を表示中" : "NEXCO情報を非表示にしました";
   }
 
+  // 🗺️ 地域連動マップ描画（初期地図を非表示）
+  function updateGoogleMap(regionName) {
+    if (!map) {
+      map = L.map('miniMap').setView([35.6812, 139.7671], 5);
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; OpenStreetMap contributors'
+      }).addTo(map);
+    }
+    fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${regionName}`)
+      .then(response => response.json())
+      .then(data => {
+        if (data.length > 0) {
+          const { lat, lon } = data[0];
+          map.setView([lat, lon], 10);
+        }
+      })
+      .catch(error => {
+        console.error("地図取得エラー:", error);
+      });
+  }
+
   // 💬 ChatGPT連携：課題抽出（再抽出防止）
   analyzeBtn.addEventListener("click", async () => {
     if (analysisDone) {
@@ -101,6 +114,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const region = regionInput.value.trim();
     const theme = noteInput.value.trim();
     if (!region || !theme) return alert("地域名とテーマを入力してください。 ※どちらかが未記入です");
+
+    updateGoogleMap(region); // ✅ 地域名で地図表示
 
     const prompt = `${region}について、テーマ「${theme}」に基づく地域課題を抽出してください。最大5つ、1〜2文で簡潔に。`;
     analyzeBtn.disabled = true;
@@ -117,7 +132,7 @@ document.addEventListener("DOMContentLoaded", () => {
       analysisDone = true;
     } catch (err) {
       console.error("課題抽出エラー:", err);
-      alert("ChatGPTへの接続に失敗しました。もう一度お試しください。")
+      alert("ChatGPTへの接続に失敗しました。もう一度お試しください。");
     } finally {
       analyzeBtn.disabled = false;
       analyzeBtn.textContent = "課題抽出";
