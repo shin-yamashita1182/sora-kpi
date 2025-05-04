@@ -291,7 +291,7 @@ const mind = new MindElixir({
 
   mind.init();
 }
-// 🧠 ChatGPTから課題＋考察ベースのマインドマップを生成
+// 🧠 ChatGPTから課題＋考察ベースのマインドマップを生成（安定版）
 async function generateMindMapFromGPT() {
   console.log("🧠 generateMindMapFromGPTが呼び出されました");
 
@@ -311,7 +311,7 @@ async function generateMindMapFromGPT() {
     combinedText += `【${i + 1}】${task}\n考察：${opinion || "（未記入）"}\n`;
   });
 
-const prompt = `
+  const prompt = `
 以下は、地域課題とそれに対する住民の考察です。これをもとに、中心テーマを「${region}：${theme}」とした放射状マインドマップ構造を構築してください。
 
 JSON形式で、MindElixirで描画可能な階層構造（topic と children を持つツリー）にしてください。
@@ -323,7 +323,6 @@ JSON形式で、MindElixirで描画可能な階層構造（topic と children �
 ${combinedText}
 `;
 
-
   try {
     const res = await fetch("/api/chatgpt", {
       method: "POST",
@@ -333,73 +332,85 @@ ${combinedText}
 
     const data = await res.json();
     console.log("🔍 GPT返答:", data.result);
+    let cleaned = data.result.trim();
 
-let cleaned = data.result.trim();
+    // 🧼 コードブロックの除去
+    if (cleaned.startsWith("```json") || cleaned.startsWith("```") || cleaned.startsWith("json")) {
+      cleaned = cleaned.replace(/^```json|^```|^json|```$/g, "").trim();
+    }
 
-// 🧼 コードブロックの除去
-if (cleaned.startsWith("```json") || cleaned.startsWith("```") || cleaned.startsWith("json")) {
-  cleaned = cleaned.replace(/^```json|^```|^json|```$/g, "").trim();
-}
+    // 🧹 JSONの末尾以降の説明文などを切り捨て
+    const endIndex = cleaned.lastIndexOf("}");
+    if (endIndex !== -1) {
+      cleaned = cleaned.slice(0, endIndex + 1);
+    }
 
-// 🧹 JSONの末尾以降の説明文などを切り捨て
-const endIndex = cleaned.lastIndexOf("}");
-if (endIndex !== -1) {
-  cleaned = cleaned.slice(0, endIndex + 1);
-}
-if (!cleaned.trim().startsWith("{")) {
-  console.error("🧠 GPT返答がJSONではありません:", cleaned);
-  alert("ChatGPTの返答が正しいJSON形式ではありませんでした。もう一度お試しください。");
-  return;
-}
+    // ✅ JSONパース
+    let parsed;
+    try {
+      parsed = JSON.parse(cleaned);
+    } catch (parseErr) {
+      console.error("🧠 JSONパースエラー:", parseErr);
+      alert("GPTからの返答が壊れていたため、マインドマップの描画に失敗しました。もう一度お試しください。");
+      return;
+    }
 
-// ✅ JSONが壊れていたらクラッシュせず止める
-let parsed;
-try {
-  parsed = JSON.parse(cleaned);
-} catch (parseErr) {
-  console.error("🧠 JSONパースエラー:", parseErr);
-  alert("GPTからの返答が壊れていたため、マインドマップの描画に失敗しました。もう一度お試しください。");
-  return;
-}
+    // ✅ children: [] を除去（MindElixir安定化）
+    function sanitizeMindMapData(node) {
+      if (Array.isArray(node.children)) {
+        if (node.children.length === 0) {
+          delete node.children;
+        } else {
+          node.children.forEach(sanitizeMindMapData);
+        }
+      }
+    }
+    sanitizeMindMapData(parsed);
+
+    // ✅ 最低限構造のチェック
+    if (!parsed || typeof parsed !== "object" || !parsed.topic) {
+      alert("マインドマップの構造が不正です。");
+      return;
+    }
 
     document.getElementById("mapModal").classList.remove("hidden");
 
     const mind = new MindElixir({
-  el: '#mindmapContainer',
-  direction: MindElixir.LEFT,
-  contextMenuOption: {
-    focus: 'フォーカス',
-    link: 'リンク',
-    copy: 'コピー',
-    cut: 'カット',
-    paste: '貼り付け',
-    delete: '削除',
-    addChild: '子ノードを追加',
-    addSibling: '関連ノードを追加',  // ← ここを日本語化（兄弟 → 関連）
-    edit: '編集',
-    moveUp: '上へ移動',
-    moveDown: '下へ移動',
-    cancelFocus: 'フォーカス解除'
-  },
-  toolBar: true,
-  nodeMenu: true,
-  keypress: true,
-})
-
+      el: '#mindmapContainer',
+      direction: MindElixir.LEFT,
+      contextMenuOption: {
+        focus: 'フォーカス',
+        link: 'リンク',
+        copy: 'コピー',
+        cut: 'カット',
+        paste: '貼り付け',
+        delete: '削除',
+        addChild: '子ノードを追加',
+        addSibling: '関連ノードを追加',  // ← 日本語化
+        edit: '編集',
+        moveUp: '上へ移動',
+        moveDown: '下へ移動',
+        cancelFocus: 'フォーカス解除'
+      },
+      toolBar: true,
+      nodeMenu: true,
+      keypress: true,
+      data: parsed,
+      draggable: true
+    });
 
     mind.init();
-    mind.scale(0.75);          // ← 追加する！ここで全体を縮小
+    mind.scale(0.75);
 
-    // 🧠 中央ノードのスタイル調整で「巨大化」を防ぐ
-const rootNode = document.querySelector("#mindmapContainer .root-node");
-if (rootNode) {
-  rootNode.style.fontSize = "14px";          // フォントサイズを控えめに
-  rootNode.style.maxWidth = "260px";         // 幅を制限（長文対策）
-  rootNode.style.whiteSpace = "normal";      // 折り返し許可
-  rootNode.style.padding = "6px 10px";       // パディング調整
-  rootNode.style.lineHeight = "1.4";         // 行間を調整して読みやすく
-}
-
+    // 🧠 中央ノードのスタイル調整（長文対応）
+    const rootNode = document.querySelector("#mindmapContainer .root-node");
+    if (rootNode) {
+      rootNode.style.fontSize = "14px";
+      rootNode.style.maxWidth = "260px";
+      rootNode.style.whiteSpace = "normal";
+      rootNode.style.padding = "6px 10px";
+      rootNode.style.lineHeight = "1.4";
+    }
 
   } catch (err) {
     console.error("🧠 マインドマップ生成エラー:", err);
