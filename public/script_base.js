@@ -121,7 +121,7 @@ const prompt = `あなたは実在する施設名に基づいて正確に答え�
         return;
       }
 
-const prompt = `
+const promptTemplate = `
 以下は、ある地域における重要なテーマと、それに関連する会議資料（議事録・ヒアリングメモ等）です。
 
 この情報をもとに、その地域が現在抱えている主な課題を10個に整理してください。
@@ -136,7 +136,7 @@ const prompt = `
 
 【地域名】：{{region}}  
 【テーマ】：{{theme}}  
-【参考資料】：
+【参考資料】：  
 {{minutesText}}
 `;
 
@@ -144,6 +144,7 @@ const prompt = promptTemplate
   .replace("{{region}}", region)
   .replace("{{theme}}", theme)
   .replace("{{minutesText}}", uploadedTextContent || "");
+
 
       isAnalyzing = true;
       analyzeBtn.disabled = true;
