@@ -1,4 +1,4 @@
-// ✅ SORA Dashboard Script Base - 最小構成版（NEXCO連動 + ChatGPT課題抽出 + ThinkingZoneマインドマップ + Google地図）
+// ✅ SORA Dashboard Script Base - 最小構成版（NEXCO連動 + ChatGPT課題抽出 + ThinkingZoneマインドマップ）
 document.addEventListener("DOMContentLoaded", () => {
   const fileInput = document.getElementById("fileInput");
   const fileNameDisplay = document.getElementById("fileNameDisplay");
@@ -19,15 +19,12 @@ document.addEventListener("DOMContentLoaded", () => {
   const mindMapContent = document.getElementById("mindmapContainer");
   const closeMindMapBtn = document.getElementById("closeMapModal");
 
-  const miniMap = document.getElementById("miniMap");
-
   let isThinkingVisible = false;
   let infoFetched = false;
   let isAccordionOpen = false;
   let isFetching = false;
   let analysisDone = false;
 
-  // 📁 ファイル選択表示
   fileInput.addEventListener("change", () => {
     fileNameDisplay.textContent = fileInput.files.length > 0
       ? fileInput.files[0].name
@@ -84,26 +81,6 @@ document.addEventListener("DOMContentLoaded", () => {
     nexcoStatus.textContent = isAccordionOpen ? "NEXCO情報を表示中" : "NEXCO情報を非表示にしました";
   }
 
-  // 🗺️ Google Map更新処理
-  function updateGoogleMap(regionName) {
-    if (!regionName || !miniMap) return;
-    const geocoder = new google.maps.Geocoder();
-    geocoder.geocode({ address: regionName }, (results, status) => {
-      if (status === "OK" && results[0]) {
-        const map = new google.maps.Map(miniMap, {
-          zoom: 10,
-          center: results[0].geometry.location
-        });
-        new google.maps.Marker({
-          map: map,
-          position: results[0].geometry.location
-        });
-      } else {
-        console.error("地図取得エラー:", status);
-      }
-    });
-  }
-
   // 💬 ChatGPT連携：課題抽出
   analyzeBtn.addEventListener("click", async () => {
     if (analysisDone) {
@@ -113,8 +90,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const region = regionInput.value.trim();
     const theme = noteInput.value.trim();
     if (!region || !theme) return alert("地域名とテーマを入力してください。 ※どちらかが未記入です");
-
-    updateGoogleMap(region);
 
     const prompt = `${region}について、テーマ「${theme}」に基づく地域課題を抽出してください。\n以下の内容について、最大トークン数500以内で、最大5つまでの地域課題を簡潔に挙げてください。各課題は1〜2文で記述し、原因や背景が簡潔に分かるようにしてください。`;
     analyzeBtn.disabled = true;
