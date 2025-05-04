@@ -665,3 +665,14 @@ footer {
 #closeMapModal:hover {
   background-color: #0056b3;
 }
+.fullscreen-modal {
+  position: fixed !important;
+  top: 0;
+  left: 0;
+  width: 100vw !important;
+  height: 100vh !important;
+  max-width: 100% !important;
+  max-height: 100% !important;
+  padding: 10px !important;
+  z-index: 9999;
+}
