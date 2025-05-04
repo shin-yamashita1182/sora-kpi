@@ -245,3 +245,47 @@ async function extractTextFromPDF(file) {
   }
   return fullText;
 }
+// 🧠 マインドマップ描画（ThinkingZone入力 → MindElixirで可視化）
+function drawMindMapFromInputs() {
+  const blocks = document.querySelectorAll(".thinking-block");
+  const mindmapContainer = document.getElementById("mindmapContainer");
+  mindmapContainer.innerHTML = ""; // 二重描画防止
+
+  const children = [];
+
+  blocks.forEach((block, index) => {
+    const task = block.querySelector("p").innerText || `課題${index + 1}`;
+    const opinion = block.querySelector("textarea").value.trim();
+    children.push({
+      topic: task,
+      children: opinion ? [{ topic: `考察: ${opinion}` }] : []
+    });
+  });
+
+  const mind = new MindElixir({
+    el: '#mindmapContainer',
+    direction: MindElixir.RIGHT,
+    data: {
+      nodeData: {
+        id: 'root',
+        topic: '課題マップ',
+        children: children
+      }
+    },
+    draggable: true,
+    contextMenu: true,
+    toolBar: true,
+    nodeMenu: true,
+    keypress: true
+  });
+
+  mind.init();
+}
+
+// 📌 モーダルを開いたときにマインドマップ描画を実行
+if (generateAllBtn) {
+  generateAllBtn.addEventListener("click", () => {
+    drawMindMapFromInputs(); // 🧠描画呼び出し
+    mindMapModal.classList.remove("hidden");
+  });
+}
