@@ -289,16 +289,66 @@ function drawMindMapFromInputs() {
 }
 // 🧠 ChatGPTから課題＋考察ベースのマインドマップを生成（今後拡張予定）
 async function generateMindMapFromGPT() {
-  console.log("🧠 generateMindMapFromGPTが呼び出されました（今後の実装箇所）");
+  console.log("🧠 generateMindMapFromGPTが呼び出されました");
 
-  // ここに ChatGPT への POST 送信と、戻り値で MindElixir に渡す処理を実装予定
-  // 例：
-  // const prompt = `以下は課題と考察のセットです。...`;
-  // const res = await fetch("/api/chatgpt", {...});
-  // const data = await res.json();
-  // const mindData = transformToMindElixir(data.result);
-  // mind.init(mindData);
+  const blocks = document.querySelectorAll(".thinking-block");
+  const region = document.getElementById("regionName").value.trim();
+  const theme = document.getElementById("userNote").value.trim();
+
+  if (blocks.length === 0 || !region || !theme) {
+    alert("課題と考察が入力されていません。");
+    return;
+  }
+
+  // 🔗 課題＋考察をまとめてプロンプト生成
+  let combinedText = `【地域名】：${region}\n【テーマ】：${theme}\n\n以下は課題と住民の考察です。\n`;
+  blocks.forEach((block, i) => {
+    const task = block.querySelector("p").innerText;
+    const opinion = block.querySelector("textarea").value.trim();
+    combinedText += `【${i + 1}】${task}\n考察：${opinion || "（未記入）"}\n`;
+  });
+
+  const prompt = `
+以下は、地域課題とそれに対する住民の考察です。これをもとに、中心テーマを「${theme}」とした放射状マインドマップ構造を構築してください。
+
+JSON形式で、MindElixirで描画可能な階層構造（topic と children を持つツリー）にしてください。
+日本語を使い、重要な項目は深掘りし、3階層以上の構造になるよう意識してください。
+
+${combinedText}
+`;
+
+  try {
+    const res = await fetch("/api/chatgpt", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ prompt })
+    });
+    const data = await res.json();
+
+    const parsed = JSON.parse(data.result); // ← ChatGPT側の出力が JSON 文字列であることが前提
+
+    const mind = new MindElixir({
+      el: "#mindmapContainer",
+      direction: MindElixir.RIGHT,
+      data: {
+        nodeData: parsed
+      },
+      draggable: true,
+      contextMenu: true,
+      toolBar: true,
+      nodeMenu: true,
+      keypress: true
+    });
+
+    mind.init();
+    document.getElementById("mapModal").classList.remove("hidden");
+
+  } catch (err) {
+    console.error("🧠 マインドマップ生成エラー:", err);
+    alert("ChatGPTによるマインドマップ生成に失敗しました。");
+  }
 }
+
 
 // 📌 モーダルを開いたときにマインドマップ描画を実行
 if (generateAllBtn) {
