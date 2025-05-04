@@ -43,7 +43,7 @@ document.addEventListener("DOMContentLoaded", () => {
         isFetching = true;
         toggleNexcoBtn.textContent = "NEXCO情報 取得中…";
 
-        const prompt = `${region}周辺の高速道路に関する、主なインターチェンジ、サービスエリア、パーキングエリアを最大5〜7件程度、リスト形式で簡潔にまとめてください。各施設名と簡単な特徴（例：トイレ、飲食、ガソリン有無など）だけを記載してください。それ以外の情報は不要です。`;
+        const prompt = `${region}周辺の高速道路に関する、主なインターチェンジ、サービスエリア、パーキングエリアを最大5件程度、リスト形式で簡潔にまとめてください。各施設名と簡単な特徴（例：トイレ、飲食、ガソリン有無など）だけを記載してください。それ以外の情報は不要です。`;
 
         fetch("/api/chatgpt", {
           method: "POST",
@@ -92,7 +92,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const theme = noteInput.value.trim();
       if (!region || !theme) return alert("地域名とテーマを入力してください。");
 
-      const prompt = `${region}について、テーマ「${theme}」に基づく地域課題を抽出してください。最大5つ、1〜2文で簡潔に。`;
+      const prompt = `${regionName}について、テーマ「${userNote}」に基づく地域課題を抽出してください。\n以下の内容について、最大トークン数500以内で、最大5つまでの地域課題を簡潔に挙げてください。各課題は1〜2文で記述し、原因や背景が簡潔に分かるようにしてください。`;
       analyzeBtn.disabled = true;
       analyzeBtn.textContent = "抽出中…";
 
