@@ -1,136 +1,192 @@
-// ✅ SORA Dashboard Script Base - 完全復旧版（NEXCO連動 + 課題抽出 + マインドマップ + 再抽出防止）
-
-document.addEventListener("DOMContentLoaded", () => {
-  // 🌐 ChatGPT 課題抽出ボタン
-  const analyzeBtn = document.getElementById("analyzeBtn");
-  const gptResponse = document.getElementById("gptResponse");
-  let analysisDone = false;
-
-  analyzeBtn.addEventListener("click", async () => {
-    if (analysisDone) {
-      alert("すでに課題抽出が完了しています。ページを更新するか、条件を変更してください。");
-      return;
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SORA Dashboard Refine</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  <style>
+    .thinking-block {
+      background-color: #ffffff;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      padding: 16px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+      margin-bottom: 20px;
     }
-
-    const region = document.getElementById("regionName").value.trim();
-    const category = document.getElementById("category").value;
-    const note = document.getElementById("userNote").value.trim();
-
-    if (!note) {
-      alert("自由記述欄が空です。入力してください。");
-      return;
+    .thinking-block p {
+      font-weight: bold;
+      margin-bottom: 6px;
     }
+    .thinking-block textarea {
+      margin-bottom: 10px;
+      resize: vertical;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      padding: 8px;
+      width: 100%;
+    }
+    .generateAllMindMapBtn {
+      background-color: #2a9d8f;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      margin-top: 20px;
+      font-size: 1em;
+    }
+    .generateAllMindMapBtn:hover {
+      background-color: #21867a;
+    }
+    .mindmap-area {
+      margin-top: 20px;
+      background-color: #f8f9fa;
+      border-left: 4px solid #2a9d8f;
+      padding: 12px;
+      font-size: 0.95em;
+      line-height: 1.6em;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo">SORA Dashboard</div>
+    <div class="user-info">ユーザー情報 ▼</div>
+  </header>
 
-    try {
-      const response = await fetch("/api/chatgpt", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ region, category, note })
-      });
+  <div class="container">
+    <aside class="sidebar">
+      <h2>履歴一覧</h2>
+      <ul>
+        <li>履歴1</li>
+        <li>履歴2</li>
+        <li>履歴3</li>
+      </ul>
+    </aside>
 
-      if (!response.ok) {
-        gptResponse.innerText = "ChatGPT連携に失敗しました。";
+    <main class="main-content">
+      <section class="input-section">
+        <h2>地域情報入力</h2>
+        <div class="input-map-wrapper">
+          <div class="input-fields">
+            <input id="regionName" type="text" placeholder="地域名を入力">
+            <select id="category">
+              <option>観光型</option>
+              <option>離島型</option>
+              <option>中山間地域型</option>
+              <option>都市型</option>
+              <option>高齢化重点地域型</option>
+              <option>子育て・定住型</option>
+              <option>移住促進重点型</option>
+              <option>観光×農業ハイブリッド型</option>
+              <option>防災・災害対策型</option>
+              <option>デジタル活用先進地域型</option>
+            </select>
+            <textarea id="userNote" placeholder="テーマや自由記述を入力してください"></textarea>
+            <div class="file-upload-wrapper">
+              <input type="file" id="fileInput" accept=".txt,.pdf,.docx">
+              <span id="fileNameDisplay">ファイルを選択してください</span>
+            </div>
+            <div class="button-wrapper">
+              <button id="analyzeBtn">課題抽出</button>
+              <button id="generateBtn">分析対策（展開/閉じる）</button>
+            </div>
+          </div>
+          <div class="mini-map" id="miniMap">地図表示エリア</div>
+        </div>
+      </section>
+
+      <section class="canvas-section">
+        <h2>SORA CANVAS（課題リスト）</h2>
+        <div id="gptResponse"></div>
+        <div class="canvas-placeholder" id="canvasResult">ここにキャンバス課題リストを展開</div>
+      </section>
+
+      <div class="nexco-toggle-wrapper" style="margin-top: 10px; margin-bottom: 10px; text-align: right;">
+        <button id="toggleNexcoBtn">NEXCO情報を表示</button>
+        <div id="nexcoStatus" style="margin-top: 4px; font-size: 0.9em; color: #888;"></div>
+      </div>
+
+      <div id="nexcoInfoBox">
+        <h3>NEXCO周辺施設・高速道路情報</h3>
+        <ul id="nexcoInfoList"></ul>
+      </div>
+
+      <section class="thinking-zone" style="margin-top: 40px; padding: 20px; background-color: #f9f9f9; border-top: 2px solid #ccc;">
+        <h2>🧠 課題に対する考察とマインドマップ生成</h2>
+        <div id="thinkingContainer"></div>
+        <button id="generateAllBtn" class="generateAllMindMapBtn" style="float: right;">🧠 一括マインドマップ生成</button>
+        <div id="allMindMapResult" class="mindmap-area"></div>
+      </section>
+    </main>
+  </div>
+
+  <footer>
+    <p>&copy; 2025 SORA Project</p>
+  </footer>
+
+  <script src="script_base.js"></script>
+  <script src="map_controller.js"></script>
+  <script src="card_renderer_mindtrigger.js"></script>
+
+  <script>
+    let isThinkingVisible = false;
+
+    document.getElementById("generateBtn").addEventListener("click", () => {
+      const thinkingContainer = document.getElementById("thinkingContainer");
+      if (isThinkingVisible) {
+        thinkingContainer.innerHTML = "";
+        document.getElementById("allMindMapResult").innerHTML = "";
+        isThinkingVisible = false;
         return;
       }
 
-      const result = await response.json();
-      gptResponse.innerText = result.message || "応答がありませんでした。";
-      analysisDone = true;
-    } catch (error) {
-      console.error("課題抽出中にエラー:", error);
-      gptResponse.innerText = "エラーが発生しました。";
-    }
-  });
+      const sampleTasks = [
+        "観光客の減少が著しい",
+        "老朽インフラの更新が進まない",
+        "若手職員の離職が多い",
+        "移住促進制度が浸透しない",
+        "避難所の整備計画が遅れている"
+      ];
 
-  // 🚧 NEXCO情報表示切替
-  const toggleNexcoBtn = document.getElementById("toggleNexcoBtn");
-  const nexcoInfoBox = document.getElementById("nexcoInfoBox");
-  const nexcoInfoList = document.getElementById("nexcoInfoList");
-  const nexcoStatus = document.getElementById("nexcoStatus");
+      sampleTasks.forEach((task, index) => {
+        const block = document.createElement("div");
+        block.className = "thinking-block";
 
-  toggleNexcoBtn.addEventListener("click", () => {
-    if (nexcoInfoBox.style.display === "none" || nexcoInfoBox.style.display === "") {
-      nexcoInfoBox.style.display = "block";
-      nexcoStatus.innerText = "表示中";
-      loadNexcoInfo();
-    } else {
-      nexcoInfoBox.style.display = "none";
-      nexcoStatus.innerText = "非表示中";
-    }
-  });
+        block.innerHTML = `
+          <p><strong>課題${index + 1}:</strong> ${task}</p>
+          <textarea placeholder="この課題について、考えていることや背景を入力してください…" rows="4"></textarea>
+        `;
 
-  function loadNexcoInfo() {
-    nexcoInfoList.innerHTML = "";
-    const sampleData = [
-      "◉ サービスエリア：〇〇SA（上り）",
-      "◉ 高速道路：〇〇自動車道（上下線）",
-      "◉ 渋滞ポイント：〇〇IC ～ △△IC"
-    ];
-    sampleData.forEach(info => {
-      const li = document.createElement("li");
-      li.textContent = info;
-      nexcoInfoList.appendChild(li);
-    });
-  }
-
-  // 🧠 ThinkingZone 展開・初期化
-  const generateBtn = document.getElementById("generateBtn");
-  const thinkingContainer = document.getElementById("thinkingContainer");
-  const allMindMapResult = document.getElementById("allMindMapResult");
-  let isThinkingVisible = false;
-
-  generateBtn.addEventListener("click", () => {
-    if (isThinkingVisible) {
-      thinkingContainer.innerHTML = "";
-      allMindMapResult.innerHTML = "";
-      isThinkingVisible = false;
-      return;
-    }
-
-    const sampleTasks = [
-      "観光客の減少が著しい",
-      "老朽インフラの更新が進まない",
-      "若手職員の離職が多い",
-      "移住促進制度が浸透しない",
-      "避難所の整備計画が遅れている"
-    ];
-
-    sampleTasks.forEach((task, index) => {
-      const block = document.createElement("div");
-      block.className = "thinking-block";
-
-      block.innerHTML = `
-        <p><strong>課題${index + 1}:</strong> ${task}</p>
-        <textarea placeholder="この課題について、考えていることや背景を入力してください…" rows="4"></textarea>
-      `;
-
-      thinkingContainer.appendChild(block);
+        thinkingContainer.appendChild(block);
+      });
+      isThinkingVisible = true;
     });
 
-    isThinkingVisible = true;
-  });
-
-  // 🧠 一括マインドマップ出力（ThinkingZone下に表示）
-  const generateAllBtn = document.getElementById("generateAllBtn");
-
-  generateAllBtn.addEventListener("click", () => {
-    const blocks = document.querySelectorAll(".thinking-block");
-    const resultArea = document.getElementById("allMindMapResult");
-    let output = "<strong>🧠 一括マインドマップ出力（仮）</strong><ul>";
-    blocks.forEach((block, index) => {
-      const task = block.querySelector("p").innerText;
-      const opinion = block.querySelector("textarea").value.trim();
-      output += `<li><strong>${task}</strong><br>考察: ${opinion || "（未記入）"}</li>`;
+    document.getElementById("generateAllBtn").addEventListener("click", () => {
+      const blocks = document.querySelectorAll(".thinking-block");
+      const resultArea = document.getElementById("allMindMapResult");
+      let output = "<strong>🧠 一括マインドマップ出力（仮）</strong><ul>";
+      blocks.forEach((block, index) => {
+        const task = block.querySelector("p").innerText;
+        const opinion = block.querySelector("textarea").value.trim();
+        output += `<li><strong>${task}</strong><br>考察: ${opinion || "（未記入）"}</li>`;
+      });
+      output += "</ul><p>※ChatGPT連携により対策提案予定</p>";
+      resultArea.innerHTML = output;
     });
-    output += "</ul><p>※ChatGPT連携により対策提案予定</p>";
-    resultArea.innerHTML = output;
-  });
 
-  // 🧠 マインドマップモーダルを閉じる
-  const closeMapModal = document.getElementById("closeMapModal");
-  const mapModal = document.getElementById("mapModal");
-
-  closeMapModal.addEventListener("click", () => {
-    mapModal.classList.add("hidden");
-  });
-});
+  </script>
+<!-- 🧠 マインドマップモーダル（追加部分） -->
+<div id="mapModal" class="modal hidden">
+  <div class="modal-content">
+    <h2 id="mapModalTitle">🧠 マインドマップ（課題全体）</h2>
+    <div id="mindmapContainer" style="width: 100%; height: 600px;"></div>
+    <button id="closeMapModal" class="close-button">閉じる</button>
+  </div>
+</div>
+</body>
+</html>
