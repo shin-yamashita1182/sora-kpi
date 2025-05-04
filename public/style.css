@@ -668,3 +668,5 @@ footer {
 #mapModal {
   position: relative;  /* ← これがないと絶対位置が効かない！ */
 }
+#generateMindMapGPTBtn {
+  min-width: 180px;
