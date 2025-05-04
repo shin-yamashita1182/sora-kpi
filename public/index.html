@@ -164,19 +164,6 @@
       isThinkingVisible = true;
     });
 
-    document.getElementById("generateAllBtn").addEventListener("click", () => {
-      const blocks = document.querySelectorAll(".thinking-block");
-      const resultArea = document.getElementById("allMindMapResult");
-      let output = "<strong>🧠 一括マインドマップ出力（仮）</strong><ul>";
-      blocks.forEach((block, index) => {
-        const task = block.querySelector("p").innerText;
-        const opinion = block.querySelector("textarea").value.trim();
-        output += `<li><strong>${task}</strong><br>考察: ${opinion || "（未記入）"}</li>`;
-      });
-      output += "</ul><p>※ChatGPT連携により対策提案予定</p>";
-      resultArea.innerHTML = output;
-    });
-
   </script>
 <!-- 🧠 マインドマップモーダル（追加部分） -->
 <div id="mapModal" class="modal hidden">
