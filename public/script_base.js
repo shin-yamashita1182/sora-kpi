@@ -1,4 +1,4 @@
-// ✅ SORA Dashboard Script Base - 最小構成版（NEXCO連動 + ChatGPT課題抽出 + ThinkingZoneマインドマップ）
+// ✅ SORA Dashboard Script Base - 最小構成版（NEXCO連動 + ChatGPT課題抽出 + ThinkingZoneマインドマップ + Google地図）
 document.addEventListener("DOMContentLoaded", () => {
   const fileInput = document.getElementById("fileInput");
   const fileNameDisplay = document.getElementById("fileNameDisplay");
@@ -18,6 +18,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const mindMapModal = document.getElementById("mapModal");
   const mindMapContent = document.getElementById("mindmapContainer");
   const closeMindMapBtn = document.getElementById("closeMapModal");
+
   const miniMap = document.getElementById("miniMap");
 
   let isThinkingVisible = false;
@@ -25,7 +26,6 @@ document.addEventListener("DOMContentLoaded", () => {
   let isAccordionOpen = false;
   let isFetching = false;
   let analysisDone = false;
-  let map;
 
   // 📁 ファイル選択表示
   fileInput.addEventListener("change", () => {
@@ -52,7 +52,7 @@ document.addEventListener("DOMContentLoaded", () => {
       })
         .then(res => res.json())
         .then(data => {
-          const items = (data.result || "").split(/[\n・。！？]/).filter(line => line.trim().length > 4);
+          const items = (data.result || "").split(/\n|・|。|！|？/).filter(line => line.trim().length > 4);
           nexcoInfoList.innerHTML = "";
           items.forEach(text => {
             const li = document.createElement("li");
@@ -84,28 +84,27 @@ document.addEventListener("DOMContentLoaded", () => {
     nexcoStatus.textContent = isAccordionOpen ? "NEXCO情報を表示中" : "NEXCO情報を非表示にしました";
   }
 
-  // 🗺️ 地域連動マップ描画（初期地図を非表示）
+  // 🗺️ Google Map更新処理
   function updateGoogleMap(regionName) {
-    if (!map) {
-      map = L.map('miniMap').setView([35.6812, 139.7671], 5);
-      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '&copy; OpenStreetMap contributors'
-      }).addTo(map);
-    }
-    fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${regionName}`)
-      .then(response => response.json())
-      .then(data => {
-        if (data.length > 0) {
-          const { lat, lon } = data[0];
-          map.setView([lat, lon], 10);
-        }
-      })
-      .catch(error => {
-        console.error("地図取得エラー:", error);
-      });
+    if (!regionName || !miniMap) return;
+    const geocoder = new google.maps.Geocoder();
+    geocoder.geocode({ address: regionName }, (results, status) => {
+      if (status === "OK" && results[0]) {
+        const map = new google.maps.Map(miniMap, {
+          zoom: 10,
+          center: results[0].geometry.location
+        });
+        new google.maps.Marker({
+          map: map,
+          position: results[0].geometry.location
+        });
+      } else {
+        console.error("地図取得エラー:", status);
+      }
+    });
   }
 
-  // 💬 ChatGPT連携：課題抽出（再抽出防止）
+  // 💬 ChatGPT連携：課題抽出
   analyzeBtn.addEventListener("click", async () => {
     if (analysisDone) {
       alert("すでに課題抽出が完了しています。ページを更新するか、条件を変更してください。");
@@ -115,9 +114,9 @@ document.addEventListener("DOMContentLoaded", () => {
     const theme = noteInput.value.trim();
     if (!region || !theme) return alert("地域名とテーマを入力してください。 ※どちらかが未記入です");
 
-    updateGoogleMap(region); // ✅ 地域名で地図表示
+    updateGoogleMap(region);
 
-    const prompt = `${region}について、テーマ「${theme}」に基づく地域課題を抽出してください。最大5つ、1〜2文で簡潔に。`;
+    const prompt = `${region}について、テーマ「${theme}」に基づく地域課題を抽出してください。\n以下の内容について、最大トークン数500以内で、最大5つまでの地域課題を簡潔に挙げてください。各課題は1〜2文で記述し、原因や背景が簡潔に分かるようにしてください。`;
     analyzeBtn.disabled = true;
     analyzeBtn.textContent = "抽出中…";
 
