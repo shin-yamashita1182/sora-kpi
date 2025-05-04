@@ -676,3 +676,14 @@ footer {
   padding: 10px !important;
   z-index: 9999;
 }
+/* ✅ モーダルの中央寄せ復元のための追加クラス */
+.modal.fullscreen-fix {
+  display: block !important;
+  align-items: initial !important;
+  justify-content: initial !important;
+}
+
+.modal-content {
+  margin: 5% auto;
+  transition: all 0.2s ease-in-out;
+}
