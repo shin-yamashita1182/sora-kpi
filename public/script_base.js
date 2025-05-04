@@ -349,6 +349,7 @@ try {
   return;
 }
 
+    document.getElementById("mapModal").classList.remove("hidden");
 
     const mind = new MindElixir({
       el: "#mindmapContainer",
@@ -364,7 +365,7 @@ try {
     });
 
     mind.init();
-    document.getElementById("mapModal").classList.remove("hidden");
+    
 
   } catch (err) {
     console.error("🧠 マインドマップ生成エラー:", err);
