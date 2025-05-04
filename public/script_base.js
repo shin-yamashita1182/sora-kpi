@@ -16,6 +16,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const thinkingContainer = document.getElementById("thinkingContainer");
   const generateBtn = document.getElementById("generateBtn");
   const generateAllBtn = document.getElementById("generateAllBtn");
+  const generateMindMapGPTBtn = document.getElementById("generateMindMapGPTBtn");
   const mindMapModal = document.getElementById("mapModal");
   const mindMapContent = document.getElementById("mindmapContainer");
   const closeMindMapBtn = document.getElementById("closeMapModal");
@@ -222,6 +223,11 @@ if (generateBtn) {
       mindMapModal.classList.remove("hidden");
     });
   }
+if (generateMindMapGPTBtn) {
+  generateMindMapGPTBtn.addEventListener("click", async () => {
+    await generateMindMapFromGPT();
+  });
+}
 
   if (closeMindMapBtn) {
     closeMindMapBtn.addEventListener("click", () => {
