@@ -241,7 +241,7 @@ if (generateMindMapGPTBtn) {
     }
 
     // 🟧 追加：少なくとも1件は考察入力があるかチェック
-    const inputs = document.querySelectorAll(".thinkingZoneInput");
+    const inputs = document.querySelectorAll(".thinking-block textarea"); // ← こちらに変更
     let hasInput = false;
     inputs.forEach(input => {
       if (input.value.trim() !== "") {
