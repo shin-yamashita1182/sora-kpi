@@ -29,6 +29,7 @@ document.addEventListener("DOMContentLoaded", () => {
 // 📝 議事録ファイルの読み取り結果を保持
   let uploadedTextContent = "";
   let isAnalyzing = false;
+  let latestExtractedTasks = []; // 🆕 抽出課題を保存
 
   // 📁 ファイル選択表示
   if (fileInput) {
@@ -160,6 +161,10 @@ const prompt = promptTemplate
 const data = await res.json();
 const canvasResult = document.getElementById("canvasResult");
 canvasResult.innerText = data.result || "課題が取得できませんでした。";
+// 🆕 課題10件を latestExtractedTasks に保存
+const canvasText = canvasResult.innerText;
+const matches = [...canvasText.matchAll(/【\d+】(.*?)\n?/g)];
+latestExtractedTasks = matches.map(m => m[1].trim());
 canvasResult.style.maxWidth = "100%"; // または必要なら "95%" 程度に調整可
 canvasResult.style.margin = "20px 0"; // auto を削除し左右寄せ防止
 canvasResult.style.textAlign = "left"; // このままでOK
