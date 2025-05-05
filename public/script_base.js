@@ -408,17 +408,6 @@ async function generateMindMapFromGPT() {
   }
 }
 
-  const prompt = `
-以下は、地域課題とそれに対する住民の考察です。これをもとに、中心テーマを「${region}：${theme}」とした放射状マインドマップ構造を構築してください。
-
-JSON形式で、MindElixirで描画可能な階層構造（topic と children を持つツリー）にしてください。
-日本語を使い、重要な項目は深掘りし、3階層以上の構造になるよう意識してください。
-課題は最大で5件程度とし、構造は簡潔にしてください。
-出力はJSONオブジェクトのみとし、コードブロックや説明文は一切含めないでください。
-返答は必ず構文を正しく閉じてください。途中で切れたり、不完全な返答は出力しないでください。
-
-${combinedText}
-`;
 
   try {
     const res = await fetch("/api/chatgpt", {
