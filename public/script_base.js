@@ -189,18 +189,19 @@ if (generateBtn) {
     }
 
     const tasks = [
-      "例：観光客の減少が著しい",
-      "例：老朽インフラの更新が進まない",
-      "例：若手職員の離職が多い",
-      "例：移住促進制度が浸透しない",
-      "例：避難所の整備計画が遅れている"
-    ];
+  "例：観光客の減少が著しい",
+  "例：老朽インフラの更新が進まない",
+  "例：若手職員の離職が多い",
+  "例：移住促進制度が浸透しない",
+  "例：避難所の整備計画が遅れている"
+];
+
 
     thinkingContainer.innerHTML = "";
     tasks.forEach((task, i) => {
       const block = document.createElement("div");
       block.className = "thinking-block";
-      block.innerHTML = `<p><strong>課題${i + 1}:</strong> ${task}</p><textarea rows="3" placeholder="考えや背景を入力してください"></textarea>`;
+      block.innerHTML = `<p><strong>対策${i + 1}:</strong> ${task}</p><textarea rows="3" placeholder="考えや背景を入力してください"></textarea>`;
       thinkingContainer.appendChild(block);
     });
     isThinkingVisible = true;
