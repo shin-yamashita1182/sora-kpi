@@ -225,22 +225,31 @@ if (generateBtn) {
     });
   }
 
+let mindMapGenerated = false; // ← 追加するグローバル変数
+
 if (generateMindMapGPTBtn) {
   generateMindMapGPTBtn.addEventListener("click", async () => {
+    if (mindMapGenerated) {
+      alert("すでにマインドマップは生成されています。ページを更新するか、条件を変更してください。");
+      return;
+    }
+
     generateMindMapGPTBtn.disabled = true;
     generateMindMapGPTBtn.textContent = "マインドマップ生成中…";
 
     try {
       await generateMindMapFromGPT();
+      mindMapGenerated = true; // 1回だけ実行するようフラグを立てる
     } catch (err) {
       console.error("⚠️ マインドマップ生成中にエラー:", err);
       alert("マインドマップ生成に失敗しました。");
+      generateMindMapGPTBtn.disabled = false;
     }
 
     generateMindMapGPTBtn.textContent = "マインドマップを生成";
-    generateMindMapGPTBtn.disabled = false;
   });
 }
+
 
 
   if (closeMindMapBtn) {
