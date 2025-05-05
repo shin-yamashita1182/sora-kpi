@@ -324,6 +324,7 @@ const mind = new MindElixir({
 
   mind.init();
 }
+
 async function generateMindMapFromGPT() {
   console.log("🧠 generateMindMapFromGPTが呼び出されました");
 
