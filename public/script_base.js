@@ -412,43 +412,43 @@ ${combinedText}
     mind.init();
     mind.scale(0.75);
 
-// 💾 保存ボタンにイベントを常にバインド（すでに存在する場合も対象）
-const saveBtn = document.getElementById("saveMindMapBtn");
+// 💾 保存ボタン：存在確認してバインド or 新規作成
+const existingSaveBtn = document.getElementById("saveMindMapBtn");
 
-if (saveBtn) {
-  saveBtn.addEventListener("click", () => {
-    console.log("🖱️ 保存ボタンクリックされた"); // ← 動作チェックログ
-    try {
-      const cleanCopy = JSON.parse(JSON.stringify(latestMindMapData, (key, value) => {
-        if (key === "parent") return undefined; // 循環対策
-        return value;
-      }));
+const handleSave = () => {
+  console.log("🖱️ 保存ボタンクリックされた");
+  try {
+    const cleanCopy = JSON.parse(JSON.stringify(latestMindMapData, (key, value) => {
+      if (key === "parent") return undefined;
+      return value;
+    }));
 
-      const blob = new Blob([JSON.stringify(cleanCopy, null, 2)], { type: "application/json" });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = `mindmap_${region}_${theme}.json`;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      URL.revokeObjectURL(url);
+    const blob = new Blob([JSON.stringify(cleanCopy, null, 2)], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `mindmap_${region}_${theme}.json`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    console.log("✅ 保存完了");
+  } catch (err) {
+    console.error("保存失敗:", err);
+    alert("マインドマップ保存に失敗しました。");
+  }
+};
 
-      console.log("✅ 保存完了");
-    } catch (err) {
-      console.error("保存失敗:", err);
-      alert("マインドマップ保存に失敗しました。");
-    }
-  });
+if (existingSaveBtn) {
+  existingSaveBtn.onclick = handleSave;  // ← onclick で上書きしてもOK
 } else {
-  console.warn("⚠️ 保存ボタンが見つかりませんでした");
-}
-
-
+  const saveBtn = document.createElement("button");
+  saveBtn.id = "saveMindMapBtn";
+  saveBtn.className = "modal-save-btn";
+  saveBtn.textContent = "マップを保存";
+  saveBtn.addEventListener("click", handleSave);
   document.querySelector("#mapModal .modal-content").appendChild(saveBtn);
 }
-
-
 
     const rootNode = document.querySelector("#mindmapContainer .root-node");
     if (rootNode) {
