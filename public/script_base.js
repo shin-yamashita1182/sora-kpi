@@ -406,6 +406,24 @@ ${combinedText}
     mind.init();
     mind.scale(0.75);
 
+    // 💾 保存ボタンをモーダルに追加（すでにある場合は追加しない）
+    if (!document.getElementById("saveMindMapBtn")) {
+      const saveBtn = document.createElement("button");
+      saveBtn.id = "saveMindMapBtn";
+      saveBtn.className = "modal-save-btn";
+      saveBtn.textContent = "マップを保存";
+      saveBtn.onclick = () => {
+        const blob = new Blob([JSON.stringify(parsed, null, 2)], { type: "application/json" });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = `mindmap_${region}_${theme}.json`;
+        a.click();
+        URL.revokeObjectURL(url);
+      };
+      document.querySelector("#mapModal .modal-content").appendChild(saveBtn);
+    }
+
     const rootNode = document.querySelector("#mindmapContainer .root-node");
     if (rootNode) {
       rootNode.style.fontSize = "14px";
