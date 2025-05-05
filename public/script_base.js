@@ -1,4 +1,4 @@
-
+  let latestExtractedTasks = []; // 🆕 抽出課題を保存
 // ✅ SORA Dashboard Script Base - 統合版（NEXCO連動 + ChatGPT課題抽出 + ThinkingZoneマインドマップ／安定運用構成）
 document.addEventListener("DOMContentLoaded", () => {
   const fileInput = document.getElementById("fileInput");
@@ -29,7 +29,7 @@ document.addEventListener("DOMContentLoaded", () => {
 // 📝 議事録ファイルの読み取り結果を保持
   let uploadedTextContent = "";
   let isAnalyzing = false;
-  let latestExtractedTasks = []; // 🆕 抽出課題を保存
+  
 
   // 📁 ファイル選択表示
   if (fileInput) {
