@@ -420,7 +420,8 @@ if (!document.getElementById("saveMindMapBtn")) {
   saveBtn.textContent = "マップを保存";
 
 saveBtn.addEventListener("click", () => {
-  try {
+console.log("🖱️ 保存ボタンクリックされた"); // ← ★ここが重要  
+try {
     const cleanCopy = JSON.parse(JSON.stringify(latestMindMapData, (key, value) => {
       if (key === "parent") return undefined;
       return value;
