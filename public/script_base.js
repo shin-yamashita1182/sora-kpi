@@ -29,7 +29,8 @@ document.addEventListener("DOMContentLoaded", () => {
 // 📝 議事録ファイルの読み取り結果を保持
   let uploadedTextContent = "";
   let isAnalyzing = false;
-  
+  let latestMindMapData = null; // スクリプトの上の方に追加しておく
+
 
   // 📁 ファイル選択表示
   if (fileInput) {
