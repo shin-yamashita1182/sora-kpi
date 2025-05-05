@@ -231,25 +231,20 @@ if (generateBtn) {
     });
   }
 
-let mindMapGenerated = false; // ← 追加するグローバル変数
+let mindMapGenerated = false;
+
 if (generateMindMapGPTBtn) {
   generateMindMapGPTBtn.addEventListener("click", async () => {
-  console.log("🧠 ボタンクリック開始（既に生成済み？）", mindMapGenerated);
-  
+    console.log("🧠 ボタンクリック開始（既に生成済み？）", mindMapGenerated);
+    
     if (mindMapGenerated) {
       alert("🧠 すでにマインドマップは生成されています。ページを更新するか、条件を変更してください。");
       return;
     }
 
-    // 🟧 追加：少なくとも1件は考察入力があるかチェック
-    const inputs = document.querySelectorAll(".thinking-block textarea"); // ← こちらに変更
-    let hasInput = false;
-    inputs.forEach(input => {
-      if (input.value.trim() !== "") {
-        hasInput = true;
-      }
-    });
-
+    // ✅ 少なくとも1件の考察が入力されているか確認
+    const inputs = document.querySelectorAll(".thinking-block textarea");
+    const hasInput = Array.from(inputs).some(input => input.value.trim() !== "");
     if (!hasInput) {
       alert("⚠️ 対策案を少なくとも1つ以上入力してください。");
       return;
@@ -258,28 +253,26 @@ if (generateMindMapGPTBtn) {
     generateMindMapGPTBtn.disabled = true;
     generateMindMapGPTBtn.textContent = "マインドマップ生成中…";
 
-try {
-  const success = await generateMindMapFromGPT(); // ← true or false を返させる
-  if (success) {
-    mindMapGenerated = true;
-    alert("✅ マインドマップが正常に生成されました。");
-  } else {
-    alert("⚠️ マインドマップの構造に問題があります。");
-    generateMindMapGPTBtn.disabled = false;
-  }
-} catch (err) {
-  console.error("⚠️ マインドマップ生成中にエラー:", err);
-  alert("マインドマップ生成に失敗しました。");
-  generateMindMapGPTBtn.disabled = false;
-}
+    try {
+      const success = await generateMindMapFromGPT();
+      if (success) {
+        mindMapGenerated = true;
+        alert("✅ マインドマップが正常に生成されました。");
+      } else {
+        alert("⚠️ マインドマップの構造に問題があります。");
+        generateMindMapGPTBtn.disabled = false;
+      }
+    } catch (err) {
+      console.error("⚠️ マインドマップ生成中にエラー:", err);
+      alert("マインドマップ生成に失敗しました。");
+      generateMindMapGPTBtn.disabled = false;
+    }
 
     generateMindMapGPTBtn.textContent = "マインドマップを生成";
   });
 }
 
-
-
-
+  
   if (closeMindMapBtn) {
     closeMindMapBtn.addEventListener("click", () => {
       mindMapModal.classList.add("hidden");
@@ -360,7 +353,7 @@ async function generateMindMapFromGPT() {
 
   if (!region || !theme || latestExtractedTasks.length !== 10) {
     alert("課題またはテーマ情報が不足しています。先に課題抽出を行ってください。");
-    return;
+    return false;
   }
 
   let combinedText = `【地域名】：${region}\n【テーマ】：${theme}\n\n以下は抽出された課題です。\n`;
@@ -374,7 +367,6 @@ async function generateMindMapFromGPT() {
     if (opinion) combinedText += `・${opinion}\n`;
   });
 
-  // ✅ ここで finalPrompt を構築
   const finalPrompt = `
 以下は、地域課題とそれに対する住民の考察です。これをもとに、中心テーマを「${region}：${theme}」とした放射状マインドマップ構造を構築してください。
 
@@ -398,10 +390,8 @@ ${combinedText}
     if (endIndex !== -1) cleaned = cleaned.slice(0, endIndex + 1);
 
     const parsed = JSON.parse(cleaned);
-    // ⬇⬇⬇ これを追加
     latestMindMapData = parsed;
 
-    // 🧼 children: [] を除去
     function sanitize(node) {
       if (Array.isArray(node.children)) {
         if (node.children.length === 0) {
@@ -414,8 +404,7 @@ ${combinedText}
     sanitize(parsed);
 
     if (!parsed || typeof parsed !== "object" || !parsed.topic) {
-      alert("マインドマップの構造が不正です。");
-      return;
+      return false;
     }
 
     document.getElementById("mapModal").classList.remove("hidden");
@@ -433,6 +422,16 @@ ${combinedText}
 
     mind.init();
     mind.scale(0.75);
+
+    return true;
+  } catch (err) {
+    console.error("🧠 マインドマップ生成エラー:", err);
+    return false;
+  }
+}
+
+
+
 
 // 💾 保存ボタン：存在確認してバインド or 新規作成
 const existingSaveBtn = document.getElementById("saveMindMapBtn");
