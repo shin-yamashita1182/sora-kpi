@@ -373,6 +373,8 @@ ${combinedText}
     if (endIndex !== -1) cleaned = cleaned.slice(0, endIndex + 1);
 
     const parsed = JSON.parse(cleaned);
+    // ⬇⬇⬇ これを追加
+    latestMindMapData = parsed;
 
     // 🧼 children: [] を除去
     function sanitize(node) {
