@@ -374,7 +374,6 @@ const finalPrompt = `
 - 出力は MindElixir.js 形式（topic, children）に準拠した JSON オブジェクトのみとし、コードブロック（\`\`\`）や説明文は一切含めないでください。
 `;
 
-
   try {
     const res = await fetch("/api/chatgpt", {
       method: "POST",
