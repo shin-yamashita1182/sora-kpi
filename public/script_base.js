@@ -412,15 +412,17 @@ ${combinedText}
     mind.init();
     mind.scale(0.75);
 
-    // 💾 保存ボタンをモーダルに追加（すでにある場合は追加しない）
+// 💾 保存ボタンをモーダルに追加（すでにある場合は追加しない）
 if (!document.getElementById("saveMindMapBtn")) {
   const saveBtn = document.createElement("button");
   saveBtn.id = "saveMindMapBtn";
   saveBtn.className = "modal-save-btn";
   saveBtn.textContent = "マップを保存";
-  saveBtn.onclick = () => {
-    setTimeout(() => {
-      const blob = new Blob([JSON.stringify(parsed, null, 2)], { type: "application/json" });
+
+  saveBtn.addEventListener("click", () => {
+    try {
+      const cleanData = JSON.stringify(latestMindMapData, null, 2);
+      const blob = new Blob([cleanData], { type: "application/json" });
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = url;
@@ -429,10 +431,15 @@ if (!document.getElementById("saveMindMapBtn")) {
       a.click();
       document.body.removeChild(a);
       URL.revokeObjectURL(url);
-    }, 100);
-  };
+    } catch (err) {
+      console.error("保存失敗:", err);
+      alert("保存に失敗しました。");
+    }
+  });
+
   document.querySelector("#mapModal .modal-content").appendChild(saveBtn);
 }
+
 
 
     const rootNode = document.querySelector("#mindmapContainer .root-node");
