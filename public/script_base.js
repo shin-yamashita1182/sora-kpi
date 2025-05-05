@@ -347,8 +347,6 @@ async function generateMindMapFromGPT() {
     if (opinion) combinedText += `・${opinion}\n`;
   });
 
-  const finalPrompt = `以下は、地域課題と住民考察です。これを基に、${region}の戦略マインドマップを階層構造でJSON生成してください。\n\n${combinedText}`;
-
   try {
     const res = await fetch("/api/chatgpt", {
       method: "POST",
