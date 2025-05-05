@@ -361,28 +361,14 @@ async function generateMindMapFromGPT() {
   });
 
   // ✅ ここで finalPrompt を構築
-const finalPrompt = `
-以下は、ある地域が抱える中心的な抽象課題（例：地域活性化・少子高齢化）と、それに対する住民・関係者の考察です。  
-これをもとに、MindElixir.jsで描画可能な**4階層以上**の放射状マインドマップを構築してください。
+ const finalPrompt = `
+以下は、地域課題とそれに対する住民の考察です。これをもとに、中心テーマを「${region}：${theme}」とした放射状マインドマップ構造を構築してください。
 
-- 中心テーマ → 第1階層（大分類）→ 第2階層（中分類）→ 第3階層（具体策）→ 第4階層（実施アクション）というように構造化してください。
-- トピックの粒度は徐々に具体化し、末端ノードにはできれば実践的なアイデアを記載してください。
-- 出力は **必ず JSON オブジェクト形式** とし、コードブロック（\`\`\`）や説明文は一切含めないでください。
+MindElixir.jsで描画可能な構造（topic, children）にしてください。
+日本語を使い、重要な項目は深掘りし、4階層以上になるように構成してください。
+出力は必ずJSONオブジェクトのみで返してください。コードブロック（\`\`\`）や説明文は一切含めないでください。
 
-【地域名】：${region}  
-【テーマ】：${theme}  
-
-【抽出された課題】：
-${latestExtractedTasks.map((task, i) => `【${i + 1}】${task}`).join('\n')}
-
-【住民や関係者の考察】：
-${Array.from(document.querySelectorAll(".thinking-block textarea"))
-  .map((input, i) => {
-    const text = input.value.trim();
-    return text ? `・${text}` : '';
-  })
-  .filter(Boolean)
-  .join('\n') || "（特記なし）"}
+${combinedText}
 `;
 
   try {
