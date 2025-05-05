@@ -348,6 +348,17 @@ async function generateMindMapFromGPT() {
     if (opinion) combinedText += `・${opinion}\n`;
   });
 
+  // ✅ ここで finalPrompt を構築
+  const finalPrompt = `
+以下は、地域課題とそれに対する住民の考察です。これをもとに、中心テーマを「${region}：${theme}」とした放射状マインドマップ構造を構築してください。
+
+MindElixir.jsで描画可能な構造（topic, children）にしてください。
+日本語を使い、重要な項目は深掘りし、3階層以上になるように構成してください。
+出力は必ずJSONオブジェクトのみで返してください。コードブロック（\`\`\`）や説明文は一切含めないでください。
+
+${combinedText}
+`;
+
   try {
     const res = await fetch("/api/chatgpt", {
       method: "POST",
@@ -408,7 +419,6 @@ async function generateMindMapFromGPT() {
     alert("ChatGPTによるマインドマップ生成に失敗しました。");
   }
 }
-
 
   try {
     const res = await fetch("/api/chatgpt", {
