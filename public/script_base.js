@@ -311,6 +311,9 @@ function drawMindMapFromInputs() {
     });
   });
 
+// Safe deep copy（循環参照が入る前に保存）
+latestMindMapData = JSON.parse(JSON.stringify(parsed));
+
 const mind = new MindElixir({
   el: '#mindmapContainer',
   direction: MindElixir.RIGHT,
