@@ -114,12 +114,12 @@
       </div>
 
       <section class="thinking-zone" style="margin-top: 40px; padding: 20px; background-color: #f9f9f9; border-top: 2px solid #ccc;">
-        <h2>🧠 課題に対する考察とマインドマップ生成</h2>
+        <h2>🧠 課題に対する対策とマインドマップ生成</h2>
         <div id="thinkingContainer"></div>
         <button id="generateAllBtn" class="generateAllMindMapBtn" style="float: right;">🧠 一括マインドマップ生成</button>
    <!-- 🧠 GPT連携マインドマップ生成ボタン（追加） -->
         <button id="generateMindMapGPTBtn" class="generateAllMindMapBtn" style="float: right; margin-right: 12px; background-color: #e76f51;">
-          🧠 GPTでマインドマップ生成
+          🧠 マインドマップの生成
          </button>
         <div id="allMindMapResult" class="mindmap-area"></div>
       </section>
@@ -147,19 +147,19 @@
       }
 
       const sampleTasks = [
-        "観光客の減少が著しい",
-        "老朽インフラの更新が進まない",
-        "若手職員の離職が多い",
-        "移住促進制度が浸透しない",
-        "避難所の整備計画が遅れている"
-      ];
+  "観光需要回復のための収益戦略を検討する",
+  "インフラ更新計画と優先順位づけの仕組みを構築する",
+  "職員定着を促すキャリア形成支援策を考える",
+  "移住制度の周知・利用促進に向けた改善策を検討",
+  "避難所整備の加速化と計画再構築の方法を考える"
+];
 
       sampleTasks.forEach((task, index) => {
         const block = document.createElement("div");
         block.className = "thinking-block";
 
         block.innerHTML = `
-          <p><strong>課題${index + 1}:</strong> ${task}</p>
+          <p><strong>対策${index + 1}:</strong> ${task}</p>
           <textarea placeholder="この課題について、考えていることや背景を入力してください…" rows="4"></textarea>
         `;
 
