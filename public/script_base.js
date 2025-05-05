@@ -231,19 +231,12 @@ if (generateBtn) {
     });
   }
 
-let mindMapGenerated = false;
+let mindMapGenerated = false; // ← 追加するグローバル変数
 
 if (generateMindMapGPTBtn) {
   generateMindMapGPTBtn.addEventListener("click", async () => {
     if (mindMapGenerated) {
-      alert("🧠 すでにマインドマップは生成されています。ページを更新するか、条件を変更してください。");
-      return;
-    }
-
-    const inputs = document.querySelectorAll(".thinking-block textarea");
-    const hasInput = Array.from(inputs).some(input => input.value.trim() !== "");
-    if (!hasInput) {
-      alert("⚠️ 対策案を少なくとも1つ以上入力してください。");
+      alert("すでにマインドマップは生成されています。ページを更新するか、条件を変更してください。");
       return;
     }
 
@@ -252,8 +245,7 @@ if (generateMindMapGPTBtn) {
 
     try {
       await generateMindMapFromGPT();
-      mindMapGenerated = true;
-      alert("✅ マインドマップが正常に生成されました。");
+      mindMapGenerated = true; // 1回だけ実行するようフラグを立てる
     } catch (err) {
       console.error("⚠️ マインドマップ生成中にエラー:", err);
       alert("マインドマップ生成に失敗しました。");
@@ -361,16 +353,15 @@ async function generateMindMapFromGPT() {
   });
 
   // ✅ ここで finalPrompt を構築
- const finalPrompt = `
-以下は、地域課題とそれに対する住民の考察です。これをもとに、中心テーマを「${region}：${issueList}」とした放射状マインドマップ構造を構築してください。
-中心ノードには「${region}」を設定してください。課題リスト】の10件を、必ず第一階層（中心ノード直下）に展開してください
+  const finalPrompt = `
+以下は、地域課題とそれに対する住民の考察です。これをもとに、中心テーマを「${region}：${theme}」とした放射状マインドマップ構造を構築してください。
+
 MindElixir.jsで描画可能な構造（topic, children）にしてください。
 日本語を使い、重要な項目は深掘りし、3階層以上になるように構成してください。
 出力は必ずJSONオブジェクトのみで返してください。コードブロック（\`\`\`）や説明文は一切含めないでください。
 
 ${combinedText}
 `;
-
 
   try {
     const res = await fetch("/api/chatgpt", {
