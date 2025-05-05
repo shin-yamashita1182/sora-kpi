@@ -324,7 +324,6 @@ const mind = new MindElixir({
 
   mind.init();
 }
-// 🧠 ChatGPTから課題＋考察ベースのマインドマップを生成（安定版）
 async function generateMindMapFromGPT() {
   console.log("🧠 generateMindMapFromGPTが呼び出されました");
 
@@ -332,17 +331,84 @@ async function generateMindMapFromGPT() {
   const region = document.getElementById("regionName").value.trim();
   const theme = document.getElementById("userNote").value.trim();
 
-  if (blocks.length === 0 || !region || !theme) {
-    alert("課題と考察が入力されていません。");
+  if (!region || !theme || latestExtractedTasks.length !== 10) {
+    alert("課題またはテーマ情報が不足しています。先に課題抽出を行ってください。");
     return;
   }
 
-  let combinedText = `【地域名】：${region}\n【テーマ】：${theme}\n\n以下は課題と住民の考察です。\n`;
-  blocks.forEach((block, i) => {
-    const task = block.querySelector("p").innerText;
-    const opinion = block.querySelector("textarea").value.trim();
-    combinedText += `【${i + 1}】${task}\n考察：${opinion || "（未記入）"}\n`;
+  let combinedText = `【地域名】：${region}\n【テーマ】：${theme}\n\n以下は抽出された課題です。\n`;
+  latestExtractedTasks.forEach((task, i) => {
+    combinedText += `【${i + 1}】${task}\n`;
   });
+
+  combinedText += `\n以下は住民・関係者からの考察です（任意）：\n`;
+  blocks.forEach((block) => {
+    const opinion = block.querySelector("textarea").value.trim();
+    if (opinion) combinedText += `・${opinion}\n`;
+  });
+
+  const finalPrompt = `以下は、地域課題と住民考察です。これを基に、${region}の戦略マインドマップを階層構造でJSON生成してください。\n\n${combinedText}`;
+
+  try {
+    const res = await fetch("/api/chatgpt", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ prompt: finalPrompt })
+    });
+
+    const data = await res.json();
+    let cleaned = data.result.trim().replace(/^```json|^```|^json|```$/g, "");
+    const endIndex = cleaned.lastIndexOf("}");
+    if (endIndex !== -1) cleaned = cleaned.slice(0, endIndex + 1);
+
+    const parsed = JSON.parse(cleaned);
+
+    // 🧼 children: [] を除去
+    function sanitize(node) {
+      if (Array.isArray(node.children)) {
+        if (node.children.length === 0) {
+          delete node.children;
+        } else {
+          node.children.forEach(sanitize);
+        }
+      }
+    }
+    sanitize(parsed);
+
+    if (!parsed || typeof parsed !== "object" || !parsed.topic) {
+      alert("マインドマップの構造が不正です。");
+      return;
+    }
+
+    document.getElementById("mapModal").classList.remove("hidden");
+
+    const mind = new MindElixir({
+      el: "#mindmapContainer",
+      direction: MindElixir.RIGHT,
+      data: { nodeData: parsed },
+      draggable: true,
+      contextMenu: true,
+      toolBar: true,
+      nodeMenu: true,
+      keypress: true
+    });
+
+    mind.init();
+    mind.scale(0.75);
+
+    const rootNode = document.querySelector("#mindmapContainer .root-node");
+    if (rootNode) {
+      rootNode.style.fontSize = "14px";
+      rootNode.style.maxWidth = "260px";
+      rootNode.style.whiteSpace = "normal";
+      rootNode.style.padding = "6px 10px";
+      rootNode.style.lineHeight = "1.4";
+    }
+  } catch (err) {
+    console.error("🧠 マインドマップ生成エラー:", err);
+    alert("ChatGPTによるマインドマップ生成に失敗しました。");
+  }
+}
 
   const prompt = `
 以下は、地域課題とそれに対する住民の考察です。これをもとに、中心テーマを「${region}：${theme}」とした放射状マインドマップ構造を構築してください。
