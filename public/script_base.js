@@ -412,38 +412,37 @@ ${combinedText}
     mind.init();
     mind.scale(0.75);
 
-// 💾 保存ボタンをモーダルに追加（すでにある場合は追加しない）
-if (!document.getElementById("saveMindMapBtn")) {
-  const saveBtn = document.createElement("button");
-  saveBtn.id = "saveMindMapBtn";
-  saveBtn.className = "modal-save-btn";
-  saveBtn.textContent = "マップを保存";
+// 💾 保存ボタンにイベントを常にバインド（すでに存在する場合も対象）
+const saveBtn = document.getElementById("saveMindMapBtn");
 
-saveBtn.addEventListener("click", () => {
-console.log("🖱️ 保存ボタンクリックされた"); // ← ★ここが重要  
-try {
-    const cleanCopy = JSON.parse(JSON.stringify(latestMindMapData, (key, value) => {
-      if (key === "parent") return undefined;
-      return value;
-    }));
+if (saveBtn) {
+  saveBtn.addEventListener("click", () => {
+    console.log("🖱️ 保存ボタンクリックされた"); // ← 動作チェックログ
+    try {
+      const cleanCopy = JSON.parse(JSON.stringify(latestMindMapData, (key, value) => {
+        if (key === "parent") return undefined; // 循環対策
+        return value;
+      }));
 
-    const blob = new Blob([JSON.stringify(cleanCopy, null, 2)], { type: "application/json" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = `mindmap_${region}_${theme}.json`;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
+      const blob = new Blob([JSON.stringify(cleanCopy, null, 2)], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `mindmap_${region}_${theme}.json`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
 
-    console.log("✅ 保存完了：parent除去済み");
-
-  } catch (err) {
-    console.error("保存失敗:", err);
-    alert("マインドマップ保存に失敗しました。");
-  }
-});
+      console.log("✅ 保存完了");
+    } catch (err) {
+      console.error("保存失敗:", err);
+      alert("マインドマップ保存に失敗しました。");
+    }
+  });
+} else {
+  console.warn("⚠️ 保存ボタンが見つかりませんでした");
+}
 
 
   document.querySelector("#mapModal .modal-content").appendChild(saveBtn);
