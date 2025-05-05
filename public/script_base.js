@@ -236,7 +236,21 @@ let mindMapGenerated = false; // ← 追加するグローバル変数
 if (generateMindMapGPTBtn) {
   generateMindMapGPTBtn.addEventListener("click", async () => {
     if (mindMapGenerated) {
-      alert("すでにマインドマップは生成されています。ページを更新するか、条件を変更してください。");
+      alert("🧠 すでにマインドマップは生成されています。ページを更新するか、条件を変更してください。");
+      return;
+    }
+
+    // 🟧 追加：少なくとも1件は考察入力があるかチェック
+    const inputs = document.querySelectorAll(".thinkingZoneInput");
+    let hasInput = false;
+    inputs.forEach(input => {
+      if (input.value.trim() !== "") {
+        hasInput = true;
+      }
+    });
+
+    if (!hasInput) {
+      alert("⚠️ 対策案を少なくとも1つ以上入力してください。");
       return;
     }
 
@@ -245,7 +259,7 @@ if (generateMindMapGPTBtn) {
 
     try {
       await generateMindMapFromGPT();
-      mindMapGenerated = true; // 1回だけ実行するようフラグを立てる
+      mindMapGenerated = true; // ✅ フラグ立て
     } catch (err) {
       console.error("⚠️ マインドマップ生成中にエラー:", err);
       alert("マインドマップ生成に失敗しました。");
@@ -255,6 +269,7 @@ if (generateMindMapGPTBtn) {
     generateMindMapGPTBtn.textContent = "マインドマップを生成";
   });
 }
+
 
 
 
