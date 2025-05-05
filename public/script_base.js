@@ -258,16 +258,20 @@ if (generateMindMapGPTBtn) {
     generateMindMapGPTBtn.disabled = true;
     generateMindMapGPTBtn.textContent = "マインドマップ生成中…";
 
-    try {
-  await generateMindMapFromGPT();
-  mindMapGenerated = true;
-  alert("✅ マインドマップが正常に生成されました。");
+try {
+  const success = await generateMindMapFromGPT(); // ← true or false を返させる
+  if (success) {
+    mindMapGenerated = true;
+    alert("✅ マインドマップが正常に生成されました。");
+  } else {
+    alert("⚠️ マインドマップの構造に問題があります。");
+    generateMindMapGPTBtn.disabled = false;
+  }
 } catch (err) {
   console.error("⚠️ マインドマップ生成中にエラー:", err);
   alert("マインドマップ生成に失敗しました。");
   generateMindMapGPTBtn.disabled = false;
 }
-
 
     generateMindMapGPTBtn.textContent = "マインドマップを生成";
   });
