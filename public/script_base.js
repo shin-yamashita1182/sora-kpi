@@ -235,11 +235,14 @@ let mindMapGenerated = false;
 
 if (generateMindMapGPTBtn) {
   generateMindMapGPTBtn.addEventListener("click", async () => {
+    console.log("🧠 ボタンクリック開始（既に生成済み？）", mindMapGenerated);
+
     if (mindMapGenerated) {
-      alert("🧠 すでにマインドマップは生成されています。ページを更新するか、条件を変更してください。");
+      alert("🧠 すでにマインドマップは生成されています。\n再生成するにはページを更新してください。");
       return;
     }
 
+    // ✅ 少なくとも1件の考察が入力されているか確認
     const inputs = document.querySelectorAll(".thinking-block textarea");
     const hasInput = Array.from(inputs).some(input => input.value.trim() !== "");
     if (!hasInput) {
@@ -247,24 +250,25 @@ if (generateMindMapGPTBtn) {
       return;
     }
 
-    generateMindMapGPTBtn.disabled = true;
+    // ボタンは押せるままで、状態だけ一時的に変更
     generateMindMapGPTBtn.textContent = "マインドマップ生成中…";
 
     try {
-      await generateMindMapFromGPT();
-      mindMapGenerated = true;
-      alert("✅ マインドマップが正常に生成されました。");
+      const success = await generateMindMapFromGPT();
+      if (success) {
+        mindMapGenerated = true;
+        alert("✅ マインドマップが正常に生成されました。");
+      } else {
+        alert("⚠️ マインドマップの構造に問題があります。");
+      }
     } catch (err) {
       console.error("⚠️ マインドマップ生成中にエラー:", err);
       alert("マインドマップ生成に失敗しました。");
-      generateMindMapGPTBtn.disabled = false;
     }
 
     generateMindMapGPTBtn.textContent = "マインドマップを生成";
   });
 }
-
-
 
   if (closeMindMapBtn) {
     closeMindMapBtn.addEventListener("click", () => {
