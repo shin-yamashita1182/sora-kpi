@@ -419,23 +419,34 @@ if (!document.getElementById("saveMindMapBtn")) {
   saveBtn.className = "modal-save-btn";
   saveBtn.textContent = "マップを保存";
 
-  saveBtn.addEventListener("click", () => {
-    try {
-      const cleanData = JSON.stringify(latestMindMapData, null, 2);
-      const blob = new Blob([cleanData], { type: "application/json" });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = `mindmap_${region}_${theme}.json`;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      URL.revokeObjectURL(url);
-    } catch (err) {
-      console.error("保存失敗:", err);
-      alert("保存に失敗しました。");
-    }
-  });
+ saveBtn.addEventListener("click", () => {
+  try {
+    const getSafeCopy = (obj) => {
+      const seen = new WeakSet();
+      return JSON.parse(JSON.stringify(obj, (key, value) => {
+        if (typeof value === "object" && value !== null) {
+          if (seen.has(value)) return undefined;
+          seen.add(value);
+        }
+        return value;
+      }));
+    };
+
+    const safeData = getSafeCopy(latestMindMapData);
+    const blob = new Blob([JSON.stringify(safeData, null, 2)], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `mindmap_${region}_${theme}.json`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  } catch (err) {
+    console.error("保存失敗:", err);
+    alert("マインドマップ保存に失敗しました。構造に問題がある可能性があります。");
+  }
+});
 
   document.querySelector("#mapModal .modal-content").appendChild(saveBtn);
 }
