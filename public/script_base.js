@@ -232,9 +232,10 @@ if (generateBtn) {
   }
 
 let mindMapGenerated = false; // ← 追加するグローバル変数
-
 if (generateMindMapGPTBtn) {
   generateMindMapGPTBtn.addEventListener("click", async () => {
+  console.log("🧠 ボタンクリック開始（既に生成済み？）", mindMapGenerated);
+  
     if (mindMapGenerated) {
       alert("🧠 すでにマインドマップは生成されています。ページを更新するか、条件を変更してください。");
       return;
@@ -258,13 +259,15 @@ if (generateMindMapGPTBtn) {
     generateMindMapGPTBtn.textContent = "マインドマップ生成中…";
 
     try {
-      await generateMindMapFromGPT();
-      mindMapGenerated = true; // ✅ フラグ立て
-    } catch (err) {
-      console.error("⚠️ マインドマップ生成中にエラー:", err);
-      alert("マインドマップ生成に失敗しました。");
-      generateMindMapGPTBtn.disabled = false;
-    }
+  await generateMindMapFromGPT();
+  mindMapGenerated = true;
+  alert("✅ マインドマップが正常に生成されました。");
+} catch (err) {
+  console.error("⚠️ マインドマップ生成中にエラー:", err);
+  alert("マインドマップ生成に失敗しました。");
+  generateMindMapGPTBtn.disabled = false;
+}
+
 
     generateMindMapGPTBtn.textContent = "マインドマップを生成";
   });
