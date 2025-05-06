@@ -315,6 +315,23 @@ if (generateMindMapGPTBtn) {
 
 });
 
+// ✅ ステップ1：GPTの返答末尾を自動補完する関数（ここに追加）
+function autoFixJSON(jsonString) {
+  let fixed = jsonString.replace(/```json|```/g, "").trim();
+
+  const openBraces = (fixed.match(/{/g) || []).length;
+  const closeBraces = (fixed.match(/}/g) || []).length;
+  const openBrackets = (fixed.match(/\[/g) || []).length;
+  const closeBrackets = (fixed.match(/]/g) || []).length;
+
+  fixed += "}".repeat(openBraces - closeBraces);
+  fixed += "]".repeat(openBrackets - closeBrackets);
+
+  return fixed;
+}
+
+
+
 async function extractTextFromPDF(file) {
   const pdfData = await file.arrayBuffer();
   const pdf = await pdfjsLib.getDocument({ data: pdfData }).promise;
@@ -344,20 +361,6 @@ function drawMindMapFromInputs() {
     });
   });
 
-// ✅ ステップ1：GPTの返答末尾を自動補完する関数（ここに追加）
-function autoFixJSON(jsonString) {
-  let fixed = jsonString.replace(/```json|```/g, "").trim();
-
-  const openBraces = (fixed.match(/{/g) || []).length;
-  const closeBraces = (fixed.match(/}/g) || []).length;
-  const openBrackets = (fixed.match(/\[/g) || []).length;
-  const closeBrackets = (fixed.match(/]/g) || []).length;
-
-  fixed += "}".repeat(openBraces - closeBraces);
-  fixed += "]".repeat(openBrackets - closeBrackets);
-
-  return fixed;
-}
 
 // ✅ 既存の関数
 async function extractTextFromPDF(file) {
