@@ -386,75 +386,55 @@ ${combinedText}
 
   try {
     const res = await fetch("/api/chatgpt", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ prompt: finalPrompt })
-    });
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({ prompt: finalPrompt })
+});
 
-    const data = await res.json();
-    const parsed = {
-  topic: "長崎県五島市：地域活性化と人口定着",
-  children: [
-    {
-      topic: "観光振興",
-      children: [
-        { topic: "観光資源の再発見とプロモーション強化" },
-        { topic: "交通アクセスの改善" },
-        { topic: "地元ガイドの育成と活用" }
-      ]
-    },
-    {
-      topic: "移住促進",
-      children: [
-        { topic: "住居支援と空き家バンクの活用" },
-        { topic: "定住支援金制度の周知" }
-      ]
-    }
-  ]
-};
+const data = await res.json();
 
+// 🧼 GPTが返すコードブロックや説明を除去
+let cleaned = data.result.trim().replace(/^```json|^```|^json|```$/g, "");
+const endIndex = cleaned.lastIndexOf("}");
+if (endIndex !== -1) cleaned = cleaned.slice(0, endIndex + 1);
+
+// ✅ JSONとしてパース
+const parsed = JSON.parse(cleaned);
 latestMindMapData = parsed;
 
-    // 🔽 GPT出力の整形・パース処理は一時停止中（テスト用サンプルで代用）
-    // let cleaned = data.result.trim().replace(/^```json|^```|^json|```$/g, "");
-    // const endIndex = cleaned.lastIndexOf("}");
-    // if (endIndex !== -1) cleaned = cleaned.slice(0, endIndex + 1);
-
-    // const parsed = JSON.parse(cleaned);
-    // latestMindMapData = parsed;
-
-    // 🧼 children: [] を除去
-    function sanitize(node) {
-      if (Array.isArray(node.children)) {
-        if (node.children.length === 0) {
-          delete node.children;
-        } else {
-          node.children.forEach(sanitize);
-        }
-      }
+// 🧼 children: [] を除去
+function sanitize(node) {
+  if (Array.isArray(node.children)) {
+    if (node.children.length === 0) {
+      delete node.children;
+    } else {
+      node.children.forEach(sanitize);
     }
-    sanitize(parsed);
+  }
+}
+sanitize(parsed);
 
-    if (!parsed || typeof parsed !== "object" || !parsed.topic) {
-      alert("マインドマップの構造が不正です。");
-      return;
-    }
+if (!parsed || typeof parsed !== "object" || !parsed.topic) {
+  alert("マインドマップの構造が不正です。");
+  return;
+}
 
-    document.getElementById("mapModal").classList.remove("hidden");
+// ✅ モーダル表示とマップ描画
+document.getElementById("mapModal").classList.remove("hidden");
 
-    const mind = new MindElixir({
-      el: "#mindmapContainer",
-      direction: MindElixir.RIGHT,
-      data: { nodeData: parsed },
-      draggable: true,
-      contextMenu: true,
-      toolBar: true,
-      nodeMenu: true,
-      keypress: true
-    });
+const mind = new MindElixir({
+  el: "#mindmapContainer",
+  direction: MindElixir.RIGHT,
+  data: parsed, // ← 本番は nodeData ラップ不要
+  draggable: true,
+  contextMenu: true,
+  toolBar: true,
+  nodeMenu: true,
+  keypress: true
+});
+mind.init();
+mind.scale(0.75);
 
-    mind.init();
-    mind.scale(0.75);
 
 // 💾 保存ボタン：存在確認してバインド or 新規作成
 const existingSaveBtn = document.getElementById("saveMindMapBtn");
