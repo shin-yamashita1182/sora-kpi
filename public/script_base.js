@@ -363,8 +363,7 @@ function drawMindMapFromInputs() {
 
 // ✅ 既存の関数
 async function extractTextFromPDF(file) {
-  ...
-}
+  }
 
 // Safe deep copy（循環参照が入る前に保存）
 latestMindMapData = JSON.parse(JSON.stringify(parsed));
