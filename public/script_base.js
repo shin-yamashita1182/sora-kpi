@@ -381,19 +381,32 @@ console.log("🧾 combinedText:\n", combinedText); // ← 確認ログ（後で�
 
 
   // ✅ ここで finalPrompt を構築
+let combinedText = `【地域名】：${region}\n【テーマ】：${theme}\n\n【抽出された課題】\n`;
+latestExtractedTasks.forEach((task) => {
+  combinedText += `- ${task}\n`;
+});
+
+combinedText += `\n【住民・関係者の考察】\n`;
+blocks.forEach((block) => {
+  const opinion = block.querySelector("textarea").value.trim();
+  if (opinion) combinedText += `- ${opinion}\n`;
+});
+
+// ✅ 改修後プロンプト
 const finalPrompt = `
-以下は、地域課題と住民の考察です。中心テーマを「${region}：${theme}」として、MindElixir.js形式（topic, children）で放射状マインドマップ構造を作成してください。
+以下は、ある地域のテーマに対して抽出された課題と、住民・関係者による考察です。
 
-以下の条件を厳守してください：
+この情報をもとに、中心ノードを「${region}：${theme}」とするMindElixir.js形式のマインドマップ構造を作成してください。
 
-- 出力はJSONオブジェクトのみ（コードブロックや説明は禁止）
-- 最後の } や ] は「多くも少なくもせず」正確に閉じてください
-- children構造は最大で3階層まで
-- 文字数は必ず2500文字以内
-- 日本語で記述する
+- 各課題や考察をベースにして、重要な論点ごとに階層構造を設計してください。
+- 子ノード（children）は3階層までで構成し、要点を日本語で簡潔に記述してください。
+- 重複する考察や課題は適切に統合してください。
+- 出力はJSONオブジェクトのみ。コードブロック（\`\`\`）や説明は一切不要です。
+- 最後の } または ] は正確に閉じてください。
 
 ${combinedText}
 `;
+
 
 
   try {
