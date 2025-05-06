@@ -456,10 +456,17 @@ document.getElementById("mapModal").classList.remove("hidden");
 
 console.log("🧠 最終描画データ:", latestMindMapData);
 
+// 💡 MindElixirが期待する構造にラップ
+const wrappedData = {
+  id: "root",
+  topic: latestMindMapData.topic,
+  children: latestMindMapData.children
+};
+
 const mind = new MindElixir({
   el: "#mindmapContainer",
   direction: MindElixir.RIGHT,
-  data: latestMindMapData, // ← ✅ parsed ではなく latestMindMapData に統一！
+  data: wrappedData,  // ← ここが重要！
   draggable: true,
   contextMenu: true,
   toolBar: true,
