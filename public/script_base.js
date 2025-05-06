@@ -246,21 +246,27 @@ if (generateMindMapGPTBtn) {
       return;
     }
 
+    if (!regionInput.value.trim() || !noteInput.value.trim() || latestExtractedTasks.length !== 10) {
+      alert("先に課題抽出を行ってください。");
+      return;
+    }
+
     generateMindMapGPTBtn.disabled = true;
     generateMindMapGPTBtn.textContent = "マインドマップ生成中…";
 
     try {
       await generateMindMapFromGPT();
-      mindMapGenerated = true; // 1回だけ実行するようフラグを立てる
+      mindMapGenerated = true;
+      // 🎯 成功してもテキストは変更しない（表示そのまま）
     } catch (err) {
       console.error("⚠️ マインドマップ生成中にエラー:", err);
       alert("マインドマップ生成に失敗しました。");
       generateMindMapGPTBtn.disabled = false;
+      generateMindMapGPTBtn.textContent = "マインドマップの生成";
     }
-
-    generateMindMapGPTBtn.textContent = "マインドマップを生成";
   });
 }
+
 
 
 
