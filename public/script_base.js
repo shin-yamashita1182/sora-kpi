@@ -454,10 +454,12 @@ if (!parsed || typeof parsed !== "object" || !parsed.topic) {
 // ✅ モーダル表示とマップ描画
 document.getElementById("mapModal").classList.remove("hidden");
 
+console.log("🧠 最終描画データ:", latestMindMapData);
+
 const mind = new MindElixir({
   el: "#mindmapContainer",
   direction: MindElixir.RIGHT,
-  data: parsed, // ← 本番は nodeData ラップ不要
+  data: latestMindMapData, // ← ✅ parsed ではなく latestMindMapData に統一！
   draggable: true,
   contextMenu: true,
   toolBar: true,
