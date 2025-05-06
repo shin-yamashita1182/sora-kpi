@@ -360,16 +360,25 @@ async function generateMindMapFromGPT() {
     return;
   }
 
-  let combinedText = `【地域名】：${region}\n【テーマ】：${theme}\n\n以下は抽出された課題です。\n`;
+let combinedText = `【地域名】：${region}\n【テーマ】：${theme}\n\n以下は抽出された課題です。\n`;
+
+if (latestExtractedTasks.length === 10) {
   latestExtractedTasks.forEach((task, i) => {
     combinedText += `【${i + 1}】${task}\n`;
   });
+} else {
+  combinedText += "（※課題データが正しく取得できていません）\n";
+}
 
-  combinedText += `\n以下は住民・関係者からの考察です（任意）：\n`;
-  blocks.forEach((block) => {
-    const opinion = block.querySelector("textarea").value.trim();
-    if (opinion) combinedText += `・${opinion}\n`;
-  });
+combinedText += `\n以下は住民・関係者からの考察です（任意）：\n`;
+
+blocks.forEach((block) => {
+  const opinion = block.querySelector("textarea").value.trim();
+  if (opinion) combinedText += `・${opinion}\n`;
+});
+
+console.log("🧾 combinedText:\n", combinedText); // ← 確認ログ（後で削除OK）
+
 
   // ✅ ここで finalPrompt を構築
 const finalPrompt = `
