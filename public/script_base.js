@@ -303,6 +303,8 @@ ${combinedText}
 
       const data = await res.json();
       const jsonText = data.result?.trim();
+      console.log("=== ChatGPT生の出力 ===");
+      console.log(jsonText);
 
       if (!jsonText.startsWith("{") && !jsonText.startsWith("[")) {
         alert("ChatGPTからの出力がJSON形式ではありません。");
