@@ -282,17 +282,28 @@ if (generateMindMapGPTBtn) {
       });
 
       const prompt = `
-以下は、地域課題と住民の考察です。中心テーマを「${region}：${theme}」として、MindElixir.js形式（topic, children）で放射状マインドマップ構造を作成してください。
+以下は、地域課題と住民の考察です。
+中心テーマを「${region}：${theme}」として、MindElixir.js形式（topic, children）で放射状マインドマップ構造を作成してください。
 
-出力はJSONオブジェクトのみとし、**コードブロック記法（たとえば「バッククォート3つ + json」や「バッククォート3つ」など）は絶対に含めないでください**。説明文や注釈も不要です。
+必ず以下の条件を守ってください：
 
-- 日本語で書く
-- children構造は3階層まで
-- 文字数は必ず2500文字以内
-- 最後の } または ] までJSONを正確に閉じてください
+- **出力はJSONオブジェクトのみ**
+- **コードブロック（\`\`\` や \`\`\`json）は絶対に含めない**
+- **説明文・注釈・見出し・補足はいっさい書かない**
+- **構造は MindElixir.js形式（topic, children）で3〜4階層**
+- **JSONは最後まで正しく閉じる（構文エラー禁止）**
+- **文字数は2500文字以内に抑える**
 
-${combinedText}
+【課題】:
+${latestExtractedTasks.map((task, i) => `【${i + 1}】${task}`).join("\n")}
+
+【住民の考察（任意）】:
+${[...document.querySelectorAll(".thinking-block textarea")]
+  .map(t => "・" + t.value.trim())
+  .filter(line => line.length > 1)
+  .join("\n")}
 `;
+
 
 
       const res = await fetch("/api/chatgpt", {
