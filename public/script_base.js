@@ -360,37 +360,29 @@ async function generateMindMapFromGPT() {
     return;
   }
 
-let combinedText = `【地域名】：${region}\n【テーマ】：${theme}\n\n以下は抽出された課題です。\n`;
-
-if (latestExtractedTasks.length === 10) {
+  let combinedText = `【地域名】：${region}\n【テーマ】：${theme}\n\n以下は抽出された課題です。\n`;
   latestExtractedTasks.forEach((task, i) => {
     combinedText += `【${i + 1}】${task}\n`;
   });
-} else {
-  combinedText += "（※課題データが正しく取得できていません）\n";
-}
 
-combinedText += `\n以下は住民・関係者からの考察です（任意）：\n`;
+  combinedText += `\n以下は住民・関係者からの考察です（任意）：\n`;
+  blocks.forEach((block) => {
+    const opinion = block.querySelector("textarea").value.trim();
+    if (opinion) combinedText += `・${opinion}\n`;
+  });
 
-blocks.forEach((block) => {
-  const opinion = block.querySelector("textarea").value.trim();
-  if (opinion) combinedText += `・${opinion}\n`;
-});
+  console.log("🧾 combinedText:\n", combinedText);
 
-console.log("🧾 combinedText:\n", combinedText); // ← 確認ログ（後で削除OK）
+  const finalPrompt = `
+以下は、地域課題と住民の考察です。中心テーマを「${region}：${theme}」として、MindElixir.js形式（topic, children）で放射状マインドマップ構造を作成してください。
 
+出力はJSONオブジェクトのみ。コードブロック（\`\`\`）や注釈・説明文は一切禁止です。
+最後の } や ] は多くも少なくもせず、正確に閉じてください。
 
-  // ✅ ここで finalPrompt を構築
-const finalPrompt = `
-以下は、ある地域における課題リストと住民の考察です。
-「${region}：${theme}」を中心に、MindElixir.js形式（topic, children）で放射状マインドマップを構築してください。
-
-**注意事項（厳守）：**
-- 出力は JSON オブジェクトのみ。コードブロック（\`\`\`）や注釈は禁止。
-- JSONの末尾 } や ] は正確に閉じてください。
-- childrenは最大3階層まで。
-- 文字数は必ず2500文字以内。
-- 日本語で記述。
+- 日本語で書く
+- children構造は3階層まで
+- 文字数は必ず2500文字以内
+- 最後の } までJSONを閉じてください
 
 ${combinedText}
 `;
@@ -399,7 +391,7 @@ ${combinedText}
     const res = await fetch("/api/chatgpt", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ prompt: combinedText })
+      body: JSON.stringify({ prompt: finalPrompt })
     });
 
     const data = await res.json();
@@ -408,10 +400,9 @@ ${combinedText}
     if (endIndex !== -1) cleaned = cleaned.slice(0, endIndex + 1);
 
     const parsed = JSON.parse(cleaned);
-    // ⬇⬇⬇ これを追加
     latestMindMapData = parsed;
 
-    // 🧼 children: [] を除去
+    // children: [] を除去
     function sanitize(node) {
       if (Array.isArray(node.children)) {
         if (node.children.length === 0) {
@@ -444,52 +435,44 @@ ${combinedText}
     mind.init();
     mind.scale(0.75);
 
-// 💾 保存ボタン：存在確認してバインド or 新規作成
-const existingSaveBtn = document.getElementById("saveMindMapBtn");
+    // ✅ 保存ボタン処理（19:30の安定構成）
+    const existingSaveBtn = document.getElementById("saveMindMapBtn");
 
-const handleSave = () => {
-  console.log("🖱️ 保存ボタンクリックされた");
-  try {
-    const cleanCopy = JSON.parse(JSON.stringify(latestMindMapData, (key, value) => {
-      if (key === "parent") return undefined;
-      return value;
-    }));
+    const handleSave = () => {
+      console.log("🖱️ 保存ボタンクリックされた");
+      try {
+        const cleanCopy = JSON.parse(JSON.stringify(latestMindMapData, (key, value) => {
+          if (key === "parent") return undefined;
+          return value;
+        }));
 
-    const blob = new Blob([JSON.stringify(cleanCopy, null, 2)], { type: "application/json" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = `mindmap_${region}_${theme}.json`;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
-    console.log("✅ 保存完了");
-  } catch (err) {
-    console.error("保存失敗:", err);
-    alert("マインドマップ保存に失敗しました。");
-  }
-};
+        const blob = new Blob([JSON.stringify(cleanCopy, null, 2)], { type: "application/json" });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = `mindmap_${region}_${theme}.json`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+        console.log("✅ 保存完了");
+      } catch (err) {
+        console.error("保存失敗:", err);
+        alert("マインドマップ保存に失敗しました。");
+      }
+    };
 
-if (existingSaveBtn) {
-  existingSaveBtn.onclick = handleSave;  // ← onclick で上書きしてもOK
-} else {
-  const saveBtn = document.createElement("button");
-  saveBtn.id = "saveMindMapBtn";
-  saveBtn.className = "modal-save-btn";
-  saveBtn.textContent = "マップを保存";
-  saveBtn.addEventListener("click", handleSave);
-  document.querySelector("#mapModal .modal-content").appendChild(saveBtn);
-}
-
-    const rootNode = document.querySelector("#mindmapContainer .root-node");
-    if (rootNode) {
-      rootNode.style.fontSize = "14px";
-      rootNode.style.maxWidth = "260px";
-      rootNode.style.whiteSpace = "normal";
-      rootNode.style.padding = "6px 10px";
-      rootNode.style.lineHeight = "1.4";
+    if (existingSaveBtn) {
+      existingSaveBtn.onclick = handleSave;
+    } else {
+      const saveBtn = document.createElement("button");
+      saveBtn.id = "saveMindMapBtn";
+      saveBtn.className = "modal-save-btn";
+      saveBtn.textContent = "マップを保存";
+      saveBtn.addEventListener("click", handleSave);
+      document.querySelector("#mapModal .modal-content").appendChild(saveBtn);
     }
+
   } catch (err) {
     console.error("🧠 マインドマップ生成エラー:", err);
     alert("ChatGPTによるマインドマップ生成に失敗しました。");
