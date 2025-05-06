@@ -392,10 +392,12 @@ const finalPrompt = `
 MindElixir.jsで描画可能な構造（topic, children）にしてください。
 日本語を使い、重要な項目は深掘りし、3階層以上になるように構成してください。
 
-以下の構造を参考にしてください：
+出力は以下のJSON構造に厳密に従ってください。
+※コードブロック（\`\`\`）・注釈・説明文は絶対に含めないでください。
+※構文不備や途中切れのない、完全なJSON形式で出力してください（最後のカッコまで含む）。
 
 {
-  "topic": "中心テーマ名",
+  "topic": "中心テーマ名（例：◯◯地域の課題全体）",
   "children": [
     {
       "topic": "課題1のタイトル",
@@ -413,11 +415,9 @@ MindElixir.jsで描画可能な構造（topic, children）にしてください�
   ]
 }
 
-※出力は必ず JSON オブジェクト形式のみとし、コードブロック（\`\`\`）や注釈、前置き説明は絶対に含めないでください。
-※出力は 2500 文字以内に収めてください。文字数が超える場合は階層数を減らして調整してください。
-
 ${combinedText}
 `;
+
   
   try {
     const res = await fetch("/api/chatgpt", {
@@ -434,9 +434,16 @@ let cleaned = data.result.trim().replace(/^```json|^```|^json|```$/g, "");
 const endIndex = cleaned.lastIndexOf("}");
 if (endIndex !== -1) cleaned = cleaned.slice(0, endIndex + 1);
 
-// ✅ JSONとしてパース
-const parsed = JSON.parse(cleaned);
-latestMindMapData = parsed;
+// ✅ JSONとしてパース（構文エラーが出たら止める）
+let parsed;
+try {
+  parsed = JSON.parse(cleaned);
+  latestMindMapData = parsed;
+} catch (e) {
+  console.error("❌ JSONパースエラー:", cleaned);
+  alert("ChatGPTの返答に構文エラーがあります。マインドマップを生成できません。");
+  return;
+}
 
 // 🧼 children: [] を除去
 function sanitize(node) {
@@ -461,7 +468,7 @@ mindMapContent.innerHTML = ""; // 🔄 前回の描画をクリア
 
 console.log("🧠 マップデータ:", latestMindMapData);
 
-// ✅ topic が無ければ描画しない
+// ✅ topicが無いなど異常なデータのときは中止
 if (!latestMindMapData || typeof latestMindMapData.topic !== "string" || latestMindMapData.topic.trim() === "") {
   alert("描画エラー：マインドマップの中心テーマ（topic）が取得できていません。");
   return;
@@ -470,7 +477,7 @@ if (!latestMindMapData || typeof latestMindMapData.topic !== "string" || latestM
 // ✅ データのコピー（念のため）
 const mindData = JSON.parse(JSON.stringify(latestMindMapData));
 
-// ✅ MindElixir 描画
+// ✅ MindElixir描画
 const mind = new MindElixir({
   el: "#mindmapContainer",
   direction: MindElixir.RIGHT,
@@ -483,8 +490,6 @@ const mind = new MindElixir({
 });
 mind.init();
 mind.scale(0.75);
-
-
 
 // 💾 保存ボタン：存在確認してバインド or 新規作成
 const existingSaveBtn = document.getElementById("saveMindMapBtn");
