@@ -1,7 +1,6 @@
 // ✅ グローバル定義（script_base.js 最上部などに追加）
 window.mindMapGenerated = false;
   let latestExtractedTasks = []; // 🆕 抽出課題を保存
-  let latestMindMapData = null;
 // ✅ SORA Dashboard Script Base - 統合版（NEXCO連動 + ChatGPT課題抽出 + ThinkingZoneマインドマップ／安定運用構成）
 document.addEventListener("DOMContentLoaded", () => {
   const fileInput = document.getElementById("fileInput");
@@ -32,6 +31,8 @@ document.addEventListener("DOMContentLoaded", () => {
 // 📝 議事録ファイルの読み取り結果を保持
   let uploadedTextContent = "";
   let isAnalyzing = false;
+  let latestMindMapData = null; // スクリプトの上の方に追加しておく
+
 
   // 📁 ファイル選択表示
   if (fileInput) {
@@ -164,8 +165,7 @@ const canvasResult = document.getElementById("canvasResult");
 canvasResult.innerText = data.result || "課題が取得できませんでした。";
 // 🆕 課題10件を latestExtractedTasks に保存
 const canvasText = canvasResult.innerText;
-// 課題リストから内容を抽出（課題1〜10対応）
-const matches = [...canvasText.matchAll(/【(?:課題)?(\d+)】\s*(.+)/g)];
+const matches = [...canvasText.matchAll(/【(?:課題)?(\d+)】(.*?)\n?/g)];
 latestExtractedTasks = matches.map(m => m[2].trim());
 canvasResult.style.maxWidth = "100%"; // または必要なら "95%" 程度に調整可
 canvasResult.style.margin = "20px 0"; // auto を削除し左右寄せ防止
@@ -395,14 +395,6 @@ ${combinedText}
     });
 
     const data = await res.json();
-    // 🛡️ 安全チェックを追加
-if (!data || !data.result) {
-  console.error("⚠️ ChatGPT応答が不正（result未定義）:", data);
-  alert("ChatGPTからの応答に失敗しました（result がありません）");
-  generateMindMapGPTBtn.disabled = false;
-  generateMindMapGPTBtn.textContent = "マインドマップの生成";
-  return;
-}
     let cleaned = data.result.trim().replace(/^```json|^```|^json|```$/g, "");
     const endIndex = cleaned.lastIndexOf("}");
     if (endIndex !== -1) cleaned = cleaned.slice(0, endIndex + 1);
@@ -486,60 +478,3 @@ if (!data || !data.result) {
     alert("ChatGPTによるマインドマップ生成に失敗しました。");
   }
 }
-// ✅ 🔄 JSON → MindElixir形式へ変換
-function convertTasksToMindElixir(data) {
-  return {
-    topic: `${data.region}：${data.theme}`,
-    children: data.tasks.map((task, i) => {
-      const node = { topic: task };
-      if (data.opinions && data.opinions[i] && data.opinions[i].trim()) {
-        node.children = [{ topic: `考察: ${data.opinions[i].trim()}` }];
-      }
-      return node;
-    })
-  };
-}
-
-// ✅ 🧠 MindElixir描画処理（共通化）
-function drawMindMap(data) {
-  const container = document.getElementById("mindmapContainer");
-  container.innerHTML = "";
-
-  const mind = new MindElixir({
-    el: "#mindmapContainer",
-    direction: MindElixir.RIGHT,
-    data: { nodeData: data },
-    draggable: true,
-    contextMenu: true,
-    toolBar: true,
-    nodeMenu: true,
-    keypress: true
-  });
-
-  mind.init();
-  mind.scale(0.75);
-}
-
-// ✅ 📂 ローカルJSONファイル読込 → マップ描画処理
-document.getElementById("loadAndDrawMap").addEventListener("click", () => {
-  const fileInput = document.getElementById("taskFileInput");
-  const file = fileInput.files[0];
-  if (!file) {
-    alert("課題ファイル（.json）を選択してください。");
-    return;
-  }
-
-  const reader = new FileReader();
-  reader.onload = function (event) {
-    try {
-      const loadedData = JSON.parse(event.target.result);
-      const parsed = convertTasksToMindElixir(loadedData);
-      drawMindMap(parsed);
-      document.getElementById("mapModal").classList.remove("hidden");
-    } catch (err) {
-      console.error("📛 読み込み/描画エラー:", err);
-      alert("ファイルの形式が正しくありません。");
-    }
-  };
-  reader.readAsText(file);
-});
