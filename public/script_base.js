@@ -214,6 +214,25 @@ if (generateBtn) {
   });
 }
 
+// ✅ 分析対策ボタン（展開／閉じる）制御
+const toggleStrategyBtn = document.getElementById("toggleStrategyBtn");
+
+if (toggleStrategyBtn) {
+  toggleStrategyBtn.addEventListener("click", () => {
+    if (!analysisDone) {
+      alert("先に課題抽出を行ってください。");
+      return;
+    }
+
+    const strategySection = document.getElementById("coreMasterContainer");
+    strategySection.classList.toggle("hidden");
+
+    toggleStrategyBtn.textContent = strategySection.classList.contains("hidden")
+      ? "分析対策（展開）"
+      : "分析対策（閉じる）";
+  });
+}
+
 
   // 🧠 一括マインドマップモーダル出力
   if (generateAllBtn) {
