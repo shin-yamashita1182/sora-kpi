@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>🧠 マインドマップビューア</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f5f7fa;
+    }
+
+    header {
+      background-color: #0077cc;
+      color: white;
+      padding: 1rem 2rem;
+      font-size: 1.4rem;
+      font-weight: bold;
+    }
+
+    #mindmap {
+      width: 100%;
+      height: 88vh;
+      margin: 0;
+      padding: 0;
+    }
+
+    .controls {
+      display: flex;
+      justify-content: flex-end;
+      padding: 0.8rem 1.5rem;
+      gap: 10px;
+    }
+
+    button {
+      background-color: #2a9d8f;
+      border: none;
+      color: white;
+      padding: 8px 16px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.95rem;
+    }
+
+    button:hover {
+      background-color: #21867a;
+    }
+  </style>
+</head>
+<body>
+
+  <header>🧠 マインドマップビューア</header>
+
+  <div class="controls">
+    <button onclick="downloadPNG()">PNGで保存</button>
+    <button onclick="window.print()">PDFを出力</button>
+  </div>
+
+  <div id="mindmap"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/mind-elixir/dist/mind-elixir.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/dom-to-image-more@2.9.0/dist/dom-to-image-more.min.js"></script>
+  <script>
+    const mindDataStr = localStorage.getItem("latestMindMapData");
+    if (!mindDataStr) {
+      document.getElementById("mindmap").innerText = "エラー：マインドマップデータが見つかりません。";
+      throw new Error("No mindmap data found");
+    }
+
+    const mind = new MindElixir({
+      el: '#mindmap',
+      direction: MindElixir.SIDE,
+      data: JSON.parse(mindDataStr),
+      draggable: true,
+      contextMenu: true,
+      toolBar: true,
+      nodeMenu: true,
+      keypress: true,
+    });
+
+    mind.init();
+
+    function downloadPNG() {
+      const node = document.getElementById('mindmap');
+      domtoimage.toPng(node).then((dataUrl) => {
+        const link = document.createElement('a');
+        link.download = 'mindmap.png';
+        link.href = dataUrl;
+        link.click();
+      }).catch((error) => {
+        alert("画像の保存に失敗しました。");
+        console.error("PNG保存エラー:", error);
+      });
+    }
+  </script>
+</body>
+</html>
