@@ -126,7 +126,7 @@ const prompt = `あなたは実在する施設名に基づいて正確に答え�
         return;
       }
 
-const region = regionInput.value.trim();
+region = regionInput.value.trim();
 const theme = noteInput.value.trim();
 const minutesText = uploadedTextContent || theme; // ←なければテーマで代用
 
