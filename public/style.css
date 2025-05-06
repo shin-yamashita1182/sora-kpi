@@ -666,9 +666,9 @@ footer {
 }
 /* === MindMap用モーダル強化スタイル === */
 #mapModal .modal-content {
-  width: 96vw !important;       /* 横幅をさらに広げる */
+  width: 80vw !important;       /* 横幅をさらに広げる */
   height: 80vh !important;
-  max-width: none !important;   /* 最大幅の制限を解除 */
+  max-width: 1000px !important; /* 上限を復活させるのも可 */
   padding: 1rem;
   background-color: #fff;
   border-radius: 12px;
@@ -770,4 +770,10 @@ footer {
 #mapModal .modal-body {
   overflow-y: auto;
   flex-grow: 1;
+}
+#mapModal pre {
+  overflow-y: auto;
+  white-space: pre-wrap;
+  max-width: 70ch;
+  margin: 0 auto;
 }
