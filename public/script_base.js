@@ -165,7 +165,8 @@ const canvasResult = document.getElementById("canvasResult");
 canvasResult.innerText = data.result || "課題が取得できませんでした。";
 // 🆕 課題10件を latestExtractedTasks に保存
 const canvasText = canvasResult.innerText;
-const matches = [...canvasText.matchAll(/【(?:課題)?(\d+)】(.*?)\n?/g)];
+// 課題リストから内容を抽出（課題1〜10対応）
+const matches = [...canvasText.matchAll(/【(?:課題)?(\d+)】\s*(.+)/g)];
 latestExtractedTasks = matches.map(m => m[2].trim());
 canvasResult.style.maxWidth = "100%"; // または必要なら "95%" 程度に調整可
 canvasResult.style.margin = "20px 0"; // auto を削除し左右寄せ防止
