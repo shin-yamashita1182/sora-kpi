@@ -395,6 +395,14 @@ ${combinedText}
     });
 
     const data = await res.json();
+    // 🛡️ 安全チェックを追加
+if (!data || !data.result) {
+  console.error("⚠️ ChatGPT応答が不正（result未定義）:", data);
+  alert("ChatGPTからの応答に失敗しました（result がありません）");
+  generateMindMapGPTBtn.disabled = false;
+  generateMindMapGPTBtn.textContent = "マインドマップの生成";
+  return;
+}
     let cleaned = data.result.trim().replace(/^```json|^```|^json|```$/g, "");
     const endIndex = cleaned.lastIndexOf("}");
     if (endIndex !== -1) cleaned = cleaned.slice(0, endIndex + 1);
