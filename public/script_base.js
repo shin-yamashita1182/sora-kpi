@@ -32,6 +32,9 @@ document.addEventListener("DOMContentLoaded", () => {
   let uploadedTextContent = "";
   let isAnalyzing = false;
   let latestMindMapData = null; // スクリプトの上の方に追加しておく
+  let region = "";
+  let theme = "";
+  let minutesText = "";
 
 
   // 📁 ファイル選択表示
@@ -128,7 +131,7 @@ const prompt = `あなたは実在する施設名に基づいて正確に答え�
 
 region = regionInput.value.trim();
 theme = noteInput.value.trim();
-const minutesText = uploadedTextContent || theme; // ←なければテーマで代用
+minutesText = uploadedTextContent || theme; // ←なければテーマで代用
 
 const promptTemplate = `
 以下は、ある地域における重要なテーマと、それに関連する会議資料（議事録・ヒアリングメモ等）です。
