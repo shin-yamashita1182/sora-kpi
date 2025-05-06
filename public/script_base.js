@@ -217,7 +217,7 @@ generateBtn.addEventListener("click", () => {
 
   isThinkingVisible = true;
 });
-
+}
 
 
 
@@ -299,7 +299,7 @@ if (generateMindMapGPTBtn) {
 //   });
 // }
 
-
+});
 
 async function extractTextFromPDF(file) {
   const pdfData = await file.arrayBuffer();
