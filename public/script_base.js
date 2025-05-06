@@ -411,11 +411,8 @@ const data = await res.json();
 console.log("🧠 GPTの返答（raw）:", data.result);
 
 // 🧼 GPTが返すコードブロックや説明を除去
-let cleaned = data.result.trim().replace(/^```json|^```|^json|```$/g, "");
-const endIndex = cleaned.lastIndexOf("}");
-if (endIndex !== -1) cleaned = cleaned.slice(0, endIndex + 1);
+let cleaned = autoFixJSON(data.result);
 
-// ✅ JSONとしてパース（構文エラーが出たら止める）
 let parsed;
 try {
   parsed = JSON.parse(cleaned);
