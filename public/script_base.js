@@ -140,7 +140,7 @@ const promptTemplate = `
 【地域名】：${region}
 【テーマ】：${theme}
 【参考資料】：
-${minutesText}
+{{minutesText}}
 `;
 
 
