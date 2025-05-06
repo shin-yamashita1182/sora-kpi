@@ -1,3 +1,5 @@
+// ✅ グローバル定義（script_base.js 最上部などに追加）
+window.mindMapGenerated = false;
   let latestExtractedTasks = []; // 🆕 抽出課題を保存
 // ✅ SORA Dashboard Script Base - 統合版（NEXCO連動 + ChatGPT課題抽出 + ThinkingZoneマインドマップ／安定運用構成）
 document.addEventListener("DOMContentLoaded", () => {
@@ -241,7 +243,7 @@ let mindMapGenerated = false; // ← 追加するグローバル変数
 
 if (generateMindMapGPTBtn) {
   generateMindMapGPTBtn.addEventListener("click", async () => {
-    if (mindMapGenerated) {
+    if (window.mindMapGenerated) {
       alert("すでにマインドマップは生成されています。ページを更新するか、条件を変更してください。");
       return;
     }
@@ -256,8 +258,7 @@ if (generateMindMapGPTBtn) {
 
     try {
       await generateMindMapFromGPT();
-      mindMapGenerated = true;
-      // 🎯 成功してもテキストは変更しない（表示そのまま）
+      window.mindMapGenerated = true; // ← グローバルに固定
     } catch (err) {
       console.error("⚠️ マインドマップ生成中にエラー:", err);
       alert("マインドマップ生成に失敗しました。");
@@ -266,6 +267,7 @@ if (generateMindMapGPTBtn) {
     }
   });
 }
+
 
 
 
