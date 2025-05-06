@@ -317,7 +317,8 @@ ${combinedText}
     } finally {
       generateMindMapGPTBtn.disabled = false;
       generateMindMapGPTBtn.textContent = "マインドマップの生成";
-    }
-  });
-}
-});
+  }
+  }); // ← ★ この行が必要
+} // ← ★ これも忘れずに
+
+}); // ← ★★★ 最も重要な閉じカッコ（DOMContentLoadedの終了）★★★
