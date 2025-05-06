@@ -1,6 +1,7 @@
 // ✅ グローバル定義（script_base.js 最上部などに追加）
 window.mindMapGenerated = false;
   let latestExtractedTasks = []; // 🆕 抽出課題を保存
+  let latestMindMapData = null; // マインドマップデータ保持用
 // ✅ SORA Dashboard Script Base - 統合版（NEXCO連動 + ChatGPT課題抽出 + ThinkingZoneマインドマップ／安定運用構成）
 document.addEventListener("DOMContentLoaded", () => {
   const fileInput = document.getElementById("fileInput");
