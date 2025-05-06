@@ -313,7 +313,6 @@ if (generateMindMapGPTBtn) {
 //   });
 // }
 
-});
 
 // ✅ ステップ1：GPTの返答末尾を自動補完する関数（ここに追加）
 function autoFixJSON(jsonString) {
@@ -329,7 +328,7 @@ function autoFixJSON(jsonString) {
 
   return fixed;
 }
-
+});
 
 
 async function extractTextFromPDF(file) {
