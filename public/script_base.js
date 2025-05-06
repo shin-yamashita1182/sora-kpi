@@ -1,13 +1,14 @@
 // ✅ グローバル定義（script_base.js 最上部などに追加）
 window.mindMapGenerated = false;
-  let latestExtractedTasks = []; // 🆕 抽出課題を保存
+let regionInput;
+let noteInput;
+let latestExtractedTasks = []; // 🆕 抽出課題を保存
+
 // ✅ SORA Dashboard Script Base - 統合版（NEXCO連動 + ChatGPT課題抽出 + ThinkingZoneマインドマップ／安定運用構成）
 document.addEventListener("DOMContentLoaded", () => {
   const fileInput = document.getElementById("fileInput");
   const fileNameDisplay = document.getElementById("fileNameDisplay");
   const analyzeBtn = document.getElementById("analyzeBtn");
-  const regionInput = document.getElementById("regionName");
-  const noteInput = document.getElementById("userNote");
   const canvasResult = document.getElementById("canvasResult");
 
   const toggleNexcoBtn = document.getElementById("toggleNexcoBtn");
@@ -35,7 +36,8 @@ document.addEventListener("DOMContentLoaded", () => {
   let region = "";
   let theme = "";
   let minutesText = "";
-
+  regionInput = document.getElementById("regionName");
+  noteInput = document.getElementById("userNote");
 
   // 📁 ファイル選択表示
   if (fileInput) {
