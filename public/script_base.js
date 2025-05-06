@@ -454,22 +454,26 @@ if (!parsed || typeof parsed !== "object" || !parsed.topic) {
   return;
 }
 
-// ✅ モーダル表示とマップ描画
+// ✅ モーダルを開いて前の内容をクリア
 document.getElementById("mapModal").classList.remove("hidden");
+mindMapContent.innerHTML = ""; // 🔄 前回の描画をクリア
 
-console.log("🧠 最終描画データ:", latestMindMapData);
+console.log("🧠 マップデータ:", latestMindMapData);
 
-// 💡 MindElixirが期待する構造にラップ
-const wrappedData = {
-  id: "root",
-  topic: latestMindMapData.topic,
-  children: latestMindMapData.children
-};
+// ✅ topic が無ければ描画しない
+if (!latestMindMapData || typeof latestMindMapData.topic !== "string" || latestMindMapData.topic.trim() === "") {
+  alert("描画エラー：マインドマップの中心テーマ（topic）が取得できていません。");
+  return;
+}
 
+// ✅ データのコピー（念のため）
+const mindData = JSON.parse(JSON.stringify(latestMindMapData));
+
+// ✅ MindElixir 描画
 const mind = new MindElixir({
   el: "#mindmapContainer",
   direction: MindElixir.RIGHT,
-  data: wrappedData,  // ← ここが重要！
+  data: mindData,
   draggable: true,
   contextMenu: true,
   toolBar: true,
@@ -478,6 +482,7 @@ const mind = new MindElixir({
 });
 mind.init();
 mind.scale(0.75);
+
 
 
 // 💾 保存ボタン：存在確認してバインド or 新規作成
