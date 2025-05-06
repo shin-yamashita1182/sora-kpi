@@ -371,7 +371,7 @@ latestMindMapData = JSON.parse(JSON.stringify(parsed));
 const mind = new MindElixir({
   el: '#mindmapContainer',
   direction: MindElixir.RIGHT,
-  data: parsed,
+  data: latestMindMapData,  // ← さっき deep copy したデータを使う
   draggable: true,
   contextMenu: true,
   toolBar: true,
