@@ -190,7 +190,7 @@ if (generateBtn) {
   generateBtn.addEventListener("click", () => {
     if (!analysisDone) {
       alert("先に課題抽出を行ってください。");
-      return;
+      return; // ← ここで止めることで下が開かなくなる！
     }
 
     if (isThinkingVisible) {
@@ -218,6 +218,7 @@ if (generateBtn) {
     isThinkingVisible = true;
   });
 }
+
 
 
   // 🧠 一括マインドマップモーダル出力
