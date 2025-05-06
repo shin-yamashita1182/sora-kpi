@@ -381,18 +381,6 @@ console.log("🧾 combinedText:\n", combinedText); // ← 確認ログ（後で�
 
 
   // ✅ ここで finalPrompt を構築
-let combinedText = `【地域名】：${region}\n【テーマ】：${theme}\n\n【抽出された課題】\n`;
-latestExtractedTasks.forEach((task) => {
-  combinedText += `- ${task}\n`;
-});
-
-combinedText += `\n【住民・関係者の考察】\n`;
-blocks.forEach((block) => {
-  const opinion = block.querySelector("textarea").value.trim();
-  if (opinion) combinedText += `- ${opinion}\n`;
-});
-
-// ✅ 改修後プロンプト
 const finalPrompt = `
 以下は、ある地域のテーマに対して抽出された課題と、住民・関係者による考察です。
 
