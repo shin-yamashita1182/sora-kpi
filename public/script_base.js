@@ -314,8 +314,7 @@ ${combinedText}
 
       const parsed = JSON.parse(jsonText);
       localStorage.setItem("latestMindMapData", JSON.stringify(parsed));
-      const mapWindow = window.open("", "_blank");
-      mapWindow.location.href = "mindmap_viewer.html";
+      window.open("mindmap_viewer.html", "_blank");
       window.mindMapGenerated = true;
 
     } catch (err) {
