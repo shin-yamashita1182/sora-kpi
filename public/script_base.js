@@ -392,6 +392,7 @@ const finalPrompt = `
 - 文字数は必ず2500文字以内
 - 日本語で記述する
 
+${canvasResult}
 ${combinedText}
 `;
 
