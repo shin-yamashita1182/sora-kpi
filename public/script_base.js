@@ -1,14 +1,13 @@
 // ✅ グローバル定義（script_base.js 最上部などに追加）
 window.mindMapGenerated = false;
-let regionInput;
-let noteInput;
-let latestExtractedTasks = []; // 🆕 抽出課題を保存
-
+  let latestExtractedTasks = []; // 🆕 抽出課題を保存
 // ✅ SORA Dashboard Script Base - 統合版（NEXCO連動 + ChatGPT課題抽出 + ThinkingZoneマインドマップ／安定運用構成）
 document.addEventListener("DOMContentLoaded", () => {
   const fileInput = document.getElementById("fileInput");
   const fileNameDisplay = document.getElementById("fileNameDisplay");
   const analyzeBtn = document.getElementById("analyzeBtn");
+  const regionInput = document.getElementById("regionName");
+  const noteInput = document.getElementById("userNote");
   const canvasResult = document.getElementById("canvasResult");
 
   const toggleNexcoBtn = document.getElementById("toggleNexcoBtn");
@@ -33,11 +32,7 @@ document.addEventListener("DOMContentLoaded", () => {
   let uploadedTextContent = "";
   let isAnalyzing = false;
   let latestMindMapData = null; // スクリプトの上の方に追加しておく
-  let region = "";
-  let theme = "";
-  let minutesText = "";
-  regionInput = document.getElementById("regionName");
-  noteInput = document.getElementById("userNote");
+
 
   // 📁 ファイル選択表示
   if (fileInput) {
@@ -61,7 +56,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // 🚗 NEXCO情報表示/取得
   if (toggleNexcoBtn) {
     toggleNexcoBtn.addEventListener("click", () => {
-      region = regionInput.value.trim();
+      const region = regionInput.value.trim();
       if (!region) return alert("地域名を入力してください！");
 
       if (!infoFetched && !isFetching) {
@@ -113,8 +108,8 @@ const prompt = `あなたは実在する施設名に基づいて正確に答え�
   // 💬 ChatGPT連携：課題抽出
   if (analyzeBtn) {
     analyzeBtn.addEventListener("click", async () => {
-      region = regionInput.value.trim();
-      theme = noteInput.value.trim();
+      const region = regionInput.value.trim();
+      const theme = noteInput.value.trim();
 
       if (!region || !theme) {
         alert("地域名とテーマを入力してください。");
@@ -131,11 +126,6 @@ const prompt = `あなたは実在する施設名に基づいて正確に答え�
         return;
       }
 
-// すでに let region を宣言済みならこれでOK（再代入）
-region = regionInput.value.trim();
-theme = noteInput.value.trim();
-minutesText = uploadedTextContent || theme;
-
 const promptTemplate = `
 以下は、ある地域における重要なテーマと、それに関連する会議資料（議事録・ヒアリングメモ等）です。
 
@@ -144,17 +134,16 @@ const promptTemplate = `
 課題は、住民生活、産業、教育、交通、福祉、環境、IT、地域ブランドなど多様な観点から導出し、
 それぞれ住民や行政関係者が読んでも理解しやすいよう、1文または2文程度で簡潔に表現してください。
 
-参考資料が空欄の場合は、地域名やテーマから合理的に推定して課題を出してください。
-ただし、その場合でも説明や注釈文は一切書かず、課題【1】〜【10】のみを出力してください。
+議事録などの参考資料がない場合でも、地域名やテーマから合理的に推定される課題を補完してください。
+出力は【1】〜【10】の番号付きでお願いします。
 
 ---
 
-【地域名】：${region}
-【テーマ】：${theme}
-【参考資料】：
-${minutesText}
+【地域名】：{{region}}  
+【テーマ】：{{theme}}  
+【参考資料】：  
+{{minutesText}}
 `;
-
 
 const prompt = promptTemplate
   .replace("{{region}}", region)
@@ -177,9 +166,8 @@ const canvasResult = document.getElementById("canvasResult");
 canvasResult.innerText = data.result || "課題が取得できませんでした。";
 // 🆕 課題10件を latestExtractedTasks に保存
 const canvasText = canvasResult.innerText;
-const matches = canvasText.match(/【\d+】(.+?)(?=\n|$)/g) || [];
-latestExtractedTasks = matches.map(m => m.replace(/【\d+】/, '').trim());
-
+const matches = [...canvasText.matchAll(/【\d+】(.*?)\n?/g)];
+latestExtractedTasks = matches.map(m => m[1].trim());
 canvasResult.style.maxWidth = "100%"; // または必要なら "95%" 程度に調整可
 canvasResult.style.margin = "20px 0"; // auto を削除し左右寄せ防止
 canvasResult.style.textAlign = "left"; // このままでOK
@@ -315,27 +303,6 @@ if (generateMindMapGPTBtn) {
 
 });
 
-// ✅ ステップ1：GPTの返答末尾を自動補完する関数（ここに追加）
-function autoFixJSON(jsonString) {
-  let fixed = jsonString.replace(/```json|```/g, "").trim();
-
-  // 最も外側だけの閉じ忘れに対応（過剰に足さない）
-  const openBraces = (fixed.match(/{/g) || []).length;
-  const closeBraces = (fixed.match(/}/g) || []).length;
-  const openBrackets = (fixed.match(/\[/g) || []).length;
-  const closeBrackets = (fixed.match(/]/g) || []).length;
-
-  if (closeBraces < openBraces) {
-    fixed += "}".repeat(openBraces - closeBraces);
-  }
-  if (closeBrackets < openBrackets) {
-    fixed += "]".repeat(openBrackets - closeBrackets);
-  }
-
-  return fixed;
-}
-
-
 async function extractTextFromPDF(file) {
   const pdfData = await file.arrayBuffer();
   const pdf = await pdfjsLib.getDocument({ data: pdfData }).promise;
@@ -365,25 +332,19 @@ function drawMindMapFromInputs() {
     });
   });
 
-
-// ✅ 既存の関数
-async function extractTextFromPDF(file) {
-  }
-
 // Safe deep copy（循環参照が入る前に保存）
 latestMindMapData = JSON.parse(JSON.stringify(parsed));
 
 const mind = new MindElixir({
   el: '#mindmapContainer',
   direction: MindElixir.RIGHT,
-  data: json,  // ← ここが正しい
+  data: parsed,  // ← GPTが返す形式に合わせる
   draggable: true,
   contextMenu: true,
   toolBar: true,
   nodeMenu: true,
   keypress: true
 });
-
 
 
   mind.init();
@@ -413,88 +374,64 @@ async function generateMindMapFromGPT() {
   });
 
   // ✅ ここで finalPrompt を構築
-const finalPrompt = `
-以下は、地域課題と住民の考察です。中心テーマを「${region}：${theme}」として、MindElixir.js形式（topic, children）で放射状マインドマップ構造を作成してください。
+  const finalPrompt = `
+以下は、地域課題とそれに対する住民の考察です。これをもとに、中心テーマを「${region}：${theme}」とした放射状マインドマップ構造を構築してください。
 
-以下の条件を厳守してください：
-
-- 出力はJSONオブジェクトのみ（コードブロックや説明は禁止）
-- 最後の } や ] は「多くも少なくもせず」正確に閉じてください
-- children構造は最大で3階層まで
-- 文字数は必ず2500文字以内
-- 日本語で記述する
+MindElixir.jsで描画可能な構造（topic, children）にしてください。
+日本語を使い、重要な項目は深掘りし、3階層以上になるように構成してください。
+出力は必ずJSONオブジェクトのみで返してください。コードブロック（\`\`\`）や説明文は一切含めないでください。
 
 ${combinedText}
 `;
-  
+
   try {
     const res = await fetch("/api/chatgpt", {
-  method: "POST",
-  headers: { "Content-Type": "application/json" },
-  body: JSON.stringify({ prompt: finalPrompt })
-});
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ prompt: finalPrompt })
+    });
 
-const data = await res.json();
-console.log("🧠 GPTの返答（raw）:", data.result);
+    const data = await res.json();
+    let cleaned = data.result.trim().replace(/^```json|^```|^json|```$/g, "");
+    const endIndex = cleaned.lastIndexOf("}");
+    if (endIndex !== -1) cleaned = cleaned.slice(0, endIndex + 1);
 
-// 🧼 GPTが返すコードブロックや説明を除去
-let cleaned = autoFixJSON(data.result);
+    const parsed = JSON.parse(cleaned);
+    // ⬇⬇⬇ これを追加
+    latestMindMapData = parsed;
 
-let parsed;
-try {
-  parsed = JSON.parse(cleaned);
-  latestMindMapData = parsed;
-} catch (e) {
-  console.error("❌ JSONパースエラー:", cleaned);
-  alert("ChatGPTの返答に構文エラーがあります。マインドマップを生成できません。");
-  return;
-}
-
-// 🧼 children: [] を除去
-function sanitize(node) {
-  if (Array.isArray(node.children)) {
-    if (node.children.length === 0) {
-      delete node.children;
-    } else {
-      node.children.forEach(sanitize);
+    // 🧼 children: [] を除去
+    function sanitize(node) {
+      if (Array.isArray(node.children)) {
+        if (node.children.length === 0) {
+          delete node.children;
+        } else {
+          node.children.forEach(sanitize);
+        }
+      }
     }
-  }
-}
-sanitize(parsed);
+    sanitize(parsed);
 
-if (!parsed || typeof parsed !== "object" || !parsed.topic) {
-  alert("マインドマップの構造が不正です。");
-  return;
-}
+    if (!parsed || typeof parsed !== "object" || !parsed.topic) {
+      alert("マインドマップの構造が不正です。");
+      return;
+    }
 
-// ✅ モーダルを開いて前の内容をクリア
-document.getElementById("mapModal").classList.remove("hidden");
-mindMapContent.innerHTML = ""; // 🔄 前回の描画をクリア
+    document.getElementById("mapModal").classList.remove("hidden");
 
-console.log("🧠 マップデータ:", latestMindMapData);
+    const mind = new MindElixir({
+      el: "#mindmapContainer",
+      direction: MindElixir.RIGHT,
+      data: { nodeData: parsed },
+      draggable: true,
+      contextMenu: true,
+      toolBar: true,
+      nodeMenu: true,
+      keypress: true
+    });
 
-// ✅ topicが無いなど異常なデータのときは中止
-if (!latestMindMapData || typeof latestMindMapData.topic !== "string" || latestMindMapData.topic.trim() === "") {
-  alert("描画エラー：マインドマップの中心テーマ（topic）が取得できていません。");
-  return;
-}
-
-// ✅ データのコピー（念のため）
-const mindData = JSON.parse(JSON.stringify(latestMindMapData));
-
-// ✅ MindElixir描画
-const mind = new MindElixir({
-  el: "#mindmapContainer",
-  direction: MindElixir.RIGHT,
-  data: mindData,
-  draggable: true,
-  contextMenu: true,
-  toolBar: true,
-  nodeMenu: true,
-  keypress: true
-});
-mind.init();
-mind.scale(0.75);
+    mind.init();
+    mind.scale(0.75);
 
 // 💾 保存ボタン：存在確認してバインド or 新規作成
 const existingSaveBtn = document.getElementById("saveMindMapBtn");
