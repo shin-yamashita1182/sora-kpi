@@ -319,13 +319,18 @@ if (generateMindMapGPTBtn) {
 function autoFixJSON(jsonString) {
   let fixed = jsonString.replace(/```json|```/g, "").trim();
 
+  // 最も外側だけの閉じ忘れに対応（過剰に足さない）
   const openBraces = (fixed.match(/{/g) || []).length;
   const closeBraces = (fixed.match(/}/g) || []).length;
   const openBrackets = (fixed.match(/\[/g) || []).length;
   const closeBrackets = (fixed.match(/]/g) || []).length;
 
-  fixed += "}".repeat(openBraces - closeBraces);
-  fixed += "]".repeat(openBrackets - closeBrackets);
+  if (closeBraces < openBraces) {
+    fixed += "}".repeat(openBraces - closeBraces);
+  }
+  if (closeBrackets < openBrackets) {
+    fixed += "]".repeat(openBrackets - closeBrackets);
+  }
 
   return fixed;
 }
@@ -411,16 +416,16 @@ async function generateMindMapFromGPT() {
 const finalPrompt = `
 以下は、地域課題と住民の考察です。中心テーマを「${region}：${theme}」として、MindElixir.js形式（topic, children）で放射状マインドマップ構造を作成してください。
 
-出力はJSONオブジェクトのみ。コードブロック（\`\`\`）や注釈・説明文は一切禁止です。
+以下の条件を厳守してください：
 
-- 日本語で書く
-- children構造は3階層まで
+- 出力はJSONオブジェクトのみ（コードブロックや説明は禁止）
+- 最後の } や ] は「多くも少なくもせず」正確に閉じてください
+- children構造は最大で3階層まで
 - 文字数は必ず2500文字以内
-- 最後の } までJSONを閉じてください
+- 日本語で記述する
 
 ${combinedText}
 `;
-
   
   try {
     const res = await fetch("/api/chatgpt", {
