@@ -188,37 +188,36 @@ analysisDone = true;
 
 // 🧠 ThinkingZone展開切替（5件のみ・重複なし）
 if (generateBtn) {
-  generateBtn.addEventListener("click", () => {
-    if (!analysisDone) {
-      alert("先に課題抽出を行ってください。");
-      return; // ← ここで止めることで下が開かなくなる！
-    }
+generateBtn.addEventListener("click", () => {
+  if (!analysisDone) {
+    alert("先に課題抽出を行ってください。");
+    return;
+  }
 
-    if (isThinkingVisible) {
-      thinkingContainer.innerHTML = "";
-      isThinkingVisible = false;
-      return;
-    }
+  if (isThinkingVisible) {
+    // 一度展開されたら非表示にせずにスキップするだけ
+    return;
+  }
 
-    const tasks = [
-      "観光需要回復のための収益戦略を検討する",
-      "インフラ更新計画と優先順位づけの仕組みを構築する",
-      "職員定着を促すキャリア形成支援策を考える",
-      "移住制度の周知・利用促進に向けた改善策を検討",
-      "避難所整備の加速化と計画再構築の方法を考える"
-    ];
+  thinkingContainer.innerHTML = "";
+  const tasks = [
+    "観光需要回復のための収益戦略を検討する",
+    "インフラ更新計画と優先順位づけの仕組みを構築する",
+    "職員定着を促すキャリア形成支援策を考える",
+    "移住制度の周知・利用促進に向けた改善策を検討",
+    "避難所整備の加速化と計画再構築の方法を考える"
+  ];
 
-    thinkingContainer.innerHTML = "";
-    tasks.forEach((task, i) => {
-      const block = document.createElement("div");
-      block.className = "thinking-block";
-      block.innerHTML = `<p><strong>対策${i + 1}:</strong> ${task}</p><textarea rows="3" placeholder="考えや背景を入力してください"></textarea>`;
-      thinkingContainer.appendChild(block);
-    });
-
-    isThinkingVisible = true;
+  tasks.forEach((task, i) => {
+    const block = document.createElement("div");
+    block.className = "thinking-block";
+    block.innerHTML = `<p><strong>対策${i + 1}:</strong> ${task}</p><textarea rows="3" placeholder="考えや背景を入力してください"></textarea>`;
+    thinkingContainer.appendChild(block);
   });
-}
+
+  isThinkingVisible = true;
+});
+
 
 
 
