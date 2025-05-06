@@ -381,28 +381,25 @@ console.log("🧾 combinedText:\n", combinedText); // ← 確認ログ（後で�
 
 
   // ✅ ここで finalPrompt を構築
-const finalPrompt = `
-以下は、地域課題と住民の考察です。中心テーマを「${region}：${theme}」として、MindElixir.js形式（topic, children）で放射状マインドマップ構造を作成してください。
+combinedText += `
 
-以下の条件を厳守してください：
+上記の課題と考察に基づき、以下の条件でマインドマップ構造を出力してください：
 
-- 出力はJSONオブジェクトのみ（コードブロックや説明は禁止）
-- 最後の } や ] は「多くも少なくもせず」正確に閉じてください
-- children構造は最大で3階層まで
-- 文字数は必ず2500文字以内
-- 日本語で記述する
-
-${combinedText}
+- JSON形式（コードブロック禁止・注釈禁止・囲い文字不要）
+- MindElixir.js形式で「topic」「children」を使った放射型マップ
+- 中心ノードに「${region}：${theme}」を設定
+- 第一階層に【1】〜【10】の課題を配置（課題文をそのまま表示）
+- 各課題の子ノードとして、対応する考察や住民の意見を1〜2件ずつ追加（ある場合）
+- childrenがない場合は空配列ではなく children 自体を省略
+- 出力は1つの JSON オブジェクトのみ、余分なテキスト・記号・説明は一切不要
+- 最後の } まで正しく閉じてください
 `;
-
-
-
 
   try {
     const res = await fetch("/api/chatgpt", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ prompt: finalPrompt })
+      body: JSON.stringify({ prompt: combinedText })
     });
 
     const data = await res.json();
