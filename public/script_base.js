@@ -392,13 +392,36 @@ ${combinedText}
     });
 
     const data = await res.json();
-    let cleaned = data.result.trim().replace(/^```json|^```|^json|```$/g, "");
-    const endIndex = cleaned.lastIndexOf("}");
-    if (endIndex !== -1) cleaned = cleaned.slice(0, endIndex + 1);
+    const parsed = {
+  topic: "長崎県五島市：地域活性化と人口定着",
+  children: [
+    {
+      topic: "観光振興",
+      children: [
+        { topic: "観光資源の再発見とプロモーション強化" },
+        { topic: "交通アクセスの改善" },
+        { topic: "地元ガイドの育成と活用" }
+      ]
+    },
+    {
+      topic: "移住促進",
+      children: [
+        { topic: "住居支援と空き家バンクの活用" },
+        { topic: "定住支援金制度の周知" }
+      ]
+    }
+  ]
+};
 
-    const parsed = JSON.parse(cleaned);
-    // ⬇⬇⬇ これを追加
-    latestMindMapData = parsed;
+latestMindMapData = parsed;
+
+    // 🔽 GPT出力の整形・パース処理は一時停止中（テスト用サンプルで代用）
+    // let cleaned = data.result.trim().replace(/^```json|^```|^json|```$/g, "");
+    // const endIndex = cleaned.lastIndexOf("}");
+    // if (endIndex !== -1) cleaned = cleaned.slice(0, endIndex + 1);
+
+    // const parsed = JSON.parse(cleaned);
+    // latestMindMapData = parsed;
 
     // 🧼 children: [] を除去
     function sanitize(node) {
