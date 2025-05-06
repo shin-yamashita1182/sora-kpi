@@ -216,15 +216,23 @@ if (generateBtn) {
 
 // ✅ 分析対策ボタン（展開／閉じる）制御
 const toggleStrategyBtn = document.getElementById("toggleStrategyBtn");
+console.log("🔍 toggleStrategyBtn:", toggleStrategyBtn);  // ← 追加！
 
 if (toggleStrategyBtn) {
   toggleStrategyBtn.addEventListener("click", () => {
+    console.log("🟢 分析対策ボタンがクリックされました");
     if (!analysisDone) {
       alert("先に課題抽出を行ってください。");
       return;
     }
 
     const strategySection = document.getElementById("coreMasterContainer");
+    console.log("📦 strategySection:", strategySection); // ← 追加！
+    if (!strategySection) {
+      alert("表示対象のエリアが見つかりません。");
+      return;
+    }
+
     strategySection.classList.toggle("hidden");
 
     toggleStrategyBtn.textContent = strategySection.classList.contains("hidden")
@@ -232,7 +240,6 @@ if (toggleStrategyBtn) {
       : "分析対策（閉じる）";
   });
 }
-
 
   // 🧠 一括マインドマップモーダル出力
   if (generateAllBtn) {
