@@ -59,7 +59,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // 🚗 NEXCO情報表示/取得
   if (toggleNexcoBtn) {
     toggleNexcoBtn.addEventListener("click", () => {
-      const region = regionInput.value.trim();
+      region = regionInput.value.trim();
       if (!region) return alert("地域名を入力してください！");
 
       if (!infoFetched && !isFetching) {
@@ -111,8 +111,8 @@ const prompt = `あなたは実在する施設名に基づいて正確に答え�
   // 💬 ChatGPT連携：課題抽出
   if (analyzeBtn) {
     analyzeBtn.addEventListener("click", async () => {
-      const region = regionInput.value.trim();
-      const theme = noteInput.value.trim();
+      region = regionInput.value.trim();
+      theme = noteInput.value.trim();
 
       if (!region || !theme) {
         alert("地域名とテーマを入力してください。");
