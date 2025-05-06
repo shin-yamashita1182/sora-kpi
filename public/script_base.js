@@ -373,108 +373,61 @@ async function generateMindMapFromGPT() {
 
   console.log("🧾 combinedText:\n", combinedText);
 
-  const finalPrompt = `
-以下は、地域課題と住民の考察です。中心テーマを「${region}：${theme}」として、MindElixir.js形式（topic, children）で放射状マインドマップ構造を作成してください。
+  const prompt = `
+以下は、地域課題と住民の考察です。中心テーマを「${region}：${theme}」として、以下のようなツリー形式で構造化してください：
 
-出力はJSONオブジェクトのみ。コードブロック（\`\`\`）や注釈・説明文は一切禁止です。
-最後の } や ] は多くも少なくもせず、正確に閉じてください。
+例：
+中心：佐賀市：観光
+  └ 課題1：観光客の減少
+       └ 施策A：宿泊施設の誘致支援
+       └ 施策B：イベント開催の推進
+  └ 課題2：観光資源のデジタル化
+       └ 施策A：バーチャルツアー構築
+       └ 施策B：観光アプリの整備
 
-- 日本語で書く
-- children構造は3階層まで
-- 文字数は必ず2500文字以内
-- 最後の } までJSONを閉じてください
+- ツリー構造は最大3階層
+- 施策は1課題につき2～3個程度
+- Markdown記法やJSON構造は禁止。テキストツリーで構造表現
+- 出力は日本語のみ、冒頭に「中心：」と明記してください
 
 ${combinedText}
-`;
+  `;
 
   try {
     const res = await fetch("/api/chatgpt", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ prompt: finalPrompt })
+      body: JSON.stringify({ prompt })
     });
 
     const data = await res.json();
-    let cleaned = data.result.trim().replace(/^```json|^```|^json|```$/g, "");
-    const endIndex = cleaned.lastIndexOf("}");
-    if (endIndex !== -1) cleaned = cleaned.slice(0, endIndex + 1);
+    const result = data.result?.trim() || "出力に失敗しました。";
+    
+    // 表示：モーダル開く
+    const modal = document.getElementById("mapModal");
+    const container = document.getElementById("mindmapContainer");
+    container.innerHTML = `<pre style="white-space:pre-wrap; font-family:inherit;">${result}</pre>`;
+    modal.classList.remove("hidden");
 
-    const parsed = JSON.parse(cleaned);
-    latestMindMapData = parsed;
-
-    // children: [] を除去
-    function sanitize(node) {
-      if (Array.isArray(node.children)) {
-        if (node.children.length === 0) {
-          delete node.children;
-        } else {
-          node.children.forEach(sanitize);
-        }
-      }
-    }
-    sanitize(parsed);
-
-    if (!parsed || typeof parsed !== "object" || !parsed.topic) {
-      alert("マインドマップの構造が不正です。");
-      return;
-    }
-
-    document.getElementById("mapModal").classList.remove("hidden");
-
-    const mind = new MindElixir({
-      el: "#mindmapContainer",
-      direction: MindElixir.RIGHT,
-      data: { nodeData: parsed },
-      draggable: true,
-      contextMenu: true,
-      toolBar: true,
-      nodeMenu: true,
-      keypress: true
-    });
-
-    mind.init();
-    mind.scale(0.75);
-
-    // ✅ 保存ボタン処理（19:30の安定構成）
-    const existingSaveBtn = document.getElementById("saveMindMapBtn");
-
-    const handleSave = () => {
-      console.log("🖱️ 保存ボタンクリックされた");
-      try {
-        const cleanCopy = JSON.parse(JSON.stringify(latestMindMapData, (key, value) => {
-          if (key === "parent") return undefined;
-          return value;
-        }));
-
-        const blob = new Blob([JSON.stringify(cleanCopy, null, 2)], { type: "application/json" });
+    // 保存ボタン処理
+    const saveBtn = document.getElementById("saveMindMapBtn");
+    if (saveBtn) {
+      saveBtn.onclick = () => {
+        const blob = new Blob([result], { type: "text/plain;charset=utf-8" });
         const url = URL.createObjectURL(blob);
         const a = document.createElement("a");
         a.href = url;
-        a.download = `mindmap_${region}_${theme}.json`;
+        a.download = `mindmap_${region}_${theme}.txt`;
         document.body.appendChild(a);
         a.click();
         document.body.removeChild(a);
         URL.revokeObjectURL(url);
-        console.log("✅ 保存完了");
-      } catch (err) {
-        console.error("保存失敗:", err);
-        alert("マインドマップ保存に失敗しました。");
-      }
-    };
-
-    if (existingSaveBtn) {
-      existingSaveBtn.onclick = handleSave;
-    } else {
-      const saveBtn = document.createElement("button");
-      saveBtn.id = "saveMindMapBtn";
-      saveBtn.className = "modal-save-btn";
-      saveBtn.textContent = "マップを保存";
-      saveBtn.addEventListener("click", handleSave);
-      document.querySelector("#mapModal .modal-content").appendChild(saveBtn);
+        console.log("✅ テキスト保存完了");
+      };
     }
 
   } catch (err) {
-    console.error("🧠 マインドマップ生成エラー:", err);
+    console.error("🧠 深掘りエラー:", err);
     alert("ChatGPTによるマインドマップ生成に失敗しました。");
   }
 }
