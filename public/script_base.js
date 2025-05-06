@@ -241,16 +241,16 @@ let mindMapGenerated = false; // ← 追加するグローバル変数
 
 if (generateMindMapGPTBtn) {
   generateMindMapGPTBtn.addEventListener("click", async () => {
-    const region = regionInput.value.trim();
-    const theme = noteInput.value.trim();
-
     if (window.mindMapGenerated) {
-      alert("すでにマインドマップは生成されています。ページを更新するか、条件を変更してください。");
+      alert("すでにマインドマップは生成されています。ページを更新するか、内容を変更してください。");
       return;
     }
 
+    const region = regionInput.value.trim();
+    const theme = noteInput.value.trim();
+
     if (!region || !theme || latestExtractedTasks.length !== 10) {
-      alert("先に課題抽出を行ってください。");
+      alert("地域名・テーマ・課題が不足しています。課題抽出を先に行ってください。");
       return;
     }
 
@@ -264,17 +264,19 @@ if (generateMindMapGPTBtn) {
     generateMindMapGPTBtn.disabled = true;
     generateMindMapGPTBtn.textContent = "マインドマップ生成中…";
 
-    // 🔁 GPTプロンプト用テキスト生成
-    const combinedText = `【地域名】：${region}\n【テーマ】：${theme}\n\n以下は抽出された課題です。\n` +
-      latestExtractedTasks.map((task, i) => `【${i + 1}】${task}`).join("\n") +
-      `\n\n以下は住民・関係者からの考察です（任意）：\n` +
-      [...document.querySelectorAll(".thinking-block textarea")]
-        .map(t => t.value.trim())
-        .filter(Boolean)
-        .map(t => `・${t}`)
-        .join("\n");
+    try {
+      let combinedText = `【地域名】：${region}\n【テーマ】：${theme}\n\n以下は抽出された課題です。\n`;
+      latestExtractedTasks.forEach((task, i) => {
+        combinedText += `【${i + 1}】${task}\n`;
+      });
 
-    const prompt = `
+      combinedText += `\n以下は住民・関係者からの考察です（任意）：\n`;
+      document.querySelectorAll(".thinking-block textarea").forEach((textarea) => {
+        const opinion = textarea.value.trim();
+        if (opinion) combinedText += `・${opinion}\n`;
+      });
+
+      const prompt = `
 以下は、地域課題と住民の考察です。中心テーマを「${region}：${theme}」として、MindElixir.js形式（topic, children）で放射状マインドマップ構造を作成してください。
 
 出力はJSONオブジェクトのみ。コードブロック（\`\`\`）や注釈・説明文は一切禁止です。
@@ -286,9 +288,8 @@ if (generateMindMapGPTBtn) {
 - 最後の } までJSONを閉じてください
 
 ${combinedText}
-    `;
+`;
 
-    try {
       const res = await fetch("/api/chatgpt", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -296,20 +297,26 @@ ${combinedText}
       });
 
       const data = await res.json();
-      const raw = data.result.trim();
+      const jsonText = data.result?.trim();
 
-      // ✅ JSON文字列としてパース（例外処理含む）
-      const parsed = JSON.parse(raw);
+      if (!jsonText.startsWith("{") && !jsonText.startsWith("[")) {
+        alert("ChatGPTからの出力がJSON形式ではありません。");
+        console.error("応答:", jsonText);
+        return;
+      }
+
+      const parsed = JSON.parse(jsonText);
       localStorage.setItem("latestMindMapData", JSON.stringify(parsed));
+      window.open("mindmap_viewer.html", "_blank");
 
       window.mindMapGenerated = true;
-      window.open("mindmap_viewer.html", "_blank");
+
     } catch (err) {
-      console.error("🧠 JSONパースエラー:", err);
-      alert("マインドマップのJSONが不正です。もう一度お試しください。");
+      console.error("⚠️ マインドマップ生成中にエラー:", err);
+      alert("マインドマップ生成に失敗しました。");
     } finally {
       generateMindMapGPTBtn.disabled = false;
-      generateMindMapGPTBtn.textContent = "🧠 マインドマップの生成";
+      generateMindMapGPTBtn.textContent = "マインドマップの生成";
     }
   });
 }
