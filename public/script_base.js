@@ -383,7 +383,6 @@ async function generateMindMapFromGPT() {
   });
 
   // ✅ ここで finalPrompt を構築
-  const finalPrompt = `
 const finalPrompt = `
 以下は、地域課題とそれに対する住民の考察です。これをもとに、中心テーマを「${region}：${theme}」とした放射状マインドマップ構造を構築してください。
 
@@ -393,7 +392,7 @@ MindElixir.jsで描画可能な構造（topic, children）にしてください�
 出力は必ず次のJSON構造に従ってください（説明文やコードブロックは禁止）：
 
 {
-  "topic": "中心テーマ名（例：◯◯地域の課題全体）",
+  "topic": "中心テーマ名 (例: ◯◯地域の課題全体)",
   "children": [
     {
       "topic": "課題1のタイトル",
@@ -410,6 +409,7 @@ MindElixir.jsで描画可能な構造（topic, children）にしてください�
     }
   ]
 }
+
 ※出力はJSONのみ、コードブロック（\`\`\`）や注釈文は一切含めないでください。
 
 ${combinedText}
