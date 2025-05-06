@@ -241,193 +241,75 @@ let mindMapGenerated = false; // ← 追加するグローバル変数
 
 if (generateMindMapGPTBtn) {
   generateMindMapGPTBtn.addEventListener("click", async () => {
+    const region = regionInput.value.trim();
+    const theme = noteInput.value.trim();
+
     if (window.mindMapGenerated) {
       alert("すでにマインドマップは生成されています。ページを更新するか、条件を変更してください。");
       return;
     }
 
-    if (!regionInput.value.trim() || !noteInput.value.trim() || latestExtractedTasks.length !== 10) {
+    if (!region || !theme || latestExtractedTasks.length !== 10) {
       alert("先に課題抽出を行ってください。");
       return;
     }
-// ✅ 🛑 少なくとも1つの対策が入力されているかを確認
+
     const hasAnyOpinion = [...document.querySelectorAll(".thinking-block textarea")]
       .some(textarea => textarea.value.trim().length > 0);
     if (!hasAnyOpinion) {
       alert("少なくとも1つの考察を入力してください。");
       return;
     }
-    
+
     generateMindMapGPTBtn.disabled = true;
     generateMindMapGPTBtn.textContent = "マインドマップ生成中…";
 
-    try {
-      await generateMindMapFromGPT();
-      window.mindMapGenerated = true; // ← グローバルに固定
-    } catch (err) {
-      console.error("⚠️ マインドマップ生成中にエラー:", err);
-      alert("マインドマップ生成に失敗しました。");
-      generateMindMapGPTBtn.disabled = false;
-      generateMindMapGPTBtn.textContent = "マインドマップの生成";
-    }
-  });
-}
+    // 🔁 GPTプロンプト用テキスト生成
+    const combinedText = `【地域名】：${region}\n【テーマ】：${theme}\n\n以下は抽出された課題です。\n` +
+      latestExtractedTasks.map((task, i) => `【${i + 1}】${task}`).join("\n") +
+      `\n\n以下は住民・関係者からの考察です（任意）：\n` +
+      [...document.querySelectorAll(".thinking-block textarea")]
+        .map(t => t.value.trim())
+        .filter(Boolean)
+        .map(t => `・${t}`)
+        .join("\n");
 
+    const prompt = `
+以下は、地域課題と住民の考察です。中心テーマを「${region}：${theme}」として、MindElixir.js形式（topic, children）で放射状マインドマップ構造を作成してください。
 
+出力はJSONオブジェクトのみ。コードブロック（\`\`\`）や注釈・説明文は一切禁止です。
+最後の } や ] は多くも少なくもせず、正確に閉じてください。
 
-
-
-  if (closeMindMapBtn) {
-    closeMindMapBtn.addEventListener("click", () => {
-      mindMapModal.classList.add("hidden");
-    });
-  }
-
-
-// ✅ 🆕 全画面トグル機能（現在は一時無効化中）
-// const toggleFullscreenBtn = document.getElementById("toggleFullscreenMap");
-// const mapModalContent = document.querySelector("#mapModal .modal-content");
-
-// if (toggleFullscreenBtn && mapModalContent) {
-//   let isFullscreen = false;
-
-//   toggleFullscreenBtn.addEventListener("click", () => {
-//     isFullscreen = !isFullscreen;
-//     mapModalContent.classList.toggle("fullscreen-modal", isFullscreen);
-//     toggleFullscreenBtn.textContent = isFullscreen ? "🗗" : "🔳";
-//     toggleFullscreenBtn.title = isFullscreen ? "元に戻す" : "全画面化";
-//   });
-// }
-
-});
-
-async function extractTextFromPDF(file) {
-  const pdfData = await file.arrayBuffer();
-  const pdf = await pdfjsLib.getDocument({ data: pdfData }).promise;
-
-  let fullText = '';
-  for (let i = 1; i <= pdf.numPages; i++) {
-    const page = await pdf.getPage(i);
-    const content = await page.getTextContent();
-    fullText += content.items.map(item => item.str).join(' ') + '\n';
-  }
-  return fullText;
-}
-// 🧠 マインドマップ描画（ThinkingZone入力 → MindElixirで可視化）
-function drawMindMapFromInputs() {
-  const blocks = document.querySelectorAll(".thinking-block");
-  const mindmapContainer = document.getElementById("mindmapContainer");
-  mindmapContainer.innerHTML = ""; // 二重描画防止
-
-  const children = [];
-
-  blocks.forEach((block, index) => {
-    const task = block.querySelector("p").innerText || `課題${index + 1}`;
-    const opinion = block.querySelector("textarea").value.trim();
-    children.push({
-      topic: task,
-      children: opinion ? [{ topic: `考察: ${opinion}` }] : []
-    });
-  });
-
-// Safe deep copy（循環参照が入る前に保存）
-latestMindMapData = JSON.parse(JSON.stringify(parsed));
-
-const mind = new MindElixir({
-  el: '#mindmapContainer',
-  direction: MindElixir.RIGHT,
-  data: parsed,  // ← GPTが返す形式に合わせる
-  draggable: true,
-  contextMenu: true,
-  toolBar: true,
-  nodeMenu: true,
-  keypress: true
-});
-
-
-  mind.init();
-}
-
-async function generateMindMapFromGPT() {
-  console.log("🧠 generateMindMapFromGPTが呼び出されました");
-
-  const blocks = document.querySelectorAll(".thinking-block");
-  const region = document.getElementById("regionName").value.trim();
-  const theme = document.getElementById("userNote").value.trim();
-
-  if (!region || !theme || latestExtractedTasks.length !== 10) {
-    alert("課題またはテーマ情報が不足しています。先に課題抽出を行ってください。");
-    return;
-  }
-
-  let combinedText = `【地域名】：${region}\n【テーマ】：${theme}\n\n以下は抽出された課題です。\n`;
-  latestExtractedTasks.forEach((task, i) => {
-    combinedText += `【${i + 1}】${task}\n`;
-  });
-
-  combinedText += `\n以下は住民・関係者からの考察です（任意）：\n`;
-  blocks.forEach((block) => {
-    const opinion = block.querySelector("textarea").value.trim();
-    if (opinion) combinedText += `・${opinion}\n`;
-  });
-
-  console.log("🧾 combinedText:\n", combinedText);
-
-  const prompt = `
-以下は、地域課題と住民の考察です。中心テーマを「${region}：${theme}」として、以下のようなツリー形式で構造化してください：
-
-例：
-中心：佐賀市：観光
-  └ 課題1：観光客の減少
-       └ 施策A：宿泊施設の誘致支援
-       └ 施策B：イベント開催の推進
-  └ 課題2：観光資源のデジタル化
-       └ 施策A：バーチャルツアー構築
-       └ 施策B：観光アプリの整備
-
-- ツリー構造は最大3階層
-- 施策は1課題につき2～3個程度
-- Markdown記法やJSON構造は禁止。テキストツリーで構造表現
-- 出力は日本語のみ、冒頭に「中心：」と明記してください
+- 日本語で書く
+- children構造は3階層まで
+- 文字数は必ず2500文字以内
+- 最後の } までJSONを閉じてください
 
 ${combinedText}
-  `;
+    `;
 
-  try {
-    const res = await fetch("/api/chatgpt", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ prompt })
-    });
+    try {
+      const res = await fetch("/api/chatgpt", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ prompt })
+      });
 
-    const data = await res.json();
-    const result = data.result?.trim() || "出力に失敗しました。";
-    
-    // 表示：モーダル開く
-    const modal = document.getElementById("mapModal");
-    const container = document.getElementById("mindmapContainer");
-    container.innerHTML = `<pre style="white-space:pre-wrap; font-family:inherit;">${result}</pre>`;
-    modal.classList.remove("hidden");
+      const data = await res.json();
+      const raw = data.result.trim();
 
-    // 保存ボタン処理
-    const saveBtn = document.getElementById("saveMindMapBtn");
-    if (saveBtn) {
-      saveBtn.onclick = () => {
-        const blob = new Blob([result], { type: "text/plain;charset=utf-8" });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement("a");
-        a.href = url;
-        a.download = `mindmap_${region}_${theme}.txt`;
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        URL.revokeObjectURL(url);
-        console.log("✅ テキスト保存完了");
-      };
+      // ✅ JSON文字列としてパース（例外処理含む）
+      const parsed = JSON.parse(raw);
+      localStorage.setItem("latestMindMapData", JSON.stringify(parsed));
+
+      window.mindMapGenerated = true;
+      window.open("mindmap_viewer.html", "_blank");
+    } catch (err) {
+      console.error("🧠 JSONパースエラー:", err);
+      alert("マインドマップのJSONが不正です。もう一度お試しください。");
+    } finally {
+      generateMindMapGPTBtn.disabled = false;
+      generateMindMapGPTBtn.textContent = "🧠 マインドマップの生成";
     }
-
-  } catch (err) {
-    console.error("🧠 深掘りエラー:", err);
-    alert("ChatGPTによるマインドマップ生成に失敗しました。");
-  }
+  });
 }
