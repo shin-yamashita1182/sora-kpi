@@ -307,8 +307,8 @@ ${combinedText}
 
       const parsed = JSON.parse(jsonText);
       localStorage.setItem("latestMindMapData", JSON.stringify(parsed));
-      window.open("mindmap_viewer.html", "_blank");
-
+      const mapWindow = window.open("", "_blank");
+      mapWindow.location.href = "mindmap_viewer.html";
       window.mindMapGenerated = true;
 
     } catch (err) {
