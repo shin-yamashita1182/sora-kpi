@@ -285,6 +285,7 @@ if (generateMindMapGPTBtn) {
 以下は、地域課題と住民の考察です。中心テーマを「${region}：${theme}」として、MindElixir.js形式（topic, children）で放射状マインドマップ構造を作成してください。
 
 出力はJSONオブジェクトのみ。コードブロック（\`\`\`）や注釈・説明文は一切禁止です。
+出力には絶対に「```」や「```json」などのコードブロック記法を含めないでください。
 最後の } や ] は多くも少なくもせず、正確に閉じてください。
 
 - 日本語で書く
@@ -306,13 +307,16 @@ ${combinedText}
       console.log("=== ChatGPT生の出力 ===");
       console.log(jsonText);
 
+      const cleanedJson = jsonText.replace(/^```json\s*|\s*```$/g, "").trim();
+
+
       if (!jsonText.startsWith("{") && !jsonText.startsWith("[")) {
         alert("ChatGPTからの出力がJSON形式ではありません。");
         console.error("応答:", jsonText);
         return;
       }
 
-      const parsed = JSON.parse(jsonText);
+      const parsed = JSON.parse(cleanedJson);
       localStorage.setItem("latestMindMapData", JSON.stringify(parsed));
       window.open("mindmap_viewer.html", "_blank");
       window.mindMapGenerated = true;
