@@ -299,7 +299,7 @@ if (generateMindMapGPTBtn) {
 //   });
 // }
 
-});
+
 
 async function extractTextFromPDF(file) {
   const pdfData = await file.arrayBuffer();
