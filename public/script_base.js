@@ -480,3 +480,60 @@ ${combinedText}
     alert("ChatGPTによるマインドマップ生成に失敗しました。");
   }
 }
+// ✅ 🔄 JSON → MindElixir形式へ変換
+function convertTasksToMindElixir(data) {
+  return {
+    topic: `${data.region}：${data.theme}`,
+    children: data.tasks.map((task, i) => {
+      const node = { topic: task };
+      if (data.opinions && data.opinions[i] && data.opinions[i].trim()) {
+        node.children = [{ topic: `考察: ${data.opinions[i].trim()}` }];
+      }
+      return node;
+    })
+  };
+}
+
+// ✅ 🧠 MindElixir描画処理（共通化）
+function drawMindMap(data) {
+  const container = document.getElementById("mindmapContainer");
+  container.innerHTML = "";
+
+  const mind = new MindElixir({
+    el: "#mindmapContainer",
+    direction: MindElixir.RIGHT,
+    data: { nodeData: data },
+    draggable: true,
+    contextMenu: true,
+    toolBar: true,
+    nodeMenu: true,
+    keypress: true
+  });
+
+  mind.init();
+  mind.scale(0.75);
+}
+
+// ✅ 📂 ローカルJSONファイル読込 → マップ描画処理
+document.getElementById("loadAndDrawMap").addEventListener("click", () => {
+  const fileInput = document.getElementById("taskFileInput");
+  const file = fileInput.files[0];
+  if (!file) {
+    alert("課題ファイル（.json）を選択してください。");
+    return;
+  }
+
+  const reader = new FileReader();
+  reader.onload = function (event) {
+    try {
+      const loadedData = JSON.parse(event.target.result);
+      const parsed = convertTasksToMindElixir(loadedData);
+      drawMindMap(parsed);
+      document.getElementById("mapModal").classList.remove("hidden");
+    } catch (err) {
+      console.error("📛 読み込み/描画エラー:", err);
+      alert("ファイルの形式が正しくありません。");
+    }
+  };
+  reader.readAsText(file);
+});
