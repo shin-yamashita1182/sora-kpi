@@ -252,7 +252,14 @@ if (generateMindMapGPTBtn) {
       alert("先に課題抽出を行ってください。");
       return;
     }
-
+// ✅ 🛑 少なくとも1つの対策が入力されているかを確認
+    const hasAnyOpinion = [...document.querySelectorAll(".thinking-block textarea")]
+      .some(textarea => textarea.value.trim().length > 0);
+    if (!hasAnyOpinion) {
+      alert("少なくとも1つの考察を入力してください。");
+      return;
+    }
+    
     generateMindMapGPTBtn.disabled = true;
     generateMindMapGPTBtn.textContent = "マインドマップ生成中…";
 
