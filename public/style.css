@@ -758,3 +758,16 @@ footer {
 #closeMapModal.modal-btn:hover {
   background-color: #5a6268;
 }
+/* モーダル全体の高さを固定して、中身だけスクロールさせる準備 */
+#mapModal .modal-content {
+  display: flex;
+  flex-direction: column;
+  height: 80vh;
+  overflow: hidden;
+}
+
+/* 実際にマインドマップの内容をスクロールできるようにする */
+#mapModal .modal-body {
+  overflow-y: auto;
+  flex-grow: 1;
+}
