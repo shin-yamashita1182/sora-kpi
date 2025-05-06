@@ -249,6 +249,11 @@ if (generateMindMapGPTBtn) {
     const region = regionInput.value.trim();
     const theme = noteInput.value.trim();
 
+    console.log("region:", region);
+    console.log("theme:", theme);
+    console.log("latestExtractedTasks:", latestExtractedTasks);
+    console.log("length:", latestExtractedTasks.length);
+
     if (!region || !theme || latestExtractedTasks.length !== 10) {
       alert("地域名・テーマ・課題が不足しています。課題抽出を先に行ってください。");
       return;
