@@ -328,8 +328,9 @@ if (!cleanedJson.endsWith("}") && !cleanedJson.endsWith("}]")) {
   alert("ChatGPTからのJSON出力が不完全です（閉じカッコが欠落しています）。再試行してください。");
   console.error("不完全なJSON:", cleanedJson);
   return;
-
-  try {    
+}
+      
+try {    
       const parsed = JSON.parse(cleanedJson);
       localStorage.setItem("latestMindMapData", JSON.stringify(parsed));
       window.open("mindmap_viewer.html", "_blank");
