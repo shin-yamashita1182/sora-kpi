@@ -326,3 +326,4 @@ ${[...document.querySelectorAll(".thinking-block textarea")]
     } // ← ✅ finally の終了
   }); // ← ✅ generateMindMapGPTBtn.addEventListener の終了
 } // ← ✅ if (generateMindMapGPTBtn) の終了
+});
