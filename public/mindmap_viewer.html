@@ -48,6 +48,22 @@
       background-color: #21867a;
     }
   </style>
+  <style>
+  @media print {
+    body * {
+      visibility: hidden !important;
+    }
+    #mindmapContainer, #mindmapContainer * {
+      visibility: visible !important;
+    }
+    #mindmapContainer {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+    }
+  }
+</style>
 </head>
 <body>
 
@@ -99,5 +115,17 @@ mind.init();
       });
     }
   </script>
+<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+<script>
+  document.getElementById("savePngBtn").addEventListener("click", () => {
+    const target = document.getElementById("mindmapContainer");
+    html2canvas(target).then(canvas => {
+      const link = document.createElement("a");
+      link.download = "mindmap.png";
+      link.href = canvas.toDataURL("image/png");
+      link.click();
+    });
+  });
+</script>
 </body>
 </html>
