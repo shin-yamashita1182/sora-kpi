@@ -1,6 +1,7 @@
 // ✅ グローバル定義（script_base.js 最上部などに追加）
 window.mindMapGenerated = false;
-  let latestExtractedTasks = []; // 🆕 抽出課題を保存
+// ✅ 最上部（DOMContentLoadedの外）に追記
+window.latestExtractedTasks = [];
 // ✅ SORA Dashboard Script Base - 統合版（NEXCO連動 + ChatGPT課題抽出 + ThinkingZoneマインドマップ／安定運用構成）
 document.addEventListener("DOMContentLoaded", () => {
   const fileInput = document.getElementById("fileInput");
@@ -166,7 +167,7 @@ canvasResult.innerText = data.result || "課題が取得できませんでした
 // 🆕 課題10件を latestExtractedTasks に保存
 const canvasText = canvasResult.innerText;
 const matches = [...canvasText.matchAll(/課題【\d+】\s*[：:]\s*(.+)/g)];
-latestExtractedTasks = matches.map(m => m[1].trim());
+window.latestExtractedTasks = matches.map(m => m[1].trim()); // ← 修正ポイント
 canvasResult.style.maxWidth = "100%"; // または必要なら "95%" 程度に調整可
 canvasResult.style.margin = "20px 0"; // auto を削除し左右寄せ防止
 canvasResult.style.textAlign = "left"; // このままでOK
@@ -254,7 +255,7 @@ if (generateMindMapGPTBtn) {
     console.log("latestExtractedTasks:", latestExtractedTasks);
     console.log("length:", latestExtractedTasks.length);
 
-    if (!region || !theme || latestExtractedTasks.length !== 10) {
+    if (!region || !theme || window.latestExtractedTasks.length !== 10) {
       alert("地域名・テーマ・課題が不足しています。課題抽出を先に行ってください。");
       return;
     }
@@ -296,7 +297,7 @@ if (generateMindMapGPTBtn) {
 - 最後の } または ] まで構文エラーがないように完全に閉じること
 
 【課題】:
-${latestExtractedTasks.map((task, i) => `【${i + 1}】${task}`).join("\n")}
+${window.latestExtractedTasks.map((task, i) => `【${i + 1}】${task}`).join("\n")}
 
 【住民の考察】:
 ${[...document.querySelectorAll(".thinking-block textarea")]
