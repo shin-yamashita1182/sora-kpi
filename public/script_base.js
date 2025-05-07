@@ -316,12 +316,7 @@ ${[...document.querySelectorAll(".thinking-block textarea")]
       console.log("=== ChatGPT生の出力 ===");
       console.log(jsonText);
 
-      let cleanedJson = jsonText
-        .replace(/^```json/, "")
-        .replace(/^```/, "")
-        .replace(/```$/, "")
-        .trim();
-
+      const cleanedJson = jsonText.replace(/^```json\s*|\s*```$/g, "").trim();
 
 // ✅ JSON末尾の検査と try-catch を構文的に完全に分離
 if (!cleanedJson.endsWith("}") && !cleanedJson.endsWith("}]")) {
