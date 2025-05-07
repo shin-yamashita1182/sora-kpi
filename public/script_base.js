@@ -287,14 +287,13 @@ if (generateMindMapGPTBtn) {
 中心テーマを「${region}：${theme}」として、MindElixir.js形式（topic, children）で放射状マインドマップ構造を作成してください。
 
 ▼条件（厳守）：
-- 出力はJSONオブジェクト **のみ**
-- コードブロック（\`\`\` や \`\`\`json）を一切含めないこと
-- 説明・注釈・見出しなし（JSON構造のみ）
-- topic / children 形式
-- 各課題には **最大2つまで** の子ノードをつけること
-- 構造は **最大3階層**
-- 全体の出力文字数を **2000文字以内** に必ず収めること
-- 最後の } または ] まで構文エラーがないように完全に閉じること
+- 出力はJSONオブジェクトのみ（構文エラーなし）
+- コードブロック（\`\`\` や \`\`\`json）は一切禁止
+- 文字列はクオーテーションで正しく囲む
+- topic / children 構造、最大3階層
+- 各childrenは2つ以内
+- 出力は **2000文字以内**
+- 最後の } または ] を**必ず閉じる**
 
 【課題】:
 ${window.latestExtractedTasks.map((task, i) => `【${i + 1}】${task}`).join("\n")}
@@ -317,14 +316,18 @@ ${[...document.querySelectorAll(".thinking-block textarea")]
       console.log("=== ChatGPT生の出力 ===");
       console.log(jsonText);
 
-      const cleanedJson = jsonText.replace(/^```json\s*|\s*```$/g, "").trim();
+      let cleanedJson = jsonText
+        .replace(/^```json/, "")
+        .replace(/^```/, "")
+        .replace(/```$/, "")
+        .trim();
 
 
-      if (!jsonText.startsWith("{") && !jsonText.startsWith("[")) {
-        alert("ChatGPTからの出力がJSON形式ではありません。");
-        console.error("応答:", jsonText);
-        return;
-      }
+      // ✅ 明示的に末尾の閉じを確認する（失敗防止用）
+if (!cleanedJson.endsWith("}") && !cleanedJson.endsWith("}]")) {
+  alert("ChatGPTからのJSON出力が不完全です（閉じカッコが欠落しています）。再試行してください。");
+  console.error("不完全なJSON:", cleanedJson);
+  return;
 
       const parsed = JSON.parse(cleanedJson);
       localStorage.setItem("latestMindMapData", JSON.stringify(parsed));
