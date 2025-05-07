@@ -323,24 +323,23 @@ ${[...document.querySelectorAll(".thinking-block textarea")]
         .trim();
 
 
-      // ✅ 明示的に末尾の閉じを確認する（失敗防止用）
+// ✅ JSON末尾の検査
 if (!cleanedJson.endsWith("}") && !cleanedJson.endsWith("}]")) {
   alert("ChatGPTからのJSON出力が不完全です（閉じカッコが欠落しています）。再試行してください。");
   console.error("不完全なJSON:", cleanedJson);
-  return;
-}
-
-try {
-  const parsed = JSON.parse(cleanedJson);
-  localStorage.setItem("latestMindMapData", JSON.stringify(parsed));
-  window.open("mindmap_viewer.html", "_blank");
-  window.mindMapGenerated = true;
-} catch (err) {
-  console.error("⚠️ マインドマップ生成中にエラー:", err);
-  alert("マインドマップ生成に失敗しました。");
-} finally {
-  generateMindMapGPTBtn.disabled = false;
-  generateMindMapGPTBtn.textContent = "マインドマップの生成";
+} else {
+  try {
+    const parsed = JSON.parse(cleanedJson);
+    localStorage.setItem("latestMindMapData", JSON.stringify(parsed));
+    window.open("mindmap_viewer.html", "_blank");
+    window.mindMapGenerated = true;
+  } catch (err) {
+    console.error("⚠️ マインドマップ生成中にエラー:", err);
+    alert("マインドマップ生成に失敗しました。");
+  } finally {
+    generateMindMapGPTBtn.disabled = false;
+    generateMindMapGPTBtn.textContent = "マインドマップの生成";
+  }
 }
 }); // ← ★ この行が必要
 } // ← ★ これも忘れずに
