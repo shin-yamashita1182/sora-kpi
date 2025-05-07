@@ -69,18 +69,20 @@
       throw new Error("No mindmap data found");
     }
 
-    const mind = new MindElixir({
-      el: '#mindmap',
-      direction: MindElixir.SIDE,
-      data: JSON.parse(mindDataStr),
-      draggable: true,
-      contextMenu: true,
-      toolBar: true,
-      nodeMenu: true,
-      keypress: true,
-    });
-
-    mind.init();
+const parsed = JSON.parse(mindDataStr); // ← 一度変数にパース
+const mind = new MindElixir({
+  el: '#mindmap',
+  direction: MindElixir.SIDE,
+  data: {
+    nodeData: parsed  // ← ここがポイント！MindElixir は "nodeData" を起点に描画します
+  },
+  draggable: true,
+  contextMenu: true,
+  toolBar: true,
+  nodeMenu: true,
+  keypress: true,
+});
+mind.init();
 
     function downloadPNG() {
       const node = document.getElementById('mindmap');
