@@ -283,7 +283,7 @@ if (generateMindMapGPTBtn) {
     const hasAnyOpinion = [...document.querySelectorAll(".thinking-block textarea")]
       .some(textarea => textarea.value.trim().length > 0);
     if (!hasAnyOpinion) {
-      alert("少なくとも1つの考察を入力してください。");
+      alert("分析対策ボタンを押し、少なくとも1つの考察を入力してください。");
       return;
     }
 
