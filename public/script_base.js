@@ -341,6 +341,7 @@ try {
 } finally {
   generateMindMapGPTBtn.disabled = false;
   generateMindMapGPTBtn.textContent = "マインドマップの生成";
+}
 }); // ← ★ この行が必要
 } // ← ★ これも忘れずに
 
