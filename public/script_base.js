@@ -144,7 +144,6 @@ const promptTemplate = `
 {{minutesText}}
 `;
 
-
 const prompt = promptTemplate
   .replace("{{region}}", region)
   .replace("{{theme}}", theme)
