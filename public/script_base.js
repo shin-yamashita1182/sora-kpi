@@ -340,5 +340,6 @@ try {
   generateMindMapGPTBtn.disabled = false;
   generateMindMapGPTBtn.textContent = "マインドマップの生成";
 }
-}); // ← ★ この行が必要
-}); // ← ★★★ 最も重要な閉じカッコ（DOMContentLoadedの終了）★★★
+  }); // ✅ これは generateMindMapGPTBtn.addEventListener の終了
+} // ✅ ←これが抜けていた！（if 文の閉じ）
+}); // ✅ DOMContentLoaded の終了
