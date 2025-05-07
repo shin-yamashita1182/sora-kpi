@@ -303,28 +303,25 @@ if (generateMindMapGPTBtn) {
       });
 
       const prompt = `
-以下は、ある地域の重要な課題と住民からの考察です。
-中心テーマを「${region}：${theme}」として、MindElixir.js形式のJSONでマインドマップ構造を作成してください。
+次の条件を厳守して、MindElixir.js形式（topic, children）で放射状のマインドマップを構成してください。
 
-■出力条件（必ず守ってください）：
-- 出力はJSONオブジェクトのみ。構文エラーがないようにしてください。
-- topic / children構造で表現し、最大5階層（第5階層はKPI）まで展開してください。
-- コードブロック（\`\`\` や \`\`\`json）は一切使わず、プレーンなJSONのみ出力してください。
-- 各施策の子ノードとして「KPI」という名前のノードを1つ必ず含めてください。
-- KPIは成果を測るための指標であり、「〇〇数」「〇〇率」「〇〇の達成」など、定量的に記述してください（例：「月間利用者数300人」「前年対比10%増」など）。
-- 全体の出力は2500文字以内に収めてください。
-- JSONの末尾（} や ]）は必ず閉じてください。
+【条件】
+- 出力はJSON形式（オブジェクト）で、構文エラーがないよう最後まで正確に閉じる
+- コードブロック（\`\`\`など）や注釈、見出しは禁止
+- 子要素（children）は最大3〜4階層まで
+- 全体の文字数は2500文字以内
 
-【課題】:
-${window.latestExtractedTasks.map((task, i) => `課題【${i + 1}】：${task}`).join("\n")}
+【中心テーマ】：${region}：${theme}
 
-【住民の考察】:
+【課題リスト】
+${latestExtractedTasks.map((task, i) => `【${i + 1}】${task}`).join("\n")}
+
+【住民の考察】
 ${[...document.querySelectorAll(".thinking-block textarea")]
   .map(t => "・" + t.value.trim())
   .filter(line => line.length > 1)
   .join("\n")}
 `;
-
 
 
       const res = await fetch("/api/chatgpt", {
