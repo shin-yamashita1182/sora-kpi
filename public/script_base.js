@@ -282,20 +282,23 @@ if (generateMindMapGPTBtn) {
       });
 
       const prompt = `
-次の条件を厳守して、MindElixir.js形式（topic, children）で放射状のマインドマップを構成してください。
+以下は、地域課題と住民の考察です。
+中心テーマを「${region}：${theme}」として、MindElixir.js形式（topic, children）で放射状マインドマップ構造を作成してください。
 
-【条件】
-- 出力はJSON形式（オブジェクト）で、構文エラーがないよう最後まで正確に閉じる
-- コードブロック（\`\`\`など）や注釈、見出しは禁止
-- 子要素（children）は最大3〜4階層まで
-- 全体の文字数は2500文字以内
+▼条件（厳守）：
+- 出力はJSONオブジェクト **のみ**
+- コードブロック（\`\`\` や \`\`\`json）を一切含めないこと
+- 説明・注釈・見出しなし（JSON構造のみ）
+- topic / children 形式
+- 各課題には **最大2つまで** の子ノードをつけること
+- 構造は **最大3階層**
+- 全体の出力文字数を **2000文字以内** に必ず収めること
+- 最後の } または ] まで構文エラーがないように完全に閉じること
 
-【中心テーマ】：${region}：${theme}
-
-【課題リスト】
+【課題】:
 ${latestExtractedTasks.map((task, i) => `【${i + 1}】${task}`).join("\n")}
 
-【住民の考察】
+【住民の考察】:
 ${[...document.querySelectorAll(".thinking-block textarea")]
   .map(t => "・" + t.value.trim())
   .filter(line => line.length > 1)
