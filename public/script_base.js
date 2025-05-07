@@ -326,7 +326,10 @@ if (!cleanedJson.endsWith("}") && !cleanedJson.endsWith("}]")) {
 }
 
 // ✅ JSON構文チェックと保存・ウィンドウオープン
-
+  const cleanedText = cleanedJson
+  .replace(/```json/g, '')
+  .replace(/```/g, '')
+  .trim();
   const parsed = JSON.parse(cleanedJson);
   localStorage.setItem("latestMindMapData", JSON.stringify(parsed));
   window.open("mindmap_viewer.html", "_blank");
