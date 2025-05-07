@@ -323,7 +323,6 @@ ${[...document.querySelectorAll(".thinking-block textarea")]
     } finally {
       generateMindMapGPTBtn.disabled = false;
       generateMindMapGPTBtn.textContent = "マインドマップの生成";
-       } // ← ✅ finally の終了
-
+    } // ← ✅ finally の終了
   }); // ← ✅ generateMindMapGPTBtn.addEventListener の終了
 } // ← ✅ if (generateMindMapGPTBtn) の終了
