@@ -249,11 +249,6 @@ if (generateMindMapGPTBtn) {
     const region = regionInput.value.trim();
     const theme = noteInput.value.trim();
 
-    console.log("region:", region);
-    console.log("theme:", theme);
-    console.log("latestExtractedTasks:", latestExtractedTasks);
-    console.log("length:", latestExtractedTasks.length);
-
     if (!region || !theme || latestExtractedTasks.length !== 10) {
       alert("地域名・テーマ・課題が不足しています。課題抽出を先に行ってください。");
       return;
@@ -270,32 +265,22 @@ if (generateMindMapGPTBtn) {
     generateMindMapGPTBtn.textContent = "マインドマップ生成中…";
 
     try {
-      let combinedText = `【地域名】：${region}\n【テーマ】：${theme}\n\n以下は抽出された課題です。\n`;
-      latestExtractedTasks.forEach((task, i) => {
-        combinedText += `【${i + 1}】${task}\n`;
-      });
-
-      combinedText += `\n以下は住民・関係者からの考察です（任意）：\n`;
-      document.querySelectorAll(".thinking-block textarea").forEach((textarea) => {
-        const opinion = textarea.value.trim();
-        if (opinion) combinedText += `・${opinion}\n`;
-      });
-
       const prompt = `
-次の条件を厳守して、MindElixir.js形式（topic, children）で放射状のマインドマップを構成してください。
+以下は、地域課題と住民の考察です。
+中心テーマを「${region}：${theme}」として、MindElixir.js形式（topic, children）で放射状マインドマップ構造を作成してください。
 
-【条件】
-- 出力はJSON形式（オブジェクト）で、構文エラーがないよう最後まで正確に閉じる
-- コードブロック（\`\`\`など）や注釈、見出しは禁止
-- 子要素（children）は最大3〜4階層まで
-- 全体の文字数は2500文字以内
+▼条件（必ず厳守）：
+- 出力はJSONオブジェクト **のみ**
+- コードブロック（\`\`\` や \`\`\`json）は絶対に含めない
+- 説明・補足・注釈などは一切書かない
+- topic / children 構造で3～4階層を推奨
+- 文字数は2500文字以内
+- 最後の } まで **構文エラーなく正確に閉じること**
 
-【中心テーマ】：${region}：${theme}
-
-【課題リスト】
+【課題】:
 ${latestExtractedTasks.map((task, i) => `【${i + 1}】${task}`).join("\n")}
 
-【住民の考察】
+【住民の考察】:
 ${[...document.querySelectorAll(".thinking-block textarea")]
   .map(t => "・" + t.value.trim())
   .filter(line => line.length > 1)
@@ -309,20 +294,25 @@ ${[...document.querySelectorAll(".thinking-block textarea")]
       });
 
       const data = await res.json();
-      const jsonText = data.result?.trim();
-      console.log("=== ChatGPT生の出力 ===");
+      let jsonText = (data.result || "").trim();
+
+      // 不要なコードブロック記号を除去（念のため）
+      jsonText = jsonText
+        .replace(/^```json/, "")
+        .replace(/^```/, "")
+        .replace(/```$/, "")
+        .trim();
+
+      console.log("=== ChatGPT出力 ===");
       console.log(jsonText);
 
-      const cleanedJson = jsonText.replace(/^```json\s*|\s*```$/g, "").trim();
-
-
-      if (!jsonText.startsWith("{") && !jsonText.startsWith("[")) {
+      if (!jsonText.startsWith("{")) {
         alert("ChatGPTからの出力がJSON形式ではありません。");
         console.error("応答:", jsonText);
         return;
       }
 
-      const parsed = JSON.parse(cleanedJson);
+      const parsed = JSON.parse(jsonText);
       localStorage.setItem("latestMindMapData", JSON.stringify(parsed));
       window.open("mindmap_viewer.html", "_blank");
       window.mindMapGenerated = true;
@@ -333,8 +323,7 @@ ${[...document.querySelectorAll(".thinking-block textarea")]
     } finally {
       generateMindMapGPTBtn.disabled = false;
       generateMindMapGPTBtn.textContent = "マインドマップの生成";
-  }
-  }); // ← ★ この行が必要
-} // ← ★ これも忘れずに
+       } // ← ✅ finally の終了
 
-}); // ← ★★★ 最も重要な閉じカッコ（DOMContentLoadedの終了）★★★
+  }); // ← ✅ generateMindMapGPTBtn.addEventListener の終了
+} // ← ✅ if (generateMindMapGPTBtn) の終了
