@@ -328,7 +328,7 @@ if (!cleanedJson.endsWith("}") && !cleanedJson.endsWith("}]")) {
 }
 
 // ✅ JSON構文チェックと保存・ウィンドウオープン
-try {
+
   const parsed = JSON.parse(cleanedJson);
   localStorage.setItem("latestMindMapData", JSON.stringify(parsed));
   window.open("mindmap_viewer.html", "_blank");
@@ -340,6 +340,6 @@ try {
   generateMindMapGPTBtn.disabled = false;
   generateMindMapGPTBtn.textContent = "マインドマップの生成";
 }
-
+});
 } // ✅ ←これが抜けていた！（if 文の閉じ）
 }); // ✅ DOMContentLoaded の終了
