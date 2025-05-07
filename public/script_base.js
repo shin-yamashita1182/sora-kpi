@@ -330,7 +330,7 @@ if (!cleanedJson.endsWith("}") && !cleanedJson.endsWith("}]")) {
   .replace(/```json/g, '')
   .replace(/```/g, '')
   .trim();
-  const parsed = JSON.parse(cleanedJson);
+  const parsed = JSON.parse(cleanedText); // ← 🔥 こっちを使う！絶対！
   localStorage.setItem("latestMindMapData", JSON.stringify(parsed));
   window.open("mindmap_viewer.html", "_blank");
   window.mindMapGenerated = true;
