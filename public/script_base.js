@@ -221,7 +221,6 @@ generateBtn.addEventListener("click", () => {
 }
 
 
-
   // 🧠 一括マインドマップモーダル出力
   if (generateAllBtn) {
     generateAllBtn.addEventListener("click", () => {
