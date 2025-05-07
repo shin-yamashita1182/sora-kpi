@@ -281,27 +281,47 @@ if (generateMindMapGPTBtn) {
       });
 
       const prompt = `
-以下は、地域課題と住民の考察です。
-中心テーマを「${region}：${theme}」として、MindElixir.js形式（topic, children）で放射状マインドマップ構造を作成してください。
+const promptTemplate = `
+以下は、地域課題と住民の考察です。  
+中心テーマを「${region}：${theme}」として、MindElixir.js形式（topic, children）で **階層4〜5レベル**の放射状マインドマップ構造を作成してください。
 
-▼条件（厳守）：
-- 出力はJSONオブジェクトのみ（構文エラーなし）
-- コードブロック（\`\`\` や \`\`\`json）は一切禁止
-- 文字列はクオーテーションで正しく囲む
-- topic / children 構造、最大3階層
-- 各childrenは2つ以内
-- 出力は **2000文字以内**
-- 最後の } または ] を**必ず閉じる**
+---
 
-【課題】:
-${window.latestExtractedTasks.map((task, i) => `【${i + 1}】${task}`).join("\n")}
+【出力ルール（厳守）】
 
-【住民の考察】:
+- JSONオブジェクトのみを出力してください（コードブロックは不要）
+- 出力形式は {"topic": "...", "children": [...]} に準拠してください
+- 必ず "topic" をキーとし、全ノードに記述してください
+- "children" は最大5階層まで使用可能（中心ノード含む）
+- 各階層で2〜4ノード程度が理想です
+- 文字列は全てダブルクオート "..." で囲んでください
+- JSONの最後は必ず閉じてください（構文エラーがないように）
+
+---
+
+【課題リスト（10件）】
+※形式は必ず「課題【1】：～」で記述してください
+
+${window.latestExtractedTasks.map((task, i) => `課題【${i + 1}】：${task}`).join("\n")}
+
+---
+
+【住民の考察（任意）】
+
 ${[...document.querySelectorAll(".thinking-block textarea")]
   .map(t => "・" + t.value.trim())
   .filter(line => line.length > 1)
   .join("\n")}
+
+---
+
+【出力条件】
+
+- JSON以外の説明文や注釈は禁止
+- コードブロック（\`\`\`json など）は含めないでください
+- 出力は必ず構文チェックに通るJSON形式で返してください
 `;
+
 
       const res = await fetch("/api/chatgpt", {
         method: "POST",
