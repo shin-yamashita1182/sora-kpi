@@ -777,3 +777,16 @@ footer {
   max-width: 70ch;
   margin: 0 auto;
 }
+.sidebar h2 {
+  font-size: 1rem; /* 通常は1.25remか1.5remくらいになっている */
+  font-weight: bold;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.sidebar h2::before {
+  content: "🕒";
+  font-size: 1.1rem;
+}
