@@ -68,37 +68,43 @@
 <script src="https://cdn.jsdelivr.net/npm/dom-to-image-more@2.8.0/dist/dom-to-image-more.min.js"></script>
 <script>
 
-const mindDataStr = localStorage.getItem("latestMindMapData");
-if (!mindDataStr) {
-  document.getElementById("mindmap").innerText = "エラー：マインドマップデータが見つかりません。";
-  throw new Error("No mindmap data found");
-}
-
-const raw = JSON.parse(mindDataStr);
-const parsed = raw.nodeData || raw; // ← "nodeData" で包まれていたら中身だけ抽出
-
-// ✅ id が無ければ root を補完
-if (!parsed.id) parsed.id = "root";
-  
-const mind = new MindElixir({
-  el: '#mindmap',
-  direction: MindElixir.SIDE,
-  draggable: true,
-  contextMenu: true,
-  toolBar: true,
-  nodeMenu: true,
-  keypress: true,
-});
-
-console.log("🧠 MindMap topic:", parsed.topic);
-mind.init(parsed); // ← parsed に ChatGPT からのマップ構造が入っている
-
-// ✅ ノードが画面外だった場合に中央に移動
-setTimeout(() => {
-  if (mind.root) {
-    mind.focusNode(mind.root.id);
+<script>
+  const mindDataStr = localStorage.getItem("latestMindMapData");
+  if (!mindDataStr) {
+    document.getElementById("mindmap").innerText = "エラー：マインドマップデータが見つかりません。";
+    throw new Error("No mindmap data found");
   }
-}, 300);
+
+  const raw = JSON.parse(mindDataStr);
+  const parsed = raw.nodeData || raw;
+
+  // ✅ 安定性のためにすべてのノードに id を補完
+  function ensureMindMapIds(node, prefix = "node", counter = { value: 1 }) {
+    if (!node.id) node.id = `${prefix}-${counter.value++}`;
+    if (!node.children) node.children = [];
+    node.children.forEach(child => ensureMindMapIds(child, prefix, counter));
+  }
+
+  ensureMindMapIds(parsed);
+
+  const mind = new MindElixir({
+    el: '#mindmap',
+    direction: MindElixir.SIDE,
+    draggable: true,
+    contextMenu: true,
+    toolBar: true,
+    nodeMenu: true,
+    keypress: true,
+  });
+
+  console.log("🧠 MindMap topic:", parsed.topic);
+  mind.init(parsed);
+
+  setTimeout(() => {
+    if (mind.root) {
+      mind.focusNode(mind.root.id);
+    }
+  }, 300);
   
 function downloadPNG() {
   const node = document.getElementById('mindmap');
