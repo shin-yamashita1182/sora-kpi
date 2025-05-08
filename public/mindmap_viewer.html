@@ -64,10 +64,9 @@
 
   <!-- ✅ このように書き換えてください -->
 <script src="https://cdn.jsdelivr.net/npm/mind-elixir/dist/mind-elixir.min.js"></script>
-<!-- ✅ 安定版 CDN（jsDelivr）を使うのが一番確実 -->
 <script src="https://cdn.jsdelivr.net/npm/dom-to-image-more@2.8.0/dist/dom-to-image-more.min.js"></script>
-<script>
 
+<script>
   const mindDataStr = localStorage.getItem("latestMindMapData");
   if (!mindDataStr) {
     document.getElementById("mindmap").innerText = "エラー：マインドマップデータが見つかりません。";
@@ -77,14 +76,15 @@
   const raw = JSON.parse(mindDataStr);
   const parsed = raw.nodeData || raw;
 
-  // ✅ 安定性のためにすべてのノードに id を補完
+  // ✅ 安定性のためにすべてのノードに id・topic・children を補完
   function ensureMindMapIds(node, prefix = "node", counter = { value: 1 }) {
     if (!node.id) node.id = `${prefix}-${counter.value++}`;
-    if (!node.children) node.children = [];
+    if (!node.topic) node.topic = "（無題）";
+    if (!Array.isArray(node.children)) node.children = [];
     node.children.forEach(child => ensureMindMapIds(child, prefix, counter));
   }
 
-  ensureMindMapIds(parsed);
+  ensureMindMapIds(parsed); // 🛡 安全構造に変換
 
   const mind = new MindElixir({
     el: '#mindmap',
@@ -96,27 +96,29 @@
     keypress: true,
   });
 
-  console.log("🧠 MindMap topic:", parsed.topic);
+  console.log("🧠 MindMap topic:", parsed.topic); // デバッグ確認用
   mind.init(parsed);
 
+  // ✅ 自動で中央ノードにフォーカス
   setTimeout(() => {
     if (mind.root) {
       mind.focusNode(mind.root.id);
     }
   }, 300);
-  
-function downloadPNG() {
-  const node = document.getElementById('mindmap');
-  domtoimage.toPng(node).then((dataUrl) => {
-    const link = document.createElement('a');
-    link.download = 'mindmap.png';
-    link.href = dataUrl;
-    link.click();
-  }).catch((error) => {
-    alert("画像の保存に失敗しました。");
-    console.error("PNG保存エラー:", error);
-  });
-}
-  </script>
+
+  function downloadPNG() {
+    const node = document.getElementById('mindmap');
+    domtoimage.toPng(node).then((dataUrl) => {
+      const link = document.createElement('a');
+      link.download = 'mindmap.png';
+      link.href = dataUrl;
+      link.click();
+    }).catch((error) => {
+      alert("画像の保存に失敗しました。");
+      console.error("PNG保存エラー:", error);
+    });
+  }
+</script>
+
 </body>
 </html>
