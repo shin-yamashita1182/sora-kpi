@@ -21,13 +21,11 @@
     }
 
     #mindmap {
-    width: 100%;
-    height: 88vh;
-    background-color: #ffffff; /* ✅ マップ表示時に見やすいように白 */
-    overflow: auto;             /* ✅ スクロールが可能に */
-    border-top: 1px solid #ccc; /* 任意：上に薄い境界線 */
-   }
-
+      width: 100%;
+      height: 88vh;
+      margin: 0;
+      padding: 0;
+    }
 
     .controls {
       display: flex;
@@ -64,61 +62,42 @@
 
   <!-- ✅ このように書き換えてください -->
 <script src="https://cdn.jsdelivr.net/npm/mind-elixir/dist/mind-elixir.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/dom-to-image-more@2.8.0/dist/dom-to-image-more.min.js"></script>
-
+<script src="https://unpkg.com/dom-to-image-more@2.9.0/dist/dom-to-image-more.min.js"></script>
 <script>
-  const mindDataStr = localStorage.getItem("latestMindMapData");
-  if (!mindDataStr) {
-    document.getElementById("mindmap").innerText = "エラー：マインドマップデータが見つかりません。";
-    throw new Error("No mindmap data found");
-  }
 
-  const raw = JSON.parse(mindDataStr);
-  const parsed = raw.nodeData || raw;
-
-  // ✅ 安定性のためにすべてのノードに id・topic・children を補完
-  function ensureMindMapIds(node, prefix = "node", counter = { value: 1 }) {
-    if (!node.id) node.id = `${prefix}-${counter.value++}`;
-    if (!node.topic) node.topic = "（無題）";
-    if (!Array.isArray(node.children)) node.children = [];
-    node.children.forEach(child => ensureMindMapIds(child, prefix, counter));
-  }
-
-  ensureMindMapIds(parsed); // 🛡 安全構造に変換
-
-  const mind = new MindElixir({
-    el: '#mindmap',
-    direction: MindElixir.SIDE,
-    draggable: true,
-    contextMenu: true,
-    toolBar: true,
-    nodeMenu: true,
-    keypress: true,
-  });
-
-  console.log("🧠 MindMap topic:", parsed.topic); // デバッグ確認用
-  mind.init(parsed);
-
-  // ✅ 自動で中央ノードにフォーカス
-  setTimeout(() => {
-    if (mind.root) {
-      mind.focusNode(mind.root.id);
+    const mindDataStr = localStorage.getItem("latestMindMapData");
+    if (!mindDataStr) {
+      document.getElementById("mindmap").innerText = "エラー：マインドマップデータが見つかりません。";
+      throw new Error("No mindmap data found");
     }
-  }, 300);
 
-  function downloadPNG() {
-    const node = document.getElementById('mindmap');
-    domtoimage.toPng(node).then((dataUrl) => {
-      const link = document.createElement('a');
-      link.download = 'mindmap.png';
-      link.href = dataUrl;
-      link.click();
-    }).catch((error) => {
-      alert("画像の保存に失敗しました。");
-      console.error("PNG保存エラー:", error);
-    });
-  }
-</script>
+const parsed = JSON.parse(mindDataStr); // ← 一度変数にパース
+const mind = new MindElixir({
+  el: '#mindmap',
+  direction: MindElixir.SIDE,
+  data: {
+    nodeData: parsed  // ← ここがポイント！MindElixir は "nodeData" を起点に描画します
+  },
+  draggable: true,
+  contextMenu: true,
+  toolBar: true,
+  nodeMenu: true,
+  keypress: true,
+});
+mind.init();
 
+    function downloadPNG() {
+      const node = document.getElementById('mindmap');
+      domtoimage.toPng(node).then((dataUrl) => {
+        const link = document.createElement('a');
+        link.download = 'mindmap.png';
+        link.href = dataUrl;
+        link.click();
+      }).catch((error) => {
+        alert("画像の保存に失敗しました。");
+        console.error("PNG保存エラー:", error);
+      });
+    }
+  </script>
 </body>
 </html>
