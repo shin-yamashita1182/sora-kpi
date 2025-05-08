@@ -88,8 +88,15 @@ const mind = new MindElixir({
 });
 
 console.log("🧠 MindMap topic:", parsed.topic);
-mind.init();
+mind.init(parsed); // ← parsed に ChatGPT からのマップ構造が入っている
 
+// ✅ ノードが画面外だった場合に中央に移動
+setTimeout(() => {
+  if (mind.root) {
+    mind.focusNode(mind.root.id);
+  }
+}, 300);
+  
 function downloadPNG() {
   const node = document.getElementById('mindmap');
   domtoimage.toPng(node).then((dataUrl) => {
