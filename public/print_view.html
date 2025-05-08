@@ -85,8 +85,14 @@ window.onload = () => {
   document.getElementById("insightOutput").textContent =
     session.insight || "未入力";
 
-  // 再描画：MindElixirマップ
+  // 💡 保険：描画前に container をリセット
+  const container = document.getElementById("mindmapContainer");
+  container.innerHTML = "";
+
   if (session.mindmapData && Object.keys(session.mindmapData).length > 0) {
+    // 💡 保険：topicが消えていたら代替
+    session.mindmapData.topic = session.mindmapData.topic || "（無題）";
+
     const mind = new MindElixir({
       el: "#mindmapContainer",
       direction: MindElixir.LEFT,
