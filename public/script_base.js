@@ -368,4 +368,31 @@ if (!cleanedJson.endsWith("}") && !cleanedJson.endsWith("}]")) {
 }
 });
 } // ✅ ←これが抜けていた！（if 文の閉じ）
+} // ✅ ←これが抜けていた！（if 文の閉じ）
+
+// ✅ ここから保存＆印刷ビュー処理を追加！
+const savePrintBtn = document.getElementById("savePrintBtn");
+if (savePrintBtn) {
+  savePrintBtn.addEventListener("click", () => {
+    try {
+      const sessionData = {
+        region: document.getElementById("regionName").value || "未設定",
+        theme: document.getElementById("userNote").value || "未設定",
+        tasks: window.latestExtractedTasks || [],
+        insight: document.getElementById("userInsight")?.value || "未入力",
+        mindmapData: JSON.parse(localStorage.getItem("latestMindMapData")) || {},
+        timestamp: new Date().toISOString()
+      };
+
+      localStorage.setItem("session_001", JSON.stringify(sessionData));
+      window.open("/print_view.html", "_blank");
+    } catch (e) {
+      alert("セッション保存に失敗しました。データ形式を確認してください。");
+      console.error(e);
+    }
+  });
+}
+
+}); // ✅ DOMContentLoaded の終了
+  
 }); // ✅ DOMContentLoaded の終了
