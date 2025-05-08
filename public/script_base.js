@@ -392,7 +392,5 @@ if (savePrintBtn) {
     }
   });
 }
-
-}); // ✅ DOMContentLoaded の終了
-  
+ 
 }); // ✅ DOMContentLoaded の終了
