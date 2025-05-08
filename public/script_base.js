@@ -447,3 +447,4 @@ function renderSessionHistory() {
 }
 
 document.addEventListener("DOMContentLoaded", renderSessionHistory);
+}); // ← これは必要
