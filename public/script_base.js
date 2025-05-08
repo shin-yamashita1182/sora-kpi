@@ -349,7 +349,7 @@ if (!cleanedJson.endsWith("}") && !cleanedJson.endsWith("}]")) {
 }
 
 // ✅ JSON構文チェックと保存・ウィンドウオープン
-  console.log("🧠 ChatGPT返答（cleanedJson）:", cleanedJson); // ←これを追加！
+  console.log("[ChatGPT返答 cleanedJson]:", cleanedJson);
       
   const cleanedText = cleanedJson
   .replace(/```json/g, '')
