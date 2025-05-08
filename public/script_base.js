@@ -368,7 +368,6 @@ if (!cleanedJson.endsWith("}") && !cleanedJson.endsWith("}]")) {
 }
 });
 } // ✅ ←これが抜けていた！（if 文の閉じ）
-} // ✅ ←これが抜けていた！（if 文の閉じ）
 
 // ✅ ここから保存＆印刷ビュー処理を追加！
 const savePrintBtn = document.getElementById("savePrintBtn");
