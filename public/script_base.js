@@ -359,6 +359,20 @@ if (!cleanedJson.endsWith("}") && !cleanedJson.endsWith("}]")) {
   localStorage.setItem("latestMindMapData", JSON.stringify(parsed));
   window.open("mindmap_viewer.html", "_blank");
   window.mindMapGenerated = true;
+
+// ✅ セッション履歴として localStorage に保存
+const sessionKey = `session_${Date.now()}`;
+const sessionData = {
+  region,
+  theme,
+  tasks: window.latestExtractedTasks || [],
+  insight: [...document.querySelectorAll(".thinking-block textarea")].map(t => t.value.trim()),
+  mindmapData: parsed,
+  timestamp: new Date().toISOString()
+};
+localStorage.setItem(sessionKey, JSON.stringify(sessionData));
+console.log("✅ セッション保存完了:", sessionKey);
+      
 } catch (err) {
   console.error("⚠️ マインドマップ生成中にエラー:", err);
   alert("マインドマップ生成に失敗しました。");
