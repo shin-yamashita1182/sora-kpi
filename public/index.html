@@ -58,8 +58,15 @@
   <div class="container">
 <aside class="sidebar">
   <!-- 🔁 更新ボタン：先に表示 -->
- <div style="text-align: right; margin: 4px 0;">
-  <button onclick="window.renderSessionHistory && renderSessionHistory()" style="all: unset; cursor: pointer; font-size: 12px; color: #007bff;">
+ <div style="text-align: right; margin: 0 0 4px 0;">
+  <button onclick="window.renderSessionHistory && renderSessionHistory()" style="
+    background: none;
+    border: none;
+    font-size: 12px;
+    color: #007bff;
+    cursor: pointer;
+    padding: 0;
+  ">
     🔄 履歴を更新
   </button>
 </div>
