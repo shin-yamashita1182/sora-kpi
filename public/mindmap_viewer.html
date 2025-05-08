@@ -21,11 +21,13 @@
     }
 
     #mindmap {
-      width: 100%;
-      height: 88vh;
-      margin: 0;
-      padding: 0;
-    }
+    width: 100%;
+    height: 88vh;
+    background-color: #ffffff; /* ✅ マップ表示時に見やすいように白 */
+    overflow: auto;             /* ✅ スクロールが可能に */
+    border-top: 1px solid #ccc; /* 任意：上に薄い境界線 */
+   }
+
 
     .controls {
       display: flex;
