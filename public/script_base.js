@@ -420,6 +420,7 @@ function renderSessionHistory() {
 
   sessionKeys.forEach((key) => {
     const session = JSON.parse(localStorage.getItem(key));
+    console.log("読み込んだセッション:", key, session); // ←これ追加！
     const li = document.createElement("li");
 
     const label = document.createElement("span");
