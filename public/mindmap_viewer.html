@@ -77,6 +77,9 @@ if (!mindDataStr) {
 const raw = JSON.parse(mindDataStr);
 const parsed = raw.nodeData || raw; // ← "nodeData" で包まれていたら中身だけ抽出
 
+// ✅ id が無ければ root を補完
+if (!parsed.id) parsed.id = "root";
+  
 const mind = new MindElixir({
   el: '#mindmap',
   direction: MindElixir.SIDE,
