@@ -242,23 +242,23 @@ generateBtn.addEventListener("click", () => {
 }
 
 
-  // 🧠 一括マインドマップモーダル出力
-  if (generateAllBtn) {
-    generateAllBtn.addEventListener("click", () => {
-      const blocks = document.querySelectorAll(".thinking-block");
-      let output = "<ul style='list-style:none;padding-left:0;'>";
-      blocks.forEach((block) => {
-        const task = block.querySelector("p").innerText;
-        const opinion = block.querySelector("textarea").value.trim();
-        output += `<li style='margin-bottom:10px;'>🟢 <strong>${task}</strong><br>考察: ${opinion || "（未記入）"}</li>`;
-      });
-      output += "</ul><p style='margin-top:1em;'>※ChatGPT連携による対策提案予定</p>";
-      mindMapContent.innerHTML = output;
-      mindMapModal.classList.remove("hidden");
-    });
-  }
+ // 🧠 一括マインドマップモーダル出力（旧UI・現在未使用）
+// if (generateAllBtn) {
+//   generateAllBtn.addEventListener("click", () => {
+//     const blocks = document.querySelectorAll(".thinking-block");
+//     let output = "<ul style='list-style:none;padding-left:0;'>";
+//     blocks.forEach((block) => {
+//       const task = block.querySelector("p").innerText;
+//       const opinion = block.querySelector("textarea").value.trim();
+//       output += `<li style='margin-bottom:10px;'>🟢 <strong>${task}</strong><br>考察: ${opinion || "（未記入）"}</li>`;
+//     });
+//     output += "</ul><p style='margin-top:1em;'>※ChatGPT連携による対策提案予定</p>";
+//     mindMapContent.innerHTML = output;
+//     mindMapModal.classList.remove("hidden");
+//   });
+// }
 
-let mindMapGenerated = false; // ← 追加するグローバル変数
+  let mindMapGenerated = false; // ← 追加するグローバル変数
 
 if (generateMindMapGPTBtn) {
   generateMindMapGPTBtn.addEventListener("click", async () => {
