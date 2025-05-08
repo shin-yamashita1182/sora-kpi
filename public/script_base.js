@@ -403,5 +403,24 @@ console.log("✅ セッション保存完了:", sessionKey);
 //     }
 //   });
 // }
+// ✅ 履歴一覧を localStorage から自動生成
+const historyList = document.getElementById("historyList"); // ← idで取得
+if (historyList) {
+  historyList.innerHTML = ""; // 一旦クリアして最新状態を描画
+  for (let i = 0; i < localStorage.length; i++) {
+    const key = localStorage.key(i);
+    if (key.startsWith("session_")) {
+      const session = JSON.parse(localStorage.getItem(key));
+      const li = document.createElement("li");
+      li.textContent = `${session.region} × ${session.theme}`;
+      li.style.cursor = "pointer";
+      li.onclick = () => {
+        localStorage.setItem("session_selected", key);
+        window.open("/print_view.html", "_blank");
+      };
+      historyList.appendChild(li);
+    }
+  }
+}
  
 }); // ✅ DOMContentLoaded の終了
