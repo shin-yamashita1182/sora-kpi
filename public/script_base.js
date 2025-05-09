@@ -409,16 +409,24 @@ window.renderSessionHistory = function () {
   const historyList = document.getElementById("historyList");
   if (!historyList) return;
 
-  historyList.innerHTML = ""; // 一度リセット
-　
-  // ✅ 修正後（管理用キーを除外して安全！）
-　  const sessionKeys = Object.keys(localStorage).filter(k => /^session_\d+$/.test(k));
-  
+  historyList.innerHTML = "";
+
+  const sessionKeys = Object.keys(localStorage)
+    .filter(k => /^session_\d+$/.test(k))  // 数字だけの session_ に限定
+    .sort((a, b) => Number(b.replace("session_", "")) - Number(a.replace("session_", "")))  // 新しい順
+    .slice(0, 20);  // ✅ 最新20件に限定
+
   sessionKeys.forEach((key) => {
-    const session = JSON.parse(localStorage.getItem(key));
+    let session;
+    try {
+      session = JSON.parse(localStorage.getItem(key));
+    } catch (e) {
+      console.warn("⚠️ JSONエラーでスキップ:", key, e);
+      return;
+    }
+
     if (!session) return;
 
-    // 👇 regionとthemeがどちらか片方でもあれば表示
     const labelText = `${session.region || "（地域未設定）"} × ${session.theme || "（テーマ未設定）"}`;
 
     const li = document.createElement("li");
@@ -430,6 +438,7 @@ window.renderSessionHistory = function () {
     const label = document.createElement("span");
     label.textContent = labelText;
     label.style.cursor = "pointer";
+    label.style.flexGrow = "1";
     label.onclick = () => {
       localStorage.setItem("selectedSessionKey", key);
       window.open("print_view.html", "_blank");
@@ -441,10 +450,13 @@ window.renderSessionHistory = function () {
     delBtn.style.border = "none";
     delBtn.style.background = "transparent";
     delBtn.style.fontSize = "16px";
+    delBtn.style.marginLeft = "8px";
+    delBtn.title = "この履歴を削除";
+
     delBtn.onclick = () => {
       if (confirm("この履歴を削除しますか？")) {
         localStorage.removeItem(key);
-        renderSessionHistory();
+        renderSessionHistory(); // 再描画
       }
     };
 
