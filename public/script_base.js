@@ -410,9 +410,10 @@ window.renderSessionHistory = function () {
   if (!historyList) return;
 
   historyList.innerHTML = ""; // 一度リセット
-
-  const sessionKeys = Object.keys(localStorage).filter(k => k.startsWith("session_"));
-
+　
+  // ✅ 修正後（管理用キーを除外して安全！）
+　  const sessionKeys = Object.keys(localStorage).filter(k => /^session_\d+$/.test(k));
+  
   sessionKeys.forEach((key) => {
     const session = JSON.parse(localStorage.getItem(key));
     if (!session) return;
