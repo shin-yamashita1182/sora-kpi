@@ -471,6 +471,6 @@ window.renderSessionHistory = function () {
 
 // ✅ DOM読み込み時に自動実行（外で）
 document.addEventListener("DOMContentLoaded", () => {
-  renderSessionHistory();
+renderSessionHistory();
 });
 }); 
