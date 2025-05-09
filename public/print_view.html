@@ -71,7 +71,8 @@
 
 <script>
 window.onload = () => {
-  const raw = localStorage.getItem("session_001");
+  const key = localStorage.getItem("selectedSessionKey");
+  const raw = key ? localStorage.getItem(key) : null;
   if (!raw) return alert("セッションが存在しません");
 
   const session = JSON.parse(raw);
