@@ -160,12 +160,16 @@ if (type === "mindmap") {
 
   // 🔷 印刷＆表示：画像
   const img = document.createElement("img");
-  img.id = "mindmapImage";
-  img.src = imageData;
-  img.alt = "マインドマップ画像";
-  img.style.maxWidth = "100%";
-  img.style.border = "1px solid #ccc";
-  img.style.boxShadow = "0 2px 6px rgba(0,0,0,0.1)";
+const img = document.createElement("img");
+img.id = "mindmapImage";
+img.src = imageData;
+img.alt = "マインドマップ画像";
+img.style.maxWidth = "100%";
+img.style.height = "auto";
+img.style.maxHeight = "80vh";
+img.style.objectFit = "contain";
+img.style.border = "1px solid #ccc";
+img.style.boxShadow = "0 2px 6px rgba(0,0,0,0.1)";
 
   // ✅ 印刷対象：画像だけを含めるラッパー
   const printable = document.createElement("div");
