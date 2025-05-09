@@ -467,5 +467,3 @@ window.renderSessionHistory = function () {
     historyList.appendChild(li);
   });
 };
-  
-}); // ← ✅ これは履歴表示のDOMContentLoadedの終了
