@@ -405,18 +405,22 @@ console.log("✅ セッション保存完了:", sessionKey);
 // }
 
 // ✅ 履歴を描画して、削除もできる・更新はlocation.reload
-window.renderSessionHistory = function () {
+function renderSessionHistory() {
   const historyList = document.getElementById("historyList");
   if (!historyList) return;
 
   historyList.innerHTML = "";
 
-  const sessionKeys = Object.keys(localStorage).filter(k => k.startsWith("session_"));
+  const sessionKeys = Object.keys(localStorage)
+    .filter(k => k.startsWith("session_"))
+    .sort((a, b) => {
+      const ta = JSON.parse(localStorage.getItem(a))?.timestamp || "";
+      const tb = JSON.parse(localStorage.getItem(b))?.timestamp || "";
+      return tb.localeCompare(ta);
+    });
 
   sessionKeys.forEach((key) => {
     const session = JSON.parse(localStorage.getItem(key));
-    if (!session?.region || !session?.theme) return;
-
     const li = document.createElement("li");
 
     const label = document.createElement("span");
@@ -427,10 +431,22 @@ window.renderSessionHistory = function () {
       window.open("/print_view.html", "_blank");
     };
 
+    const del = document.createElement("button");
+    del.textContent = "🗑️";
+    del.style.marginLeft = "8px";
+    del.onclick = () => {
+      if (confirm("このセッションを削除してもよろしいですか？")) {
+        localStorage.removeItem(key);
+        renderSessionHistory();
+      }
+    };
+
     li.appendChild(label);
+    li.appendChild(del);
     historyList.appendChild(li);
   });
 }
 
 document.addEventListener("DOMContentLoaded", renderSessionHistory);
-}); // ✅ DOMContentLoaded の終了
+}); // ← これは必要
+
