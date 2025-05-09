@@ -405,39 +405,26 @@ console.log("✅ セッション保存完了:", sessionKey);
 // }
 // ✅ 履歴一覧を localStorage から自動生成
 window.renderSessionHistory = function () {
-  console.log("📂 履歴を再読み込み中...");
-
   const historyList = document.getElementById("historyList");
   if (!historyList) return;
 
   historyList.innerHTML = "";
 
-  const sessionKeys = Object.keys(localStorage)
-    .filter(k => k.startsWith("session_"))
-    .sort((a, b) => {
-      const ta = JSON.parse(localStorage.getItem(a))?.timestamp || "0";
-      const tb = JSON.parse(localStorage.getItem(b))?.timestamp || "0";
-      return tb.localeCompare(ta);
-    });
+  const sessionKeys = Object.keys(localStorage).filter(k => k.startsWith("session_"));
 
   sessionKeys.forEach((key) => {
     let session;
     try {
       session = JSON.parse(localStorage.getItem(key));
-      console.log("📦 セッション:", session);
     } catch (e) {
-      console.warn("❌ パース失敗:", key);
+      console.warn("❌ 読み込み失敗:", key);
       return;
     }
 
     const li = document.createElement("li");
 
     const label = document.createElement("span");
-    label.textContent =
-      (session?.region && session?.theme)
-        ? `${session.region} × ${session.theme}`
-        : session?.title || key || "セッション";
-
+    label.textContent = `${session.region} × ${session.theme}`;
     label.style.cursor = "pointer";
     label.onclick = () => {
       localStorage.setItem("selectedSessionKey", key);
@@ -448,7 +435,7 @@ window.renderSessionHistory = function () {
     del.textContent = "🗑️";
     del.style.marginLeft = "8px";
     del.onclick = () => {
-      if (confirm("このセッションを削除してもよろしいですか？")) {
+      if (confirm("このセッションを削除しますか？")) {
         localStorage.removeItem(key);
         renderSessionHistory();
       }
@@ -457,5 +444,5 @@ window.renderSessionHistory = function () {
     li.appendChild(label);
     li.appendChild(del);
     historyList.appendChild(li);
- });
-};  // ✅ これが正しい最後のカッコとセミコロン！
+  });
+};
