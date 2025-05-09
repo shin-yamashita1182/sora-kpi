@@ -412,7 +412,6 @@ window.renderSessionHistory = function () {
   historyList.innerHTML = "";
 
   const sessionKeys = Object.keys(localStorage)
-    const sessionKeys = Object.keys(localStorage)
   .filter(k => k.startsWith("session_") && !k.startsWith("session_selected"))
   .sort((a, b) => Number(b.replace("session_", "")) - Number(a.replace("session_", "")))
   .slice(0, 20);
