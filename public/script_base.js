@@ -458,4 +458,5 @@ window.renderSessionHistory = function () {
     li.appendChild(del);
     historyList.appendChild(li);
   });
-};
+  }
+});
