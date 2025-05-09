@@ -790,3 +790,18 @@ footer {
   content: "🕒";
   font-size: 1.1rem;
 }
+/* 親要素：ロゴ全体の配置用（すでに .logo クラスがある前提） */
+.logo {
+  display: flex;
+  align-items: center;
+  padding: 8px 16px;         /* 上下左右の余白（好みで調整OK） */
+  background-color: white;  /* 任意。背景が白でない場合に */
+}
+
+/* ロゴ画像そのもののスタイル */
+#dashboardLogo {
+  height: 48px;              /* 推奨：45〜55pxが自然。必要に応じて調整可 */
+  max-width: 100%;           /* 画面横幅が狭い場合でもはみ出さないように */
+  display: block;
+  object-fit: contain;       /* 縦横比を維持して中身が切れないように */
+}
