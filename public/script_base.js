@@ -434,6 +434,5 @@ window.renderSessionHistory = function () {
 
 document.addEventListener("DOMContentLoaded", renderSessionHistory);
 }
-});
 } // ✅ ←これが抜けていた！（if 文の閉じ）
 }); // ✅ DOMContentLoaded の終了
