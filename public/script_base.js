@@ -418,13 +418,16 @@ window.renderSessionHistory = function () {
 
 
   sessionKeys.forEach((key) => {
-    let session;
-    try {
-      session = JSON.parse(localStorage.getItem(key));
-    } catch (e) {
-      console.warn("⚠️ JSON構文エラー：", key, e);
-      return; // 壊れたデータはスキップ
-    }
+    console.log("➡️ 現在処理中のキー:", key); // ← 🔥 ここも必須！
+let session;
+try {
+  const raw = localStorage.getItem(key);
+  session = JSON.parse(raw);
+  if (!session || typeof session !== 'object') throw new Error("不正な形式");
+} catch (e) {
+  console.warn("⚠️ JSONパース失敗:", key, e);
+  return; // この1件だけスキップ
+}
 
     if (!session) return;
 
