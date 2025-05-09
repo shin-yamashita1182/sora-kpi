@@ -88,10 +88,10 @@
 
   // ✅ セッションに保存して閉じる
 function saveAndClose() {
-  const node = document.getElementById("mindmap");
+  const node = document.querySelector("#mindmap .map-canvas"); // ✅ ← 修正ポイント
 
   if (!node) {
-    alert("❌ #mindmap 要素が見つかりませんでした");
+    alert("❌ キャプチャ対象の .map-canvas が見つかりません");
     return;
   }
 
@@ -112,7 +112,7 @@ function saveAndClose() {
         alert("❌ PNG変換に失敗しました");
         console.error("PNGエラー:", err);
       });
-  }, 300); // 最低限のwait、描画済みなら無害
+  }, 300);
 }
 
 </script>
