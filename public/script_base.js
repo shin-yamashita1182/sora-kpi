@@ -459,7 +459,16 @@ function renderSessionHistory() {
   });
 }
 
-document.addEventListener("DOMContentLoaded", renderSessionHistory);
+document.addEventListener("DOMContentLoaded", () => {
+  renderSessionHistory();  // ✅ ページ読み込み時に履歴を表示
 
+  const updateBtn = document.getElementById("updateHistoryBtn");
+  if (updateBtn) {
+    updateBtn.addEventListener("click", () => {
+      console.log("✅ 更新ボタン押されたよ！");
+      renderSessionHistory();  // ✅ ボタンクリックでも履歴を更新
+    });
+  }
+});
 
 }); // ← これは必要
