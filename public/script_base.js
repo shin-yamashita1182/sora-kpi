@@ -404,8 +404,7 @@ console.log("✅ セッション保存完了:", sessionKey);
 //   });
 // }
 
-// ✅ 履歴を描画して、削除もできる・更新はlocation.reload
-// ✅ 1. セッション履歴描画の関数定義（function本体）
+// ✅ グローバル定義：セッション描画関数（ゴミ箱付き）
 window.renderSessionHistory = function () {
   const historyList = document.getElementById("historyList");
   if (!historyList) return;
@@ -413,22 +412,20 @@ window.renderSessionHistory = function () {
   historyList.innerHTML = "";
 
   const sessionKeys = Object.keys(localStorage)
-    .filter(k => /^session_\d+$/.test(k))
+    .filter(k => /^session_\d+$/.test(k))  // session_＋数字だけに限定
     .sort((a, b) => Number(b.replace("session_", "")) - Number(a.replace("session_", "")))
-    .slice(0, 20);
+    .slice(0, 20);  // 最大20件表示
 
   sessionKeys.forEach((key) => {
     let session;
     try {
       session = JSON.parse(localStorage.getItem(key));
     } catch (e) {
-      console.warn("⚠️ JSONエラー：", key, e);
-      return;
+      console.warn("⚠️ JSON構文エラー：", key, e);
+      return; // 壊れたデータはスキップ
     }
 
     if (!session) return;
-
-    const labelText = `${session.region || "（地域未設定）"} × ${session.theme || "（テーマ未設定）"}`;
 
     const li = document.createElement("li");
     li.style.marginBottom = "0.5rem";
@@ -437,7 +434,7 @@ window.renderSessionHistory = function () {
     li.style.alignItems = "center";
 
     const label = document.createElement("span");
-    label.textContent = labelText;
+    label.textContent = `${session.region || "（地域未設定）"} × ${session.theme || "（テーマ未設定）"}`;
     label.style.cursor = "pointer";
     label.style.flexGrow = "1";
     label.style.color = "#0077cc";
@@ -456,6 +453,7 @@ window.renderSessionHistory = function () {
     delBtn.style.background = "transparent";
     delBtn.style.color = "#cc0000";
     delBtn.style.fontSize = "16px";
+
     delBtn.onclick = () => {
       if (confirm("この履歴を削除しますか？")) {
         localStorage.removeItem(key);
@@ -467,9 +465,9 @@ window.renderSessionHistory = function () {
     li.appendChild(delBtn);
     historyList.appendChild(li);
   });
-};  // ← ✅ 関数はここでキッチリ閉じる！
+};
 
-// ✅ 2. ページ読み込み時に実行（DOMContentLoaded）
+// ✅ DOM読み込み時に自動実行（外で）
 document.addEventListener("DOMContentLoaded", () => {
   renderSessionHistory();
 });
