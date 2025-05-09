@@ -89,12 +89,6 @@
   // ✅ セッションに保存して閉じる
 function saveAndClose() {
   const node = document.getElementById("mindmap");
-  const svg = node.querySelector("svg");
-
-  if (!svg) {
-    alert("❌ マインドマップがまだ描画されていません");
-    return;
-  }
 
   domtoimage.toPng(node).then((dataUrl) => {
     const sessionKey = localStorage.getItem("selectedSessionKey");
