@@ -407,29 +407,27 @@ console.log("✅ セッション保存完了:", sessionKey);
 // ✅ グローバル定義：セッション描画関数（ゴミ箱付き）
 window.renderSessionHistory = function () {
   const historyList = document.getElementById("historyList");
-  if (!historyList) return;
+  if (!historyList) {
+    console.warn("📛 historyList が見つかりません");
+    return;
+  }
 
   historyList.innerHTML = "";
 
   const sessionKeys = Object.keys(localStorage)
-  .filter(k => k.startsWith("session_") && !k.startsWith("session_selected"))
-  .sort((a, b) => Number(b.replace("session_", "")) - Number(a.replace("session_", "")))
-  .slice(0, 20);
-
+    .filter(k => k.startsWith("session_") && !k.startsWith("session_selected"))
+    .sort((a, b) => Number(b.replace("session_", "")) - Number(a.replace("session_", "")))
+    .slice(0, 20);
 
   sessionKeys.forEach((key) => {
-    console.log("➡️ 現在処理中のキー:", key); // ← 🔥 ここも必須！
-let session;
-try {
-  const raw = localStorage.getItem(key);
-  session = JSON.parse(raw);
-  if (!session || typeof session !== 'object') throw new Error("不正な形式");
-} catch (e) {
-  console.warn("⚠️ JSONパース失敗:", key, e);
-  return; // この1件だけスキップ
-}
-
-    if (!session) return;
+    let session;
+    try {
+      session = JSON.parse(localStorage.getItem(key));
+      if (!session || typeof session !== "object") throw new Error("不正なセッション形式");
+    } catch (e) {
+      console.warn("⚠️ 無効なセッションをスキップ:", key);
+      return;
+    }
 
     const li = document.createElement("li");
     li.style.marginBottom = "0.5rem";
@@ -461,7 +459,7 @@ try {
     delBtn.onclick = () => {
       if (confirm("この履歴を削除しますか？")) {
         localStorage.removeItem(key);
-        renderSessionHistory();
+        renderSessionHistory(); // 再描画
       }
     };
 
