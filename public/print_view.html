@@ -163,13 +163,14 @@ const img = document.createElement("img");
 img.id = "mindmapImage";
 img.src = imageData;
 img.alt = "マインドマップ画像";
-img.style.maxWidth = "100%";
-img.style.height = "auto";
-img.style.maxHeight = "80vh";
-img.style.objectFit = "contain";
-img.style.border = "1px solid #ccc";
-img.style.boxShadow = "0 2px 6px rgba(0,0,0,0.1)";
 
+// サイズ調整を削除して、画像が自動で収まるようにする
+img.style.maxWidth = "100%";  // 画面幅に合わせる
+img.style.height = "auto";  // 高さを自動調整
+img.style.border = "1px solid #ccc";  // 境界線
+img.style.boxShadow = "0 2px 6px rgba(0,0,0,0.1)";  // 影を追加
+
+  
   // ✅ 印刷対象：画像だけを含めるラッパー
   const printable = document.createElement("div");
   printable.className = "print-area";
