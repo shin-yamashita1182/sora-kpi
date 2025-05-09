@@ -90,18 +90,29 @@
 function saveAndClose() {
   const node = document.getElementById("mindmap");
 
-  domtoimage.toPng(node).then((dataUrl) => {
-    const sessionKey = localStorage.getItem("selectedSessionKey");
-    const sessionData = sessionKey ? JSON.parse(localStorage.getItem(sessionKey)) : {};
-    sessionData.mindmapImageData = dataUrl;
-    localStorage.setItem(sessionKey, JSON.stringify(sessionData));
+  if (!node) {
+    alert("❌ #mindmap 要素が見つかりませんでした");
+    return;
+  }
 
-    alert("✅ マインドマップを保存しました！");
-    window.close();
-  }).catch((err) => {
-    alert("❌ 画像保存に失敗しました。");
-    console.error("キャプチャエラー:", err);
-  });
+  console.log("🎯 キャプチャ対象:", node);
+
+  setTimeout(() => {
+    domtoimage.toPng(node)
+      .then((dataUrl) => {
+        const sessionKey = localStorage.getItem("selectedSessionKey");
+        const sessionData = sessionKey ? JSON.parse(localStorage.getItem(sessionKey)) : {};
+        sessionData.mindmapImageData = dataUrl;
+        localStorage.setItem(sessionKey, JSON.stringify(sessionData));
+
+        alert("✅ 画像として保存しました！");
+        window.close();
+      })
+      .catch((err) => {
+        alert("❌ PNG変換に失敗しました");
+        console.error("PNGエラー:", err);
+      });
+  }, 300); // 最低限のwait、描画済みなら無害
 }
 
 </script>
