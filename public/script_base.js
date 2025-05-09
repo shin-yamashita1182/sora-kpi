@@ -415,6 +415,8 @@ window.renderSessionHistory = function () {
 
   sessionKeys.forEach((key) => {
     const session = JSON.parse(localStorage.getItem(key));
+    if (!session?.region || !session?.theme) return;
+
     const li = document.createElement("li");
 
     const label = document.createElement("span");
@@ -431,8 +433,3 @@ window.renderSessionHistory = function () {
 };
 
 document.addEventListener("DOMContentLoaded", renderSessionHistory);
-
-  });
-};
-
-  document.addEventListener("DOMContentLoaded", renderSessionHistory);
