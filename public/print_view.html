@@ -80,6 +80,9 @@
   </div>
 
   <script>
+    const sessionKey = localStorage.getItem("selectedSessionKey");
+    const sessionData = sessionKey ? JSON.parse(localStorage.getItem(sessionKey)) : null;
+
     function loadSection(type) {
       const content = document.getElementById("content");
       const details = document.getElementById("detailSections");
@@ -87,8 +90,9 @@
       details.innerHTML = "";
 
       if (type === "mindmap") {
-        const region = localStorage.getItem("region") || "地域未設定";
-        const theme = localStorage.getItem("theme") || "テーマ未設定";
+        const region = sessionData?.region || localStorage.getItem("region") || "地域未設定";
+        const theme = sessionData?.theme || localStorage.getItem("theme") || "テーマ未設定";
+        const imageData = sessionData?.mindmapImageData || localStorage.getItem("mindmapImageData");
         const dateStr = new Date().toLocaleDateString();
 
         const metadata = document.createElement("div");
@@ -100,7 +104,7 @@
         `;
 
         const img = document.createElement("img");
-        img.src = localStorage.getItem("mindmapImageData");
+        img.src = imageData;
         img.style.maxWidth = "100%";
         img.alt = "マインドマップ画像";
 
