@@ -56,6 +56,21 @@
     #mindmapMetadata {
       text-align: left;
       margin-bottom: 1rem;
+      background: #fff;
+      border: 1px solid #ccc;
+      padding: 1rem;
+      border-radius: 6px;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    #mindmapImage {
+      display: block;
+      margin: 1rem auto;
+      max-width: 100%;
+      border: 1px solid #999;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
     }
   </style>
 </head>
@@ -75,9 +90,7 @@
   </div>
 
   <!-- ✅ 統合出力などの追加UI領域 -->
-  <div class="section-container" id="detailSections">
-    <!-- 各セクション表示用：今後追加される詳細出力UIがここに展開されます -->
-  </div>
+  <div class="section-container" id="detailSections"></div>
 
   <script>
     const sessionKey = localStorage.getItem("selectedSessionKey");
@@ -98,20 +111,21 @@
         const metadata = document.createElement("div");
         metadata.id = "mindmapMetadata";
         metadata.innerHTML = `
+          <h2>🧠 マインドマップ出力</h2>
           <p><strong>地域名：</strong>${region}</p>
           <p><strong>テーマ：</strong>${theme}</p>
           <p><strong>出力日：</strong>${dateStr}</p>
         `;
 
         const img = document.createElement("img");
+        img.id = "mindmapImage";
         img.src = imageData;
-        img.style.maxWidth = "100%";
         img.alt = "マインドマップ画像";
 
         content.appendChild(metadata);
         content.appendChild(img);
 
-        details.innerHTML = "<p style='margin-top: 1rem;'>このマインドマップは、地域の課題と構造的な思考を可視化した資料です。</p>";
+        details.innerHTML = "<p style='margin-top: 1rem;'>このマインドマップは、地域の課題と構造的な思考を可視化した資料です。今後の対策立案や共有に活用できます。</p>";
       } else if (type === "summary") {
         content.innerHTML = "<h2>📊 統合出力（ダッシュボード情報）</h2><p>※ここにダッシュボードの統合レポートが表示されます。</p>";
         details.innerHTML = "<p>[統合グラフ・KPI一覧・地域指標などのパネルが今後ここに展開されます]</p>";
