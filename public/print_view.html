@@ -97,6 +97,7 @@
     const sessionData = sessionKey ? JSON.parse(localStorage.getItem(sessionKey)) : null;
 
     function loadSection(type) {
+      console.log("loadSection called with type:", type); // ← 追加
       const content = document.getElementById("content");
       const details = document.getElementById("detailSections");
       content.innerHTML = "";
