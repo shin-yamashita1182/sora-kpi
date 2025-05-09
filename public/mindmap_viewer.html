@@ -89,30 +89,25 @@
   // ✅ セッションに保存して閉じる
 function saveAndClose() {
   const node = document.getElementById("mindmap");
-  const svg = node.querySelector("svg"); // ✅ SVG要素を取得（これが抜けていた）
+  const svg = node.querySelector("svg");
 
-  console.log("🎯 キャプチャ直前のSVG:", svg);
   if (!svg) {
-    alert("❌ SVGが描画されていません（キャプチャ不能）");
+    alert("❌ マインドマップがまだ描画されていません");
     return;
   }
 
-  setTimeout(() => {
-    html2canvas(node, { useCORS: true, scale: 2 }).then(canvas => {
-      const dataUrl = canvas.toDataURL("image/png");
+  domtoimage.toPng(node).then((dataUrl) => {
+    const sessionKey = localStorage.getItem("selectedSessionKey");
+    const sessionData = sessionKey ? JSON.parse(localStorage.getItem(sessionKey)) : {};
+    sessionData.mindmapImageData = dataUrl;
+    localStorage.setItem(sessionKey, JSON.stringify(sessionData));
 
-      const sessionKey = localStorage.getItem("selectedSessionKey");
-      const sessionData = sessionKey ? JSON.parse(localStorage.getItem(sessionKey)) : {};
-      sessionData.mindmapImageData = dataUrl;
-      localStorage.setItem(sessionKey, JSON.stringify(sessionData));
-
-      alert("✅ キャプチャして保存しました！");
-      window.close();
-    }).catch((err) => {
-      alert("❌ 保存に失敗しました。");
-      console.error(err);
-    });
-  }, 500); // ← 少し描画を待つ工夫
+    alert("✅ マインドマップを保存しました！");
+    window.close();
+  }).catch((err) => {
+    alert("❌ 画像保存に失敗しました。");
+    console.error("キャプチャエラー:", err);
+  });
 }
 
 </script>
