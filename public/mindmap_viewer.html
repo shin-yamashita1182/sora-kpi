@@ -53,10 +53,9 @@
 
   <header>🧠 マインドマップビューア</header>
 
-  <div class="controls">
-    <button onclick="downloadPNG()">PNGで保存</button>
-    <button onclick="window.print()">PDFを出力</button>
-  </div>
+ <div class="controls">
+  <button onclick="openPrintPreview()">印刷・保存（プレビュー）</button>
+</div>
 
   <div id="mindmap"></div>
 
@@ -88,24 +87,21 @@
   mind.init();
 
   // ✅ キャプチャ用PNG保存ボタン
-  function downloadPNG() {
-    const node = document.getElementById('mindmap');
+  function openPrintPreview() {
+  const node = document.getElementById('mindmap');
 
-    // 💡 描画が安定してから実行（0.5〜1秒待機）
-    setTimeout(() => {
-      domtoimage.toPng(node)
-        .then((dataUrl) => {
-          const link = document.createElement('a');
-          link.download = 'mindmap.png';
-          link.href = dataUrl;
-          link.click();
-        })
-        .catch((error) => {
-          alert("画像の保存に失敗しました。");
-          console.error("PNG保存エラー:", error);
-        });
-    }, 700); // 描画負荷が高い場合は 1000 にしてもOK
-  }
+  setTimeout(() => {
+    domtoimage.toPng(node)
+      .then((dataUrl) => {
+        localStorage.setItem("mindmapImageData", dataUrl);  // 👈 保存だけに切り替え
+        window.open("print_viewer.html", "_blank");         // 👈 印刷プレビューへ遷移
+      })
+      .catch((error) => {
+        alert("画像生成に失敗しました。");
+        console.error("PNG生成エラー:", error);
+      });
+  }, 700);
+}
 </script>
 </body>
 </html>
