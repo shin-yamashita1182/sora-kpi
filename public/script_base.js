@@ -450,4 +450,5 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 
   renderSessionHistory(); // ← イベント発火時に呼び出す
-}); // ← ★絶対に必要な閉じ括弧＋セミコロン！
+}); // ← ✅ これは履歴表示のDOMContentLoadedの終了
+}); // ← ✅ 🔥 これが本当に必要な「最初の全体の閉じカッコ」！！
