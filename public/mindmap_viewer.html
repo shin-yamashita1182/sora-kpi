@@ -88,31 +88,36 @@
 
   // ✅ セッションに保存して閉じる
 function saveAndClose() {
-  const node = document.querySelector("#mindmap .map-canvas"); // ✅ ← 修正ポイント
+  const node = document.getElementById("mindmap");
+  let attempts = 0;
+  const maxAttempts = 10;
 
-  if (!node) {
-    alert("❌ キャプチャ対象の .map-canvas が見つかりません");
-    return;
-  }
+  const checkRendered = setInterval(() => {
+    const isReady = node && node.querySelector("svg"); // MindElixirが描画されたか確認
+    attempts++;
 
-  console.log("🎯 キャプチャ対象:", node);
+    if (isReady || attempts >= maxAttempts) {
+      clearInterval(checkRendered);
 
-  setTimeout(() => {
-    domtoimage.toPng(node)
-      .then((dataUrl) => {
-        const sessionKey = localStorage.getItem("selectedSessionKey");
-        const sessionData = sessionKey ? JSON.parse(localStorage.getItem(sessionKey)) : {};
-        sessionData.mindmapImageData = dataUrl;
-        localStorage.setItem(sessionKey, JSON.stringify(sessionData));
+      if (!isReady) {
+        alert("描画が完了しなかったため、保存できませんでした。");
+        return;
+      }
 
-        alert("✅ 画像として保存しました！");
-        window.close();
-      })
-      .catch((err) => {
-        alert("❌ PNG変換に失敗しました");
-        console.error("PNGエラー:", err);
-      });
-  }, 300);
+      domtoimage.toPng(node)
+        .then((dataUrl) => {
+          const sessionKey = localStorage.getItem("selectedSessionKey");
+          const sessionData = sessionKey ? JSON.parse(localStorage.getItem(sessionKey)) : {};
+          sessionData.png = dataUrl;
+          localStorage.setItem(sessionKey, JSON.stringify(sessionData));
+          window.close(); // 任意：保存後にウィンドウを閉じる
+        })
+        .catch((error) => {
+          console.error("PNG保存エラー:", error);
+          alert("PNG保存に失敗しました。");
+        });
+    }
+  }, 500);
 }
 
 </script>
