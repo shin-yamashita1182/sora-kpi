@@ -474,4 +474,3 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }, 300); // ← 読み込み完了後に遅延実行（確実にするため）
 });
-}); 
