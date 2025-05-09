@@ -145,7 +145,7 @@
 if (type === "mindmap") {
   const region = sessionData?.region || localStorage.getItem("region") || "地域未設定";
   const theme = sessionData?.theme || localStorage.getItem("theme") || "テーマ未設定";
-  const imageData = sessionData?.mindmapImageData || localStorage.getItem("mindmapImageData");
+  const imageData = sessionData?.mindmapImageData || sessionData?.png || localStorage.getItem("mindmapImageData");
   const dateStr = new Date().toLocaleDateString();
 
   // 🔷 表示専用：メタデータ（印刷には含めない）
