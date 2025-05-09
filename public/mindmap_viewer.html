@@ -89,13 +89,13 @@
   // ✅ セッションに保存して閉じる
 function saveAndClose() {
   const node = document.getElementById("mindmap");
+  const svg = node.querySelector("svg"); // ✅ SVG要素を取得（これが抜けていた）
 
-   console.log("🎯 キャプチャ直前のSVG:", svg);
+  console.log("🎯 キャプチャ直前のSVG:", svg);
   if (!svg) {
     alert("❌ SVGが描画されていません（キャプチャ不能）");
     return;
   }
-
 
   setTimeout(() => {
     html2canvas(node, { useCORS: true, scale: 2 }).then(canvas => {
@@ -112,7 +112,7 @@ function saveAndClose() {
       alert("❌ 保存に失敗しました。");
       console.error(err);
     });
-  }, 500); // ← この“少し待つ”だけが唯一の工夫
+  }, 500); // ← 少し描画を待つ工夫
 }
 
 </script>
