@@ -414,13 +414,7 @@ window.renderSessionHistory = function () {
   const sessionKeys = Object.keys(localStorage).filter(k => k.startsWith("session_"));
 
   sessionKeys.forEach((key) => {
-    let session;
-    try {
-      session = JSON.parse(localStorage.getItem(key));
-    } catch {
-      return;
-    }
-
+    const session = JSON.parse(localStorage.getItem(key));
     const li = document.createElement("li");
 
     const label = document.createElement("span");
@@ -431,27 +425,9 @@ window.renderSessionHistory = function () {
       window.open("/print_view.html", "_blank");
     };
 
-    const del = document.createElement("button");
-    del.textContent = "🗑️";
-    del.style.marginLeft = "8px";
-    del.onclick = () => {
-      if (confirm("このセッションを削除しますか？")) {
-        localStorage.removeItem(key);
-        location.reload(); // ✅ 超シンプル更新：削除後リロード
-      }
-    };
-
     li.appendChild(label);
-    li.appendChild(del);
     historyList.appendChild(li);
   });
 };
 
-document.addEventListener("DOMContentLoaded", () => {
-  renderSessionHistory();
-
-  const updateBtn = document.getElementById("updateHistoryBtn");
-  if (updateBtn) {
-    updateBtn.addEventListener("click", () => location.reload()); // ✅ シンプル更新ボタン
-  }
-});
+document.addEventListener("DOMContentLoaded", renderSessionHistory);
