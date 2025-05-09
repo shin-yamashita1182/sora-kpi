@@ -405,6 +405,8 @@ console.log("✅ セッション保存完了:", sessionKey);
 // }
 // ✅ 履歴一覧を localStorage から自動生成
 function renderSessionHistory() {
+  console.log("📂 履歴を再読み込み中...");
+  
   const historyList = document.getElementById("historyList");
   if (!historyList) return;
 
@@ -412,11 +414,11 @@ function renderSessionHistory() {
 
   const sessionKeys = Object.keys(localStorage)
     .filter(k => k.startsWith("session_"))
-    .sort((a, b) => {
-      const ta = JSON.parse(localStorage.getItem(a))?.timestamp || "";
-      const tb = JSON.parse(localStorage.getItem(b))?.timestamp || "";
-      return tb.localeCompare(ta);
-    });
+.sort((a, b) => {
+  const ta = JSON.parse(localStorage.getItem(a))?.timestamp || "0";
+  const tb = JSON.parse(localStorage.getItem(b))?.timestamp || "0";
+  return tb.localeCompare(ta);
+});
 
   sessionKeys.forEach((key) => {
     let session;
@@ -431,9 +433,10 @@ function renderSessionHistory() {
 
     const label = document.createElement("span");
     label.textContent =
-      (session?.region && session?.theme)
-        ? `${session.region} × ${session.theme}`
-        : key;
+  (session?.region && session?.theme)
+    ? `${session.region} × ${session.theme}`
+    : session?.title || key || "セッション";
+      
     label.style.cursor = "pointer";
     label.onclick = () => {
       localStorage.setItem("selectedSessionKey", key);
@@ -457,4 +460,6 @@ function renderSessionHistory() {
 }
 
 document.addEventListener("DOMContentLoaded", renderSessionHistory);
+
+
 }); // ← これは必要
