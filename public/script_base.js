@@ -419,12 +419,21 @@ function renderSessionHistory() {
     });
 
   sessionKeys.forEach((key) => {
-    const session = JSON.parse(localStorage.getItem(key));
-    console.log("読み込んだセッション:", key, session); // ←これ追加！
+    let session;
+    try {
+      session = JSON.parse(localStorage.getItem(key));
+    } catch (e) {
+      console.warn("セッションデータの読み込み失敗:", key);
+      return;
+    }
+
     const li = document.createElement("li");
 
     const label = document.createElement("span");
-    label.textContent = `${session.region} × ${session.theme}`;
+    label.textContent =
+      (session?.region && session?.theme)
+        ? `${session.region} × ${session.theme}`
+        : key;
     label.style.cursor = "pointer";
     label.onclick = () => {
       localStorage.setItem("selectedSessionKey", key);
