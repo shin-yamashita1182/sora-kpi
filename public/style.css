@@ -800,7 +800,7 @@ footer {
 
 /* ロゴ画像そのもののスタイル */
 #dashboardLogo {
-  height: 48px;              /* 推奨：45〜55pxが自然。必要に応じて調整可 */
+  height: 60px;              /* 推奨：45〜55pxが自然。必要に応じて調整可 */
   max-width: 100%;           /* 画面横幅が狭い場合でもはみ出さないように */
   display: block;
   object-fit: contain;       /* 縦横比を維持して中身が切れないように */
