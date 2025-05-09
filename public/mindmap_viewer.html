@@ -95,38 +95,19 @@ function saveAndClose() {
     return;
   }
 
-  let attempts = 0;
-  const maxAttempts = 10;
-
-  const checkRendered = setInterval(() => {
-    attempts++;
-    const svgEl = node.querySelector("svg");
-
-    if (svgEl || attempts >= maxAttempts) {
-      clearInterval(checkRendered);
-
-      if (!svgEl) {
-        alert("描画が完了しなかったため、PNG保存できませんでした。");
-        return;
-      }
-
-      // ✅ ここでnodeが確実に存在する前提でPNG変換
-      domtoimage.toPng(node)
-        .then((dataUrl) => {
-          const sessionKey = localStorage.getItem("selectedSessionKey");
-          const sessionData = sessionKey ? JSON.parse(localStorage.getItem(sessionKey)) : {};
-          sessionData.png = dataUrl;
-          localStorage.setItem(sessionKey, JSON.stringify(sessionData));
-          window.close(); // 任意: 保存後ウィンドウを閉じる
-        })
-        .catch((error) => {
-          console.error("PNG保存に失敗:", error);
-          alert("PNG保存処理中にエラーが発生しました。");
-        });
-    }
-  }, 500);
+  domtoimage.toPng(node)
+    .then((dataUrl) => {
+      const sessionKey = localStorage.getItem("selectedSessionKey");
+      const sessionData = sessionKey ? JSON.parse(localStorage.getItem(sessionKey)) : {};
+      sessionData.png = dataUrl;
+      localStorage.setItem(sessionKey, JSON.stringify(sessionData));
+      window.close();
+    })
+    .catch((error) => {
+      console.error("PNG保存失敗:", error);
+      alert("PNG保存処理中にエラーが発生しました。");
+    });
 }
-
 
 </script>
 </body>
