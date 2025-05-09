@@ -96,7 +96,7 @@
     domtoimage.toPng(node)
       .then((dataUrl) => {
         localStorage.setItem("mindmapImageData", dataUrl);  // 👈 保存だけに切り替え
-        window.open("print_viewer.html", "_blank");         // 👈 印刷プレビューへ遷移
+        window.open("print_view.html", "_blank");  // 👈 印刷プレビューへ遷移
       })
       .catch((error) => {
         alert("画像生成に失敗しました。");
