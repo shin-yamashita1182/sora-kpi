@@ -52,6 +52,11 @@
       border-top: 1px solid #ccc;
       padding-top: 1rem;
     }
+
+    #mindmapMetadata {
+      text-align: left;
+      margin-bottom: 1rem;
+    }
   </style>
 </head>
 <body>
@@ -61,7 +66,7 @@
   <div id="menu">
     <button onclick="loadSection('mindmap')">🧠 マインドマップ単体</button>
     <button onclick="loadSection('summary')">📊 統合出力（ダッシュボード）</button>
-    <button onclick="loadSection('cards')">📇 トリガーカード一覧</button>
+    <button onclick="loadSection('cards')">📇 実行策一覧</button>
     <button onclick="loadSection('3d')">🌐 3Dビューア</button>
   </div>
 
@@ -82,16 +87,32 @@
       details.innerHTML = "";
 
       if (type === "mindmap") {
+        const region = localStorage.getItem("region") || "地域未設定";
+        const theme = localStorage.getItem("theme") || "テーマ未設定";
+        const dateStr = new Date().toLocaleDateString();
+
+        const metadata = document.createElement("div");
+        metadata.id = "mindmapMetadata";
+        metadata.innerHTML = `
+          <p><strong>地域名：</strong>${region}</p>
+          <p><strong>テーマ：</strong>${theme}</p>
+          <p><strong>出力日：</strong>${dateStr}</p>
+        `;
+
         const img = document.createElement("img");
         img.src = localStorage.getItem("mindmapImageData");
         img.style.maxWidth = "100%";
         img.alt = "マインドマップ画像";
+
+        content.appendChild(metadata);
         content.appendChild(img);
+
+        details.innerHTML = "<p style='margin-top: 1rem;'>このマインドマップは、地域の課題と構造的な思考を可視化した資料です。</p>";
       } else if (type === "summary") {
         content.innerHTML = "<h2>📊 統合出力（ダッシュボード情報）</h2><p>※ここにダッシュボードの統合レポートが表示されます。</p>";
         details.innerHTML = "<p>[統合グラフ・KPI一覧・地域指標などのパネルが今後ここに展開されます]</p>";
       } else if (type === "cards") {
-        content.innerHTML = "<h2>📇 トリガーカード一覧出力</h2><p>※ここにカードの分類や一覧が表示されます。</p>";
+        content.innerHTML = "<h2>📇 実行策一覧出力</h2><p>※ここにカードの分類や一覧が表示されます。</p>";
         details.innerHTML = "<p>[Mind Trigger Card 表形式、ラベル分類、エクスポート機能予定]</p>";
       } else if (type === "3d") {
         window.open("3d_viewer.html", "_blank");
