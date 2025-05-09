@@ -433,5 +433,3 @@ window.renderSessionHistory = function () {
 };
 
 document.addEventListener("DOMContentLoaded", renderSessionHistory);
-}
-}); // ✅ DOMContentLoaded の終了
