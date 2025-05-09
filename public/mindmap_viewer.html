@@ -95,20 +95,16 @@ function saveAndClose() {
     return;
   }
 
-  let attempts = 0;
-  const maxAttempts = 10;
+  const checkRendered = () => {
+    const svg = node.querySelector("svg");
 
-  const checkRendered = setInterval(() => {
-    const internalCanvas = node.querySelector("svg"); // ← MindElixir内部描画が終わるとSVGが現れる
+    if (!svg) {
+      alert("描画が完了しなかったため、保存できませんでした。");
+      return;
+    }
 
-    if (internalCanvas || attempts >= maxAttempts) {
-      clearInterval(checkRendered);
-
-      if (!internalCanvas) {
-        alert("描画が完了しなかったため、保存できませんでした。");
-        return;
-      }
-
+    // ✅ 描画が終わってから1フレーム待つ
+    requestAnimationFrame(() => {
       domtoimage.toPng(node)
         .then((dataUrl) => {
           const sessionKey = localStorage.getItem("selectedSessionKey");
@@ -121,10 +117,11 @@ function saveAndClose() {
           console.error("PNG保存失敗:", error);
           alert("PNG保存処理中にエラーが発生しました。");
         });
-    }
+    });
+  };
 
-    attempts++;
-  }, 300); // 0.3秒ごとにチェック
+  // 0.3秒後に一度だけチェックして保存（確実性を高める）
+  setTimeout(checkRendered, 300);
 }
 
 </script>
