@@ -446,3 +446,12 @@ window.renderSessionHistory = function () {
     historyList.appendChild(li);
   });
 };
+
+document.addEventListener("DOMContentLoaded", () => {
+  renderSessionHistory();
+
+  const updateBtn = document.getElementById("updateHistoryBtn");
+  if (updateBtn) {
+    updateBtn.addEventListener("click", renderSessionHistory);
+  }
+});
