@@ -407,10 +407,7 @@ console.log("✅ セッション保存完了:", sessionKey);
 // ✅ グローバル定義：セッション描画関数（ゴミ箱付き）
 window.renderSessionHistory = function () {
   const historyList = document.getElementById("historyList");
-  if (!historyList) {
-    console.warn("📛 historyList が見つかりません");
-    return;
-  }
+  if (!historyList) return;
 
   historyList.innerHTML = "";
 
@@ -423,17 +420,16 @@ window.renderSessionHistory = function () {
     let session;
     try {
       session = JSON.parse(localStorage.getItem(key));
-      if (!session || typeof session !== "object") throw new Error("不正なセッション形式");
     } catch (e) {
-      console.warn("⚠️ 無効なセッションをスキップ:", key);
+      console.warn("⚠️ JSON形式エラー:", key, e);
       return;
     }
 
     const li = document.createElement("li");
-    li.style.marginBottom = "0.5rem";
     li.style.display = "flex";
     li.style.justifyContent = "space-between";
     li.style.alignItems = "center";
+    li.style.marginBottom = "0.5rem";
 
     const label = document.createElement("span");
     label.textContent = `${session.region || "（地域未設定）"} × ${session.theme || "（テーマ未設定）"}`;
@@ -459,7 +455,7 @@ window.renderSessionHistory = function () {
     delBtn.onclick = () => {
       if (confirm("この履歴を削除しますか？")) {
         localStorage.removeItem(key);
-        renderSessionHistory(); // 再描画
+        renderSessionHistory();
       }
     };
 
@@ -469,8 +465,13 @@ window.renderSessionHistory = function () {
   });
 };
 
+
 // ✅ DOM読み込み時に自動実行（外で）
 document.addEventListener("DOMContentLoaded", () => {
-renderSessionHistory();
+  setTimeout(() => {
+    if (typeof renderSessionHistory === "function") {
+      renderSessionHistory();
+    }
+  }, 300); // ← 読み込み完了後に遅延実行（確実にするため）
 });
 }); 
