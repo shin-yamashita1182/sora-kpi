@@ -412,9 +412,11 @@ window.renderSessionHistory = function () {
   historyList.innerHTML = "";
 
   const sessionKeys = Object.keys(localStorage)
-    .filter(k => /^session_\d+$/.test(k))  // session_＋数字だけに限定
-    .sort((a, b) => Number(b.replace("session_", "")) - Number(a.replace("session_", "")))
-    .slice(0, 20);  // 最大20件表示
+    const sessionKeys = Object.keys(localStorage)
+  .filter(k => k.startsWith("session_") && !k.startsWith("session_selected"))
+  .sort((a, b) => Number(b.replace("session_", "")) - Number(a.replace("session_", "")))
+  .slice(0, 20);
+
 
   sessionKeys.forEach((key) => {
     let session;
