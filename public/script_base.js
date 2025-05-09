@@ -430,4 +430,4 @@ window.renderSessionHistory = function () {
   });
 };
 
-document.addEventListener("DOMContentLoaded", renderSessionHistory);
+  document.addEventListener("DOMContentLoaded", renderSessionHistory);
