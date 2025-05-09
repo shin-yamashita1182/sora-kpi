@@ -405,50 +405,49 @@ console.log("✅ セッション保存完了:", sessionKey);
 // }
 
 // ✅ 履歴を描画して、削除もできる・更新はlocation.reload
-window.renderSessionHistory = function () {
-  const historyList = document.getElementById("historyList");
-  if (!historyList) return;
-
-  historyList.innerHTML = "";
-
-  const sessionKeys = Object.keys(localStorage).filter(k => k.startsWith("session_"));
-
-  sessionKeys.forEach((key) => {
-    const session = JSON.parse(localStorage.getItem(key));
-    if (!session?.region || !session?.theme) return;
-
-    const li = document.createElement("li");
-    li.style.marginBottom = "0.5rem";
-
-    const label = document.createElement("span");
-    label.textContent = `${session.region} × ${session.theme}`;
-    label.style.cursor = "pointer";
-    label.style.display = "inline-block";
-    label.style.marginRight = "0.5rem";
-    label.onclick = () => {
-      localStorage.setItem("selectedSessionKey", key);
-      window.open("print_view.html", "_blank");
-    };
-
-    const delBtn = document.createElement("button");
-    delBtn.textContent = "🗑";
-    delBtn.style.cursor = "pointer";
-    delBtn.style.border = "none";
-    delBtn.style.background = "transparent";
-    delBtn.onclick = () => {
-      if (confirm("この履歴を削除しますか？")) {
-        localStorage.removeItem(key);
-        renderSessionHistory(); // 再描画
-      }
-    };
-
-    li.appendChild(label);
-    li.appendChild(delBtn);
-    historyList.appendChild(li);
-  });
-};
-
 document.addEventListener("DOMContentLoaded", () => {
-  renderSessionHistory();
-});
+  window.renderSessionHistory = function () {
+    const historyList = document.getElementById("historyList");
+    if (!historyList) return;
 
+    historyList.innerHTML = "";
+
+    const sessionKeys = Object.keys(localStorage).filter(k => k.startsWith("session_"));
+
+    sessionKeys.forEach((key) => {
+      const session = JSON.parse(localStorage.getItem(key));
+      if (!session?.region || !session?.theme) return;
+
+      const li = document.createElement("li");
+      li.style.marginBottom = "0.5rem";
+
+      const label = document.createElement("span");
+      label.textContent = `${session.region} × ${session.theme}`;
+      label.style.cursor = "pointer";
+      label.style.display = "inline-block";
+      label.style.marginRight = "0.5rem";
+      label.onclick = () => {
+        localStorage.setItem("selectedSessionKey", key);
+        window.open("print_view.html", "_blank");
+      };
+
+      const delBtn = document.createElement("button");
+      delBtn.textContent = "🗑";
+      delBtn.style.cursor = "pointer";
+      delBtn.style.border = "none";
+      delBtn.style.background = "transparent";
+      delBtn.onclick = () => {
+        if (confirm("この履歴を削除しますか？")) {
+          localStorage.removeItem(key);
+          renderSessionHistory();
+        }
+      };
+
+      li.appendChild(label);
+      li.appendChild(delBtn);
+      historyList.appendChild(li);
+    });
+  };
+
+  renderSessionHistory(); // ← イベント発火時に呼び出す
+}); // ← ★絶対に必要な閉じ括弧＋セミコロン！
