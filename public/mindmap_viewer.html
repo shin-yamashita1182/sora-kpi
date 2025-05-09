@@ -91,6 +91,13 @@
 function saveAndClose() {
   const node = document.getElementById("mindmap");
 
+   console.log("🎯 キャプチャ直前のSVG:", svg);
+  if (!svg) {
+    alert("❌ SVGが描画されていません（キャプチャ不能）");
+    return;
+  }
+
+
   setTimeout(() => {
     html2canvas(node, { useCORS: true, scale: 2 }).then(canvas => {
       const dataUrl = canvas.toDataURL("image/png");
