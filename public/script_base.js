@@ -405,49 +405,54 @@ console.log("✅ セッション保存完了:", sessionKey);
 // }
 
 // ✅ 履歴を描画して、削除もできる・更新はlocation.reload
-document.addEventListener("DOMContentLoaded", () => {
-  window.renderSessionHistory = function () {
-    const historyList = document.getElementById("historyList");
-    if (!historyList) return;
+window.renderSessionHistory = function () {
+  const historyList = document.getElementById("historyList");
+  if (!historyList) return;
 
-    historyList.innerHTML = "";
+  historyList.innerHTML = ""; // 一度リセット
 
-    const sessionKeys = Object.keys(localStorage).filter(k => k.startsWith("session_"));
+  const sessionKeys = Object.keys(localStorage).filter(k => k.startsWith("session_"));
 
-    sessionKeys.forEach((key) => {
-      const session = JSON.parse(localStorage.getItem(key));
-      if (!session?.region || !session?.theme) return;
+  sessionKeys.forEach((key) => {
+    const session = JSON.parse(localStorage.getItem(key));
+    if (!session) return;
 
-      const li = document.createElement("li");
-      li.style.marginBottom = "0.5rem";
+    // 👇 regionとthemeがどちらか片方でもあれば表示
+    const labelText = `${session.region || "（地域未設定）"} × ${session.theme || "（テーマ未設定）"}`;
 
-      const label = document.createElement("span");
-      label.textContent = `${session.region} × ${session.theme}`;
-      label.style.cursor = "pointer";
-      label.style.display = "inline-block";
-      label.style.marginRight = "0.5rem";
-      label.onclick = () => {
-        localStorage.setItem("selectedSessionKey", key);
-        window.open("print_view.html", "_blank");
-      };
+    const li = document.createElement("li");
+    li.style.marginBottom = "0.5rem";
+    li.style.display = "flex";
+    li.style.justifyContent = "space-between";
+    li.style.alignItems = "center";
 
-      const delBtn = document.createElement("button");
-      delBtn.textContent = "🗑";
-      delBtn.style.cursor = "pointer";
-      delBtn.style.border = "none";
-      delBtn.style.background = "transparent";
-      delBtn.onclick = () => {
-        if (confirm("この履歴を削除しますか？")) {
-          localStorage.removeItem(key);
-          renderSessionHistory();
-        }
-      };
+    const label = document.createElement("span");
+    label.textContent = labelText;
+    label.style.cursor = "pointer";
+    label.onclick = () => {
+      localStorage.setItem("selectedSessionKey", key);
+      window.open("print_view.html", "_blank");
+    };
 
-      li.appendChild(label);
-      li.appendChild(delBtn);
-      historyList.appendChild(li);
-    });
-  };
+    const delBtn = document.createElement("button");
+    delBtn.textContent = "🗑";
+    delBtn.style.cursor = "pointer";
+    delBtn.style.border = "none";
+    delBtn.style.background = "transparent";
+    delBtn.style.fontSize = "16px";
+    delBtn.onclick = () => {
+      if (confirm("この履歴を削除しますか？")) {
+        localStorage.removeItem(key);
+        renderSessionHistory();
+      }
+    };
+
+    li.appendChild(label);
+    li.appendChild(delBtn);
+    historyList.appendChild(li);
+  });
+};
+
 
   renderSessionHistory(); // ← イベント発火時に呼び出す
 }); // ← ✅ これは履歴表示のDOMContentLoadedの終了
