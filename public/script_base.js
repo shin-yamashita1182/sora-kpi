@@ -403,7 +403,8 @@ console.log("✅ セッション保存完了:", sessionKey);
 //     }
 //   });
 // }
-// ✅ 履歴一覧を localStorage から自動生成
+
+// ✅ 履歴を描画して、削除もできる・更新はlocation.reload
 window.renderSessionHistory = function () {
   const historyList = document.getElementById("historyList");
   if (!historyList) return;
@@ -416,8 +417,7 @@ window.renderSessionHistory = function () {
     let session;
     try {
       session = JSON.parse(localStorage.getItem(key));
-    } catch (e) {
-      console.warn("❌ 読み込み失敗:", key);
+    } catch {
       return;
     }
 
@@ -437,7 +437,7 @@ window.renderSessionHistory = function () {
     del.onclick = () => {
       if (confirm("このセッションを削除しますか？")) {
         localStorage.removeItem(key);
-        renderSessionHistory();
+        location.reload(); // ✅ 超シンプル更新：削除後リロード
       }
     };
 
@@ -452,6 +452,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const updateBtn = document.getElementById("updateHistoryBtn");
   if (updateBtn) {
-    updateBtn.addEventListener("click", renderSessionHistory);
+    updateBtn.addEventListener("click", () => location.reload()); // ✅ シンプル更新ボタン
   }
 });
