@@ -1,134 +1,102 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8" />
-  <title>SORA印刷ビュー</title>
-  <link rel="stylesheet" href="/style.css" />
+  <meta charset="UTF-8">
+  <title>印刷ビューア - 出力統合メニュー</title>
   <style>
     body {
       font-family: 'Segoe UI', sans-serif;
-      background-color: #f9f9f9;
-      padding: 20px;
+      margin: 0;
+      padding: 0;
+      background-color: #f8f9fa;
     }
-    .section {
-      background: white;
-      border-radius: 8px;
-      padding: 20px;
-      margin-bottom: 20px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.05);
+
+    header {
+      background-color: #0077cc;
+      color: white;
+      padding: 1rem 2rem;
+      font-size: 1.4rem;
+      font-weight: bold;
+      text-align: center;
     }
-    .section h3 {
-      margin-top: 0;
-      font-size: 1.2em;
+
+    #menu {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      padding: 1rem;
+      background-color: #e9ecef;
     }
-    .output-box {
-      white-space: pre-wrap;
-      line-height: 1.6em;
+
+    #menu button {
+      background-color: #2a9d8f;
+      border: none;
+      color: white;
+      padding: 10px 20px;
+      font-size: 1rem;
+      border-radius: 6px;
+      cursor: pointer;
     }
-    #mindmapContainer {
-      width: 100%;
-      height: 600px;
-      border: 1px dashed #ccc;
-      border-radius: 8px;
-      background: #fff;
+
+    #menu button:hover {
+      background-color: #21867a;
     }
-    .output-controls {
-      text-align: right;
-      margin-top: 10px;
+
+    #content {
+      padding: 2rem;
+      text-align: center;
+    }
+
+    .section-container {
+      margin-top: 2rem;
+      border-top: 1px solid #ccc;
+      padding-top: 1rem;
     }
   </style>
 </head>
 <body>
+  <header>🖨️ 印刷・出力ビューア</header>
 
-<div class="section">
-  <h3>地域とテーマ</h3>
-  <p id="regionThemeOutput">-</p>
-</div>
-
-<div class="section">
-  <h3>課題リスト</h3>
-  <div id="taskListOutput" class="output-box">-</div>
-</div>
-
-<div class="section">
-  <h3>住民の考察</h3>
-  <div id="insightOutput" class="output-box">-</div>
-</div>
-
-<div class="section">
-  <h3>マインドマップ</h3>
-  <div id="mindmapContainer">ここにマインドマップを再描画</div>
-  <div class="output-controls">
-    <button onclick="saveAsPNG()">PNGで保存</button>
-    <button onclick="saveAsPDF()">PDFで出力</button>
+  <!-- ✅ 総合メニュー -->
+  <div id="menu">
+    <button onclick="loadSection('mindmap')">🧠 マインドマップ単体</button>
+    <button onclick="loadSection('summary')">📊 統合出力（ダッシュボード）</button>
+    <button onclick="loadSection('cards')">📇 トリガーカード一覧</button>
+    <button onclick="loadSection('3d')">🌐 3Dビューア</button>
   </div>
-</div>
 
-<!-- ライブラリ -->
-<script src="https://cdn.jsdelivr.net/npm/mind-elixir/dist/mind-elixir.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <div id="content">
+    <p>出力内容を選択してください。</p>
+  </div>
 
-<script>
-window.onload = () => {
-  const key = localStorage.getItem("selectedSessionKey");
-  const raw = key ? localStorage.getItem(key) : null;
-  if (!raw) return alert("セッションが存在しません");
+  <!-- ✅ 統合出力などの追加UI領域 -->
+  <div class="section-container" id="detailSections">
+    <!-- 各セクション表示用：今後追加される詳細出力UIがここに展開されます -->
+  </div>
 
-  const session = JSON.parse(raw);
+  <script>
+    function loadSection(type) {
+      const content = document.getElementById("content");
+      const details = document.getElementById("detailSections");
+      content.innerHTML = "";
+      details.innerHTML = "";
 
-  document.getElementById("regionThemeOutput").textContent =
-    `${session.region} × ${session.theme}`;
-
-  document.getElementById("taskListOutput").textContent =
-    (session.tasks || []).map((t, i) => `● ${t}`).join("\n");
-
-  document.getElementById("insightOutput").textContent =
-    session.insight || "未入力";
-
-  // 💡 保険：描画前に container をリセット
-  const container = document.getElementById("mindmapContainer");
-  container.innerHTML = "";
-
-  if (session.mindmapData && Object.keys(session.mindmapData).length > 0) {
-    // 💡 保険：topicが消えていたら代替
-    session.mindmapData.topic = session.mindmapData.topic || `${session.region}：${session.theme}`;
-    
-
-    const mind = new MindElixir({
-      el: "#mindmapContainer",
-      direction: MindElixir.LEFT,
-      data: session.mindmapData,
-      draggable: false,
-      contextMenu: false,
-      toolBar: false,
-      nodeMenu: false,
-      keypress: false,
-    });
-    mind.init();
-  }
-};
-
-// PNG出力
-function saveAsPNG() {
-  html2canvas(document.getElementById("mindmapContainer")).then(canvas => {
-    const link = document.createElement("a");
-    link.download = "mindmap.png";
-    link.href = canvas.toDataURL();
-    link.click();
-  });
-}
-
-// PDF出力
-function saveAsPDF() {
-  html2canvas(document.getElementById("mindmapContainer")).then(canvas => {
-    const imgData = canvas.toDataURL("image/png");
-    const { jsPDF } = window.jspdf;
-    const pdf = new jsPDF("landscape", "mm", "a4");
-    pdf.addImage(imgData, "PNG", 10, 10, 270, 190);
-    pdf.save("mindmap.pdf");
-  });
-}
-</script>
+      if (type === "mindmap") {
+        const img = document.createElement("img");
+        img.src = localStorage.getItem("mindmapImageData");
+        img.style.maxWidth = "100%";
+        img.alt = "マインドマップ画像";
+        content.appendChild(img);
+      } else if (type === "summary") {
+        content.innerHTML = "<h2>📊 統合出力（ダッシュボード情報）</h2><p>※ここにダッシュボードの統合レポートが表示されます。</p>";
+        details.innerHTML = "<p>[統合グラフ・KPI一覧・地域指標などのパネルが今後ここに展開されます]</p>";
+      } else if (type === "cards") {
+        content.innerHTML = "<h2>📇 トリガーカード一覧出力</h2><p>※ここにカードの分類や一覧が表示されます。</p>";
+        details.innerHTML = "<p>[Mind Trigger Card 表形式、ラベル分類、エクスポート機能予定]</p>";
+      } else if (type === "3d") {
+        window.open("3d_viewer.html", "_blank");
+      }
+    }
+  </script>
 </body>
 </html>
