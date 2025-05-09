@@ -59,26 +59,23 @@
 
 <div class="container">
   <aside class="sidebar">
-    <!-- 🔁 更新ボタン（idを指定、onclick削除） -->
-    <div style="text-align: right; margin: 0 0 4px 0;">
-      <button id="updateHistoryBtn" style="
-        background: none;
-        border: none;
-        font-size: 14px;
-        color: #007bff;
-        cursor: pointer;
-        padding: 0;
-      ">
-        🔄 履歴を更新
-      </button>
-    </div>
-
- 
-  <!-- 見出し：あとに表示 -->
   <h2>セッション履歴</h2>
-
   <ul id="historyList"></ul>
+
+  <div style="text-align: right; margin-top: 4px;">
+    <button id="updateHistoryBtn" style="
+      background: none;
+      border: none;
+      font-size: 14px;
+      color: #007bff;
+      cursor: pointer;
+      padding: 0;
+    ">
+      🔄 履歴を更新
+    </button>
+  </div>
 </aside>
+
 
     <main class="main-content">
       <section class="input-section">
