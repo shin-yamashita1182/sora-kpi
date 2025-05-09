@@ -404,9 +404,9 @@ console.log("✅ セッション保存完了:", sessionKey);
 //   });
 // }
 // ✅ 履歴一覧を localStorage から自動生成
-function renderSessionHistory() {
+window.renderSessionHistory = function () {
   console.log("📂 履歴を再読み込み中...");
-  
+
   const historyList = document.getElementById("historyList");
   if (!historyList) return;
 
@@ -414,18 +414,19 @@ function renderSessionHistory() {
 
   const sessionKeys = Object.keys(localStorage)
     .filter(k => k.startsWith("session_"))
-.sort((a, b) => {
-  const ta = JSON.parse(localStorage.getItem(a))?.timestamp || "0";
-  const tb = JSON.parse(localStorage.getItem(b))?.timestamp || "0";
-  return tb.localeCompare(ta);
-});
+    .sort((a, b) => {
+      const ta = JSON.parse(localStorage.getItem(a))?.timestamp || "0";
+      const tb = JSON.parse(localStorage.getItem(b))?.timestamp || "0";
+      return tb.localeCompare(ta);
+    });
 
   sessionKeys.forEach((key) => {
     let session;
     try {
       session = JSON.parse(localStorage.getItem(key));
+      console.log("📦 セッション:", session);
     } catch (e) {
-      console.warn("セッションデータの読み込み失敗:", key);
+      console.warn("❌ パース失敗:", key);
       return;
     }
 
@@ -433,10 +434,10 @@ function renderSessionHistory() {
 
     const label = document.createElement("span");
     label.textContent =
-  (session?.region && session?.theme)
-    ? `${session.region} × ${session.theme}`
-    : session?.title || key || "セッション";
-      
+      (session?.region && session?.theme)
+        ? `${session.region} × ${session.theme}`
+        : session?.title || key || "セッション";
+
     label.style.cursor = "pointer";
     label.onclick = () => {
       localStorage.setItem("selectedSessionKey", key);
@@ -457,18 +458,4 @@ function renderSessionHistory() {
     li.appendChild(del);
     historyList.appendChild(li);
   });
-}
-
-document.addEventListener("DOMContentLoaded", () => {
-  renderSessionHistory();  // ✅ ページ読み込み時に履歴を表示
-
-  const updateBtn = document.getElementById("updateHistoryBtn");
-  if (updateBtn) {
-    updateBtn.addEventListener("click", () => {
-      console.log("✅ 更新ボタン押されたよ！");
-      renderSessionHistory();  // ✅ ボタンクリックでも履歴を更新
-    });
-  }
-});
-
-}); // ← これは必要
+};
