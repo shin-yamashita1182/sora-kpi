@@ -456,4 +456,3 @@ window.renderSessionHistory = function () {
 
   renderSessionHistory(); // ← イベント発火時に呼び出す
 }); // ← ✅ これは履歴表示のDOMContentLoadedの終了
-}); // ← ✅ 🔥 これが本当に必要な「最初の全体の閉じカッコ」！！
