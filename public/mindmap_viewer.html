@@ -95,18 +95,36 @@ function saveAndClose() {
     return;
   }
 
-  domtoimage.toPng(node)
-    .then((dataUrl) => {
-      const sessionKey = localStorage.getItem("selectedSessionKey");
-      const sessionData = sessionKey ? JSON.parse(localStorage.getItem(sessionKey)) : {};
-      sessionData.png = dataUrl;
-      localStorage.setItem(sessionKey, JSON.stringify(sessionData));
-      window.close();
-    })
-    .catch((error) => {
-      console.error("PNG保存失敗:", error);
-      alert("PNG保存処理中にエラーが発生しました。");
-    });
+  let attempts = 0;
+  const maxAttempts = 10;
+
+  const checkRendered = setInterval(() => {
+    const internalCanvas = node.querySelector("svg"); // ← MindElixir内部描画が終わるとSVGが現れる
+
+    if (internalCanvas || attempts >= maxAttempts) {
+      clearInterval(checkRendered);
+
+      if (!internalCanvas) {
+        alert("描画が完了しなかったため、保存できませんでした。");
+        return;
+      }
+
+      domtoimage.toPng(node)
+        .then((dataUrl) => {
+          const sessionKey = localStorage.getItem("selectedSessionKey");
+          const sessionData = sessionKey ? JSON.parse(localStorage.getItem(sessionKey)) : {};
+          sessionData.png = dataUrl;
+          localStorage.setItem(sessionKey, JSON.stringify(sessionData));
+          window.close();
+        })
+        .catch((error) => {
+          console.error("PNG保存失敗:", error);
+          alert("PNG保存処理中にエラーが発生しました。");
+        });
+    }
+
+    attempts++;
+  }, 300); // 0.3秒ごとにチェック
 }
 
 </script>
