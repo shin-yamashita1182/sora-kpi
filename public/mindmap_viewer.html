@@ -112,8 +112,11 @@
           alert("画像の保存に失敗しました。");
           console.error("PNG保存エラー:", error);
         });
-    }, 1800);
-  }
+    }
+
+  attempts++;
+}, 200);
+  
 </script>
 </body>
 </html>
