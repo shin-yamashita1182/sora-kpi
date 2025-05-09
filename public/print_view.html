@@ -179,8 +179,8 @@ if (type === "mindmap") {
   content.appendChild(metadata);
   content.appendChild(printable); // 印刷対象
   details.innerHTML = "<p style='margin-top: 1rem;'>このマインドマップは、地域の課題と構造的な思考を可視化した資料です。今後の対策立案や共有に活用できます。</p>";
-}
 
+  
       } else if (type === "summary") {
   const region = sessionData?.region || "地域未設定";
   const theme = sessionData?.theme || "テーマ未設定";
@@ -224,8 +224,8 @@ if (type === "mindmap") {
   content.appendChild(heading);
   content.appendChild(printable);
   details.innerHTML = "<p>このエリアには地域全体の課題構造と住民の分析を統合表示します。</p>";
-}
 
+      
      } else if (type === "cards") {
   // 表示用タイトル（印刷時には非表示）
   const heading = document.createElement("h2");
@@ -265,7 +265,7 @@ if (type === "mindmap") {
   content.appendChild(cardContainer);
 
   details.innerHTML = "<p>このエリアにはマインドマップと連動する優先実行策（Mind Trigger Cards）が表示されます。</p>";
-}
+
 
       } else if (type === "3d") {
         window.open("3d_viewer.html", "_blank");
