@@ -4,96 +4,47 @@
   <meta charset="UTF-8">
   <title>印刷ビューア - 出力統合メニュー</title>
   <style>
-    body {
-      font-family: 'Segoe UI', sans-serif;
-      margin: 0;
-      padding: 0;
-      background-color: #f8f9fa;
-    }
-
-    header {
-      background-color: #0077cc;
-      color: white;
-      padding: 1rem 2rem;
-      font-size: 1.4rem;
-      font-weight: bold;
-      text-align: center;
-    }
-
-    #menu {
-      display: flex;
-      justify-content: center;
-      gap: 1rem;
-      padding: 1rem;
-      background-color: #e9ecef;
-    }
-
-    #menu button {
-      background-color: #2a9d8f;
-      border: none;
-      color: white;
-      padding: 10px 20px;
-      font-size: 1rem;
-      border-radius: 6px;
-      cursor: pointer;
-    }
-
-    #menu button:hover {
-      background-color: #21867a;
-    }
-
-    #content {
-      padding: 2rem;
-      text-align: center;
-    }
-
-    .section-container {
-      margin-top: 2rem;
-      border-top: 1px solid #ccc;
-      padding-top: 1rem;
-    }
-
-    #mindmapMetadata {
-      text-align: left;
-      margin-bottom: 1rem;
-      background: #fff;
-      border: 1px solid #ccc;
-      padding: 1rem;
-      border-radius: 6px;
-      max-width: 600px;
-      margin-left: auto;
-      margin-right: auto;
-    }
-
-    #mindmapImage {
-      display: block;
-      margin: 1rem auto;
-      max-width: 100%;
-      border: 1px solid #999;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-    }
-@media print {
-  body * {
-    visibility: hidden;
+  /* ===== 画面表示用スタイル ===== */
+  body {
+    font-family: 'Segoe UI', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f8f9fa;
   }
 
-  .print-area, .print-area * {
-    visibility: visible;
+  header {
+    background-color: #0077cc;
+    color: white;
+    padding: 1rem 2rem;
+    font-size: 1.4rem;
+    font-weight: bold;
+    text-align: center;
   }
 
-  .print-area {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    background: white;
-    padding: 2rem;
+  #menu {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    padding: 1rem;
+    background-color: #e9ecef;
   }
 
-  header, #menu, #detailSections {
-    display: none !important;
+  #menu button {
+    background-color: #2a9d8f;
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    font-size: 1rem;
+    border-radius: 6px;
+    cursor: pointer;
   }
- #printBtn {
+
+  #menu button:hover {
+    background-color: #21867a;
+  }
+
+  /* 🎯 印刷ボタンだけ別色に（見分けやすく） */
+  #printBtn {
     background-color: #6c757d;
     color: white;
     padding: 10px 20px;
@@ -105,6 +56,64 @@
 
   #printBtn:hover {
     background-color: #5a6268;
+  }
+
+  #content {
+    padding: 2rem;
+    text-align: center;
+  }
+
+  .section-container {
+    margin-top: 2rem;
+    border-top: 1px solid #ccc;
+    padding-top: 1rem;
+  }
+
+  #mindmapMetadata {
+    text-align: left;
+    margin-bottom: 1rem;
+    background: #fff;
+    border: 1px solid #ccc;
+    padding: 1rem;
+    border-radius: 6px;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  #mindmapImage {
+    display: block;
+    margin: 1rem auto;
+    max-width: 100%;
+    border: 1px solid #999;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  }
+
+  /* ===== 印刷時専用スタイル ===== */
+  @media print {
+    body * {
+      visibility: hidden;
+    }
+
+    .print-area,
+    .print-area * {
+      visibility: visible;
+    }
+
+    .print-area {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      background: white;
+      padding: 2rem;
+    }
+
+    header,
+    #menu,
+    #detailSections {
+      display: none !important;
+    }
   }
 </style>
 </head>
