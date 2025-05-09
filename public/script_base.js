@@ -405,6 +405,7 @@ console.log("✅ セッション保存完了:", sessionKey);
 // }
 
 // ✅ 履歴を描画して、削除もできる・更新はlocation.reload
+// ✅ 1. セッション履歴描画の関数定義（function本体）
 window.renderSessionHistory = function () {
   const historyList = document.getElementById("historyList");
   if (!historyList) return;
@@ -463,7 +464,12 @@ window.renderSessionHistory = function () {
     };
 
     li.appendChild(label);
-    li.appendChild(delBtn);  // 👈 後ろに削除ボタンを付ける（前にしたければ順番を逆にするだけ）
+    li.appendChild(delBtn);
     historyList.appendChild(li);
   });
-};
+};  // ← ✅ 関数はここでキッチリ閉じる！
+
+// ✅ 2. ページ読み込み時に実行（DOMContentLoaded）
+document.addEventListener("DOMContentLoaded", () => {
+  renderSessionHistory();
+});
