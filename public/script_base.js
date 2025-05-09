@@ -457,6 +457,5 @@ window.renderSessionHistory = function () {
     li.appendChild(label);
     li.appendChild(del);
     historyList.appendChild(li);
-  });
-  }
-});
+ });
+};  // ✅ これが正しい最後のカッコとセミコロン！
