@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>印刷ビューア - 出力統合メニュー</title>
+
   <style>
   /* ===== 画面表示用スタイル ===== */
   body {
@@ -43,18 +44,13 @@
     background-color: #21867a;
   }
 
-  /* 🎯 印刷ボタンだけ別色に（見分けやすく） */
-  #printBtn {
+  /* ✅ 🎯 印刷ボタンだけ別色に（@media の外に出す！） */
+  #menu #printBtn {
     background-color: #6c757d;
     color: white;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 6px;
-    font-size: 1rem;
-    cursor: pointer;
   }
 
-  #printBtn:hover {
+  #menu #printBtn:hover {
     background-color: #5a6268;
   }
 
@@ -114,16 +110,9 @@
     #detailSections {
       display: none !important;
     }
-  #menu #printBtn {
-  background-color: #6c757d;
-  color: white;
-}
+  }
+</style>
 
-#menu #printBtn:hover {
-  background-color: #5a6268;
-}
-
-  </style>
 </head>
 <body>
   <header>🖨️ 印刷・出力ビューア</header>
