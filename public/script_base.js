@@ -412,16 +412,16 @@ window.renderSessionHistory = function () {
   historyList.innerHTML = "";
 
   const sessionKeys = Object.keys(localStorage)
-    .filter(k => /^session_\d+$/.test(k))  // 数字だけの session_ に限定
-    .sort((a, b) => Number(b.replace("session_", "")) - Number(a.replace("session_", "")))  // 新しい順
-    .slice(0, 20);  // ✅ 最新20件に限定
+    .filter(k => /^session_\d+$/.test(k))
+    .sort((a, b) => Number(b.replace("session_", "")) - Number(a.replace("session_", "")))
+    .slice(0, 20);
 
   sessionKeys.forEach((key) => {
     let session;
     try {
       session = JSON.parse(localStorage.getItem(key));
     } catch (e) {
-      console.warn("⚠️ JSONエラーでスキップ:", key, e);
+      console.warn("⚠️ JSONエラー：", key, e);
       return;
     }
 
@@ -439,6 +439,9 @@ window.renderSessionHistory = function () {
     label.textContent = labelText;
     label.style.cursor = "pointer";
     label.style.flexGrow = "1";
+    label.style.color = "#0077cc";
+    label.style.textDecoration = "underline";
+
     label.onclick = () => {
       localStorage.setItem("selectedSessionKey", key);
       window.open("print_view.html", "_blank");
@@ -446,26 +449,23 @@ window.renderSessionHistory = function () {
 
     const delBtn = document.createElement("button");
     delBtn.textContent = "🗑";
+    delBtn.title = "この履歴を削除";
     delBtn.style.cursor = "pointer";
     delBtn.style.border = "none";
     delBtn.style.background = "transparent";
+    delBtn.style.color = "#cc0000";
     delBtn.style.fontSize = "16px";
-    delBtn.style.marginLeft = "8px";
-    delBtn.title = "この履歴を削除";
-
     delBtn.onclick = () => {
       if (confirm("この履歴を削除しますか？")) {
         localStorage.removeItem(key);
-        renderSessionHistory(); // 再描画
+        renderSessionHistory();
       }
     };
 
     li.appendChild(label);
-    li.appendChild(delBtn);
+    li.appendChild(delBtn);  // 👈 後ろに削除ボタンを付ける（前にしたければ順番を逆にするだけ）
     historyList.appendChild(li);
   });
 };
-
-
-  renderSessionHistory(); // ← イベント発火時に呼び出す
+  
 }); // ← ✅ これは履歴表示のDOMContentLoadedの終了
