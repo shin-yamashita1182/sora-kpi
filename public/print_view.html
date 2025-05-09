@@ -140,7 +140,7 @@
   const sessionKey = localStorage.getItem("selectedSessionKey");
   const sessionData = sessionKey ? JSON.parse(localStorage.getItem(sessionKey)) : null;
   if (sessionData?.mindmapImageData) {
-    loadSection("mindmap"); // ← 自動で呼ぶ
+  
   }
 });
   </script>
