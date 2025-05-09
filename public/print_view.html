@@ -72,13 +72,11 @@
       border: 1px solid #999;
       box-shadow: 0 2px 6px rgba(0,0,0,0.1);
     }
-  <style>
 @media print {
   body * {
     visibility: hidden;
   }
 
-  /* ✅ 印刷したい中身だけ見せる */
   .print-area, .print-area * {
     visibility: visible;
   }
@@ -91,7 +89,23 @@
     background: white;
     padding: 2rem;
   }
-}
+
+  header, #menu, #detailSections {
+    display: none !important;
+  }
+ #printBtn {
+    background-color: #6c757d;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 6px;
+    font-size: 1rem;
+    cursor: pointer;
+  }
+
+  #printBtn:hover {
+    background-color: #5a6268;
+  }
 </style>
 </head>
 <body>
@@ -103,8 +117,7 @@
     <button onclick="loadSection('summary')">📊 統合出力（ダッシュボード）</button>
     <button onclick="loadSection('cards')">📇 実行策一覧</button>
     <button onclick="loadSection('3d')">🌐 3Dビューア</button>
-    <button onclick="window.print()">🖨️ 印刷</button> <!-- 🔽追加！ -->
-  </div>
+    <button id="printBtn" onclick="window.print()">🖨️ 印刷</button>  </div>
 
   <div id="content" class="print-area">
     <p>出力内容を選択してください。</p>
@@ -123,37 +136,128 @@
       const details = document.getElementById("detailSections");
       content.innerHTML = "";
       details.innerHTML = "";
+if (type === "mindmap") {
+  const region = sessionData?.region || localStorage.getItem("region") || "地域未設定";
+  const theme = sessionData?.theme || localStorage.getItem("theme") || "テーマ未設定";
+  const imageData = sessionData?.mindmapImageData || localStorage.getItem("mindmapImageData");
+  const dateStr = new Date().toLocaleDateString();
 
-      if (type === "mindmap") {
-        const region = sessionData?.region || localStorage.getItem("region") || "地域未設定";
-        const theme = sessionData?.theme || localStorage.getItem("theme") || "テーマ未設定";
-        const imageData = sessionData?.mindmapImageData || localStorage.getItem("mindmapImageData");
-        const dateStr = new Date().toLocaleDateString();
+  // 🔷 表示専用：メタデータ（印刷には含めない）
+  const metadata = document.createElement("div");
+  metadata.id = "mindmapMetadata";
+  metadata.innerHTML = `
+    <h2>🧠 マインドマップ出力</h2>
+    <p><strong>地域名：</strong>${region}</p>
+    <p><strong>テーマ：</strong>${theme}</p>
+    <p><strong>出力日：</strong>${dateStr}</p>
+  `;
 
-        const metadata = document.createElement("div");
-        metadata.id = "mindmapMetadata";
-        metadata.innerHTML = `
-          <h2>🧠 マインドマップ出力</h2>
-          <p><strong>地域名：</strong>${region}</p>
-          <p><strong>テーマ：</strong>${theme}</p>
-          <p><strong>出力日：</strong>${dateStr}</p>
-        `;
+  // 🔷 印刷＆表示：画像
+  const img = document.createElement("img");
+  img.id = "mindmapImage";
+  img.src = imageData;
+  img.alt = "マインドマップ画像";
+  img.style.maxWidth = "100%";
+  img.style.border = "1px solid #ccc";
+  img.style.boxShadow = "0 2px 6px rgba(0,0,0,0.1)";
 
-        const img = document.createElement("img");
-        img.id = "mindmapImage";
-        img.src = imageData;
-        img.alt = "マインドマップ画像";
+  // ✅ 印刷対象：画像だけを含めるラッパー
+  const printable = document.createElement("div");
+  printable.className = "print-area";
+  printable.appendChild(img);
 
-        content.appendChild(metadata);
-        content.appendChild(img);
+  // 表示用にすべてを追加
+  content.appendChild(metadata);
+  content.appendChild(printable); // 印刷対象
+  details.innerHTML = "<p style='margin-top: 1rem;'>このマインドマップは、地域の課題と構造的な思考を可視化した資料です。今後の対策立案や共有に活用できます。</p>";
+}
 
-        details.innerHTML = "<p style='margin-top: 1rem;'>このマインドマップは、地域の課題と構造的な思考を可視化した資料です。今後の対策立案や共有に活用できます。</p>";
       } else if (type === "summary") {
-        content.innerHTML = "<h2>📊 統合出力（ダッシュボード情報）</h2><p>※ここにダッシュボードの統合レポートが表示されます。</p>";
-        details.innerHTML = "<p>[統合グラフ・KPI一覧・地域指標などのパネルが今後ここに展開されます]</p>";
-      } else if (type === "cards") {
-        content.innerHTML = "<h2>📇 実行策一覧出力</h2><p>※ここにカードの分類や一覧が表示されます。</p>";
-        details.innerHTML = "<p>[Mind Trigger Card 表形式、ラベル分類、エクスポート機能予定]</p>";
+  const region = sessionData?.region || "地域未設定";
+  const theme = sessionData?.theme || "テーマ未設定";
+  const tasks = sessionData?.tasks || [];
+  const insights = sessionData?.insights || "";
+  const imageData = sessionData?.mindmapImageData || "";
+  const nexcoInfo = sessionData?.nexcoInfo || "[NEXCO情報はまだ登録されていません]";
+
+  // 🔵 表示専用タイトル
+  const heading = document.createElement("h2");
+  heading.textContent = "📊 統合出力（ダッシュボード資料）";
+
+  // 🔵 印刷対象エリアの中身
+  const printable = document.createElement("div");
+  printable.className = "print-area";
+  printable.style.textAlign = "left";
+
+  // 地域名＋テーマ
+  printable.innerHTML += `<h3>地域名：${region}</h3><p><strong>テーマ：</strong>${theme}</p>`;
+
+  // 課題リスト
+  if (Array.isArray(tasks) && tasks.length > 0) {
+    printable.innerHTML += "<h4>抽出された10の課題：</h4><ol>";
+    tasks.forEach(task => {
+      printable.innerHTML += `<li>${task}</li>`;
+    });
+    printable.innerHTML += "</ol>";
+  }
+
+  // 考察エリア
+  printable.innerHTML += `<h4>住民の考察・分析コメント：</h4><p>${insights || "（未入力）"}</p>`;
+
+  // マインドマップ画像
+  if (imageData) {
+    printable.innerHTML += `<h4>マインドマップ：</h4><img src="${imageData}" alt="マインドマップ" style="max-width:100%; border:1px solid #ccc; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">`;
+  }
+
+  // NEXCO情報
+  printable.innerHTML += `<h4>NEXCO連携情報：</h4><p>${nexcoInfo}</p>`;
+
+  content.appendChild(heading);
+  content.appendChild(printable);
+  details.innerHTML = "<p>このエリアには地域全体の課題構造と住民の分析を統合表示します。</p>";
+}
+
+     } else if (type === "cards") {
+  // 表示用タイトル（印刷時には非表示）
+  const heading = document.createElement("h2");
+  heading.textContent = "📇 実行策一覧出力（マインドトリガーカード）";
+
+  // 印刷＆表示共通：マインドトリガーカードを並べるコンテナ
+  const cardContainer = document.createElement("div");
+  cardContainer.className = "print-area"; // ✅ 印刷対象はこの中だけ
+  cardContainer.style.display = "grid";
+  cardContainer.style.gridTemplateColumns = "repeat(auto-fit, minmax(280px, 1fr))";
+  cardContainer.style.gap = "1rem";
+  cardContainer.style.padding = "1rem";
+
+  // 🔽 デモ用：絞り込み結果の仮カードを表示（後でベクトル抽出結果に差し替え）
+  const sampleCards = [
+    { strategy: "地域医療体制の強化", action: "医療人材誘致・遠隔診療拠点の整備" },
+    { strategy: "移住定住促進の基盤構築", action: "空き家バンクとリノベーション補助" },
+    { strategy: "観光資源の魅力最大化", action: "地域ガイド養成・体験コンテンツ創出" }
+  ];
+
+  sampleCards.forEach(cardData => {
+    const card = document.createElement("div");
+    card.style.border = "1px solid #ccc";
+    card.style.borderRadius = "10px";
+    card.style.padding = "1rem";
+    card.style.backgroundColor = "#fff";
+    card.innerHTML = `
+      <h4 style="margin-top:0;">${cardData.strategy}</h4>
+      <p style="margin-bottom:0.5rem;">${cardData.action}</p>
+      <small style="color:gray;">※ KPIはカード詳細に記載</small>
+    `;
+    cardContainer.appendChild(card);
+  });
+
+  // ブラウザ表示に追加（タイトル + カード）
+  content.appendChild(heading);
+  content.appendChild(cardContainer);
+
+  details.innerHTML = "<p>このエリアにはマインドマップと連動する優先実行策（Mind Trigger Cards）が表示されます。</p>";
+}
+
       } else if (type === "3d") {
         window.open("3d_viewer.html", "_blank");
       }
