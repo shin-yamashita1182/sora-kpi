@@ -62,7 +62,6 @@
   <!-- ✅ このように書き換えてください -->
 <script src="https://cdn.jsdelivr.net/npm/mind-elixir/dist/mind-elixir.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
-<script src="./js/dom-to-image-more.min.js"></script>
 
 
 <script>
@@ -89,42 +88,25 @@
   mind.init();
 
   // ✅ セッションに保存して閉じる
-  function saveAndClose() {
-    const node = document.getElementById("mindmap");
+function saveAndClose() {
+  const node = document.getElementById("mindmap");
 
-    let attempts = 0;
-    const maxAttempts = 10;
+  html2canvas(node, { useCORS: true }).then(canvas => {
+    const dataUrl = canvas.toDataURL("image/png");
 
-    const checkRendered = setInterval(() => {
-      const internalCanvas = node.querySelector("svg");
+    const sessionKey = localStorage.getItem("selectedSessionKey");
+    const sessionData = sessionKey ? JSON.parse(localStorage.getItem(sessionKey)) : {};
+    sessionData.mindmapImageData = dataUrl;
+    localStorage.setItem(sessionKey, JSON.stringify(sessionData));
 
-      if (internalCanvas || attempts >= maxAttempts) {
-        clearInterval(checkRendered);
+    alert("✅ マインドマップを保存しました。");
+    window.close();
+  }).catch((error) => {
+    alert("画像保存に失敗しました。");
+    console.error("キャプチャエラー:", error);
+  });
+}
 
-        if (!internalCanvas) {
-          alert("描画が完了しなかったため、保存できませんでした。");
-          return;
-        }
-
-        domtoimage.toPng(node)
-          .then((dataUrl) => {
-            const sessionKey = localStorage.getItem("selectedSessionKey");
-            const sessionData = sessionKey ? JSON.parse(localStorage.getItem(sessionKey)) : {};
-            sessionData.mindmapImageData = dataUrl;
-            localStorage.setItem(sessionKey, JSON.stringify(sessionData));
-
-            alert("✅ マインドマップを保存しました。");
-            window.close();
-          })
-          .catch((error) => {
-            alert("画像の保存に失敗しました。");
-            console.error("PNG保存エラー:", error);
-          });
-      }
-
-      attempts++;
-    }, 300);
-  }
 </script>
 </body>
 </html>
