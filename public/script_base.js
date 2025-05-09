@@ -430,6 +430,7 @@ window.renderSessionHistory = function () {
     li.appendChild(label);
     historyList.appendChild(li);
   });
-};
+}
 
 document.addEventListener("DOMContentLoaded", renderSessionHistory);
+}); // ✅ DOMContentLoaded の終了
