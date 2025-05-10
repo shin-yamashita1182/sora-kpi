@@ -92,7 +92,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
     // ✅ MindElixir 公式エクスポートを使って保存・セッションへ記録
-window.saveAndClose = function() {
+window.saveAndClose = function () {
   const confirmSave = confirm("マインドマップは完全に表示されていますか？");
   if (!confirmSave) return;
 
@@ -104,30 +104,41 @@ window.saveAndClose = function() {
     return;
   }
 
-  const rawKey = localStorage.getItem("selectedSessionKey");
-  const sessionKey = rawKey || `session_${Date.now()}`;
-  if (!rawKey) localStorage.setItem("selectedSessionKey", sessionKey);
+  // ✅ ここでセッションキーを1回だけ宣言し、以後再定義しない
+  let sessionKey = localStorage.getItem("selectedSessionKey");
+  if (!sessionKey) {
+    sessionKey = `session_${Date.now()}`;
+    localStorage.setItem("selectedSessionKey", sessionKey);
+  }
 
   setTimeout(() => {
-  domtoimage.toPng(node)
-    .then((dataUrl) => {
-      console.log("🧠 セッションキー:", sessionKey);
-      console.log("🧠 画像データ長さ:", dataUrl.length);
-      console.log("🧠 画像データ冒頭:", dataUrl.slice(0, 100));
-      
-      const sessionKey = localStorage.getItem("selectedSessionKey");
-      const sessionData = sessionKey ? JSON.parse(localStorage.getItem(sessionKey)) : {};
-      sessionData.mindmapImageData = dataUrl;
-      localStorage.setItem(sessionKey, JSON.stringify(sessionData));
-      alert("PNGを保存しました。プリントビューアで確認できます。");
-      window.close();
-    })
-    .catch((error) => {
-      console.error("PNG保存失敗:", error);
-      alert("PNG保存処理中にエラーが発生しました。");
-    });
- }, 800);
-}; // ✅ 閉じカッコとセミコロンを忘れない！
+    domtoimage.toPng(node)
+      .then((dataUrl) => {
+        console.log("🧠 セッションキー:", sessionKey);
+        console.log("🧠 画像データ長さ:", dataUrl.length);
+        console.log("🧠 画像データ冒頭:", dataUrl.slice(0, 100));
+
+        const img = new Image();
+        img.src = dataUrl;
+        img.style.maxWidth = '100%';
+        img.style.border = '2px solid red';
+        img.style.marginTop = '20px';
+        document.body.appendChild(img);
+
+        const sessionData = JSON.parse(localStorage.getItem(sessionKey) || "{}");
+        sessionData.mindmapImageData = dataUrl;
+        localStorage.setItem(sessionKey, JSON.stringify(sessionData));
+
+        alert("PNGを保存しました。プリントビューアで確認できます。");
+        // window.close(); ← テスト中は閉じない
+      })
+      .catch((error) => {
+        console.error("PNG保存失敗:", error);
+        alert("PNG保存処理中にエラーが発生しました。");
+      });
+  }, 800);
+};
+
     
   </script>
 </body>
