@@ -92,12 +92,19 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 
-    // ✅ MindElixir 公式エクスポートを使って保存・セッションへ記録
+   // ✅ MindElixir 公式エクスポートを使って保存・セッションへ記録
 window.saveAndClose = function () {
   const confirmSave = confirm("マインドマップは完全に表示されていますか？");
   if (!confirmSave) return;
 
   const node = document.getElementById("mindmap");
+
+  // ✅ ここで固定化（修正ポイント）
+  const fixedKey = localStorage.getItem("selectedSessionKey");
+  if (!fixedKey) {
+    alert("❌ セッションキーが見つかりません。保存に失敗しました。");
+    return;
+  }
 
   // ✅ 描画が終わっていない場合は保存を中止（空白キャプチャ防止）
   const internalSvg = node.querySelector("svg");
@@ -115,18 +122,12 @@ window.saveAndClose = function () {
   }).then((canvas) => {
     const dataUrl = canvas.toDataURL("image/png");
 
-    // ✅ 現在の selectedSessionKey に紐づけて保存
-    const sessionKey = localStorage.getItem("selectedSessionKey");
-    if (!sessionKey) {
-      alert("❌ セッションキーが見つかりません。保存に失敗しました。");
-      return;
-    }
-
-    const sessionData = JSON.parse(localStorage.getItem(sessionKey) || "{}");
+    // ✅ 修正済：再取得せず fixedKey を使って保存！
+    const sessionData = JSON.parse(localStorage.getItem(fixedKey) || "{}");
     sessionData.mindmapImageData = dataUrl;
-    localStorage.setItem(sessionKey, JSON.stringify(sessionData));
+    localStorage.setItem(fixedKey, JSON.stringify(sessionData));
 
-    console.log("✅ PNG保存成功:", sessionKey);
+    console.log("✅ PNG保存成功:", fixedKey);
     console.log("🧠 画像データ長さ:", dataUrl.length);
     console.log("🧠 画像データ冒頭:", dataUrl.slice(0, 100));
 
