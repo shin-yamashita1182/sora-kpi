@@ -106,19 +106,25 @@ function saveAndClose() {
   }
 
   // ✅ 描画完了していたらPNGに変換
-  domtoimage.toPng(node)
-    .then((dataUrl) => {
+  mind.exportPng().then(blob => {
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      const base64data = reader.result;
+
       const sessionKey = localStorage.getItem("selectedSessionKey");
       const sessionData = sessionKey ? JSON.parse(localStorage.getItem(sessionKey)) : {};
-      sessionData.mindmapImageData = dataUrl;
+      sessionData.mindmapImageData = base64data;
+
       localStorage.setItem(sessionKey, JSON.stringify(sessionData));
+      alert("PNGを保存しました。プリントビューアで確認できます。");
       window.close();
-    })
-    .catch((error) => {
-      console.error("PNG保存失敗:", error);
-      alert("PNG保存処理中にエラーが発生しました。");
-    });
-}
+    };
+    reader.readAsDataURL(blob);
+  }).catch((error) => {
+    console.error("PNG保存失敗:", error);
+    alert("PNG保存処理中にエラーが発生しました。");
+  });
+
 
   </script>
 </body>
