@@ -86,6 +86,9 @@ const mind = new MindElixir({
 
 mind.init(); // ← 引数なしでOK（内部的に nodeData を使う）
 
+console.log("🧠 exportSvg:", typeof mind.exportSvg);
+console.log("🧠 exportPng:", typeof mind.exportPng);
+
 
 
     // ✅ MindElixir 公式エクスポートを使って保存・セッションへ記録
