@@ -99,28 +99,45 @@ window.saveAndClose = function () {
 
   const node = document.getElementById("mindmap");
 
-  // ✅ html2canvasでピクセルごとにキャプチャ（見たまま）
+  // ✅ 描画が終わっていない場合は保存を中止（空白キャプチャ防止）
+  const internalSvg = node.querySelector("svg");
+  if (!internalSvg || internalSvg.innerHTML.trim() === "") {
+    alert("⚠️ 描画が完了していない可能性があります。保存を中止します。");
+    return;
+  }
+
+  // ✅ 画面をPNGとしてキャプチャ
   html2canvas(node, {
     backgroundColor: null,
     scale: 2,
     useCORS: true,
     allowTaint: true,
-  }).then(canvas => {
+  }).then((canvas) => {
     const dataUrl = canvas.toDataURL("image/png");
 
-    // ✅ セッションに保存
+    // ✅ 現在の selectedSessionKey に紐づけて保存
     const sessionKey = localStorage.getItem("selectedSessionKey");
+    if (!sessionKey) {
+      alert("❌ セッションキーが見つかりません。保存に失敗しました。");
+      return;
+    }
+
     const sessionData = JSON.parse(localStorage.getItem(sessionKey) || "{}");
     sessionData.mindmapImageData = dataUrl;
     localStorage.setItem(sessionKey, JSON.stringify(sessionData));
 
-    alert("✅ マインドマップ画像を保存しました。プリントビューアで確認できます。");
+    console.log("✅ PNG保存成功:", sessionKey);
+    console.log("🧠 画像データ長さ:", dataUrl.length);
+    console.log("🧠 画像データ冒頭:", dataUrl.slice(0, 100));
+
+    alert("✅ PNGを保存しました。プリントビューアで確認できます。");
     window.close();
-  }).catch(error => {
-    console.error("❌ キャプチャ失敗:", error);
-    alert("PNG保存処理中にエラーが発生しました。");
+  }).catch((err) => {
+    console.error("❌ PNG保存エラー:", err);
+    alert("保存中にエラーが発生しました。");
   });
 };
+
     
   </script>
 </body>
