@@ -63,9 +63,11 @@
   <script src="./js/dom-to-image-more.min.js"></script>
 
   <script>
-    const raw = localStorage.getItem("latestMindMapData");
-    const rawParsed = JSON.parse(raw);
-    const parsed = rawParsed.nodeData || rawParsed; // 柔軟対応：両構造を受け入れ
+    const raw2 = localStorage.getItem("latestMindMapData");
+    const rawParsed2 = JSON.parse(raw2);
+    const parsed2 = rawParsed2.nodeData || rawParsed2;
+    console.log("🧠 parsed2 内容確認:", parsed2);
+
 
     parsed.topic = parsed.topic || "（無題）";
 
