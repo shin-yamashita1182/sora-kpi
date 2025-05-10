@@ -63,26 +63,27 @@
   <script src="./js/dom-to-image-more.min.js"></script>
 
   <script>
-    const raw2 = localStorage.getItem("latestMindMapData");
-    const rawParsed2 = JSON.parse(raw2);
-    const parsed2 = rawParsed2.nodeData || rawParsed2;
-    console.log("🧠 parsed2 内容確認:", parsed2);
+const raw = localStorage.getItem("latestMindMapData");
+const rawParsed = JSON.parse(raw);
+const parsed = rawParsed.nodeData || rawParsed;
 
+console.log("🧠 parsed 内容確認:", parsed);
 
-    parsed.topic = parsed.topic || "（無題）";
+parsed.topic = parsed.topic || "（無題）";
 
-    const mind = new MindElixir({
-      el: '#mindmap',
-      direction: MindElixir.LEFT,
-      data: parsed,
-      draggable: true,
-      editable: true,
-      contextMenu: true,
-      toolBar: true,
-      locale: 'ja'
-    });
+const mind = new MindElixir({
+  el: '#mindmap',
+  direction: MindElixir.LEFT,
+  data: parsed,
+  draggable: true,
+  editable: true,
+  contextMenu: true,
+  toolBar: true,
+  locale: 'ja'
+});
 
-    mind.init(parsed);
+mind.init(parsed);
+
 
     // ✅ MindElixir 公式エクスポートを使って保存・セッションへ記録
     async function saveAndClose() {
