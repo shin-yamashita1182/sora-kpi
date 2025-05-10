@@ -63,28 +63,31 @@
   <script src="./js/dom-to-image-more.min.js"></script>
 
   <script>
-const raw = localStorage.getItem("latestMindMapData");
-const rawParsed = JSON.parse(raw);
-const parsed = rawParsed.nodeData || rawParsed;
+let mind; // ← グローバルスコープで宣言！
 
-console.log("🧠 parsed 内容確認:", parsed);
+document.addEventListener("DOMContentLoaded", () => {
+  const raw = localStorage.getItem("latestMindMapData");
+  const rawParsed = JSON.parse(raw);
+  const parsed = rawParsed.nodeData || rawParsed;
 
-if (!parsed.topic || parsed.topic.trim() === "") {
-  parsed.topic = "（無題）";
-}
+  if (!parsed.topic || parsed.topic.trim() === "") {
+    parsed.topic = "（無題）";
+  }
 
-const mind = new MindElixir({
-  el: '#mindmap',
-  direction: MindElixir.SIDE,
-  data: { nodeData: parsed },  // ← ここをこうする！
-  draggable: true,
-  editable: true,
-  contextMenu: true,
-  toolBar: true,
-  locale: 'ja'
+  mind = new MindElixir({
+    el: '#mindmap',
+    direction: MindElixir.SIDE,
+    data: { nodeData: parsed },
+    draggable: true,
+    editable: true,
+    contextMenu: true,
+    toolBar: true,
+    locale: 'ja'
+  });
+
+  mind.init(); // ← 初期化はDOMContentLoadedの中でOK
 });
 
-mind.init(); // ← 引数なしでOK（内部的に nodeData を使う）
 
 console.log("🧠 exportSvg:", typeof mind.exportSvg);
 console.log("🧠 exportPng:", typeof mind.exportPng);
