@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>🧠 マインドマップビューア</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
@@ -53,57 +53,50 @@
 
   <header>🧠 マインドマップビューア</header>
 
- <div class="controls">
-<button onclick="saveAndClose()">💾 マインドマップを保存して閉じる</button>
-</div>
+  <div class="controls">
+    <button onclick="saveAndClose()">💾 マインドマップを保存して閉じる</button>
+  </div>
 
   <div id="mindmap"></div>
 
-  <!-- ✅ このように書き換えてください -->
-<script src="https://cdn.jsdelivr.net/npm/mind-elixir@0.9.0/dist/mind-elixir.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mind-elixir@0.9.0/dist/mind-elixir.min.js"></script>
   <script src="./js/dom-to-image-more.min.js"></script>
 
-<script>
-  const mindDataStr = localStorage.getItem("latestMindMapData");
-  if (!mindDataStr) {
-    document.getElementById("mindmap").innerText = "エラー：マインドマップデータが見つかりません。";
-    throw new Error("No mindmap data found");
-  }
+  <script>
+    const raw = localStorage.getItem("latestMindMapData");
+    const rawParsed = JSON.parse(raw);
+    const parsed = rawParsed.nodeData || rawParsed; // 柔軟対応：両構造を受け入れ
 
-  const parsed = JSON.parse(mindDataStr);
-  parsed.topic = parsed.topic || "（無題）";
+    parsed.topic = parsed.topic || "（無題）";
 
- const mind = new MindElixir({
-  el: '#mindmap',
-  direction: MindElixir.LEFT, // SIDE でもOK
-  data: parsed,               // { nodeData: parsed } → parsed そのままに
-  draggable: true,
-  editable: true,
-  contextMenu: true,
-  toolBar: true,
-  locale: 'ja'  // ✅ 日本語UIを有効にする
-});
+    const mind = new MindElixir({
+      el: '#mindmap',
+      direction: MindElixir.LEFT,
+      data: parsed,
+      draggable: true,
+      editable: true,
+      contextMenu: true,
+      toolBar: true,
+      locale: 'ja'
+    });
 
+    mind.init(parsed);
 
-  mind.init(parsed);
-
- 
-  // ✅ MindElixir 公式エクスポートを使って保存・セッションへ記録
-async function saveAndClose() {
-  try {
-    const blob = await mind.exportPng();
-    const url = URL.createObjectURL(blob);
-    const sessionKey = localStorage.getItem("selectedSessionKey");
-    const sessionData = sessionKey ? JSON.parse(localStorage.getItem(sessionKey)) : {};
-    sessionData.png = url;
-    localStorage.setItem(sessionKey, JSON.stringify(sessionData));
-    window.close();
-  } catch (error) {
-    console.error("PNG保存失敗:", error);
-    alert("PNG保存処理中にエラーが発生しました。");
-  }
-}
-
-</script>
+    // ✅ MindElixir 公式エクスポートを使って保存・セッションへ記録
+    async function saveAndClose() {
+      try {
+        const blob = await mind.exportPng();
+        const url = URL.createObjectURL(blob);
+        const sessionKey = localStorage.getItem("selectedSessionKey");
+        const sessionData = sessionKey ? JSON.parse(localStorage.getItem(sessionKey)) : {};
+        sessionData.png = url;
+        localStorage.setItem(sessionKey, JSON.stringify(sessionData));
+        window.close();
+      } catch (error) {
+        console.error("PNG保存失敗:", error);
+        alert("PNG保存処理中にエラーが発生しました。");
+      }
+    }
+  </script>
 </body>
 </html>
