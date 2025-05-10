@@ -76,7 +76,7 @@ if (!parsed.topic || parsed.topic.trim() === "") {
 const mind = new MindElixir({
   el: '#mindmap',
   direction: MindElixir.LEFT,
-  data: parsed,
+  data: { nodeData: parsed },  // ← ここをこうする！
   draggable: true,
   editable: true,
   contextMenu: true,
@@ -84,7 +84,8 @@ const mind = new MindElixir({
   locale: 'ja'
 });
 
-mind.init(parsed);
+mind.init(); // ← 引数なしでOK（内部的に nodeData を使う）
+
 
 
     // ✅ MindElixir 公式エクスポートを使って保存・セッションへ記録
