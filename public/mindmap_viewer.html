@@ -99,12 +99,14 @@ window.saveAndClose = function () {
 
   const node = document.getElementById("mindmap");
 
-  // ✅ ここで固定化（修正ポイント）
-  const fixedKey = localStorage.getItem("selectedSessionKey");
+  // ✅ URLパラメータから取得して即固定（ここが超重要！）
+  const urlParams = new URLSearchParams(window.location.search);
+  const fixedKey = urlParams.get("sessionKey");
   if (!fixedKey) {
-    alert("❌ セッションキーが見つかりません。保存に失敗しました。");
+    alert("❌ セッションキーが渡されていません。Viewerを正しく開いてください。");
     return;
   }
+
 
   // ✅ 描画が終わっていない場合は保存を中止（空白キャプチャ防止）
   const internalSvg = node.querySelector("svg");
