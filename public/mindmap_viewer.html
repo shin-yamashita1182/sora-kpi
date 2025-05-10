@@ -69,7 +69,9 @@ const parsed = rawParsed.nodeData || rawParsed;
 
 console.log("🧠 parsed 内容確認:", parsed);
 
-parsed.topic = parsed.topic || "（無題）";
+if (!parsed.topic || parsed.topic.trim() === "") {
+  parsed.topic = "（無題）";
+}
 
 const mind = new MindElixir({
   el: '#mindmap',
