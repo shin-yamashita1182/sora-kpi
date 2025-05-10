@@ -355,10 +355,13 @@ if (!cleanedJson.endsWith("}") && !cleanedJson.endsWith("}]")) {
   .replace(/```json/g, '')
   .replace(/```/g, '')
   .trim();
-  const parsed = JSON.parse(cleanedText); // ← 🔥 こっちを使う！絶対！
-  localStorage.setItem("latestMindMapData", JSON.stringify(parsed));
-  window.open("mindmap_viewer.html", "_blank");
-  window.mindMapGenerated = true;
+const parsed = JSON.parse(cleanedText); // ← GPTから来たマインドマップJSON
+localStorage.setItem("latestMindMapData", JSON.stringify(parsed));
+
+const selectedSessionKey = localStorage.getItem("selectedSessionKey"); // ✅ セッションキー取得
+window.open(`mindmap_viewer.html?sessionKey=${selectedSessionKey}`, "_blank"); // ✅ 正しく渡す！
+
+window.mindMapGenerated = true;
 
 // ✅ セッション履歴として localStorage に保存
 const sessionKey = `session_${Date.now()}`;
