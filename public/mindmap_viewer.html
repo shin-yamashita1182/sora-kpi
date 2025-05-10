@@ -98,47 +98,28 @@ window.saveAndClose = function () {
 
   const node = document.getElementById("mindmap");
 
-  const internalSvg = node.querySelector("svg");
-  if (!internalSvg || internalSvg.innerHTML.trim() === "") {
-    alert("⚠️ マインドマップがまだ描画されていない可能性があります。保存を中止します。");
-    return;
-  }
+  // ✅ html2canvasでピクセルごとにキャプチャ（見たまま）
+  html2canvas(node, {
+    backgroundColor: null,
+    scale: 2,
+    useCORS: true,
+    allowTaint: true,
+  }).then(canvas => {
+    const dataUrl = canvas.toDataURL("image/png");
 
-  // ✅ ここでセッションキーを1回だけ宣言し、以後再定義しない
-  let sessionKey = localStorage.getItem("selectedSessionKey");
-  if (!sessionKey) {
-    sessionKey = `session_${Date.now()}`;
-    localStorage.setItem("selectedSessionKey", sessionKey);
-  }
+    // ✅ セッションに保存
+    const sessionKey = localStorage.getItem("selectedSessionKey");
+    const sessionData = JSON.parse(localStorage.getItem(sessionKey) || "{}");
+    sessionData.mindmapImageData = dataUrl;
+    localStorage.setItem(sessionKey, JSON.stringify(sessionData));
 
-  setTimeout(() => {
-    domtoimage.toPng(node)
-      .then((dataUrl) => {
-        console.log("🧠 セッションキー:", sessionKey);
-        console.log("🧠 画像データ長さ:", dataUrl.length);
-        console.log("🧠 画像データ冒頭:", dataUrl.slice(0, 100));
-
-        const img = new Image();
-        img.src = dataUrl;
-        img.style.maxWidth = '100%';
-        img.style.border = '2px solid red';
-        img.style.marginTop = '20px';
-        document.body.appendChild(img);
-
-        const sessionData = JSON.parse(localStorage.getItem(sessionKey) || "{}");
-        sessionData.mindmapImageData = dataUrl;
-        localStorage.setItem(sessionKey, JSON.stringify(sessionData));
-
-        alert("PNGを保存しました。プリントビューアで確認できます。");
-        // window.close(); ← テスト中は閉じない
-      })
-      .catch((error) => {
-        console.error("PNG保存失敗:", error);
-        alert("PNG保存処理中にエラーが発生しました。");
-      });
-  }, 2000);
+    alert("✅ マインドマップ画像を保存しました。プリントビューアで確認できます。");
+    window.close();
+  }).catch(error => {
+    console.error("❌ キャプチャ失敗:", error);
+    alert("PNG保存処理中にエラーが発生しました。");
+  });
 };
-
     
   </script>
 </body>
