@@ -98,6 +98,14 @@ function saveAndClose() {
 
   const node = document.getElementById("mindmap");
 
+  // ✅ SVGの描画が完了しているか確認（これが新ポイント！）
+  const internalSvg = node.querySelector("svg");
+  if (!internalSvg || internalSvg.innerHTML.trim() === "") {
+    alert("⚠️ マインドマップがまだ描画されていない可能性があります。保存を中止します。");
+    return;
+  }
+
+  // ✅ 描画完了していたらPNGに変換
   domtoimage.toPng(node)
     .then((dataUrl) => {
       const sessionKey = localStorage.getItem("selectedSessionKey");
@@ -111,7 +119,6 @@ function saveAndClose() {
       alert("PNG保存処理中にエラーが発生しました。");
     });
 }
-
 
   </script>
 </body>
