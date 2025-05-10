@@ -86,16 +86,12 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   mind.init(); // ← 初期化はDOMContentLoadedの中でOK
+  console.log("🧠 exportPng:", typeof mind.exportPng);
 });
 
 
-console.log("🧠 exportSvg:", typeof mind.exportSvg);
-console.log("🧠 exportPng:", typeof mind.exportPng);
-
-
-
     // ✅ MindElixir 公式エクスポートを使って保存・セッションへ記録
-function saveAndClose() {
+window.saveAndClose = function() {
   const confirmSave = confirm("マインドマップは完全に表示されていますか？");
   if (!confirmSave) return;
 
