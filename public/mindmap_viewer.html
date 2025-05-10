@@ -75,7 +75,7 @@ if (!parsed.topic || parsed.topic.trim() === "") {
 
 const mind = new MindElixir({
   el: '#mindmap',
-  direction: MindElixir.LEFT,
+  direction: MindElixir.SIDE  // ← これが放射状（左右）表示になる
   data: { nodeData: parsed },  // ← ここをこうする！
   draggable: true,
   editable: true,
@@ -89,19 +89,17 @@ mind.init(); // ← 引数なしでOK（内部的に nodeData を使う）
 
 
     // ✅ MindElixir 公式エクスポートを使って保存・セッションへ記録
- function saveAndClose() {
-  const node = document.getElementById("mindmap");
+function saveAndClose() {
+  const confirmSave = confirm("マインドマップは完全に表示されていますか？");
+  if (!confirmSave) return;
 
-  if (!node) {
-    alert("マインドマップが見つかりません。");
-    return;
-  }
+  const node = document.getElementById("mindmap");
 
   domtoimage.toPng(node)
     .then((dataUrl) => {
       const sessionKey = localStorage.getItem("selectedSessionKey");
       const sessionData = sessionKey ? JSON.parse(localStorage.getItem(sessionKey)) : {};
-      sessionData.png = dataUrl;
+      sessionData.mindmapImageData = dataUrl;
       localStorage.setItem(sessionKey, JSON.stringify(sessionData));
       window.close();
     })
@@ -110,6 +108,7 @@ mind.init(); // ← 引数なしでOK（内部的に nodeData を使う）
       alert("PNG保存処理中にエラーが発生しました。");
     });
 }
+
 
   </script>
 </body>
