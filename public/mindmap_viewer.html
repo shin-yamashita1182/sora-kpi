@@ -107,9 +107,14 @@ window.saveAndClose = function() {
   const rawKey = localStorage.getItem("selectedSessionKey");
   const sessionKey = rawKey || `session_${Date.now()}`;
   if (!rawKey) localStorage.setItem("selectedSessionKey", sessionKey);
-  
+
+  setTimeout(() => {
   domtoimage.toPng(node)
     .then((dataUrl) => {
+      console.log("🧠 セッションキー:", sessionKey);
+      console.log("🧠 画像データ長さ:", dataUrl.length);
+      console.log("🧠 画像データ冒頭:", dataUrl.slice(0, 100));
+      
       const sessionKey = localStorage.getItem("selectedSessionKey");
       const sessionData = sessionKey ? JSON.parse(localStorage.getItem(sessionKey)) : {};
       sessionData.mindmapImageData = dataUrl;
