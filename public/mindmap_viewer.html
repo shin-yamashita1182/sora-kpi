@@ -87,15 +87,7 @@
 
   mind.init(parsed);
 
-  // ✅ セッションに保存して閉じる
-function saveAndClose() {
-  const node = document.getElementById("mindmap");
-
-  if (!node) {
-    alert("マインドマップが見つかりません。");
-    return;
-  }
-
+ 
   // ✅ MindElixir 公式エクスポートを使って保存・セッションへ記録
 async function saveAndClose() {
   try {
