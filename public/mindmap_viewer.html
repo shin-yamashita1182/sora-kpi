@@ -73,18 +73,19 @@
   const parsed = JSON.parse(mindDataStr);
   parsed.topic = parsed.topic || "（無題）";
 
-  const mind = new MindElixir({
-    el: '#mindmap',
-    direction: MindElixir.SIDE,
-    data: { nodeData: parsed },
-    draggable: false,
-    contextMenu: false,
-    toolBar: false,
-    nodeMenu: false,
-    keypress: false,
-  });
+ const mind = new MindElixir({
+  el: '#mindmap',
+  direction: MindElixir.LEFT, // SIDE でもOK
+  data: parsed,               // { nodeData: parsed } → parsed そのままに
+  draggable: true,
+  editable: true,
+  contextMenu: true,
+  toolBar: true,
+  locale: 'ja'  // ✅ 日本語UIを有効にする
+});
 
-  mind.init();
+
+  mind.init(parsed);
 
   // ✅ セッションに保存して閉じる
 function saveAndClose() {
@@ -95,21 +96,20 @@ function saveAndClose() {
     return;
   }
 
-  // 描画完了後にスクリーンショットを撮る
-  requestAnimationFrame(() => {
-    domtoimage.toPng(node)
-      .then((dataUrl) => {
-        const sessionKey = localStorage.getItem("selectedSessionKey");
-        const sessionData = sessionKey ? JSON.parse(localStorage.getItem(sessionKey)) : {};
-        sessionData.png = dataUrl;
-        localStorage.setItem(sessionKey, JSON.stringify(sessionData));
-        window.close();
-      })
-      .catch((error) => {
-        console.error("PNG保存失敗:", error);
-        alert("PNG保存処理中にエラーが発生しました。");
-      });
-  });
+  // ✅ MindElixir 公式エクスポートを使って保存・セッションへ記録
+async function saveAndClose() {
+  try {
+    const blob = await mind.exportPng();
+    const url = URL.createObjectURL(blob);
+    const sessionKey = localStorage.getItem("selectedSessionKey");
+    const sessionData = sessionKey ? JSON.parse(localStorage.getItem(sessionKey)) : {};
+    sessionData.png = url;
+    localStorage.setItem(sessionKey, JSON.stringify(sessionData));
+    window.close();
+  } catch (error) {
+    console.error("PNG保存失敗:", error);
+    alert("PNG保存処理中にエラーが発生しました。");
+  }
 }
 
 </script>
