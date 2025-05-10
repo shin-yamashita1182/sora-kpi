@@ -104,6 +104,10 @@ window.saveAndClose = function() {
     return;
   }
 
+  const rawKey = localStorage.getItem("selectedSessionKey");
+  const sessionKey = rawKey || `session_${Date.now()}`;
+  if (!rawKey) localStorage.setItem("selectedSessionKey", sessionKey);
+  
   domtoimage.toPng(node)
     .then((dataUrl) => {
       const sessionKey = localStorage.getItem("selectedSessionKey");
