@@ -148,6 +148,15 @@ if (type === "mindmap") {
   const imageData = sessionData?.mindmapImageData || sessionData?.png || localStorage.getItem("mindmapImageData");
   const dateStr = new Date().toLocaleDateString();
 
+  if (!imageData || imageData.startsWith("data:image/png;base64,") === false) {
+  const warning = document.createElement("p");
+  warning.textContent = "⚠️ マインドマップ画像データが不正です（形式がPNGではない可能性あり）。";
+  warning.style.color = "orange";
+  content.appendChild(warning);
+  return;
+}
+
+  
   // 🔷 表示専用：メタデータ（印刷には含めない）
   const metadata = document.createElement("div");
   metadata.id = "mindmapMetadata";
@@ -160,6 +169,15 @@ if (type === "mindmap") {
 
   // 🔷 印刷＆表示：画像
 const img = document.createElement("img");
+
+if (!imageData || imageData.trim() === "") {
+  const warning = document.createElement("p");
+  warning.textContent = "❌ マインドマップ画像が存在しません。保存に失敗した可能性があります。";
+  warning.style.color = "red";
+  content.appendChild(warning);
+  return;
+}
+  
 img.id = "mindmapImage";
 img.src = imageData;
 img.alt = "マインドマップ画像";
