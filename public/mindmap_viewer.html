@@ -75,7 +75,7 @@ if (!parsed.topic || parsed.topic.trim() === "") {
 
 const mind = new MindElixir({
   el: '#mindmap',
-  direction: MindElixir.SIDE  // ← これが放射状（左右）表示になる
+  direction: MindElixir.SIDE,
   data: { nodeData: parsed },  // ← ここをこうする！
   draggable: true,
   editable: true,
