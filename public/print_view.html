@@ -142,22 +142,24 @@
       const details = document.getElementById("detailSections");
       content.innerHTML = "";
       details.innerHTML = "";
-if (type === "mindmap") {
+
+      
+  if (type === "mindmap") {
   const region = sessionData?.region || localStorage.getItem("region") || "地域未設定";
   const theme = sessionData?.theme || localStorage.getItem("theme") || "テーマ未設定";
   const imageData = sessionData?.mindmapImageData || sessionData?.png || localStorage.getItem("mindmapImageData");
   const dateStr = new Date().toLocaleDateString();
 
-  if (!imageData || imageData.startsWith("data:image/png;base64,") === false) {
-  const warning = document.createElement("p");
-  warning.textContent = "⚠️ マインドマップ画像データが不正です（形式がPNGではない可能性あり）。";
-  warning.style.color = "orange";
-  content.appendChild(warning);
-  return;
-}
+  // ✅ Base64 PNG形式であることを厳密チェック
+  if (!imageData || !imageData.startsWith("data:image/png;base64,")) {
+    const warning = document.createElement("p");
+    warning.textContent = "❌ マインドマップ画像が存在しません、または形式が不正です。保存に失敗した可能性があります。";
+    warning.style.color = "red";
+    content.appendChild(warning);
+    return;
+  }
 
-  
-  // 🔷 表示専用：メタデータ（印刷には含めない）
+  // ✅ 表示用のメタデータ（印刷には含めない）
   const metadata = document.createElement("div");
   metadata.id = "mindmapMetadata";
   metadata.innerHTML = `
@@ -167,37 +169,27 @@ if (type === "mindmap") {
     <p><strong>出力日：</strong>${dateStr}</p>
   `;
 
-  // 🔷 印刷＆表示：画像
-const img = document.createElement("img");
+  // ✅ PNG画像表示エリア
+  const img = document.createElement("img");
+  img.id = "mindmapImage";
+  img.src = imageData;
+  img.alt = "マインドマップ画像";
+  img.style.maxWidth = "100%";
+  img.style.height = "auto";
+  img.style.border = "1px solid #ccc";
+  img.style.boxShadow = "0 2px 6px rgba(0,0,0,0.1)";
 
-if (!imageData || imageData.trim() === "") {
-  const warning = document.createElement("p");
-  warning.textContent = "❌ マインドマップ画像が存在しません。保存に失敗した可能性があります。";
-  warning.style.color = "red";
-  content.appendChild(warning);
-  return;
-}
-  
-img.id = "mindmapImage";
-img.src = imageData;
-img.alt = "マインドマップ画像";
-
-// サイズ調整を削除して、画像が自動で収まるようにする
-img.style.maxWidth = "100%";  // 画面幅に合わせる
-img.style.height = "auto";  // 高さを自動調整
-img.style.border = "1px solid #ccc";  // 境界線
-img.style.boxShadow = "0 2px 6px rgba(0,0,0,0.1)";  // 影を追加
-
-  
-  // ✅ 印刷対象：画像だけを含めるラッパー
+  // ✅ 印刷対象としてラップ
   const printable = document.createElement("div");
   printable.className = "print-area";
   printable.appendChild(img);
 
-  // 表示用にすべてを追加
+  // ✅ 画面表示に追加
   content.appendChild(metadata);
-  content.appendChild(printable); // 印刷対象
+  content.appendChild(printable);
   details.innerHTML = "<p style='margin-top: 1rem;'>このマインドマップは、地域の課題と構造的な思考を可視化した資料です。今後の対策立案や共有に活用できます。</p>";
+}
+
 
   
       } else if (type === "summary") {
