@@ -196,6 +196,7 @@
   const region = sessionData?.region || "地域未設定";
   const theme = sessionData?.theme || "テーマ未設定";
   const tasks = sessionData?.tasks || [];
+  const category = sessionData?.category || "分類未設定";
   const insightRaw = sessionData?.insight || [];
   const insights = Array.isArray(insightRaw)
   ? insightRaw.map(line => `・${line}`).join("<br>")
@@ -215,7 +216,13 @@
   printable.style.textAlign = "left";
 
   // 地域名＋テーマ
-  printable.innerHTML += `<h3>地域名：${region}</h3><p><strong>テーマ：</strong>${theme}</p>`;
+  // 地域名＋テーマ＋分類
+printable.innerHTML += `
+  <h3>地域名：${region}</h3>
+  <p><strong>テーマ：</strong>${theme}</p>
+  <p><strong>分類：</strong>${category}</p>
+`;
+
 
   // 課題リスト
   if (Array.isArray(tasks) && tasks.length > 0) {
