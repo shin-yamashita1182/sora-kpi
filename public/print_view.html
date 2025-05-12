@@ -197,10 +197,11 @@
   const insights = sessionData?.insights || "";
   const imageData = sessionData?.mindmapImageData || "";
   const nexcoInfo = sessionData?.nexcoInfo || "[NEXCO情報はまだ登録されていません]";
+  const mapImageData = sessionData?.mapImageData || ""; // ✅ 地図画像の取得
 
   // 🔵 表示専用タイトル
   const heading = document.createElement("h2");
-  heading.textContent = "📊 統合出力（レポート）";
+  heading.textContent = "📊 総合出力レポート";
 
   // 🔵 印刷対象エリアの中身
   const printable = document.createElement("div");
@@ -222,12 +223,17 @@
   // 考察エリア
   printable.innerHTML += `<h4>住民の考察・分析コメント：</h4><p>${insights || "（未入力）"}</p>`;
 
-  // マインドマップ画像
+  // ✅ 地図画像を表示（もしあれば）
+  if (mapImageData && mapImageData.startsWith("data:image/png")) {
+    printable.innerHTML += `<h4>地域マップ：</h4><img src="${mapImageData}" alt="地図画像" style="max-width:100%; border:1px solid #ccc; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">`;
+  }
+
+  // ✅ マインドマップ画像
   if (imageData) {
     printable.innerHTML += `<h4>マインドマップ：</h4><img src="${imageData}" alt="マインドマップ" style="max-width:100%; border:1px solid #ccc; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">`;
   }
 
-  // NEXCO情報
+  // ✅ NEXCO情報
   printable.innerHTML += `<h4>NEXCO連携情報：</h4><p>${nexcoInfo}</p>`;
 
   content.appendChild(heading);
