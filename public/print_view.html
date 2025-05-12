@@ -346,25 +346,25 @@ function createCard(item) {
   header.className = "card-header";
 
   const tag = document.createElement("span");
-  tag.className = "viewpoint-tag viewpoint-" + convertTagClass(item.perspective || "");
-  tag.innerText = getFullPerspectiveName(item.perspective || "");
+  tag.className = "viewpoint-tag viewpoint-" + convertTagClass(item["視点"] || "");
+  tag.innerText = getFullPerspectiveName(item["視点"] || "");
 
   const desc = document.createElement("span");
   desc.className = "viewpoint-desc";
-  const key = (item.perspective || "").replace("の視点", "");
-  desc.innerText = getPerspectiveAnnotation(item.perspective || "");
+  const key = (item["視点"] || "").replace("の視点", "");
+  desc.innerText = getPerspectiveAnnotation(item["視点"] || "");
 
   header.appendChild(tag);
   header.appendChild(desc);
 
   const title = document.createElement("h2");
-  title.innerText = item.strategy;
+  title.innerText = item["戦略目標"];
 
   const policy = document.createElement("p");
-  policy.innerText = item.policy || "（施策内容なし）";
+  policy.innerText = item["施策／活動案"] || "（施策内容なし）";
 
   const kpi = document.createElement("p");
-  kpi.innerText = "KPI：" + (item.kpi || "未設定");
+  kpi.innerText = "KPI：" + (item["KPI案"] || "未設定");
   kpi.style.color = "gray";
   kpi.style.fontSize = "0.85rem";
 
@@ -392,9 +392,8 @@ function createCard(item) {
 
   return card;
 }
-
    
-    window.addEventListener("DOMContentLoaded", () => {
+  window.addEventListener("DOMContentLoaded", () => {
   const sessionKey = localStorage.getItem("selectedSessionKey");
   const sessionData = sessionKey ? JSON.parse(localStorage.getItem(sessionKey)) : null;
   if (sessionData?.mindmapImageData) {
