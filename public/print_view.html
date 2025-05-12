@@ -197,6 +197,8 @@
   const theme = sessionData?.theme || "テーマ未設定";
   const tasks = sessionData?.tasks || [];
   const category = sessionData?.category || "分類未設定";
+  // 地域名＋テーマ＋分類
+  printable.innerHTML += `<h3>地域名：${region}</h3><p><strong>テーマ：</strong>${theme}</p><p><strong>分類：</strong>${category}</p>`;
   const insightRaw = sessionData?.insight || [];
   const insights = Array.isArray(insightRaw)
   ? insightRaw.map(line => `・${line}`).join("<br>")
