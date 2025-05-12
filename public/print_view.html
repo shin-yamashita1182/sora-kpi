@@ -227,10 +227,20 @@
   // 考察
   printable.innerHTML += `<h4>住民の考察・分析コメント：</h4><p>${insights}</p>`;
 
-  // 地図
-  if (mapImageData && mapImageData.startsWith("data:image/png")) {
-    printable.innerHTML += `<h4>地域マップ：</h4><img src="${mapImageData}" alt="地図画像" style="max-width:100%; border:1px solid #ccc; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">`;
-  }
+ // 地域名に基づいたGoogleマップ表示
+const mapQuery = encodeURIComponent(region);
+printable.innerHTML += `
+  <h4>地域マップ：</h4>
+  <iframe
+    width="100%"
+    height="300"
+    style="border:1px solid #ccc; border-radius:8px; box-shadow: 0 2px 6px rgba(0,0,0,0.1);"
+    loading="lazy"
+    allowfullscreen
+    referrerpolicy="no-referrer-when-downgrade"
+    src="https://maps.google.com/maps?q=${mapQuery}&output=embed">
+  </iframe>
+`;
 
   // マインドマップ
   if (imageData) {
