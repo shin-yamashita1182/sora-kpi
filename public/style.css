@@ -3,7 +3,7 @@
 /* ---------- 基本レイアウト ---------- */
 body {
   font-family: 'Segoe UI', sans-serif;
-  background-color: #f8f9fa;
+  background-color: #f0f4f8;
   margin: 0;
   padding: 0;
 }
@@ -12,7 +12,7 @@ header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: white;
+  background-color: #e6eef5;
   padding: 10px 20px;
   border-bottom: 1px solid #dee2e6;
 }
@@ -32,7 +32,7 @@ header {
 
 .sidebar {
   width: 240px;
-  background-color: #ffffff;
+  background-color: #e6eef5;
   border-right: 1px solid #dee2e6;
   padding: 20px;
 }
