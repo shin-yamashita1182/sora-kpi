@@ -368,6 +368,10 @@ window.mindMapGenerated = true;
 
 // ✅ セッション履歴として localStorage に保存
 const sessionKey = `session_${Date.now()}`;
+
+// ✅ 1. 先に selectedSessionKey を固定！
+localStorage.setItem("selectedSessionKey", sessionKey);
+      
 const sessionData = {
   region,
   theme,
@@ -376,7 +380,6 @@ const sessionData = {
   mindmapData: parsed,
   timestamp: new Date().toISOString()
 };
-localStorage.setItem("selectedSessionKey", sessionKey);
 localStorage.setItem(sessionKey, JSON.stringify(sessionData));
 console.log("✅ セッション保存完了:", sessionKey);
       
