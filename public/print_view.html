@@ -178,8 +178,8 @@ img.src = imageData;
 img.alt = "マインドマップ画像";
 
 // ✅ スタイル修正（ここが肝！）
-img.style.width = "960px"; // ← 拡大表示のため追加
-img.style.maxWidth = "100%";
+img.style.width = "100%";
+img.style.maxWidth = "1400px";  // 好みに応じて1200〜1600px程度
 img.style.height = "auto";
 img.style.display = "block";
 img.style.margin = "1rem auto";
@@ -249,7 +249,9 @@ printable.innerHTML += `
 
   // マインドマップ
   if (imageData) {
-    printable.innerHTML += `<h4>マインドマップ：</h4><img src="${imageData}" alt="マインドマップ" style="width:960px; max-width:100%; border:1px solid #ccc; box-shadow: 0 2px 4px rgba(0,0,0,0.1); display:block; margin:1rem auto;">`;
+  printable.innerHTML += `<h4>マインドマップ：</h4>
+<img src="${imageData}" alt="マインドマップ" 
+style="width:100%; max-width:1400px; height:auto; border:1px solid #ccc; box-shadow: 0 2px 4px rgba(0,0,0,0.1); display:block; margin:1rem auto;">`;
   }
 
   // NEXCO情報
