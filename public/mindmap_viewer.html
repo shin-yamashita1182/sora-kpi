@@ -107,6 +107,11 @@ window.saveAndClose = function () {
     return;
   }
 
+  // ✅ 追加：localStorageに存在しなければ中止（ガード）
+if (!localStorage.getItem(fixedKey)) {
+  alert("❌ セッションが見つかりません。保存できません。");
+  return;
+}
 
   // ✅ 描画が終わっていない場合は保存を中止（空白キャプチャ防止）
   const internalSvg = node.querySelector("svg");
