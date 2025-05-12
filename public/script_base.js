@@ -412,6 +412,7 @@ if (mapDOM) {
     const sessionData = {
       region,
       theme,
+      category: selectedCategory, // ✅ 地域分類を保存
       tasks: window.latestExtractedTasks || [],
       insight: [...document.querySelectorAll(".thinking-block textarea")].map(t => t.value.trim()),
       mindmapData: parsed,
