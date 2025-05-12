@@ -404,7 +404,7 @@ if (mapDOM) {
 
     setTimeout(() => {
       window.open(`mindmap_viewer.html?sessionKey=${sessionKey}`, "_blank");
-    }, 100);
+    }, 200);
   } catch (mapErr) {
     console.error("❌ 地図のキャプチャに失敗しました:", mapErr);
     alert("⚠️ 地図画像の保存に失敗しました（セッションには他の情報のみ保存）。");
@@ -427,7 +427,7 @@ if (mapDOM) {
 
     setTimeout(() => {
       window.open(`mindmap_viewer.html?sessionKey=${sessionKey}`, "_blank");
-    }, 100);
+    }, 200);
   }
 } else {
   console.warn("⚠️ 地図DOM（#miniMap）が見つかりませんでした");
@@ -456,7 +456,7 @@ if (mapDOM) {
 
   setTimeout(() => {
     window.open(`mindmap_viewer.html?sessionKey=${sessionKey}`, "_blank");
-  }, 100);
+  }, 200);
 }
 
       
