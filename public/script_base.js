@@ -131,6 +131,10 @@ const categorySelect = document.getElementById("categorySelect");
 const selectedCategory = categorySelect ? categorySelect.value.trim() : "（分類未設定）";
      
 const promptTemplate = `
+【背景説明】：
+この地域は「${selectedCategory}」に分類されており、その特性上、特有の課題が存在すると想定されます。
+たとえば、交通アクセスの制限、産業基盤の脆弱性、人口構成の偏り、インフラの制約など、分類に起因する地域特性を十分に考慮してください。
+
 以下は、ある地域における重要なテーマと、それに関連する会議資料（議事録・ヒアリングメモ等）です。
 
 この情報をもとに、その地域が現在抱えている主な課題を10個に整理してください。
@@ -163,11 +167,12 @@ const promptTemplate = `
 ---
 
 【地域名】：${region}  
-【テーマ】：${theme}
+【テーマ】：${theme}  
 【分類】：${selectedCategory}（この地域は ${selectedCategory} に該当し、その特性を踏まえた課題整理が求められます）
 【参考資料】：  
 ${uploadedTextContent || "（参考資料なし）"}
 `;
+
 
 
 const prompt = promptTemplate
