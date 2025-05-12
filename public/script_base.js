@@ -383,6 +383,7 @@ if (mapDOM) {
   try {
     const canvas = await html2canvas(mapDOM);
     const mapImageData = canvas.toDataURL("image/png");
+    const nexcoText = document.getElementById("nexcoInfoList")?.innerText || "";
 
     const sessionData = {
       region,
@@ -391,6 +392,7 @@ if (mapDOM) {
       insight: [...document.querySelectorAll(".thinking-block textarea")].map(t => t.value.trim()),
       mindmapData: parsed,
       mapImageData,
+      nexcoInfo: nexcoText, // ← NEXCO情報
       timestamp: new Date().toISOString()
     };
 
