@@ -196,7 +196,11 @@
   const region = sessionData?.region || "地域未設定";
   const theme = sessionData?.theme || "テーマ未設定";
   const tasks = sessionData?.tasks || [];
-  const insights = sessionData?.insights || "";
+  const insightRaw = sessionData?.insight || [];
+  const insights = Array.isArray(insightRaw)
+  ? insightRaw.map(line => `・${line}`).join("<br>")
+  : insightRaw || "（未入力）";
+
   const imageData = sessionData?.mindmapImageData || "";
   const nexcoInfo = sessionData?.nexcoInfo || "[NEXCO情報はまだ登録されていません]";
   const mapImageData = sessionData?.mapImageData || ""; // ✅ 地図画像の取得
@@ -223,8 +227,10 @@
   }
 
   // 考察エリア
-  const insightsText = Array.isArray(insights) ? insights.map(line => `・${line}`).join("<br>") : insights;  
-  printable.innerHTML += `<h4>住民の考察・分析コメント：</h4><p>${insights || "（未入力）"}</p>`;
+// 考察エリア
+const insightsText = Array.isArray(insights) ? insights.map(line => `・${line}`).join("<br>") : insights || "（未入力）";
+printable.innerHTML += `<h4>住民の考察・分析コメント：</h4><p>${insightsText}</p>`;
+
 
   // ✅ 地図画像を表示（もしあれば）
   if (mapImageData && mapImageData.startsWith("data:image/png")) {
