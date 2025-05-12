@@ -111,6 +111,7 @@ const prompt = `あなたは実在する施設名に基づいて正確に答え�
     analyzeBtn.addEventListener("click", async () => {
       const region = regionInput.value.trim();
       const theme = noteInput.value.trim();
+      const selectedCategory = document.getElementById("categorySelect")?.value || "（分類未設定）";
 
       if (!region || !theme) {
         alert("地域名とテーマを入力してください。");
