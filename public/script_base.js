@@ -127,6 +127,9 @@ const prompt = `あなたは実在する施設名に基づいて正確に答え�
         return;
       }
 
+const categorySelect = document.getElementById("categorySelect");
+const selectedCategory = categorySelect ? categorySelect.value.trim() : "（分類未設定）";
+     
 const promptTemplate = `
 以下は、ある地域における重要なテーマと、それに関連する会議資料（議事録・ヒアリングメモ等）です。
 
