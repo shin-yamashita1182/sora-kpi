@@ -12,7 +12,7 @@ header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: #ffffff;
+  background-color: #e6eef5;
   padding: 10px 20px;
   border-bottom: 1px solid #dee2e6;
 }
@@ -33,7 +33,7 @@ header {
 
 .sidebar {
   width: 240px;
-  background-color: #ffffff;
+  background-color: #e6eef5;
   border-right: 1px solid #dee2e6;
   padding: 20px;
 }
