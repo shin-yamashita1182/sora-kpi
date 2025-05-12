@@ -358,9 +358,6 @@ if (!cleanedJson.endsWith("}") && !cleanedJson.endsWith("}]")) {
 const parsed = JSON.parse(cleanedText); // ← GPTから来たマインドマップJSON
 localStorage.setItem("latestMindMapData", JSON.stringify(parsed));
 
-// ✅ ← この下に入れる
-saveMindmapToSession(parsed);      
-
 const selectedSessionKey = localStorage.getItem("selectedSessionKey"); // ✅ セッションキー取得
 window.open(`mindmap_viewer.html?sessionKey=${selectedSessionKey}`, "_blank"); // ✅ 正しく渡す！
 
