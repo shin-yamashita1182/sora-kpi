@@ -430,6 +430,8 @@ if (mapDOM) {
 } else {
   console.warn("⚠️ 地図DOM（#miniMap）が見つかりませんでした");
 
+  const nexcoText = document.getElementById("nexcoInfoList")?.innerText || ""; // ✅ 追加
+
   const sessionData = {
     region,
     theme,
@@ -437,6 +439,7 @@ if (mapDOM) {
     insight: [...document.querySelectorAll(".thinking-block textarea")].map(t => t.value.trim()),
     mindmapData: parsed,
     mapImageData: "",
+    nexcoInfo: nexcoText, // ✅ ここにも追加
     timestamp: new Date().toISOString()
   };
 
