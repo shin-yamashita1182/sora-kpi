@@ -67,6 +67,18 @@
 let mind; // ← グローバルスコープで宣言！
 
 document.addEventListener("DOMContentLoaded", () => {
+
+// ✅ ここに追加！
+  if (!Element.prototype.scrollIntoViewIfNeeded) {
+    Element.prototype.scrollIntoViewIfNeeded = function (centerIfNeeded = true) {
+      this.scrollIntoView({
+        block: centerIfNeeded ? "center" : "nearest",
+        inline: "nearest",
+        behavior: "smooth",
+      });
+    };
+  }
+  
   const raw = localStorage.getItem("latestMindMapData");
   const rawParsed = JSON.parse(raw);
   const parsed = rawParsed.nodeData || rawParsed;
