@@ -276,8 +276,8 @@ style="width:100%; max-width:1400px; height:auto; border:1px solid #ccc; box-sha
   cardContainer.style.gap = "1rem";
   cardContainer.style.justifyContent = "flex-start";
 
-  // ✅ ここを外部JSON読込に変更（パスは適宜変更）
-  fetch("../test-validation/coremaster_real_401cards.json")
+  // ✅ 正しいパス（public/test-validation/ にあるファイルを読む）
+  fetch("test-validation/coremaster_real_401cards.json")
     .then(res => res.json())
     .then(strategyCards => {
       strategyCards.forEach(item => {
