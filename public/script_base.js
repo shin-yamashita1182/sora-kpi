@@ -377,7 +377,9 @@ const sessionKey = `session_${Date.now()}`;
 // ✅ 1. 先に selectedSessionKey を固定！
 localStorage.setItem("selectedSessionKey", sessionKey);
       
-const mapDOM = document.getElementById("miniMap"); // ✅ あなたのHTMLに合った正しいID
+const mapDOM = document.getElementById("miniMap");
+
+if (mapDOM) {
   try {
     const canvas = await html2canvas(mapDOM);
     const mapImageData = canvas.toDataURL("image/png");
@@ -388,7 +390,7 @@ const mapDOM = document.getElementById("miniMap"); // ✅ あなたのHTMLに合
       tasks: window.latestExtractedTasks || [],
       insight: [...document.querySelectorAll(".thinking-block textarea")].map(t => t.value.trim()),
       mindmapData: parsed,
-      mapImageData, // ✅ 地図画像を追加
+      mapImageData,
       timestamp: new Date().toISOString()
     };
 
@@ -402,19 +404,17 @@ const mapDOM = document.getElementById("miniMap"); // ✅ あなたのHTMLに合
     setTimeout(() => {
       window.open(`mindmap_viewer.html?sessionKey=${sessionKey}`, "_blank");
     }, 100);
-
   } catch (mapErr) {
     console.error("❌ 地図のキャプチャに失敗しました:", mapErr);
     alert("⚠️ 地図画像の保存に失敗しました（セッションには他の情報のみ保存）。");
 
-    // フォールバック：地図なしで保存
     const sessionData = {
       region,
       theme,
       tasks: window.latestExtractedTasks || [],
       insight: [...document.querySelectorAll(".thinking-block textarea")].map(t => t.value.trim()),
       mindmapData: parsed,
-      mapImageData: "", // 空のまま
+      mapImageData: "",
       timestamp: new Date().toISOString()
     };
 
@@ -428,7 +428,7 @@ const mapDOM = document.getElementById("miniMap"); // ✅ あなたのHTMLに合
     }, 100);
   }
 } else {
-  console.warn("⚠️ 地図DOM（#map）が見つかりませんでした");
+  console.warn("⚠️ 地図DOM（#miniMap）が見つかりませんでした");
 
   const sessionData = {
     region,
@@ -436,7 +436,7 @@ const mapDOM = document.getElementById("miniMap"); // ✅ あなたのHTMLに合
     tasks: window.latestExtractedTasks || [],
     insight: [...document.querySelectorAll(".thinking-block textarea")].map(t => t.value.trim()),
     mindmapData: parsed,
-    mapImageData: "", // 空のまま
+    mapImageData: "",
     timestamp: new Date().toISOString()
   };
 
