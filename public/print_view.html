@@ -120,7 +120,7 @@
   <!-- ✅ 総合メニュー -->
   <div id="menu">
     <button onclick="loadSection('mindmap')">🧠 マインドマップ単体</button>
-    <button onclick="loadSection('summary')">📊 統合出力（ダッシュボード）</button>
+    <button onclick="loadSection('summary')">📊 統合出力（レポート）</button>
     <button onclick="loadSection('cards')">📇 実行策一覧</button>
     <button onclick="loadSection('3d')">🌐 3Dビューア</button>
     <button id="printBtn" onclick="window.print()">🖨️ 印刷</button>  </div>
@@ -200,7 +200,7 @@
 
   // 🔵 表示専用タイトル
   const heading = document.createElement("h2");
-  heading.textContent = "📊 統合出力（ダッシュボード資料）";
+  heading.textContent = "📊 統合出力（レポート）";
 
   // 🔵 印刷対象エリアの中身
   const printable = document.createElement("div");
