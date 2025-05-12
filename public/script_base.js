@@ -377,27 +377,82 @@ const sessionKey = `session_${Date.now()}`;
 // ✅ 1. 先に selectedSessionKey を固定！
 localStorage.setItem("selectedSessionKey", sessionKey);
       
-const sessionData = {
-  region,
-  theme,
-  tasks: window.latestExtractedTasks || [],
-  insight: [...document.querySelectorAll(".thinking-block textarea")].map(t => t.value.trim()),
-  mindmapData: parsed,
-  timestamp: new Date().toISOString()
-};
-localStorage.setItem(sessionKey, JSON.stringify(sessionData));
-console.log("✅ セッション保存完了:", sessionKey);
-      
-// ✅ アラートはここに入れる（セッション保存完了ログの直後）
-alert("✅ セッションが保存されました。\n履歴に反映するにはページを再読み込みしてください。");
-      
-// ✅ ③ この1行を追加して保存反映させる！
-saveMindmapToSession(parsed);
+const mapDOM = document.getElementById("map");
+if (mapDOM) {
+  try {
+    const canvas = await html2canvas(mapDOM);
+    const mapImageData = canvas.toDataURL("image/png");
 
-// ✅ ④ Viewerオープンも後でやるならここ
-setTimeout(() => {
-  window.open(`mindmap_viewer.html?sessionKey=${sessionKey}`, "_blank");
-}, 100);
+    const sessionData = {
+      region,
+      theme,
+      tasks: window.latestExtractedTasks || [],
+      insight: [...document.querySelectorAll(".thinking-block textarea")].map(t => t.value.trim()),
+      mindmapData: parsed,
+      mapImageData, // ✅ 地図画像を追加
+      timestamp: new Date().toISOString()
+    };
+
+    localStorage.setItem(sessionKey, JSON.stringify(sessionData));
+    console.log("✅ セッション保存完了:", sessionKey);
+
+    alert("✅ セッションが保存されました。\n履歴に反映するにはページを再読み込みしてください。");
+
+    saveMindmapToSession(parsed);
+
+    setTimeout(() => {
+      window.open(`mindmap_viewer.html?sessionKey=${sessionKey}`, "_blank");
+    }, 100);
+
+  } catch (mapErr) {
+    console.error("❌ 地図のキャプチャに失敗しました:", mapErr);
+    alert("⚠️ 地図画像の保存に失敗しました（セッションには他の情報のみ保存）。");
+
+    // フォールバック：地図なしで保存
+    const sessionData = {
+      region,
+      theme,
+      tasks: window.latestExtractedTasks || [],
+      insight: [...document.querySelectorAll(".thinking-block textarea")].map(t => t.value.trim()),
+      mindmapData: parsed,
+      mapImageData: "", // 空のまま
+      timestamp: new Date().toISOString()
+    };
+
+    localStorage.setItem(sessionKey, JSON.stringify(sessionData));
+    console.log("✅ セッション保存完了（地図なし）:", sessionKey);
+
+    saveMindmapToSession(parsed);
+
+    setTimeout(() => {
+      window.open(`mindmap_viewer.html?sessionKey=${sessionKey}`, "_blank");
+    }, 100);
+  }
+} else {
+  console.warn("⚠️ 地図DOM（#map）が見つかりませんでした");
+
+  const sessionData = {
+    region,
+    theme,
+    tasks: window.latestExtractedTasks || [],
+    insight: [...document.querySelectorAll(".thinking-block textarea")].map(t => t.value.trim()),
+    mindmapData: parsed,
+    mapImageData: "", // 空のまま
+    timestamp: new Date().toISOString()
+  };
+
+  localStorage.setItem(sessionKey, JSON.stringify(sessionData));
+  console.log("✅ セッション保存完了（地図DOMなし）:", sessionKey);
+
+  alert("✅ セッションが保存されました（地図画像なし）");
+
+  saveMindmapToSession(parsed);
+
+  setTimeout(() => {
+    window.open(`mindmap_viewer.html?sessionKey=${sessionKey}`, "_blank");
+  }, 100);
+}
+
       
 } catch (err) {
   console.error("⚠️ マインドマップ生成中にエラー:", err);
