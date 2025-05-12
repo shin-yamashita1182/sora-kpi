@@ -290,10 +290,9 @@ style="width:100%; max-width:1400px; height:auto; border:1px solid #ccc; box-sha
       }
 
       strategyCards.forEach(item => {
-  const card = createCard(item);
-  cardContainer.appendChild(card);
-});
-
+        const card = createCard(item);
+        cardContainer.appendChild(card);
+      });
 
       content.appendChild(heading);
       content.appendChild(cardContainer);
@@ -320,16 +319,7 @@ function convertTagClass(perspective = "") {
   if (perspective.includes("顧客")) return "customer";
   if (perspective.includes("プロセス")) return "process";
   if (perspective.includes("学習")) return "growth";
-  return "finance"; // fallback（未設定や不明な視点も受け止める）
-}
-// ✅ ここに以下の2つの関数を追加！👇
-
-function convertTagClass(perspective = "") {
-  if (perspective.includes("財務")) return "finance";
-  if (perspective.includes("顧客")) return "customer";
-  if (perspective.includes("プロセス")) return "process";
-  if (perspective.includes("学習")) return "growth";
-  return "finance"; // fallback
+  return "finance";
 }
 
 function getFullPerspectiveName(perspective = "") {
@@ -402,6 +392,7 @@ function createCard(item) {
 
   return card;
 }
+
    
     window.addEventListener("DOMContentLoaded", () => {
   const sessionKey = localStorage.getItem("selectedSessionKey");
