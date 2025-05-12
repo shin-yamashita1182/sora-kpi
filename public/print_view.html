@@ -276,10 +276,20 @@ style="width:100%; max-width:1400px; height:auto; border:1px solid #ccc; box-sha
   cardContainer.style.gap = "1rem";
   cardContainer.style.justifyContent = "flex-start";
 
-  // ✅ 正しいパス（public/test-validation/ にあるファイルを読む）
+  // ✅ 外部JSON読込
   fetch("test-validation/coremaster_real_401cards.json")
     .then(res => res.json())
     .then(strategyCards => {
+      if (!Array.isArray(strategyCards) || strategyCards.length === 0) {
+        const warning = document.createElement("p");
+        warning.textContent = "❌ カードデータは取得されましたが、空のようです。";
+        warning.style.color = "red";
+        content.appendChild(heading);
+        content.appendChild(warning);
+        return;
+      }
+
+      // ✅ カードを展開
       strategyCards.forEach(item => {
         const card = document.createElement("div");
         card.className = "card";
@@ -295,18 +305,20 @@ style="width:100%; max-width:1400px; height:auto; border:1px solid #ccc; box-sha
         cardContainer.appendChild(card);
       });
 
+      // ✅ 画面に反映
       content.appendChild(heading);
       content.appendChild(cardContainer);
-
-      details.innerHTML = "<p>このセクションには、<strong>test-validationホルダーの本物カード</strong>を直接参照して出力しています。</p>";
+      details.innerHTML = "<p>このセクションには、<strong>CoreMaster401件</strong>を直接読み込んで表示しています。</p>";
     })
     .catch(err => {
-      content.appendChild(heading);
       const warning = document.createElement("p");
-      warning.textContent = "❌ カードデータの取得に失敗しました。パスまたはファイルの確認をしてください。";
+      warning.textContent = "❌ カードデータの読み込み中にエラーが発生しました。";
       warning.style.color = "red";
+      content.appendChild(heading);
       content.appendChild(warning);
+      console.error("読み込み失敗:", err);
     });
+
 
       
  } else if (type === "3d") {
