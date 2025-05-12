@@ -135,7 +135,7 @@ if (!localStorage.getItem(fixedKey)) {
   // ✅ 画面をPNGとしてキャプチャ
   html2canvas(node, {
     backgroundColor: null,
-    scale: 2,
+    scale: 0.5, // ← ここを縮小！
     useCORS: true,
     allowTaint: true,
   }).then((canvas) => {
