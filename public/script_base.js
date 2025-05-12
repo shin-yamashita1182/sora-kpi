@@ -578,6 +578,10 @@ function saveMindmapToSession(mindmapData) {
       session.insight = insights;
     }
 
+   // ✅ 🔽🔽🔽 ここを追加！ 🔽🔽🔽
+    const selectedCategory = document.getElementById("categorySelect")?.value || "分類未設定";
+    session.category = selectedCategory;
+    
     localStorage.setItem(key, JSON.stringify(session));
     console.log("✅ mindmapData + insight をセッションに保存:", key);
   } catch (err) {
