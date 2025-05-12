@@ -376,6 +376,7 @@ const sessionData = {
   mindmapData: parsed,
   timestamp: new Date().toISOString()
 };
+localStorage.setItem("selectedSessionKey", sessionKey);
 localStorage.setItem(sessionKey, JSON.stringify(sessionData));
 console.log("✅ セッション保存完了:", sessionKey);
       
