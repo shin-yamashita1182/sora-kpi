@@ -129,7 +129,6 @@ const prompt = `あなたは実在する施設名に基づいて正確に答え�
       }
 
 const categorySelect = document.getElementById("categorySelect");
-const selectedCategory = categorySelect ? categorySelect.value.trim() : "（分類未設定）";
      
 const promptTemplate = `
 【背景説明】：
