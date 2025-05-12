@@ -39,6 +39,7 @@ header {
 }
 
 .main-content {
+  background-color: #e6eef5;
   flex-grow: 1;
   padding: 20px;
   max-width: calc(100% - 260px);
