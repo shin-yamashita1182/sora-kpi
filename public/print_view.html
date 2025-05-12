@@ -263,44 +263,45 @@ style="width:100%; max-width:1400px; height:auto; border:1px solid #ccc; box-sha
 
     
      } else if (type === "cards") {
-  // 表示用タイトル（印刷時には非表示）
   const heading = document.createElement("h2");
-  heading.textContent = "📇 実行策一覧出力（マインドトリガーカード）";
+  heading.textContent = "📇 実行策一覧出力（MindTriggerカード）";
 
-  // 印刷＆表示共通：マインドトリガーカードを並べるコンテナ
   const cardContainer = document.createElement("div");
-  cardContainer.className = "print-area"; // ✅ 印刷対象はこの中だけ
+  cardContainer.className = "print-area";
   cardContainer.style.display = "grid";
   cardContainer.style.gridTemplateColumns = "repeat(auto-fit, minmax(280px, 1fr))";
   cardContainer.style.gap = "1rem";
   cardContainer.style.padding = "1rem";
 
-  // 🔽 デモ用：絞り込み結果の仮カードを表示（後でベクトル抽出結果に差し替え）
-  const sampleCards = [
-    { strategy: "地域医療体制の強化", action: "医療人材誘致・遠隔診療拠点の整備" },
-    { strategy: "移住定住促進の基盤構築", action: "空き家バンクとリノベーション補助" },
-    { strategy: "観光資源の魅力最大化", action: "地域ガイド養成・体験コンテンツ創出" }
-  ];
+  // ✅ 実際のセッションデータから戦略カードを取得
+  const strategyCards = sessionData?.coreStrategies || [];
 
-  sampleCards.forEach(cardData => {
+  if (strategyCards.length === 0) {
+    const warning = document.createElement("p");
+    warning.textContent = "❌ 保存された実行策が見つかりません。";
+    warning.style.color = "red";
+    content.appendChild(heading);
+    content.appendChild(warning);
+    return;
+  }
+
+  strategyCards.forEach(cardData => {
     const card = document.createElement("div");
-    card.style.border = "1px solid #ccc";
-    card.style.borderRadius = "10px";
-    card.style.padding = "1rem";
-    card.style.backgroundColor = "#fff";
+    card.className = "strategy-card"; // 既存CSSのスタイル適用を想定
     card.innerHTML = `
-      <h4 style="margin-top:0;">${cardData.strategy}</h4>
-      <p style="margin-bottom:0.5rem;">${cardData.action}</p>
-      <small style="color:gray;">※ KPIはカード詳細に記載</small>
+      <div class="perspective-tag">${cardData.perspective || "視点未設定"}</div>
+      <div class="strategy-annotation">${cardData.annotation || ""}</div>
+      <h4>${cardData.strategy}</h4>
+      <p>${cardData.policy || "（施策内容未記載）"}</p>
+      <p style="color: gray; font-size: 0.9em;">KPI：${cardData.kpi || "未設定"}</p>
     `;
     cardContainer.appendChild(card);
   });
 
-  // ブラウザ表示に追加（タイトル + カード）
   content.appendChild(heading);
   content.appendChild(cardContainer);
 
-  details.innerHTML = "<p>このエリアにはマインドマップと連動する優先実行策（Mind Trigger Cards）が表示されます。</p>";
+  details.innerHTML = "<p>このエリアには、セッションで保存された優先実行策が表示されます。</p>";
 
 
       } else if (type === "3d") {
