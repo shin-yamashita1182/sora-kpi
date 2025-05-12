@@ -358,6 +358,9 @@ if (!cleanedJson.endsWith("}") && !cleanedJson.endsWith("}]")) {
 const parsed = JSON.parse(cleanedText); // ← GPTから来たマインドマップJSON
 localStorage.setItem("latestMindMapData", JSON.stringify(parsed));
 
+// ✅ ← この下に入れる
+saveMindmapToSession(parsed);      
+
 const selectedSessionKey = localStorage.getItem("selectedSessionKey"); // ✅ セッションキー取得
 window.open(`mindmap_viewer.html?sessionKey=${selectedSessionKey}`, "_blank"); // ✅ 正しく渡す！
 
@@ -472,5 +475,33 @@ window.renderSessionHistory = function () {
 window.addEventListener("load", () => {
   renderSessionHistory();
 });
+// ✅ DOMContentLoadedの外側に貼ってください（例えば末尾近く）
+
+function saveMindmapToSession(mindmapData) {
+  const key = localStorage.getItem("selectedSessionKey");
+  if (!key || !localStorage.getItem(key)) {
+    alert("セッションが未確定のため保存できません。");
+    return;
+  }
+
+  try {
+    const session = JSON.parse(localStorage.getItem(key));
+
+    session.mindmapData = mindmapData;
+
+    // ✅ 考察欄を格納（通常は insight として配列で保存）
+    const insights = [...document.querySelectorAll(".thinking-block textarea")]
+      .map(t => t.value.trim())
+      .filter(v => v);
+    if (insights.length > 0) {
+      session.insight = insights;
+    }
+
+    localStorage.setItem(key, JSON.stringify(session));
+    console.log("✅ mindmapData + insight をセッションに保存:", key);
+  } catch (err) {
+    console.error("❌ セッション保存失敗:", err);
+  }
+}
 
 });
