@@ -384,10 +384,12 @@ if (mapDOM) {
     const canvas = await html2canvas(mapDOM);
     const mapImageData = canvas.toDataURL("image/png");
     const nexcoText = document.getElementById("nexcoInfoList")?.innerText || "";
+    const selectedCategory = document.getElementById("categorySelect")?.value || "分類未設定"; // ✅ 追加
 
     const sessionData = {
       region,
       theme,
+      category: selectedCategory, // ✅ 地域分類を保存
       tasks: window.latestExtractedTasks || [],
       insight: [...document.querySelectorAll(".thinking-block textarea")].map(t => t.value.trim()),
       mindmapData: parsed,
@@ -433,10 +435,12 @@ if (mapDOM) {
   console.warn("⚠️ 地図DOM（#miniMap）が見つかりませんでした");
 
   const nexcoText = document.getElementById("nexcoInfoList")?.innerText || ""; // ✅ 追加
+  const selectedCategory = document.getElementById("categorySelect")?.value || "分類未設定"; // ✅ 追加
 
   const sessionData = {
     region,
     theme,
+    category: selectedCategory, // ✅ 地域分類を保存
     tasks: window.latestExtractedTasks || [],
     insight: [...document.querySelectorAll(".thinking-block textarea")].map(t => t.value.trim()),
     mindmapData: parsed,
