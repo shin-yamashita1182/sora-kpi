@@ -290,28 +290,10 @@ style="width:100%; max-width:1400px; height:auto; border:1px solid #ccc; box-sha
       }
 
       strategyCards.forEach(item => {
-        const perspective = item.perspective || "視点未設定";
-        const tagClass = convertTagClass(perspective);
-        const fullLabel = getFullPerspectiveName(perspective);
-        const annotation = getPerspectiveAnnotation(perspective);
+  const card = createCard(item);
+  cardContainer.appendChild(card);
+});
 
-        const card = document.createElement("div");
-        card.className = "card";
-
-        card.innerHTML = `
-          <div class="viewpoint-tag viewpoint-${tagClass}">${fullLabel}</div>
-          <div class="viewpoint-desc">${annotation}</div>
-          <h2>${item.strategy}</h2>
-          <p>${item.policy || "（施策内容なし）"}</p>
-          <p style="color:gray; font-size:0.85rem;">KPI：${item.kpi || "未設定"}</p>
-          <div style="margin-top:1rem; display:flex; gap:0.5rem; justify-content:center;">
-            <button class="detail-button">詳細を見る</button>
-            <button class="add-priority-button">優先リストへ追加</button>
-          </div>
-        `;
-
-        cardContainer.appendChild(card);
-      });
 
       content.appendChild(heading);
       content.appendChild(cardContainer);
@@ -325,8 +307,6 @@ style="width:100%; max-width:1400px; height:auto; border:1px solid #ccc; box-sha
       content.appendChild(warning);
       console.error("読み込み失敗:", err);
     });
-
-
 
       
  } else if (type === "3d") {
@@ -344,6 +324,14 @@ function convertTagClass(perspective = "") {
 }
 // ✅ ここに以下の2つの関数を追加！👇
 
+function convertTagClass(perspective = "") {
+  if (perspective.includes("財務")) return "finance";
+  if (perspective.includes("顧客")) return "customer";
+  if (perspective.includes("プロセス")) return "process";
+  if (perspective.includes("学習")) return "growth";
+  return "finance"; // fallback
+}
+
 function getFullPerspectiveName(perspective = "") {
   if (perspective.includes("財務")) return "財務の視点";
   if (perspective.includes("顧客")) return "顧客の視点";
@@ -359,7 +347,62 @@ function getPerspectiveAnnotation(perspective = "") {
   if (perspective.includes("学習")) return "人材・情報・文化資産など将来の力を高める基盤の形成";
   return "視点に応じた注釈を設定してください";
 }
-    
+
+function createCard(item) {
+  const card = document.createElement("div");
+  card.className = "card";
+
+  const header = document.createElement("div");
+  header.className = "card-header";
+
+  const tag = document.createElement("span");
+  tag.className = "viewpoint-tag viewpoint-" + convertTagClass(item.perspective || "");
+  tag.innerText = getFullPerspectiveName(item.perspective || "");
+
+  const desc = document.createElement("span");
+  desc.className = "viewpoint-desc";
+  const key = (item.perspective || "").replace("の視点", "");
+  desc.innerText = getPerspectiveAnnotation(item.perspective || "");
+
+  header.appendChild(tag);
+  header.appendChild(desc);
+
+  const title = document.createElement("h2");
+  title.innerText = item.strategy;
+
+  const policy = document.createElement("p");
+  policy.innerText = item.policy || "（施策内容なし）";
+
+  const kpi = document.createElement("p");
+  kpi.innerText = "KPI：" + (item.kpi || "未設定");
+  kpi.style.color = "gray";
+  kpi.style.fontSize = "0.85rem";
+
+  const detailButton = document.createElement("button");
+  detailButton.className = "detail-button";
+  detailButton.innerText = "詳細を見る";
+
+  const priorityButton = document.createElement("button");
+  priorityButton.className = "add-priority-button";
+  priorityButton.innerText = "優先リストへ追加";
+
+  const buttonArea = document.createElement("div");
+  buttonArea.style.display = "flex";
+  buttonArea.style.gap = "0.5rem";
+  buttonArea.style.justifyContent = "center";
+  buttonArea.style.marginTop = "1rem";
+  buttonArea.appendChild(detailButton);
+  buttonArea.appendChild(priorityButton);
+
+  card.appendChild(header);
+  card.appendChild(title);
+  card.appendChild(policy);
+  card.appendChild(kpi);
+  card.appendChild(buttonArea);
+
+  return card;
+}
+   
     window.addEventListener("DOMContentLoaded", () => {
   const sessionKey = localStorage.getItem("selectedSessionKey");
   const sessionData = sessionKey ? JSON.parse(localStorage.getItem(sessionKey)) : null;
