@@ -381,7 +381,6 @@ const mapDOM = document.getElementById("miniMap");
 
 if (mapDOM) {
   try {
-    const mapImageData = ""; // ✅ 地図キャプチャは行わず、空にしておく
     const nexcoText = document.getElementById("nexcoInfoList")?.innerText || "";
     const selectedCategory = document.getElementById("categorySelect")?.value || "分類未設定"; // ✅ 追加
 
@@ -392,7 +391,6 @@ if (mapDOM) {
       tasks: window.latestExtractedTasks || [],
       insight: [...document.querySelectorAll(".thinking-block textarea")].map(t => t.value.trim()),
       mindmapData: parsed,
-      mapImageData,
       nexcoInfo: nexcoText, // ← NEXCO情報
       timestamp: new Date().toISOString()
     };
