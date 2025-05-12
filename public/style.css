@@ -47,7 +47,7 @@ header {
 /* ここに追加！ ↓ */
 .input-section,
 .canvas-section {
-  background-color: #e6eef5;
+  background-color: #e6eef5 !important;
   border: 1px solid #cdd7e1;
   border-radius: 8px;
   padding: 20px;
