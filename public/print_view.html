@@ -277,7 +277,6 @@ style="width:100%; max-width:1400px; height:auto; border:1px solid #ccc; box-sha
   cardContainer.style.gap = "1rem";
   cardContainer.style.justifyContent = "flex-start";
 
-  // ✅ CoreMaster 401件を安全に読み込む（test-validation or 本番どちらでも対応可能）
   fetch("test-validation/coremaster_real_401cards.json")
     .then(res => res.json())
     .then(strategyCards => {
@@ -293,16 +292,22 @@ style="width:100%; max-width:1400px; height:auto; border:1px solid #ccc; box-sha
       strategyCards.forEach(item => {
         const perspective = item.perspective || "視点未設定";
         const tagClass = convertTagClass(perspective);
+        const fullLabel = getFullPerspectiveName(perspective);
+        const annotation = getPerspectiveAnnotation(perspective);
 
         const card = document.createElement("div");
         card.className = "card";
 
         card.innerHTML = `
-          <div class="viewpoint-tag viewpoint-${tagClass}">${perspective}</div>
-          <div class="viewpoint-desc">${item.annotation || ""}</div>
+          <div class="viewpoint-tag viewpoint-${tagClass}">${fullLabel}</div>
+          <div class="viewpoint-desc">${annotation}</div>
           <h2>${item.strategy}</h2>
           <p>${item.policy || "（施策内容なし）"}</p>
           <p style="color:gray; font-size:0.85rem;">KPI：${item.kpi || "未設定"}</p>
+          <div style="margin-top:1rem; display:flex; gap:0.5rem; justify-content:center;">
+            <button class="detail-button">詳細を見る</button>
+            <button class="add-priority-button">優先リストへ追加</button>
+          </div>
         `;
 
         cardContainer.appendChild(card);
@@ -310,7 +315,7 @@ style="width:100%; max-width:1400px; height:auto; border:1px solid #ccc; box-sha
 
       content.appendChild(heading);
       content.appendChild(cardContainer);
-      details.innerHTML = "<p>このセクションには、<strong>CoreMaster401件</strong>の実行策カードを表示しています（視点未設定のカードも安全に処理）。</p>";
+      details.innerHTML = "<p>このセクションには、<strong>CoreMaster401件</strong>の実行策カードを表示しています。</p>";
     })
     .catch(err => {
       content.appendChild(heading);
