@@ -197,36 +197,25 @@
   const theme = sessionData?.theme || "テーマ未設定";
   const tasks = sessionData?.tasks || [];
   const category = sessionData?.category || "分類未設定";
-  // 地域名＋テーマ＋分類
-  printable.innerHTML += `<h3>地域名：${region}</h3><p><strong>テーマ：</strong>${theme}</p><p><strong>分類：</strong>${category}</p>`;
   const insightRaw = sessionData?.insight || [];
   const insights = Array.isArray(insightRaw)
-  ? insightRaw.map(line => `・${line}`).join("<br>")
-  : insightRaw || "（未入力）";
-
+    ? insightRaw.map(line => `・${line}`).join("<br>")
+    : insightRaw || "（未入力）";
   const imageData = sessionData?.mindmapImageData || "";
   const nexcoInfo = sessionData?.nexcoInfo || "[NEXCO情報はまだ登録されていません]";
-  const mapImageData = sessionData?.mapImageData || ""; // ✅ 地図画像の取得
+  const mapImageData = sessionData?.mapImageData || "";
 
-  // 🔵 表示専用タイトル
   const heading = document.createElement("h2");
   heading.textContent = "📊 総合出力レポート";
 
-  // 🔵 印刷対象エリアの中身
   const printable = document.createElement("div");
   printable.className = "print-area";
   printable.style.textAlign = "left";
 
-  // 地域名＋テーマ
   // 地域名＋テーマ＋分類
-printable.innerHTML += `
-  <h3>地域名：${region}</h3>
-  <p><strong>テーマ：</strong>${theme}</p>
-  <p><strong>分類：</strong>${category}</p>
-`;
+  printable.innerHTML += `<h3>地域名：${region}</h3><p><strong>テーマ：</strong>${theme}</p><p><strong>分類：</strong>${category}</p>`;
 
-
-  // 課題リスト
+  // 課題
   if (Array.isArray(tasks) && tasks.length > 0) {
     printable.innerHTML += "<h4>抽出された10の課題：</h4><ol>";
     tasks.forEach(task => {
@@ -235,30 +224,27 @@ printable.innerHTML += `
     printable.innerHTML += "</ol>";
   }
 
-  // 考察エリア
-// 考察エリア
-const insightsText = Array.isArray(insights) ? insights.map(line => `・${line}`).join("<br>") : insights || "（未入力）";
-printable.innerHTML += `<h4>住民の考察・分析コメント：</h4><p>${insightsText}</p>`;
+  // 考察
+  printable.innerHTML += `<h4>住民の考察・分析コメント：</h4><p>${insights}</p>`;
 
-
-  // ✅ 地図画像を表示（もしあれば）
+  // 地図
   if (mapImageData && mapImageData.startsWith("data:image/png")) {
     printable.innerHTML += `<h4>地域マップ：</h4><img src="${mapImageData}" alt="地図画像" style="max-width:100%; border:1px solid #ccc; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">`;
   }
 
-  // ✅ マインドマップ画像
+  // マインドマップ
   if (imageData) {
     printable.innerHTML += `<h4>マインドマップ：</h4><img src="${imageData}" alt="マインドマップ" style="max-width:100%; border:1px solid #ccc; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">`;
   }
 
-  // ✅ NEXCO情報
+  // NEXCO情報
   printable.innerHTML += `<h4>NEXCO連携情報：</h4><p>${nexcoInfo}</p>`;
 
   content.appendChild(heading);
   content.appendChild(printable);
   details.innerHTML = "<p>このエリアには地域全体の課題構造と住民の分析を統合表示します。</p>";
 
-      
+    
      } else if (type === "cards") {
   // 表示用タイトル（印刷時には非表示）
   const heading = document.createElement("h2");
