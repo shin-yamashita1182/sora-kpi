@@ -382,6 +382,14 @@ const sessionData = {
 };
 localStorage.setItem(sessionKey, JSON.stringify(sessionData));
 console.log("✅ セッション保存完了:", sessionKey);
+
+// ✅ ③ この1行を追加して保存反映させる！
+saveMindmapToSession(parsed);
+
+// ✅ ④ Viewerオープンも後でやるならここ
+setTimeout(() => {
+  window.open(`mindmap_viewer.html?sessionKey=${sessionKey}`, "_blank");
+}, 100);
       
 } catch (err) {
   console.error("⚠️ マインドマップ生成中にエラー:", err);
