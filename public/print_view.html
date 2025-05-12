@@ -223,6 +223,7 @@
   }
 
   // 考察エリア
+  const insightsText = Array.isArray(insights) ? insights.map(line => `・${line}`).join("<br>") : insights;  
   printable.innerHTML += `<h4>住民の考察・分析コメント：</h4><p>${insights || "（未入力）"}</p>`;
 
   // ✅ 地図画像を表示（もしあれば）
