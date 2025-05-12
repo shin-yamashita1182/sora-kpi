@@ -276,26 +276,28 @@ style="width:100%; max-width:1400px; height:auto; border:1px solid #ccc; box-sha
   cardContainer.style.gap = "1rem";
   cardContainer.style.justifyContent = "flex-start";
 
-  // ✅ 外部JSON読込
+  // ✅ CoreMaster 401件を安全に読み込む（test-validation or 本番どちらでも対応可能）
   fetch("test-validation/coremaster_real_401cards.json")
     .then(res => res.json())
     .then(strategyCards => {
       if (!Array.isArray(strategyCards) || strategyCards.length === 0) {
         const warning = document.createElement("p");
-        warning.textContent = "❌ カードデータは取得されましたが、空のようです。";
+        warning.textContent = "❌ カードデータは取得されましたが、空です。";
         warning.style.color = "red";
         content.appendChild(heading);
         content.appendChild(warning);
         return;
       }
 
-      // ✅ カードを展開
       strategyCards.forEach(item => {
+        const perspective = item.perspective || "視点未設定";
+        const tagClass = convertTagClass(perspective);
+
         const card = document.createElement("div");
         card.className = "card";
 
         card.innerHTML = `
-          <div class="viewpoint-tag viewpoint-${convertTagClass(item.perspective)}">${item.perspective}</div>
+          <div class="viewpoint-tag viewpoint-${tagClass}">${perspective}</div>
           <div class="viewpoint-desc">${item.annotation || ""}</div>
           <h2>${item.strategy}</h2>
           <p>${item.policy || "（施策内容なし）"}</p>
@@ -305,19 +307,19 @@ style="width:100%; max-width:1400px; height:auto; border:1px solid #ccc; box-sha
         cardContainer.appendChild(card);
       });
 
-      // ✅ 画面に反映
       content.appendChild(heading);
       content.appendChild(cardContainer);
-      details.innerHTML = "<p>このセクションには、<strong>CoreMaster401件</strong>を直接読み込んで表示しています。</p>";
+      details.innerHTML = "<p>このセクションには、<strong>CoreMaster401件</strong>の実行策カードを表示しています（視点未設定のカードも安全に処理）。</p>";
     })
     .catch(err => {
-      const warning = document.createElement("p");
-      warning.textContent = "❌ カードデータの読み込み中にエラーが発生しました。";
-      warning.style.color = "red";
       content.appendChild(heading);
+      const warning = document.createElement("p");
+      warning.textContent = "❌ カードデータの取得に失敗しました。パスやJSON構造を確認してください。";
+      warning.style.color = "red";
       content.appendChild(warning);
       console.error("読み込み失敗:", err);
     });
+
 
 
       
@@ -327,12 +329,12 @@ style="width:100%; max-width:1400px; height:auto; border:1px solid #ccc; box-sha
 } // ✅ ← loadSection() 関数をここで正しく閉じる！
 
     
-function convertTagClass(perspective) {
+function convertTagClass(perspective = "") {
   if (perspective.includes("財務")) return "finance";
   if (perspective.includes("顧客")) return "customer";
   if (perspective.includes("プロセス")) return "process";
   if (perspective.includes("学習")) return "growth";
-  return "finance"; // fallback
+  return "finance"; // fallback（未設定や不明な視点も受け止める）
 }
      
     window.addEventListener("DOMContentLoaded", () => {
