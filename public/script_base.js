@@ -341,7 +341,7 @@ ${[...document.querySelectorAll(".thinking-block textarea")]
 
 // ✅ JSON末尾の検査と try-catch を構文的に完全に分離
 if (!cleanedJson.endsWith("}") && !cleanedJson.endsWith("}]")) {
-  alert("ChatGPTからのJSON出力が不完全です（閉じカッコが欠落しています）。再試行してください。");
+  alert("⚠️ マインドマップの出力が途中で切れてしまったようです。\n通信や容量の影響でまれに発生します。\nもう一度『マインドマップの生成』を押して再試行してください。");
   console.error("不完全なJSON:", cleanedJson);
   generateMindMapGPTBtn.disabled = false;
   generateMindMapGPTBtn.textContent = "マインドマップの生成";
@@ -378,7 +378,10 @@ const sessionData = {
 };
 localStorage.setItem(sessionKey, JSON.stringify(sessionData));
 console.log("✅ セッション保存完了:", sessionKey);
-
+      
+// ✅ アラートはここに入れる（セッション保存完了ログの直後）
+alert("✅ セッションが保存されました。\n履歴に反映するにはページを再読み込みしてください。");
+      
 // ✅ ③ この1行を追加して保存反映させる！
 saveMindmapToSession(parsed);
 
