@@ -276,38 +276,39 @@ style="width:100%; max-width:1400px; height:auto; border:1px solid #ccc; box-sha
   cardContainer.style.gap = "1rem";
   cardContainer.style.justifyContent = "flex-start";
 
-  const strategyCards = sessionData?.coreStrategies || [];
+  // ✅ ここを外部JSON読込に変更（パスは適宜変更）
+  fetch("../test-validation/coremaster_real_401cards.json")
+    .then(res => res.json())
+    .then(strategyCards => {
+      strategyCards.forEach(item => {
+        const card = document.createElement("div");
+        card.className = "card";
 
-  if (strategyCards.length === 0) {
-    const warning = document.createElement("p");
-    warning.textContent = "❌ セッション内に保存されたカードが見つかりません。";
-    warning.style.color = "red";
-    content.appendChild(heading);
-    content.appendChild(warning);
-    return;
-  }
+        card.innerHTML = `
+          <div class="viewpoint-tag viewpoint-${convertTagClass(item.perspective)}">${item.perspective}</div>
+          <div class="viewpoint-desc">${item.annotation || ""}</div>
+          <h2>${item.strategy}</h2>
+          <p>${item.policy || "（施策内容なし）"}</p>
+          <p style="color:gray; font-size:0.85rem;">KPI：${item.kpi || "未設定"}</p>
+        `;
 
-  strategyCards.forEach(item => {
-    const card = document.createElement("div");
-    card.className = "card";
+        cardContainer.appendChild(card);
+      });
 
-    card.innerHTML = `
-      <div class="viewpoint-tag viewpoint-${convertTagClass(item.perspective)}">${item.perspective}</div>
-      <div class="viewpoint-desc">${item.annotation || ""}</div>
-      <h2>${item.strategy}</h2>
-      <p>${item.policy || "（施策内容なし）"}</p>
-      <p style="color:gray; font-size:0.85rem;">KPI：${item.kpi || "未設定"}</p>
-    `;
+      content.appendChild(heading);
+      content.appendChild(cardContainer);
 
-    cardContainer.appendChild(card);
-  });
+      details.innerHTML = "<p>このセクションには、<strong>test-validationホルダーの本物カード</strong>を直接参照して出力しています。</p>";
+    })
+    .catch(err => {
+      content.appendChild(heading);
+      const warning = document.createElement("p");
+      warning.textContent = "❌ カードデータの取得に失敗しました。パスまたはファイルの確認をしてください。";
+      warning.style.color = "red";
+      content.appendChild(warning);
+    });
 
-  content.appendChild(heading);
-  content.appendChild(cardContainer);
-
-  details.innerHTML = "<p>このセクションには、分析から抽出された MindTrigger 実行策カードを表示します。</p>";
-
-    
+      
  } else if (type === "3d") {
     window.open("3d_viewer.html", "_blank");
   }
