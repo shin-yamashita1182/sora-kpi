@@ -306,8 +306,14 @@ style="width:100%; max-width:1400px; height:auto; border:1px solid #ccc; box-sha
   content.appendChild(cardContainer);
 
   details.innerHTML = "<p>このセクションには、分析から抽出された MindTrigger 実行策カードを表示します。</p>";
-}
 
+    
+ } else if (type === "3d") {
+    window.open("3d_viewer.html", "_blank");
+  }
+} // ✅ ← loadSection() 関数をここで正しく閉じる！
+
+    
 function convertTagClass(perspective) {
   if (perspective.includes("財務")) return "finance";
   if (perspective.includes("顧客")) return "customer";
@@ -315,11 +321,7 @@ function convertTagClass(perspective) {
   if (perspective.includes("学習")) return "growth";
   return "finance"; // fallback
 }
-
-      } else if (type === "3d") {
-        window.open("3d_viewer.html", "_blank");
-      }
-    }
+     
     window.addEventListener("DOMContentLoaded", () => {
   const sessionKey = localStorage.getItem("selectedSessionKey");
   const sessionData = sessionKey ? JSON.parse(localStorage.getItem(sessionKey)) : null;
