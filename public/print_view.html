@@ -268,40 +268,49 @@ style="width:100%; max-width:1400px; height:auto; border:1px solid #ccc; box-sha
 
   const cardContainer = document.createElement("div");
   cardContainer.className = "print-area";
-  cardContainer.style.display = "grid";
-  cardContainer.style.gridTemplateColumns = "repeat(auto-fit, minmax(280px, 1fr))";
+  cardContainer.style.display = "flex";
+  cardContainer.style.flexWrap = "wrap";
   cardContainer.style.gap = "1rem";
-  cardContainer.style.padding = "1rem";
+  cardContainer.style.justifyContent = "flex-start";
 
-  // ✅ 実際のセッションデータから戦略カードを取得
   const strategyCards = sessionData?.coreStrategies || [];
 
   if (strategyCards.length === 0) {
     const warning = document.createElement("p");
-    warning.textContent = "❌ 保存された実行策が見つかりません。";
+    warning.textContent = "❌ セッション内に保存されたカードが見つかりません。";
     warning.style.color = "red";
     content.appendChild(heading);
     content.appendChild(warning);
     return;
   }
 
-  strategyCards.forEach(cardData => {
+  strategyCards.forEach(item => {
     const card = document.createElement("div");
-    card.className = "strategy-card"; // 既存CSSのスタイル適用を想定
+    card.className = "card";
+
     card.innerHTML = `
-      <div class="perspective-tag">${cardData.perspective || "視点未設定"}</div>
-      <div class="strategy-annotation">${cardData.annotation || ""}</div>
-      <h4>${cardData.strategy}</h4>
-      <p>${cardData.policy || "（施策内容未記載）"}</p>
-      <p style="color: gray; font-size: 0.9em;">KPI：${cardData.kpi || "未設定"}</p>
+      <div class="viewpoint-tag viewpoint-${convertTagClass(item.perspective)}">${item.perspective}</div>
+      <div class="viewpoint-desc">${item.annotation || ""}</div>
+      <h2>${item.strategy}</h2>
+      <p>${item.policy || "（施策内容なし）"}</p>
+      <p style="color:gray; font-size:0.85rem;">KPI：${item.kpi || "未設定"}</p>
     `;
+
     cardContainer.appendChild(card);
   });
 
   content.appendChild(heading);
   content.appendChild(cardContainer);
 
-  details.innerHTML = "<p>このエリアには、セッションで保存された優先実行策が表示されます。</p>";
+  details.innerHTML = "<p>このセクションには、分析から抽出された MindTrigger 実行策カードを表示します。</p>";
+}
+
+function convertTagClass(perspective) {
+  if (perspective.includes("財務")) return "finance";
+  if (perspective.includes("顧客")) return "customer";
+  if (perspective.includes("プロセス")) return "process";
+  if (perspective.includes("学習")) return "growth";
+  return "finance"; // fallback
 
 
       } else if (type === "3d") {
