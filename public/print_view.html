@@ -342,7 +342,24 @@ function convertTagClass(perspective = "") {
   if (perspective.includes("学習")) return "growth";
   return "finance"; // fallback（未設定や不明な視点も受け止める）
 }
-     
+// ✅ ここに以下の2つの関数を追加！👇
+
+function getFullPerspectiveName(perspective = "") {
+  if (perspective.includes("財務")) return "財務の視点";
+  if (perspective.includes("顧客")) return "顧客の視点";
+  if (perspective.includes("プロセス")) return "内部プロセスの視点";
+  if (perspective.includes("学習")) return "学習と成長の視点";
+  return "視点未設定";
+}
+
+function getPerspectiveAnnotation(perspective = "") {
+  if (perspective.includes("財務")) return "地域・企業が持続的に成長するための経済的成果や資源の最適化";
+  if (perspective.includes("顧客")) return "住民・来訪者など外部関係者への価値提供と満足度の向上";
+  if (perspective.includes("プロセス")) return "地域内部の業務効率・連携強化・制度改善など仕組みの整備";
+  if (perspective.includes("学習")) return "人材・情報・文化資産など将来の力を高める基盤の形成";
+  return "視点に応じた注釈を設定してください";
+}
+    
     window.addEventListener("DOMContentLoaded", () => {
   const sessionKey = localStorage.getItem("selectedSessionKey");
   const sessionData = sessionKey ? JSON.parse(localStorage.getItem(sessionKey)) : null;
