@@ -377,7 +377,7 @@ const sessionKey = `session_${Date.now()}`;
 // ✅ 1. 先に selectedSessionKey を固定！
 localStorage.setItem("selectedSessionKey", sessionKey);
       
-const mapDOM = document.getElementById("googleMap"); // ✅ これが正解！if (mapDOM) {
+const mapDOM = document.getElementById("miniMap"); // ✅ あなたのHTMLに合った正しいID
   try {
     const canvas = await html2canvas(mapDOM);
     const mapImageData = canvas.toDataURL("image/png");
