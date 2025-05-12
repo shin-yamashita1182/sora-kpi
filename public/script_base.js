@@ -381,8 +381,7 @@ const mapDOM = document.getElementById("miniMap");
 
 if (mapDOM) {
   try {
-    const canvas = await html2canvas(mapDOM);
-    const mapImageData = canvas.toDataURL("image/png");
+    const mapImageData = ""; // ✅ 地図キャプチャは行わず、空にしておく
     const nexcoText = document.getElementById("nexcoInfoList")?.innerText || "";
     const selectedCategory = document.getElementById("categorySelect")?.value || "分類未設定"; // ✅ 追加
 
