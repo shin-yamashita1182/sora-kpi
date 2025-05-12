@@ -358,13 +358,13 @@ function createCard(item) {
   header.appendChild(desc);
 
   const title = document.createElement("h2");
-  title.innerText = item["戦略目標"];
+  title.innerText = item.strategy;
 
   const policy = document.createElement("p");
-  policy.innerText = item["施策／活動案"] || "（施策内容なし）";
+  policy.innerText = item.policy || "（施策内容なし）";
 
   const kpi = document.createElement("p");
-  kpi.innerText = "KPI：" + (item["KPI案"] || "未設定");
+  kpi.innerText = "KPI：" + (item.kpi || "未設定");
   kpi.style.color = "gray";
   kpi.style.fontSize = "0.85rem";
 
