@@ -18,6 +18,7 @@ header {
 }
 
 .logo {
+  background-color: transparent !important;
   font-weight: bold;
   font-size: 20px;
 }
