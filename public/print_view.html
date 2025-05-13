@@ -345,7 +345,7 @@ function createCard(item) {
   const header = document.createElement("div");
   header.className = "card-header";
 
-  const perspective = item["視点"] || "";
+  const perspective = item.viewpoint || "";
   const tag = document.createElement("span");
   tag.className = "viewpoint-tag viewpoint-" + convertTagClass(perspective);
   tag.innerText = getFullPerspectiveName(perspective);
@@ -358,17 +358,16 @@ function createCard(item) {
   header.appendChild(desc);
 
   const title = document.createElement("h2");
-  title.innerText = item["戦略目標"] || "戦略未設定";
+  title.innerText = item.strategy || "戦略未設定";
 
-  // ✅ 表から施策・KPIは非表示に
   const detailButton = document.createElement("button");
   detailButton.className = "detail-button";
   detailButton.innerText = "詳細を見る";
   detailButton.onclick = () => {
     openModal(
-      item["戦略目標"] || "戦略未設定",
-      item["施策／活動案"] || "施策情報なし",
-      item["KPI案"] || "KPI未設定"
+      item.strategy || "戦略未設定",
+      item.policy || "施策情報なし",
+      item.kpi || "KPI未設定"
     );
   };
 
@@ -378,7 +377,7 @@ function createCard(item) {
 
   const buttonArea = document.createElement("div");
   buttonArea.style.display = "flex";
-  buttonArea.style.flexDirection = "column"; // ✅ 縦並びに変更
+  buttonArea.style.flexDirection = "column";
   buttonArea.style.alignItems = "center";
   buttonArea.style.gap = "0.3rem";
   buttonArea.style.marginTop = "1rem";
@@ -391,7 +390,6 @@ function createCard(item) {
 
   return card;
 }
-
    
   window.addEventListener("DOMContentLoaded", () => {
   const sessionKey = localStorage.getItem("selectedSessionKey");
