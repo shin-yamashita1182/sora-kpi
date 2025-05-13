@@ -345,14 +345,14 @@ function createCard(item) {
   const header = document.createElement("div");
   header.className = "card-header";
 
+  const perspective = item["視点"] || "";
   const tag = document.createElement("span");
-  tag.className = "viewpoint-tag viewpoint-" + convertTagClass(item["視点"] || "");
-  tag.innerText = getFullPerspectiveName(item["視点"] || "");
+  tag.className = "viewpoint-tag viewpoint-" + convertTagClass(perspective);
+  tag.innerText = getFullPerspectiveName(perspective);
 
   const desc = document.createElement("span");
   desc.className = "viewpoint-desc";
-  const key = (item["視点"] || "").replace("の視点", "");
-  desc.innerText = getPerspectiveAnnotation(item["視点"] || "");
+  desc.innerText = getPerspectiveAnnotation(perspective);
 
   header.appendChild(tag);
   header.appendChild(desc);
@@ -360,7 +360,7 @@ function createCard(item) {
   const title = document.createElement("h2");
   title.innerText = item["戦略目標"] || "戦略未設定";
 
-  // ✅ モーダル表示用ボタン
+  // ✅ 表から施策・KPIは非表示に
   const detailButton = document.createElement("button");
   detailButton.className = "detail-button";
   detailButton.innerText = "詳細を見る";
@@ -378,18 +378,20 @@ function createCard(item) {
 
   const buttonArea = document.createElement("div");
   buttonArea.style.display = "flex";
-  buttonArea.style.gap = "0.5rem";
-  buttonArea.style.justifyContent = "center";
+  buttonArea.style.flexDirection = "column"; // ✅ 縦並びに変更
+  buttonArea.style.alignItems = "center";
+  buttonArea.style.gap = "0.3rem";
   buttonArea.style.marginTop = "1rem";
   buttonArea.appendChild(detailButton);
   buttonArea.appendChild(priorityButton);
 
   card.appendChild(header);
   card.appendChild(title);
-  card.appendChild(buttonArea); // ← policy, kpi は表示しない
+  card.appendChild(buttonArea);
 
   return card;
 }
+
    
   window.addEventListener("DOMContentLoaded", () => {
   const sessionKey = localStorage.getItem("selectedSessionKey");
