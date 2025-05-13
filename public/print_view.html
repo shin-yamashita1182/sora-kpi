@@ -446,6 +446,15 @@ priorityButton.onclick = () => {
   const sessionKey = localStorage.getItem("selectedSessionKey");
   const sessionData = sessionKey ? JSON.parse(localStorage.getItem(sessionKey)) : null;
   if (sessionData?.mindmapImageData) {
+
+　<!-- ✅ 詳細モーダル（カード詳細表示） -->
+<div id="detail-modal" style="display:none; position:fixed; z-index:9999; top:10%; left:50%; transform:translateX(-50%);
+ background:white; padding:2rem; border-radius:12px; box-shadow:0 4px 20px rgba(0,0,0,0.3); max-width:500px;">
+  <h2 id="modal-title">詳細タイトル</h2>
+  <p><strong>施策：</strong> <span id="modal-content"></span></p>
+  <p><strong>KPI：</strong> <span id="modal-kpi"></span></p>
+  <button onclick="closeModal()" style="margin-top:1rem; background:#007bff; color:white; padding:0.5rem 1rem; border:none; border-radius:6px;">閉じる</button>
+</div>
    
   }
 });
