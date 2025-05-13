@@ -1,20 +1,93 @@
-reader.onloadend = async () => {
-  const base64Image = reader.result;
-  const res = await fetch('/api/image-to-desc', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ image: base64Image })
-  });
-  const data = await res.json();
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>多言語商品説明ツール</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      padding: 2rem;
+      background-color: #f8f9fa;
+      max-width: 800px;
+      margin: auto;
+    }
+    h1 {
+      color: #007bff;
+    }
+    #output {
+      margin-top: 2rem;
+    }
+    .lang-block {
+      background: #fff;
+      border-left: 6px solid #007bff;
+      padding: 1rem;
+      margin-bottom: 1rem;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+    }
+    input[type="file"] {
+      margin-top: 1rem;
+    }
+    button {
+      margin-top: 1rem;
+      padding: 0.5rem 1.5rem;
+      font-size: 1rem;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+  </style>
+</head>
+<body>
+  <h1>🌐 商品説明を多言語で生成</h1>
+  <p>商品の写真をアップロードするだけで、日本語、英語、中国語、韓国語で説明を生成します。</p>
 
-  if (data.error) {
-    output.innerHTML = `<p style="color:red;">${data.error}</p>`;
-    return;
-  }
+  <input type="file" id="imageInput" accept="image/*">
+  <button id="submitBtn">導入開始</button>
 
-  const result = data.result; // ← ここ追加
-  const langs = ["Japanese", "English", "Chinese", "Korean"];
-  output.innerHTML = langs.map(lang => {
-    return `<div class="lang-block"><strong>${lang}</strong><br>${result[lang.toLowerCase()]}</div>`;
-  }).join('');
-};
+  <div id="output"></div>
+
+  <script>
+    const submitBtn = document.getElementById('submitBtn');
+    const imageInput = document.getElementById('imageInput');
+    const output = document.getElementById('output');
+
+    submitBtn.addEventListener('click', async () => {
+      if (!imageInput.files[0]) {
+        alert('写真をアップロードしてください');
+        return;
+      }
+
+      output.innerHTML = '作成中...';
+
+      const file = imageInput.files[0];
+      const reader = new FileReader();
+      reader.onloadend = async () => {
+        const base64Image = reader.result;
+        const res = await fetch('/api/image-to-desc', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ image: base64Image })
+        });
+        const data = await res.json();
+
+        if (data.error) {
+          output.innerHTML = `<p style="color:red;">${data.error}</p>`;
+          return;
+        }
+
+        const result = data.result;
+        const langs = ["Japanese", "English", "Chinese", "Korean"];
+        output.innerHTML = langs.map(lang => {
+          return `<div class="lang-block"><strong>${lang}</strong><br>${result[lang.toLowerCase()]}</div>`;
+        }).join('');
+      };
+      reader.readAsDataURL(file);
+    });
+  </script>
+</body>
+</html>
