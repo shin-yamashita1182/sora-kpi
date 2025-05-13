@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <title>SORAツールズ - 周辺便利機能集</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f8f9fa;
+      margin: 0;
+      padding: 2rem;
+    }
+    header {
+      text-align: center;
+      padding: 1rem;
+      background-color: #0077cc;
+      color: white;
+      border-radius: 8px;
+    }
+    h2 {
+      margin-top: 2rem;
+      color: #333;
+    }
+    .tool-box {
+      background: white;
+      border: 1px solid #ccc;
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin-top: 1.5rem;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    .tool-box h3 {
+      margin-top: 0;
+    }
+    .upload-preview {
+      max-width: 300px;
+      margin-top: 1rem;
+    }
+    .output-box {
+      background-color: #f1f1f1;
+      padding: 1rem;
+      margin-top: 1rem;
+      border-radius: 6px;
+      font-size: 0.95rem;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>🧰 SORA周辺ツール集</h1>
+    <p>地域フロントの現場でも役立つ！未来型ユーティリティ</p>
+  </header>
+
+  <div class="tool-box">
+    <h3>🖼️ 画像から商品説明（多言語対応）</h3>
+    <p>画像をアップロードすると、その内容を解析して多言語で商品説明を生成します。</p>
+    <input type="file" id="imageInput" accept="image/*" />
+    <div id="previewArea"></div>
+    <div class="output-box" id="descriptionArea">ここに商品説明が表示されます</div>
+  </div>
+
+  <script>
+    document.getElementById("imageInput").addEventListener("change", async (event) => {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = async () => {
+        const imgUrl = reader.result;
+        const imgTag = `<img src="${imgUrl}" class="upload-preview" />`;
+        document.getElementById("previewArea").innerHTML = imgTag;
+
+        // 🧠 GPT APIで画像内容に基づく説明生成（ここではモック表示）
+        document.getElementById("descriptionArea").innerText =
+          "（例）これは地域特産の手作りジャムです。甘さ控えめで、海外観光客にも人気です。\n\n英文: This is a handmade jam made from local fruits. It's mildly sweet and popular among international visitors.";
+      };
+      reader.readAsDataURL(file);
+    });
+  </script>
+</body>
+</html>
