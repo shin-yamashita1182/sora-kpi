@@ -80,11 +80,20 @@
           return;
         }
 
-        const result = data.result;
-        const langs = ["Japanese", "English", "Chinese", "Korean"];
-        output.innerHTML = langs.map(lang => {
-          return `<div class="lang-block"><strong>${lang}</strong><br>${result[lang.toLowerCase()]}</div>`;
-        }).join('');
+const resultText = data.result;
+
+const langTexts = {
+  Japanese: resultText.match(/日本語[:：]\s*(.+)/)?.[1] || "（取得できませんでした）",
+  English: resultText.match(/英語[:：]\s*(.+)/)?.[1] || "（取得できませんでした）",
+  Chinese: resultText.match(/中国語（簡体字）[:：]\s*(.+)/)?.[1] || "（取得できませんでした）",
+  Korean: resultText.match(/韓国語[:：]\s*(.+)/)?.[1] || "（取得できませんでした）",
+};
+
+const langs = ["Japanese", "English", "Chinese", "Korean"];
+output.innerHTML = langs.map(lang => {
+  return `<div class="lang-block"><strong>${lang}</strong><br>${langTexts[lang]}</div>`;
+}).join('');
+
       };
       reader.readAsDataURL(file);
     });
