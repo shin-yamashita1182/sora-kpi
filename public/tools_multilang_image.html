@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>多言語商品説明ツール</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f8f9fa;
+      padding: 2rem;
+      text-align: center;
+    }
+    input[type="file"] {
+      margin: 1rem 0;
+    }
+    #output {
+      margin-top: 2rem;
+      text-align: left;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+      background: white;
+      padding: 1rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+  </style>
+</head>
+<body>
+  <h1>🧃 商品画像から多言語説明へ</h1>
+  <p>商品画像を選ぶと、日本語＋英語の説明文を自動生成します（デモ版）。</p>
+
+  <input type="file" id="imageInput" accept="image/*">
+  <div id="output"></div>
+
+  <script>
+    const imageInput = document.getElementById("imageInput");
+    const output = document.getElementById("output");
+
+    imageInput.addEventListener("change", async () => {
+      const file = imageInput.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = async () => {
+        const base64 = reader.result;
+
+        output.innerHTML = `<p><strong>画像送信中...</strong></p>`;
+
+        const response = await fetch("/api/chatgpt", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            prompt: `以下は商品の画像です。何の商品かを日本語で簡潔に説明し、次に英語で同じ内容を説明してください。
+            
+            # 出力形式：
+            日本語：〇〇〇
+            英語：〇〇〇
+
+            画像：${base64}`
+          })
+        });
+
+        const result = await response.json();
+        output.innerHTML = `<h3>📝 説明生成結果</h3><pre>${result.result}</pre>`;
+      };
+      reader.readAsDataURL(file);
+    });
+  </script>
+</body>
+</html>
