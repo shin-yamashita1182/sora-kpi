@@ -362,7 +362,54 @@ triggerBtn.addEventListener("click", async () => {
   const region = sessionData?.region || "地域未設定";
   const theme = sessionData?.theme || "テーマ未設定";
 
+// ✅ ChatGPTプロンプト（完全版）
+const prompt = `以下は地域の課題と住民の考察です。これらに対応する対策カードを、CoreMaster401件の中から視点ごとに5件ずつ（合計20件）抽出してください。
+
+出力形式はJSON配列のみで返してください。文章説明は一切不要です。以下の形式で、全20件を出力してください：
+
+[
+  {
+    "id": "core-001",
+    "strategy": "戦略タイトル",
+    "policy": "施策の内容",
+    "kpi": "KPI指標",
+    "viewpoint": "財務の視点"
+  },
+  ...（計20件）
+]
+
+地域：${region}
+テーマ：${theme}
+課題：${tasks.join("、")}
+考察：${Array.isArray(insights) ? insights.join("、") : insights}`;
+
+
+// ✅ JavaScript修正部分（data.resultのJSON.parse安全対策）
+triggerBtn.addEventListener("click", async () => {
+  const sessionKey = localStorage.getItem("selectedSessionKey");
+  const sessionData = sessionKey ? JSON.parse(localStorage.getItem(sessionKey)) : {};
+  const tasks = sessionData?.tasks || [];
+  const insights = sessionData?.insight || [];
+  const region = sessionData?.region || "地域未設定";
+  const theme = sessionData?.theme || "テーマ未設定";
+
+  triggerBtn.innerText = "⏳ カード抽出中...";
+  triggerBtn.disabled = true;
+
   const prompt = `以下は地域の課題と住民の考察です。これらに対応する対策カードを、CoreMaster401件の中から視点ごとに5件ずつ（合計20件）抽出してください。
+
+出力形式はJSON配列のみで返してください。文章説明は一切不要です。以下の形式で、全20件を出力してください：
+
+[
+  {
+    \"id\": \"core-001\",
+    \"strategy\": \"戦略タイトル\",
+    \"policy\": \"施策の内容\",
+    \"kpi\": \"KPI指標\",
+    \"viewpoint\": \"財務の視点\"
+  },
+  ...（計20件）
+]
 
 地域：${region}
 テーマ：${theme}
@@ -379,7 +426,16 @@ triggerBtn.addEventListener("click", async () => {
     const data = await res.json();
     console.log("GPTのレスポンス内容（data.result）:", data.result);
 
-    const cards = JSON.parse(data.result);
+    let cards = [];
+    try {
+      cards = JSON.parse(data.result);
+    } catch (parseErr) {
+      console.error("JSONの解析に失敗しました。非JSON応答の可能性:", data.result);
+      alert("ChatGPTからカードのJSONが取得できませんでした。応答内容を確認してください。");
+      triggerBtn.innerText = "🎯 対策カードを抽出する";
+      triggerBtn.disabled = false;
+      return;
+    }
 
     const container = document.getElementById("cardContainer");
     container.innerHTML = "";
@@ -387,17 +443,16 @@ triggerBtn.addEventListener("click", async () => {
       const card = createCard(item);
       container.appendChild(card);
     });
-
-    // ✅ 成功時：完了表示に変化
-    triggerBtn.innerText = "✅ 抽出完了（再抽出も可）";
+    triggerBtn.innerText = "✅ 抽出完了";
   } catch (err) {
     alert("カードの抽出に失敗しました。");
     console.error("抽出エラー:", err);
-    triggerBtn.innerText = "🎯 対策カードを抽出する"; // 元に戻す
+    triggerBtn.innerText = "🎯 対策カードを抽出する";
   } finally {
     triggerBtn.disabled = false;
   }
 });
+
 
       
  } else if (type === "3d") {
