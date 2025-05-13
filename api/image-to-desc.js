@@ -10,7 +10,7 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: 'No image provided' });
   }
 
-  // ✅ Base64画像のデータ部分だけを抽出（先頭の "data:image/png;base64," を除く）
+  // ✅ Base64のヘッダー部分を除去（data:image/png;base64,... → ...）
   const base64Raw = image.split(',')[1];
 
   try {
@@ -28,14 +28,14 @@ export default async function handler(req, res) {
             content: [
               {
                 type: "text",
-                text: `この商品画像をもとに以下の形式で説明を作ってください：
+                text: `以下の商品画像をもとに、各言語でシンプルな商品説明を80文字以内で生成してください。
 
-🟩 日本語: （80文字以内の商品紹介）
-🟦 英語: （英語での同様の商品紹介）
-🟥 中国語（簡体字）: （同様）
-🟨 韓国語: （同様）
+🟩 日本語:
+🟦 英語:
+🟥 中国語（簡体字）:
+🟨 韓国語:
 
-※シンプルで実用的な説明にしてください。`
+※商品の特徴・魅力・使い方などを簡潔に紹介してください。`
               },
               {
                 type: "image_url",
@@ -51,8 +51,9 @@ export default async function handler(req, res) {
     });
 
     const data = await response.json();
-    const resultText = data.choices?.[0]?.message?.content?.trim() || "[応答なし]";
-    res.status(200).json({ result: resultText });
+    const raw = data.choices?.[0]?.message?.content?.trim() || "[応答なし]";
+
+    res.status(200).json({ result: raw });
 
   } catch (error) {
     console.error("Vision API error:", error);
