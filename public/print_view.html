@@ -140,6 +140,40 @@
   background-color: #007bff; /* 青 */
   color: white;
 }
+/* ✅ ボタンを幅広＆統一サイズに変更 */
+.detail-button,
+.add-priority-button {
+  width: 90%;
+  max-width: 260px;
+  padding: 0.6rem 0;
+  font-size: 1rem;
+  font-weight: bold;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  display: block;
+  text-align: center;
+}
+
+/* ✅ 各ボタン色 */
+.detail-button {
+  background-color: #28a745; /* 緑 */
+  color: white;
+}
+
+.add-priority-button {
+  background-color: #007bff; /* 青 */
+  color: white;
+}
+
+/* ✅ ボタン配置を中央寄せ＆縦並びにする */
+.card .card-header + h2 + div {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
 
   }
 </style>
