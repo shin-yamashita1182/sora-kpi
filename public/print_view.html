@@ -351,30 +351,31 @@ style="width:100%; max-width:1400px; height:auto; border:1px solid #ccc; box-sha
   details.innerHTML = "<p>このセクションには、<strong>課題に応じた抽出した20件</strong>の実行策カードが表示されます。</p>";
 
   // ✅ ボタンクリック時の抽出処理
-  triggerBtn.addEventListener("click", async () => {
-    triggerBtn.disabled = true;
-    triggerBtn.innerText = "⏳ カード抽出中...";
+// ✅ ボタンクリック時の抽出処理（完全対応版）
+triggerBtn.addEventListener("click", async () => {
+  triggerBtn.disabled = true;
+  triggerBtn.innerText = "⏳ カード抽出中...";
 
-    const sessionKey = localStorage.getItem("selectedSessionKey");
-    const sessionData = sessionKey ? JSON.parse(localStorage.getItem(sessionKey)) : {};
-    const tasks = sessionData?.tasks || [];
-    const insights = sessionData?.insight || [];
-    const region = sessionData?.region || "地域未設定";
-    const theme = sessionData?.theme || "テーマ未設定";
+  const sessionKey = localStorage.getItem("selectedSessionKey");
+  const sessionData = sessionKey ? JSON.parse(localStorage.getItem(sessionKey)) : {};
+  const tasks = sessionData?.tasks || [];
+  const insights = sessionData?.insight || [];
+  const region = sessionData?.region || "地域未設定";
+  const theme = sessionData?.theme || "テーマ未設定";
 
-    const prompt = `以下は地域の課題と住民の考察です。これらに対応する対策カードを、CoreMaster401件の中から視点ごとに5件ずつ（合計20件）抽出してください。
+  const prompt = `以下は地域の課題と住民の考察です。これらに対応する対策カードを、CoreMaster401件の中から視点ごとに5件ずつ（合計20件）抽出してください。
 
-出力形式はJSON配列のみで返してください。文章説明は一切不要です。以下の形式で、全20件を出力してください：
+出力形式はJSON配列のみとし、コードブロック（\`\`\`）や注釈・説明文は一切不要です。以下の形式で、全20件を出力してください：
 
 [
   {
-    \"id\": \"core-001\",
-    \"strategy\": \"戦略タイトル\",
-    \"policy\": \"施策の内容\",
-    \"kpi\": \"KPI指標\",
-    \"viewpoint\": \"財務の視点\"
+    "id": "core-001",
+    "strategy": "戦略タイトル",
+    "policy": "施策の内容",
+    "kpi": "KPI指標",
+    "viewpoint": "財務の視点"
   },
-  ...（計20件）
+  ...
 ]
 
 地域：${region}
@@ -382,24 +383,49 @@ style="width:100%; max-width:1400px; height:auto; border:1px solid #ccc; box-sha
 課題：${tasks.join("、")}
 考察：${Array.isArray(insights) ? insights.join("、") : insights}`;
 
-    try {
-      const res = await fetch("/api/chatgpt", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ prompt })
-      });
+  try {
+    const res = await fetch("/api/chatgpt", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ prompt })
+    });
 
-      const data = await res.json();
-      let cards = [];
-      try {
-        cards = JSON.parse(data.result);
-      } catch (parseErr) {
-        console.error("JSONの解析に失敗しました。非JSON応答の可能性:", data.result);
-        alert("ChatGPTからカードのJSONが取得できませんでした。応答内容を確認してください。");
-        triggerBtn.innerText = "🎯 対策カードを抽出する";
-        triggerBtn.disabled = false;
-        return;
-      }
+    const data = await res.json();
+    let rawText = data.result;
+
+    // ✅ コードブロック（```）が付いていた場合は除去
+    if (rawText.startsWith("```")) {
+      rawText = rawText.replace(/^```json\s*|\s*```$/g, "").trim();
+    }
+
+    let cards = [];
+    try {
+      cards = JSON.parse(rawText);
+    } catch (parseErr) {
+      console.error("JSONの解析に失敗しました。非JSON応答の可能性:", rawText);
+      alert("ChatGPTからカードのJSONが取得できませんでした。応答内容を確認してください。");
+      triggerBtn.innerText = "🎯 対策カードを抽出する";
+      triggerBtn.disabled = false;
+      return;
+    }
+
+    const container = document.getElementById("cardContainer");
+    container.innerHTML = "";
+    cards.forEach(item => {
+      const card = createCard(item);
+      container.appendChild(card);
+    });
+
+    triggerBtn.innerText = "✅ 抽出完了";
+  } catch (err) {
+    alert("カードの抽出に失敗しました。");
+    console.error("抽出エラー:", err);
+    triggerBtn.innerText = "🎯 対策カードを抽出する";
+  } finally {
+    triggerBtn.disabled = false;
+  }
+});
+
 
       const container = document.getElementById("cardContainer");
       container.innerHTML = "";
