@@ -2,84 +2,123 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>多言語商品説明ツール</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <style>
     body {
       font-family: 'Segoe UI', sans-serif;
-      padding: 1rem;
-      background-color: #f2f2f2;
+      background: #f8f9fa;
+      margin: 0;
+      padding: 2rem;
       text-align: center;
     }
     h1 {
-      font-size: 1.6rem;
-      margin-bottom: 1rem;
+      color: #0077cc;
     }
     input[type="file"] {
-      margin-bottom: 1rem;
+      margin-top: 1rem;
     }
-    img {
-      max-width: 100%;
-      max-height: 300px;
+    #preview {
       margin: 1rem auto;
-      display: block;
+      max-width: 100%;
       border: 1px solid #ccc;
       border-radius: 8px;
-    }
-    .translation-block {
-      margin-top: 1rem;
-      background: #fff;
-      padding: 1rem;
-      border-radius: 8px;
       box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-      text-align: left;
     }
-    .translation-block h2 {
-      font-size: 1.2rem;
-      margin-bottom: 0.5rem;
+    #result {
+      margin-top: 1rem;
+      padding: 1rem;
+      background: #fff;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      text-align: left;
+      max-width: 800px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    button {
+      margin-top: 1rem;
+      background: #2a9d8f;
+      color: white;
+      padding: 0.6rem 1.2rem;
+      font-size: 1rem;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
     }
   </style>
 </head>
 <body>
-  <h1>🈂️ 多言語商品説明ツール</h1>
-  <input type="file" accept="image/*" id="imageInput">
-  <img id="preview" alt="画像プレビュー" style="display: none;">
+  <h1>🛍️ 多言語商品説明ツール</h1>
+  <p>商品画像をアップロードすると、GPTが内容を判別し、複数言語で説明を生成します。</p>
 
-  <div class="translation-block">
-    <h2>🗾 日本語の説明：</h2>
-    <p>手作りいちごジャムです。甘さ控えめで素材の味を活かしています。</p>
-  </div>
-
-  <div class="translation-block">
-    <h2>🇺🇸 英語の説明：</h2>
-    <p>This is homemade strawberry jam. It's low in sugar to preserve the natural flavor.</p>
-  </div>
-
-  <div class="translation-block">
-    <h2>🇰🇷 韓国語の説明：</h2>
-    <p>개인제작 노인 화이트지 자밀입니다. 감소한 당 자주 지시를 가지고 있습니다.</p>
-  </div>
-
-  <div class="translation-block">
-    <h2>🇨🇳 中国語の説明：</h2>
-    <p>這是手工草莓果醬，簡潔的甜味，保留了果物原始的風味。</p>
-  </div>
+  <input type="file" id="imageInput" accept="image/*">
+  <div><img id="preview" style="display:none;"></div>
+  <button onclick="analyzeImage()">📤 GPTで説明生成</button>
+  <div id="result"></div>
 
   <script>
-    const input = document.getElementById("imageInput");
+    const imageInput = document.getElementById("imageInput");
     const preview = document.getElementById("preview");
+    const resultBox = document.getElementById("result");
 
-    input.addEventListener("change", (e) => {
-      const file = e.target.files[0];
-      if (file) {
-        const reader = new FileReader();
-        reader.onload = () => {
-          preview.src = reader.result;
-          preview.style.display = "block";
-        };
-        reader.readAsDataURL(file);
-      }
+    imageInput.addEventListener("change", () => {
+      const file = imageInput.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        preview.src = e.target.result;
+        preview.style.display = "block";
+      };
+      reader.readAsDataURL(file);
     });
+
+    async function analyzeImage() {
+      const file = imageInput.files[0];
+      if (!file) {
+        alert("画像を選択してください。");
+        return;
+      }
+
+      resultBox.innerHTML = "⏳ 解析中...";
+
+      const reader = new FileReader();
+      reader.onload = async () => {
+        const base64Image = reader.result.split(",")[1];
+        const payload = {
+          model: "gpt-4-vision-preview",
+          messages: [
+            {
+              role: "user",
+              content: [
+                { type: "text", text: "この商品を日本語・英語・中国語・韓国語で説明してください。" },
+                {
+                  type: "image_url",
+                  image_url: {
+                    url: `data:image/jpeg;base64,${base64Image}`
+                  }
+                }
+              ]
+            }
+          ],
+          max_tokens: 1000
+        };
+
+        const res = await fetch("https://api.openai.com/v1/chat/completions", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer YOUR_API_KEY`
+          },
+          body: JSON.stringify(payload)
+        });
+
+        const data = await res.json();
+        resultBox.innerHTML = `<h3>🌍 多言語説明</h3><p>${data.choices[0].message.content.replaceAll("\n", "<br>")}</p>`;
+      };
+
+      reader.readAsDataURL(file);
+    }
   </script>
 </body>
 </html>
