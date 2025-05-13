@@ -1,51 +1,54 @@
-// /api/image-to-desc.js（Node.js + OpenAI API）
-
-import { OpenAI } from "openai";
-
-const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
-
 export default async function handler(req, res) {
-  if (req.method !== "POST") {
-    return res.status(405).json({ error: "Method not allowed" });
+  if (req.method !== 'POST') {
+    return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  const { imageBase64 } = req.body;
+  const { base64Image } = req.body;
+  const apiKey = process.env.OPENAI_API_KEY;
 
-  if (!imageBase64) {
-    return res.status(400).json({ error: "画像データがありません" });
+  if (!base64Image) {
+    return res.status(400).json({ error: 'No image provided' });
   }
 
   try {
-    const visionResponse = await openai.chat.completions.create({
-      model: "gpt-4-vision-preview",
-      messages: [
-        {
-          role: "user",
-          content: [
-            {
-              type: "image_url",
-              image_url: { url: imageBase64 },
-            },
-            {
-              type: "text",
-              text: `以下の画像に写っている商品について、多言語の説明文を生成してください。
+    const response = await fetch("https://api.openai.com/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${apiKey}`,
+      },
+      body: JSON.stringify({
+        model: "gpt-4-vision-preview",
+        messages: [
+          {
+            role: "user",
+            content: [
+              { type: "text", text: `この商品画像をもとに以下の形式で説明を作ってください：
+              
+🟩 日本語: （80文字以内の商品紹介）
+🟦 英語: （英語での同様の商品紹介）
+🟥 中国語（簡体字）: （同様）
+🟨 韓国語: （同様）
 
-【出力形式】
-- 日本語説明：
-- 英語説明：
-
-それぞれ1〜2文程度で簡潔に書いてください。販売促進を意識した表現で。`
-            },
-          ],
-        },
-      ],
-      max_tokens: 500,
+※シンプルで実用的な説明にしてください。` },
+              {
+                type: "image_url",
+                image_url: {
+                  url: `data:image/jpeg;base64,${base64Image}`,
+                },
+              },
+            ],
+          },
+        ],
+        max_tokens: 1000,
+      }),
     });
 
-    const resultText = visionResponse.choices[0].message.content;
+    const data = await response.json();
+    const resultText = data.choices?.[0]?.message?.content?.trim() || "[応答なし]";
     res.status(200).json({ result: resultText });
-  } catch (err) {
-    console.error("Vision API error:", err);
-    res.status(500).json({ error: "Vision APIとの通信に失敗しました" });
+  } catch (error) {
+    console.error("Vision API error:", error);
+    res.status(500).json({ error: "OpenAI Vision API error" });
   }
 }
