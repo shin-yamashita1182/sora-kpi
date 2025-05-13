@@ -399,9 +399,16 @@ function createCard(item) {
   };
 
   const priorityButton = document.createElement("button");
-  priorityButton.className = "add-priority-button";
-  priorityButton.innerText = "優先リストへ追加";
+priorityButton.className = "add-priority-button";
+priorityButton.innerText = "優先リストへ追加";
 
+// ✅ 今後活用予定：別ビューにID付きで渡す
+priorityButton.onclick = () => {
+  const id = item.id || "unknown";
+  window.open(`kpi_input_viewer.html?id=${id}`, "_blank");
+};
+
+  
   const buttonArea = document.createElement("div");
   buttonArea.style.display = "flex";
   buttonArea.style.flexDirection = "column";
