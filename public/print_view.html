@@ -351,41 +351,11 @@ style="width:100%; max-width:1400px; height:auto; border:1px solid #ccc; box-sha
 
   details.innerHTML = "<p>このセクションには、<strong>課題に応じた抽出した20件</strong>の実行策カードが表示されます。</p>";
 
-  // ✅ 「対策カードを抽出する」ボタンのクリックイベント
-triggerBtn.addEventListener("click", async () => {
-  // 🔄 状態表示の追加（押した直後）
-  triggerBtn.disabled = true;
-  triggerBtn.innerText = "⏳ 抽出中...";
-
-  const tasks = sessionData?.tasks || [];
-  const insights = sessionData?.insight || [];
-  const region = sessionData?.region || "地域未設定";
-  const theme = sessionData?.theme || "テーマ未設定";
-
-// ✅ ChatGPTプロンプト（完全版）
-const prompt = `以下は地域の課題と住民の考察です。これらに対応する対策カードを、CoreMaster401件の中から視点ごとに5件ずつ（合計20件）抽出してください。
-
-出力形式はJSON配列のみで返してください。文章説明は一切不要です。以下の形式で、全20件を出力してください：
-
-[
-  {
-    "id": "core-001",
-    "strategy": "戦略タイトル",
-    "policy": "施策の内容",
-    "kpi": "KPI指標",
-    "viewpoint": "財務の視点"
-  },
-  ...（計20件）
-]
-
-地域：${region}
-テーマ：${theme}
-課題：${tasks.join("、")}
-考察：${Array.isArray(insights) ? insights.join("、") : insights}`;
-
 
 // ✅ JavaScript修正部分（data.resultのJSON.parse安全対策）
 triggerBtn.addEventListener("click", async () => {
+  triggerBtn.disabled = true;
+  triggerBtn.innerText = "⏳ 抽出中...";
   const sessionKey = localStorage.getItem("selectedSessionKey");
   const sessionData = sessionKey ? JSON.parse(localStorage.getItem(sessionKey)) : {};
   const tasks = sessionData?.tasks || [];
