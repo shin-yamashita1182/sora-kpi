@@ -310,7 +310,8 @@ style="width:100%; max-width:1400px; height:auto; border:1px solid #ccc; box-sha
   details.innerHTML = "<p>このエリアには地域全体の課題構造と住民の分析を統合表示します。</p>";
 
     
-     } else if (type === "cards") {
+    // ✅ 正しいcardsブロック：置き換え用（差し替えです）
+} else if (type === "cards") {
   const heading = document.createElement("h2");
   heading.textContent = "📇 実行策一覧出力（MindTriggerカード）";
 
@@ -339,7 +340,7 @@ style="width:100%; max-width:1400px; height:auto; border:1px solid #ccc; box-sha
     display:flex;
     flex-wrap:wrap;
     gap:1rem;
-    justify-content:flex-start;
+    justify-content:center;
   `;
 
   content.appendChild(heading);
@@ -347,7 +348,7 @@ style="width:100%; max-width:1400px; height:auto; border:1px solid #ccc; box-sha
   content.appendChild(triggerBtn);
   content.appendChild(cardContainer);
 
-  details.innerHTML = "<p>このセクションには、課題解決に向けた実行策カードが表示されます。</p>";
+  details.innerHTML = "<p>このセクションには、<strong>GPTが抽出した20件</strong>の実行策カードが表示されます。</p>";
 
 
       
