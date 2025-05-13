@@ -358,19 +358,19 @@ function createCard(item) {
   header.appendChild(desc);
 
   const title = document.createElement("h2");
-  title.innerText = item.strategy;
+  title.innerText = item["戦略目標"] || "戦略未設定";
 
-  const policy = document.createElement("p");
-  policy.innerText = item.policy || "（施策内容なし）";
-
-  const kpi = document.createElement("p");
-  kpi.innerText = "KPI：" + (item.kpi || "未設定");
-  kpi.style.color = "gray";
-  kpi.style.fontSize = "0.85rem";
-
+  // ✅ モーダル表示用ボタン
   const detailButton = document.createElement("button");
   detailButton.className = "detail-button";
   detailButton.innerText = "詳細を見る";
+  detailButton.onclick = () => {
+    openModal(
+      item["戦略目標"] || "戦略未設定",
+      item["施策／活動案"] || "施策情報なし",
+      item["KPI案"] || "KPI未設定"
+    );
+  };
 
   const priorityButton = document.createElement("button");
   priorityButton.className = "add-priority-button";
@@ -386,9 +386,7 @@ function createCard(item) {
 
   card.appendChild(header);
   card.appendChild(title);
-  card.appendChild(policy);
-  card.appendChild(kpi);
-  card.appendChild(buttonArea);
+  card.appendChild(buttonArea); // ← policy, kpi は表示しない
 
   return card;
 }
