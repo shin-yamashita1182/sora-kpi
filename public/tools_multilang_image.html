@@ -1,98 +1,76 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
   <title>多言語商品説明ツール</title>
   <style>
     body {
       font-family: 'Segoe UI', sans-serif;
-      margin: 0;
       padding: 2rem;
-      background: #f8f9fa;
-      text-align: center;
+      background-color: #f8f9fa;
+      max-width: 800px;
+      margin: auto;
     }
     h1 {
-      color: #0077cc;
+      color: #007bff;
     }
-    input[type="file"] {
-      margin: 1rem 0;
-    }
-    button {
-      background-color: #007bff;
-      color: white;
-      border: none;
-      padding: 0.6rem 1.2rem;
-      font-size: 1rem;
-      border-radius: 6px;
-      cursor: pointer;
-    }
-    #preview {
-      margin-top: 1rem;
-      max-width: 300px;
-      border: 1px solid #ccc;
-    }
-    #result {
+    #output {
       margin-top: 2rem;
-      text-align: left;
+    }
+    .lang-block {
       background: #fff;
+      border-left: 6px solid #007bff;
       padding: 1rem;
-      border-radius: 8px;
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+      margin-bottom: 1rem;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
     }
   </style>
 </head>
 <body>
-  <h1>📸 多言語商品説明ツール</h1>
-  <p>商品画像をアップロードすると、日本語と英語の商品説明文を生成します。</p>
-  <input type="file" id="imageInput" accept="image/*" />
-  <br />
-  <button onclick="generateDescription()">説明を生成</button>
-  <br />
-  <img id="preview" src="" alt="プレビュー" style="display:none;" />
+  <h1>🌐 商品説明を多言語で生成</h1>
+  <p>商品の写真をアップロードするだけで、日本語、英語、中国語、韓国語で説明を生成します。</p>
 
-  <div id="result"></div>
+  <input type="file" id="imageInput" accept="image/*">
+  <button id="submitBtn">導入開始</button>
+
+  <div id="output"></div>
 
   <script>
+    const submitBtn = document.getElementById('submitBtn');
     const imageInput = document.getElementById('imageInput');
-    const preview = document.getElementById('preview');
+    const output = document.getElementById('output');
 
-    imageInput.addEventListener('change', () => {
-      const file = imageInput.files[0];
-      if (file) {
-        const reader = new FileReader();
-        reader.onload = (e) => {
-          preview.src = e.target.result;
-          preview.style.display = 'block';
-        };
-        reader.readAsDataURL(file);
+    submitBtn.addEventListener('click', async () => {
+      if (!imageInput.files[0]) {
+        alert('写真をアップロードしてください');
+        return;
       }
-    });
 
-    async function generateDescription() {
+      output.innerHTML = '作成中...';
+
       const file = imageInput.files[0];
-      if (!file) return alert('画像を選択してください。');
-
       const reader = new FileReader();
-      reader.onload = async (e) => {
-        const base64 = e.target.result;
-
+      reader.onloadend = async () => {
+        const base64Image = reader.result;
         const res = await fetch('/api/image-to-desc', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ imageBase64: base64 })
+          body: JSON.stringify({ image: base64Image })
         });
-
         const data = await res.json();
-        document.getElementById('result').innerHTML = `
-          <h2>📝 商品説明</h2>
-          <p><strong>日本語:</strong><br>${data.japanese}</p>
-          <p><strong>English:</strong><br>${data.english}</p>
-        `;
-      };
 
+        if (data.error) {
+          output.innerHTML = `<p style="color:red;">${data.error}</p>`;
+          return;
+        }
+
+        const langs = ["Japanese", "English", "Chinese", "Korean"];
+        output.innerHTML = langs.map(lang => {
+          return `<div class="lang-block"><strong>${lang}</strong><br>${data[lang.toLowerCase()]}</div>`;
+        }).join('');
+      };
       reader.readAsDataURL(file);
-    }
+    });
   </script>
 </body>
 </html>
