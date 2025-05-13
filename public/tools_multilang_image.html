@@ -2,95 +2,80 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <title>多言語商品説明ツール（画像対応）</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>多言語商品説明ツール</title>
   <style>
     body {
       font-family: 'Segoe UI', sans-serif;
+      padding: 1rem;
       background-color: #f2f2f2;
-      padding: 1.5rem;
-      margin: 0;
       text-align: center;
     }
-
     h1 {
-      font-size: 1.5rem;
+      font-size: 1.6rem;
       margin-bottom: 1rem;
     }
-
     input[type="file"] {
-      display: none;
-    }
-
-    label[for="imageUpload"] {
-      display: inline-block;
-      background-color: #007bff;
-      color: white;
-      padding: 0.7rem 1.5rem;
-      font-size: 1rem;
-      border-radius: 6px;
-      cursor: pointer;
       margin-bottom: 1rem;
     }
-
-    #preview {
+    img {
       max-width: 100%;
       max-height: 300px;
       margin: 1rem auto;
+      display: block;
       border: 1px solid #ccc;
       border-radius: 8px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
     }
-
-    .description-box {
-      background: white;
+    .translation-block {
+      margin-top: 1rem;
+      background: #fff;
       padding: 1rem;
-      margin-top: 1.5rem;
       border-radius: 8px;
       box-shadow: 0 2px 6px rgba(0,0,0,0.1);
       text-align: left;
     }
-
-    .description-box h2 {
-      font-size: 1.1rem;
+    .translation-block h2 {
+      font-size: 1.2rem;
       margin-bottom: 0.5rem;
-    }
-
-    .description-box p {
-      font-size: 1rem;
-      line-height: 1.5;
     }
   </style>
 </head>
 <body>
   <h1>🈂️ 多言語商品説明ツール</h1>
+  <input type="file" accept="image/*" id="imageInput">
+  <img id="preview" alt="画像プレビュー" style="display: none;">
 
-  <label for="imageUpload">画像を選択</label>
-  <input type="file" id="imageUpload" accept="image/*">
-  <br>
-  <img id="preview" src="" alt="プレビュー" style="display:none;">
-
-  <div class="description-box">
-    <h2>🇯🇵 日本語での説明</h2>
-    <p>これは手作りいちごジャムです。甘さ控えめで、朝食やスイーツにもぴったりです。</p>
+  <div class="translation-block">
+    <h2>🗾 日本語の説明：</h2>
+    <p>手作りいちごジャムです。甘さ控えめで素材の味を活かしています。</p>
   </div>
 
-  <div class="description-box">
-    <h2>🇬🇧 Description in English</h2>
-    <p>This is a handmade strawberry jam. It is mildly sweet and perfect for breakfast or desserts.</p>
+  <div class="translation-block">
+    <h2>🇺🇸 英語の説明：</h2>
+    <p>This is homemade strawberry jam. It's low in sugar to preserve the natural flavor.</p>
+  </div>
+
+  <div class="translation-block">
+    <h2>🇰🇷 韓国語の説明：</h2>
+    <p>개인제작 노인 화이트지 자밀입니다. 감소한 당 자주 지시를 가지고 있습니다.</p>
+  </div>
+
+  <div class="translation-block">
+    <h2>🇨🇳 中国語の説明：</h2>
+    <p>這是手工草莓果醬，簡潔的甜味，保留了果物原始的風味。</p>
   </div>
 
   <script>
-    const imageInput = document.getElementById('imageUpload');
-    const preview = document.getElementById('preview');
+    const input = document.getElementById("imageInput");
+    const preview = document.getElementById("preview");
 
-    imageInput.addEventListener('change', (event) => {
-      const file = event.target.files[0];
+    input.addEventListener("change", (e) => {
+      const file = e.target.files[0];
       if (file) {
         const reader = new FileReader();
         reader.onload = () => {
           preview.src = reader.result;
-          preview.style.display = 'block';
+          preview.style.display = "block";
         };
         reader.readAsDataURL(file);
       }
@@ -98,4 +83,3 @@
   </script>
 </body>
 </html>
-
