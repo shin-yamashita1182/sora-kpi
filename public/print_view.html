@@ -372,6 +372,8 @@ style="width:100%; max-width:1400px; height:auto; border:1px solid #ccc; box-sha
         body: JSON.stringify({ prompt })
       });
 
+     console.log("GPTのレスポンス内容（data.result）:", data.result);
+
       const data = await res.json();
       const cards = JSON.parse(data.result);
 
