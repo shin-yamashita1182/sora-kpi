@@ -441,13 +441,29 @@ priorityButton.onclick = () => {
 
   return card;
 }
-   
+
+  function openModal(title, content, kpi) {
+  const modal = document.getElementById("detail-modal");
+  document.getElementById("modal-title").innerText = title;
+  document.getElementById("modal-content").innerText = content;
+  document.getElementById("modal-kpi").innerText = kpi;
+  modal.style.display = "block";
+}
+
+function closeModal() {
+  document.getElementById("detail-modal").style.display = "none";
+}
+
   window.addEventListener("DOMContentLoaded", () => {
   const sessionKey = localStorage.getItem("selectedSessionKey");
   const sessionData = sessionKey ? JSON.parse(localStorage.getItem(sessionKey)) : null;
   if (sessionData?.mindmapImageData) {
+    // ここに必要な処理があれば入れてOK
+  }
+});
+</script>
 
-　<!-- ✅ 詳細モーダル（カード詳細表示） -->
+<!-- ✅ モーダルHTMLは script タグの"外側" に書く！ -->
 <div id="detail-modal" style="display:none; position:fixed; z-index:9999; top:10%; left:50%; transform:translateX(-50%);
  background:white; padding:2rem; border-radius:12px; box-shadow:0 4px 20px rgba(0,0,0,0.3); max-width:500px;">
   <h2 id="modal-title">詳細タイトル</h2>
@@ -455,9 +471,6 @@ priorityButton.onclick = () => {
   <p><strong>KPI：</strong> <span id="modal-kpi"></span></p>
   <button onclick="closeModal()" style="margin-top:1rem; background:#007bff; color:white; padding:0.5rem 1rem; border:none; border-radius:6px;">閉じる</button>
 </div>
-   
-  }
-});
-  </script>
+
 </body>
 </html>
