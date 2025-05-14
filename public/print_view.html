@@ -314,7 +314,6 @@ style="width:100%; max-width:1400px; height:auto; border:1px solid #ccc; box-sha
   const heading = document.createElement("h2");
   heading.textContent = "📇 実行策一覧出力（MindTriggerカード）";
 
-  // ✅ オレンジ色のGPT抽出ボタン
   const gptExecBtn = document.createElement("button");
   gptExecBtn.innerText = "AIによる抽出開始（GPT 20選）";
   gptExecBtn.style.backgroundColor = "#f0ad4e";
@@ -326,85 +325,79 @@ style="width:100%; max-width:1400px; height:auto; border:1px solid #ccc; box-sha
   gptExecBtn.style.margin = "1rem 0";
   gptExecBtn.style.cursor = "pointer";
 
-  // ✅ 表示領域
   const gptArea = document.createElement("div");
   gptArea.style.textAlign = "center";
   gptArea.appendChild(gptExecBtn);
+  content.appendChild(heading);
   content.appendChild(gptArea);
 
-  // ✅ カードコンテナ（最初は非表示）
   const cardContainer = document.createElement("div");
   cardContainer.className = "print-area";
-  cardContainer.style.display = "none";
+  cardContainer.style.display = "flex";
   cardContainer.style.flexWrap = "wrap";
   cardContainer.style.gap = "1rem";
   cardContainer.style.justifyContent = "center";
+  cardContainer.style.display = "none"; // 初期は非表示
+  content.appendChild(cardContainer);
 
-  // ✅ 401枚のカード全体（あとでGPTから選ぶ）
-  let allCards = [];
+  gptExecBtn.onclick = async () => {
+    gptExecBtn.disabled = true;
+    gptExecBtn.innerText = "🔄 抽出中...";
 
-  fetch("test-validation/coremaster_real_401cards.json")
-    .then(res => res.json())
-    .then(strategyCards => {
-      if (!Array.isArray(strategyCards) || strategyCards.length === 0) {
-        const warning = document.createElement("p");
-        warning.textContent = "❌ カードデータは取得されましたが、空です。";
-        warning.style.color = "red";
-        content.appendChild(heading);
-        content.appendChild(warning);
-        return;
-      }
+    const tasks = window.latestExtractedTasks || [];
+    const thoughts = [...document.querySelectorAll(".thinking-block textarea")]
+      .map(t => t.value.trim()).filter(t => t);
 
-      allCards = strategyCards;
+    const prompt = `
+以下は、地域課題と住民の考察です。これに基づいて、次の条件で最適なカードIDを各視点5枚ずつ抽出してください。
 
-      // 抽出ボタンのイベント設定（抽出して表示）
-      gptExecBtn.onclick = () => {
-        const byViewpoint = {
-          財務: [],
-          顧客: [],
-          プロセス: [],
-          学習: [],
-        };
+▼条件：
+- 視点（財務・顧客・プロセス・学習）ごとに5枚ずつ、合計20枚を抽出
+- 出力はJSON形式（例: { "finance": ["core-001", ...], "customer": [...], "process": [...], "growth": [...] }）
+- 余計な文章や注釈は禁止
+- 必ずIDはJSON構造で正確に出力
 
-        // 視点別に分類
-        allCards.forEach(card => {
-          const vp = card.viewpoint || "";
-          if (vp.includes("財務")) byViewpoint.財務.push(card);
-          else if (vp.includes("顧客")) byViewpoint.顧客.push(card);
-          else if (vp.includes("プロセス")) byViewpoint.プロセス.push(card);
-          else if (vp.includes("学習")) byViewpoint.学習.push(card);
-        });
+【課題】:
+${tasks.map((t, i) => `【${i+1}】${t}`).join("\n")}
 
-        const selectRandom = (arr, n) => arr.sort(() => 0.5 - Math.random()).slice(0, n);
+【住民の考察】:
+${thoughts.map(t => "・" + t).join("\n")}
+`;
 
-        const selectedCards = [
-          ...selectRandom(byViewpoint.財務, 5),
-          ...selectRandom(byViewpoint.顧客, 5),
-          ...selectRandom(byViewpoint.プロセス, 5),
-          ...selectRandom(byViewpoint.学習, 5),
-        ];
+    try {
+      const res = await fetch("/api/chatgpt", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ prompt }),
+      });
 
-        // 表示更新
-        cardContainer.innerHTML = "";
-        selectedCards.forEach(item => {
-          const card = createCard(item);
-          cardContainer.appendChild(card);
-        });
+      const { result } = await res.json();
+      const selectedIds = JSON.parse(result); // ← ここでJSON形式のIDセットを受け取る
 
-        content.appendChild(heading);
-        content.appendChild(cardContainer);
-        cardContainer.style.display = "flex";
-        details.innerHTML = "<p>このセクションには、<strong>GPTが抽出した20件</strong>の実行策カードが表示されています。</p>";
-      };
-    })
-    .catch(err => {
-      content.appendChild(heading);
-      const warning = document.createElement("p");
-      warning.textContent = "❌ カードデータの取得に失敗しました。パスやJSON構造を確認してください。";
-      warning.style.color = "red";
-      content.appendChild(warning);
-      console.error("読み込み失敗:", err);
-    });
+      // JSONファイルから再取得してフィルタ
+      const response = await fetch("test-validation/coremaster_real_401cards.json");
+      const allCards = await response.json();
+
+      const filteredCards = allCards.filter(card => {
+        const key = convertTagClass(card.viewpoint);
+        return selectedIds[key]?.includes(card.id);
+      });
+
+      // 表示処理
+      cardContainer.innerHTML = "";
+      filteredCards.forEach(card => {
+        cardContainer.appendChild(createCard(card));
+      });
+      cardContainer.style.display = "flex";
+      details.innerHTML = "<p><strong>GPTが抽出した20枚の実行策カード</strong>を表示中です。</p>";
+    } catch (err) {
+      alert("❌ GPTからのカード抽出に失敗しました。詳細はコンソールをご確認ください。");
+      console.error("GPT抽出失敗:", err);
+    } finally {
+      gptExecBtn.disabled = false;
+      gptExecBtn.innerText = "AIによる抽出開始（GPT 20選）";
+    }
+  };
 
       
  } else if (type === "3d") {
