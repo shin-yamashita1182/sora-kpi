@@ -134,13 +134,21 @@ header {
 /* ✅ ここから通常画面用として追加！ */
 .section-header {
   display: flex;
-  justify-content: space-between;
+  justify-content: center; /* タイトルを中央寄せ */
   align-items: center;
+  gap: 1rem;
   margin-bottom: 1.5rem;
   padding: 0 1rem;
+  position: relative; /* これでボタンが absolute できるようになる */
+}
+
+.section-header h2 {
+  margin: 0 auto; /* 中央の余白調整 */
 }
 
 .gpt-button {
+  position: absolute;
+  right: 1rem;
   background-color: #f0ad4e;
   color: white;
   padding: 0.6rem 1.2rem;
@@ -155,6 +163,7 @@ header {
 .gpt-button:hover {
   background-color: #e8960f;
 }
+
 /* ===== 印刷時専用スタイル ===== */
 @media print {
   body * {
