@@ -341,63 +341,70 @@ style="width:100%; max-width:1400px; height:auto; border:1px solid #ccc; box-sha
   content.appendChild(cardContainer);
 
   gptExecBtn.onclick = async () => {
-    gptExecBtn.disabled = true;
-    gptExecBtn.innerText = "🔄 抽出中...";
+  gptExecBtn.disabled = true;
+  gptExecBtn.innerText = "🔄 GPT抽出中...";
 
-    const tasks = window.latestExtractedTasks || [];
-    const thoughts = [...document.querySelectorAll(".thinking-block textarea")]
-      .map(t => t.value.trim()).filter(t => t);
+  try {
+    const sessionKey = localStorage.getItem("selectedSessionKey");
+    const sessionData = sessionKey ? JSON.parse(localStorage.getItem(sessionKey)) : null;
 
     const prompt = `
-以下は、地域課題と住民の考察です。これに基づいて、次の条件で最適なカードIDを各視点5枚ずつ抽出してください。
-
-▼条件：
-- 視点（財務・顧客・プロセス・学習）ごとに5枚ずつ、合計20枚を抽出
-- 出力はJSON形式（例: { "finance": ["core-001", ...], "customer": [...], "process": [...], "growth": [...] }）
-- 余計な文章や注釈は禁止
-- 必ずIDはJSON構造で正確に出力
+以下は、地域課題と住民の考察です。
+中心テーマを「${sessionData?.region || "地域未設定"}：${sessionData?.theme || "テーマ未設定"}」として、重要な実行策カードを各視点5枚ずつ、合計20枚選んでください。
 
 【課題】:
-${tasks.map((t, i) => `【${i+1}】${t}`).join("\n")}
+${(sessionData?.tasks || []).map((task, i) => `【${i + 1}】${task}`).join("\n")}
 
 【住民の考察】:
-${thoughts.map(t => "・" + t).join("\n")}
+${(sessionData?.insights || "").split("\n").map(l => "・" + l).join("\n")}
 `;
 
-    try {
-      const res = await fetch("/api/chatgpt", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ prompt }),
-      });
+    const res = await fetch("/api/chatgpt", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ prompt }),
+    });
 
-      const { result } = await res.json();
-      const selectedIds = JSON.parse(result); // ← ここでJSON形式のIDセットを受け取る
+    const data = await res.json();
+    const result = data.result;
 
-      // JSONファイルから再取得してフィルタ
-      const response = await fetch("test-validation/coremaster_real_401cards.json");
-      const allCards = await response.json();
-
-      const filteredCards = allCards.filter(card => {
-        const key = convertTagClass(card.viewpoint);
-        return selectedIds[key]?.includes(card.id);
-      });
-
-      // 表示処理
-      cardContainer.innerHTML = "";
-      filteredCards.forEach(card => {
-        cardContainer.appendChild(createCard(card));
-      });
-      cardContainer.style.display = "flex";
-      details.innerHTML = "<p><strong>GPTが抽出した20枚の実行策カード</strong>を表示中です。</p>";
-    } catch (err) {
-      alert("❌ GPTからのカード抽出に失敗しました。詳細はコンソールをご確認ください。");
-      console.error("GPT抽出失敗:", err);
-    } finally {
-      gptExecBtn.disabled = false;
-      gptExecBtn.innerText = "AIによる抽出開始（GPT 20選）";
+    if (!result || typeof result !== "object") {
+      alert("❌ GPTの応答形式が不正です。");
+      return;
     }
-  };
+
+    // 🔍 20枚のIDを抽出（全視点から）
+    const ids = [
+      ...(result.finance || []),
+      ...(result.customer || []),
+      ...(result.process || []),
+      ...(result.growth || [])
+    ];
+
+    // 🎴 全カードJSONの読み込みとフィルタリング
+    const resCard = await fetch("test-validation/coremaster_real_401cards.json");
+    const allCards = await resCard.json();
+
+    const selectedCards = allCards.filter(card => ids.includes(card.id));
+
+    // 🧼 表示前にクリア
+    cardContainer.innerHTML = "";
+
+    selectedCards.forEach(item => {
+      const card = createCard(item);
+      cardContainer.appendChild(card);
+    });
+
+    details.innerHTML = "<p>🟠 GPTが抽出した<strong>20枚</strong>の実行策カードを表示中です。</p>";
+  } catch (err) {
+    console.error("抽出エラー:", err);
+    alert("❌ GPT連携中にエラーが発生しました。");
+  } finally {
+    gptExecBtn.disabled = false;
+    gptExecBtn.innerText = "AIによる抽出開始（GPT 20選）";
+  }
+};
+
 
       
  } else if (type === "3d") {
