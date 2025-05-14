@@ -500,7 +500,41 @@ function loadCardsFromLocalStorage() {
     return [];
   }
 }
+// 画面遷移後に保存されたカードを読み込んで表示
+window.addEventListener("DOMContentLoaded", () => {
+  // ローカルストレージからカードを読み込み
+  const savedCards = loadCardsFromLocalStorage();
+  
+  // もし保存されたカードがあれば表示
+  if (savedCards.length > 0) {
+    displayCards(savedCards); // 画面に表示
+  }
+});
 
+// 保存されたカードを画面に表示する関数
+function displayCards(cards) {
+  const cardContainer = document.getElementById("cardContainer"); // カード表示の要素を取得
+
+  // すでに表示されているカードをクリア
+  cardContainer.innerHTML = "";
+
+  // 各カードを表示
+  cards.forEach(card => {
+    const cardElement = createCard(card); // createCardはカード作成用の関数
+    cardContainer.appendChild(cardElement);
+  });
+}
+
+// カード作成用関数（例）
+function createCard(card) {
+  const cardElement = document.createElement("div");
+  cardElement.classList.add("card");
+  
+  const title = document.createElement("h3");
+  title.textContent = card.strategy; // 戦略の名前を表示
+  
+  cardElement.appendChild(title);
+  return cardElement;
 
       
  } else if (type === "3d") {
