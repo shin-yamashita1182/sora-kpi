@@ -539,9 +539,10 @@ function createCard(card) {
       
  } else if (type === "3d") {
     window.open("3d_viewer.html", "_blank");
-  
-} // ✅ ← loadSection() 関数をここで正しく閉じる！
+}  // ここで「else if」の条件を終了
 
+// loadSection() 関数を正しく閉じる
+} 
     
 function convertTagClass(perspective = "") {
   if (perspective.includes("財務")) return "finance";
