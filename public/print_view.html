@@ -451,9 +451,9 @@ selectedCards.forEach(card => {
 function convertTagClass(perspective = "") {
   if (perspective.includes("財務")) return "finance";
   if (perspective.includes("顧客")) return "customer";
-  if (perspective.includes("プロセス")) return "process";
-  if (perspective.includes("学習")) return "growth";
-  return "finance";
+  if (perspective.includes("プロセス") || perspective.includes("内部")) return "process";
+  if (perspective.includes("学習") || perspective.includes("成長")) return "growth";
+  return "finance"; // デフォルト
 }
 
 function getFullPerspectiveName(perspective = "") {
