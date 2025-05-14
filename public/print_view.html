@@ -389,19 +389,18 @@ content.appendChild(sectionHeader);
 これに基づいて、最も関連性の高いカードIDを、各視点から **最大5枚まで** 抽出してください。
 
 ▼ 出力条件（厳守）：
-- finance / customer / process / growth の4分類に必ず分けて出力
-- 各分類の枚数は **最大5枚まで**（0〜5枚でよい）
-- **合計20枚前後を目安に**調整（ただし多少の増減は許容する）
+- 視点（finance, customer, process, growth） の4分類で、計20枚のカードIDを抽出
 - 出力形式は以下の純粋なJSONオブジェクトのみ（例）：
 
 {
-  "finance": ["core-001", "core-015", "core-022"],
+  "finance": ["core-001", "core-015", "core-022", "core-038", "core-043"],
   "customer": ["core-101", "core-108", "core-109", "core-112", "core-118"],
-  "process": ["core-205", "core-210", "core-212"],
-  "growth": ["core-305", "core-309", "core-310"]
+  "process": ["core-201", "core-205", "core-209", "core-210", "core-212"],
+  "growth": ["core-301", "core-305", "core-309", "core-310", "core-318"]
 }
 
 - JSON以外の文章、注釈、コメントは一切含めないこと
+- JSONの書式を厳守（クオーテーション、カンマ、閉じ括弧など）
 
 【課題】:
 ${tasks.map((t, i) => `【${i+1}】${t}`).join("\n")}
