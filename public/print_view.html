@@ -314,6 +314,31 @@ style="width:100%; max-width:1400px; height:auto; border:1px solid #ccc; box-sha
   const heading = document.createElement("h2");
   heading.textContent = "📇 実行策一覧出力（MindTriggerカード）";
 
+  // ✅ オレンジ色のGPT抽出ボタン
+  const gptExecBtn = document.createElement("button");
+  gptExecBtn.innerText = "AIによる抽出開始（GPT 20選）";
+  gptExecBtn.style.backgroundColor = "#f0ad4e";
+  gptExecBtn.style.color = "white";
+  gptExecBtn.style.padding = "1rem 2rem";
+  gptExecBtn.style.fontSize = "1.2rem";
+  gptExecBtn.style.border = "none";
+  gptExecBtn.style.borderRadius = "8px";
+  gptExecBtn.style.margin = "1rem 0";
+  gptExecBtn.style.cursor = "pointer";
+
+  // ✅ GPTロジック（仮）ここでGPTと連携する想定
+  gptExecBtn.onclick = () => {
+    alert("🔄 GPT抽出を実行します（ここにAPI接続予定）");
+    // ※今後ここにfetch() or OpenAI APIを記述予定
+  };
+
+  // ✅ GPTボタン表示用のエリア
+  const gptArea = document.createElement("div");
+  gptArea.style.textAlign = "center";
+  gptArea.appendChild(gptExecBtn);
+  content.appendChild(gptArea);
+
+  // ✅ カード表示エリア
   const cardContainer = document.createElement("div");
   cardContainer.className = "print-area";
   cardContainer.style.display = "flex";
@@ -321,6 +346,7 @@ style="width:100%; max-width:1400px; height:auto; border:1px solid #ccc; box-sha
   cardContainer.style.gap = "1rem";
   cardContainer.style.justifyContent = "center";
 
+  // ✅ JSONファイルからカードを読み込んで表示
   fetch("test-validation/coremaster_real_401cards.json")
     .then(res => res.json())
     .then(strategyCards => {
