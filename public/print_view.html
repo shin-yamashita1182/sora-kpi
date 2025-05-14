@@ -455,6 +455,9 @@ console.log("🎯 フィルタ対象ID一覧:", ids);
     return ids.includes(card.id) && !isSample;
 });
 
+    // ✅ 保存する処理（ここに保存を追加）
+    saveCardsToLocalStorage(selectedCards);  // ここで保存処理を追加
+
     // 🧼 表示前にクリア
     cardContainer.innerHTML = "";
 
@@ -481,7 +484,20 @@ selectedCards.forEach(card => {
     gptExecBtn.innerText = "AIによる抽出開始（GPT 20選）";
   }
 };
+// 保存処理（localStorage使用）
+function saveCardsToLocalStorage(cards) {
+  localStorage.setItem("extractedCards", JSON.stringify(cards));
+}
 
+// 保存されたカードを読み込む
+function loadCardsFromLocalStorage() {
+  const cards = localStorage.getItem("extractedCards");
+  if (cards) {
+    return JSON.parse(cards);
+  } else {
+    return [];
+  }
+}
 
       
  } else if (type === "3d") {
