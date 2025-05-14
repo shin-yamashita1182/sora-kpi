@@ -385,21 +385,19 @@ content.appendChild(sectionHeader);
       .map(t => t.value.trim()).filter(t => t);
 
     const prompt = `
-以下は、地域課題と住民の考察です。これに基づいて、最も関連性の高いカードIDを各視点から5枚ずつ抽出してください。
+以下は、地域課題と住民の考察です。これに基づいて、次の条件で最適なカードIDを各視点5枚ずつ抽出してください。
 
 ▼出力条件（厳守）：
-- finance / customer / process / growth の各視点から**必ず5枚ずつ**抽出し、合計20枚にすること
-- 抽出するカードは、strategy や policy の内容が課題や考察に**できるだけ関連しているもの**を選ぶこと（多少のズレがあってもよい）
-- 出力されるカードIDは、必ず "core-001" のような正式なID形式であること
-- 出力は以下の形式のJSONオブジェクトのみ。コメントや注釈、説明文は一切含めないこと
-
-▼出力形式（例）：
+- 視点（finance, customer, process, growth）の4分類で、各5枚ずつ（計20枚）のカードIDを抽出
+- 出力形式は以下のような純粋なJSONオブジェクトのみ（例）：
 {
   "finance": ["core-001", "core-015", "core-022", "core-038", "core-043"],
   "customer": ["core-101", "core-108", "core-109", "core-112", "core-118"],
   "process": ["core-201", "core-205", "core-209", "core-210", "core-212"],
   "growth": ["core-301", "core-305", "core-309", "core-310", "core-318"]
 }
+- JSON以外の文章、注釈、コメントは一切含めないこと
+- JSONの書式を厳守（クオーテーション、カンマ、閉じ括弧など）
 
 【課題】:
 ${tasks.map((t, i) => `【${i+1}】${t}`).join("\n")}
