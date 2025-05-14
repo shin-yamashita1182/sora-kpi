@@ -416,6 +416,12 @@ console.log("🎯 フィルタ対象ID一覧:", ids);
     // 🧼 表示前にクリア
     cardContainer.innerHTML = "";
 
+    // ✅ ログ出力（ここが追加部分）
+console.log("🧾 選ばれたカードの視点:");
+selectedCards.forEach(card => {
+  console.log(`🟢 ${card.id} | viewpoint: ${card.viewpoint} | classKey: ${convertTagClass(card.viewpoint)}`);
+});
+
     selectedCards.forEach(item => {
       const card = createCard(item);
       cardContainer.appendChild(card);
