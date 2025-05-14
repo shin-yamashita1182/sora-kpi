@@ -385,22 +385,22 @@ content.appendChild(sectionHeader);
       .map(t => t.value.trim()).filter(t => t);
 
     const prompt = `
-以下は、地域課題と住民の考察です。
-これに基づいて、最も関連性の高いカードIDを、各視点から **最大5枚まで** 抽出してください。
+以下は、地域課題と住民の考察です。これに基づいて、最も関連性の高いカードIDを、finance / customer / process / growth の視点ごとに抽出してください。
 
 ▼ 出力条件（厳守）：
-- 視点（finance, customer, process, growth） の4分類で、計20枚のカードIDを抽出
-- 出力形式は以下の純粋なJSONオブジェクトのみ（例）：
+- finance / customer / process / growth の各視点から **最低1枚以上・最大5枚まで** 抽出すること
+- **合計20枚程度**になるよう調整し、全ての視点を含めること（完全な空はNG）
+- 出力形式は以下のような純粋なJSONオブジェクトのみ：
 
 {
-  "finance": ["core-001", "core-015", "core-022", "core-038", "core-043"],
-  "customer": ["core-101", "core-108", "core-109", "core-112", "core-118"],
-  "process": ["core-201", "core-205", "core-209", "core-210", "core-212"],
-  "growth": ["core-301", "core-305", "core-309", "core-310", "core-318"]
+  "finance": ["core-001", "core-015", "core-034", "core-067"],
+  "customer": ["core-108", "core-112", "core-113"],
+  "process": ["core-209", "core-212", "core-217", "core-225"],
+  "growth": ["core-309", "core-310", "core-318", "core-320"]
 }
 
 - JSON以外の文章、注釈、コメントは一切含めないこと
-- JSONの書式を厳守（クオーテーション、カンマ、閉じ括弧など）
+- JSON構文の厳密な書式を守ること（ダブルクオート、カンマ、括弧など）
 
 【課題】:
 ${tasks.map((t, i) => `【${i+1}】${t}`).join("\n")}
@@ -408,6 +408,7 @@ ${tasks.map((t, i) => `【${i+1}】${t}`).join("\n")}
 【住民の考察】:
 ${thoughts.map(t => "・" + t).join("\n")}
 `;
+
 
 
 
