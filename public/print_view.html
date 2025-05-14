@@ -421,6 +421,9 @@ console.log("🎯 フィルタ対象ID一覧:", ids);
       cardContainer.appendChild(card);
     });
 
+   // ✅ ここで非表示 → 表示に変更！
+    cardContainer.style.display = "flex";
+    
     details.innerHTML = "<p>🟠 GPTが抽出した<strong>20枚</strong>の実行策カードを表示中です。</p>";
   } catch (err) {
     console.error("抽出エラー:", err);
