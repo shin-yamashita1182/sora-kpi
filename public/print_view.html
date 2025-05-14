@@ -401,9 +401,15 @@ try {
       ...(result.growth || [])
     ];
 
+console.log("✅ GPT抽出結果:", result);
+console.log("🎯 フィルタ対象ID一覧:", ids);
+    
+    
     // 🎴 全カードJSONの読み込みとフィルタリング
     const resCard = await fetch("test-validation/coremaster_real_401cards.json");
     const allCards = await resCard.json();
+
+    console.log("📦 CoreMaster内の全カードID:", allCards.map(c => c.id));
 
     const selectedCards = allCards.filter(card => ids.includes(card.id));
 
