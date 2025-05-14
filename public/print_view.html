@@ -413,6 +413,12 @@ console.log("🎯 フィルタ対象ID一覧:", ids);
 
     const selectedCards = allCards.filter(card => ids.includes(card.id));
 
+    // ✅ 「サンプル」という文字が含まれるカードを除外
+    const selectedCards = allCards.filter(card => {
+    const isSample = card.strategy?.includes("サンプル");
+    return ids.includes(card.id) && !isSample;
+});
+
     // 🧼 表示前にクリア
     cardContainer.innerHTML = "";
 
