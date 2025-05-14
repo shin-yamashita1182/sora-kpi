@@ -326,27 +326,23 @@ style="width:100%; max-width:1400px; height:auto; border:1px solid #ccc; box-sha
   gptExecBtn.style.margin = "1rem 0";
   gptExecBtn.style.cursor = "pointer";
 
-  // ✅ GPTロジック（仮）ここでGPTと連携する想定
-  gptExecBtn.onclick = () => {
-    alert("🔄 GPT抽出を実行します（ここにAPI接続予定）");
-    // ※今後ここにfetch() or OpenAI APIを記述予定
-  };
-
-  // ✅ GPTボタン表示用のエリア
+  // ✅ 表示領域
   const gptArea = document.createElement("div");
   gptArea.style.textAlign = "center";
   gptArea.appendChild(gptExecBtn);
   content.appendChild(gptArea);
 
-  // ✅ カード表示エリア
+  // ✅ カードコンテナ（最初は非表示）
   const cardContainer = document.createElement("div");
   cardContainer.className = "print-area";
-  cardContainer.style.display = "flex";
+  cardContainer.style.display = "none";
   cardContainer.style.flexWrap = "wrap";
   cardContainer.style.gap = "1rem";
   cardContainer.style.justifyContent = "center";
 
-  // ✅ JSONファイルからカードを読み込んで表示
+  // ✅ 401枚のカード全体（あとでGPTから選ぶ）
+  let allCards = [];
+
   fetch("test-validation/coremaster_real_401cards.json")
     .then(res => res.json())
     .then(strategyCards => {
@@ -359,14 +355,47 @@ style="width:100%; max-width:1400px; height:auto; border:1px solid #ccc; box-sha
         return;
       }
 
-      strategyCards.forEach(item => {
-        const card = createCard(item);
-        cardContainer.appendChild(card);
-      });
+      allCards = strategyCards;
 
-      content.appendChild(heading);
-      content.appendChild(cardContainer);
-      details.innerHTML = "<p>このセクションには、<strong>CoreMaster401件</strong>の実行策カードを表示しています。</p>";
+      // 抽出ボタンのイベント設定（抽出して表示）
+      gptExecBtn.onclick = () => {
+        const byViewpoint = {
+          財務: [],
+          顧客: [],
+          プロセス: [],
+          学習: [],
+        };
+
+        // 視点別に分類
+        allCards.forEach(card => {
+          const vp = card.viewpoint || "";
+          if (vp.includes("財務")) byViewpoint.財務.push(card);
+          else if (vp.includes("顧客")) byViewpoint.顧客.push(card);
+          else if (vp.includes("プロセス")) byViewpoint.プロセス.push(card);
+          else if (vp.includes("学習")) byViewpoint.学習.push(card);
+        });
+
+        const selectRandom = (arr, n) => arr.sort(() => 0.5 - Math.random()).slice(0, n);
+
+        const selectedCards = [
+          ...selectRandom(byViewpoint.財務, 5),
+          ...selectRandom(byViewpoint.顧客, 5),
+          ...selectRandom(byViewpoint.プロセス, 5),
+          ...selectRandom(byViewpoint.学習, 5),
+        ];
+
+        // 表示更新
+        cardContainer.innerHTML = "";
+        selectedCards.forEach(item => {
+          const card = createCard(item);
+          cardContainer.appendChild(card);
+        });
+
+        content.appendChild(heading);
+        content.appendChild(cardContainer);
+        cardContainer.style.display = "flex";
+        details.innerHTML = "<p>このセクションには、<strong>GPTが抽出した20件</strong>の実行策カードが表示されています。</p>";
+      };
     })
     .catch(err => {
       content.appendChild(heading);
