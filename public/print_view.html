@@ -411,7 +411,8 @@ console.log("🎯 フィルタ対象ID一覧:", ids);
 
     console.log("📦 CoreMaster内の全カードID:", allCards.map(c => c.id));
 
-    const selectedCards = allCards.filter(card => ids.includes(card.id));
+    // ✅ 先に let で宣言しておく
+    let selectedCards = allCards.filter(card => ids.includes(card.id));
 
     // ✅ 「サンプル」という文字が含まれるカードを除外
     selectedCards = allCards.filter(card => {
