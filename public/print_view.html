@@ -382,13 +382,16 @@ ${thoughts.map(t => "・" + t).join("\n")}
       body: JSON.stringify({ prompt }),
     });
 
-    const data = await res.json();
-    const result = data.result;
+ const data = await res.json();
+let result;
 
-    if (!result || typeof result !== "object") {
-      alert("❌ GPTの応答形式が不正です。");
-      return;
-    }
+try {
+  result = typeof data.result === "string" ? JSON.parse(data.result) : data.result;
+} catch (e) {
+  alert("❌ GPTの応答を正しく読み取れませんでした（JSON構文エラー）。");
+  console.error("JSON parse error:", e);
+  return;
+}
 
     // 🔍 20枚のIDを抽出（全視点から）
     const ids = [
