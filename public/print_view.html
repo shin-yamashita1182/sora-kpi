@@ -388,14 +388,15 @@ content.appendChild(sectionHeader);
 以下は、地域課題と住民の考察です。これに基づいて、次の条件で最適なカードIDを抽出してください。
 
 ▼出力条件（厳守）：
-- 視点（finance, customer, process, growth）の分類は維持するが、**視点ごとの枚数に偏りがあっても構わない**
-- **必ず合計20枚になるように**、最も関連性の高いカードIDを抽出すること
+- 出力対象は finance / customer / process / growth の4分類とする
+- 各分類のカード枚数は **偏りがあってよい**（均等でなくてよい）
+- **ただし、全体で正確に20枚になるようにすること**
 - 出力形式は以下のような純粋なJSONオブジェクトのみ（例）：
 {
-  "finance": ["core-001", "core-015", "core-022", "core-038", "core-043"],
+  "finance": ["core-001", "core-015", "core-022"],
   "customer": ["core-101", "core-108", "core-109", "core-112", "core-118"],
-  "process": ["core-201", "core-205", "core-209", "core-210", "core-212"],
-  "growth": ["core-301", "core-305", "core-309", "core-310", "core-318"]
+  "process": ["core-205", "core-210", "core-212", "core-219", "core-222"],
+  "growth": ["core-305", "core-309", "core-310", "core-318", "core-320"]
 }
 - JSON以外の文章、注釈、コメントは一切含めないこと
 - JSONの書式を厳守（クオーテーション、カンマ、閉じ括弧など）
