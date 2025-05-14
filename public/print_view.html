@@ -441,49 +441,51 @@ console.log("🎯 フィルタ対象ID一覧:", ids);
     
     
     // 🎴 全カードJSONの読み込みとフィルタリング
-    const resCard = await fetch("test-validation/coremaster_real_401cards.json");
-    const allCards = await resCard.json();
+const resCard = await fetch("test-validation/coremaster_real_401cards.json");
+const allCards = await resCard.json();
 
-    console.log("📦 CoreMaster内の全カードID:", allCards.map(c => c.id));
+console.log("📦 CoreMaster内の全カードID:", allCards.map(c => c.id));
 
-    // ✅ 先に let で宣言しておく
-    let selectedCards = allCards.filter(card => ids.includes(card.id));
+// ✅ 先に let で宣言しておく
+let selectedCards = allCards.filter(card => ids.includes(card.id));
 
-    // ✅ 「サンプル」という文字が含まれるカードを除外
-    selectedCards = allCards.filter(card => {
-    const isSample = card.strategy?.includes("サンプル");
-    return ids.includes(card.id) && !isSample;
+// ✅ 「サンプル」という文字が含まれるカードを除外
+selectedCards = selectedCards.filter(card => {
+  const isSample = card.strategy?.includes("サンプル");
+  return !isSample; // サンプル除外
 });
 
-    // ✅ 保存する処理（ここに保存を追加）
-    saveCardsToLocalStorage(selectedCards);  // ここで保存処理を追加
+// ✅ 保存する処理（ここで保存）
+saveCardsToLocalStorage(selectedCards);  // 保存処理
 
-    // 🧼 表示前にクリア
-    cardContainer.innerHTML = "";
+// 🧼 表示前にクリア
+cardContainer.innerHTML = "";
 
-    // ✅ ログ出力（ここが追加部分）
+// ✅ ログ出力（ここが追加部分）
 console.log("🧾 選ばれたカードの視点:");
 selectedCards.forEach(card => {
   console.log(`🟢 ${card.id} | viewpoint: ${card.viewpoint} | classKey: ${convertTagClass(card.viewpoint)}`);
 });
 
-    selectedCards.forEach(item => {
-      const card = createCard(item);
-      cardContainer.appendChild(card);
-    });
+// カードを表示
+selectedCards.forEach(item => {
+  const card = createCard(item);
+  cardContainer.appendChild(card);
+});
 
-   // ✅ ここで非表示 → 表示に変更！
-    cardContainer.style.display = "flex";
-    
-    details.innerHTML = "<p>🟠 GPTが抽出した<strong>20枚</strong>の実行策カードを表示中です。</p>";
-  } catch (err) {
-    console.error("抽出エラー:", err);
-    alert("❌ GPT連携中にエラーが発生しました。");
-  } finally {
-    gptExecBtn.disabled = false;
-    gptExecBtn.innerText = "AIによる抽出開始（GPT 20選）";
-  }
+// ✅ ここで非表示 → 表示に変更
+cardContainer.style.display = "flex";
+
+details.innerHTML = "<p>🟠 GPTが抽出した<strong>20枚</strong>の実行策カードを表示中です。</p>";
+} catch (err) {
+  console.error("抽出エラー:", err);
+  alert("❌ GPT連携中にエラーが発生しました。");
+} finally {
+  gptExecBtn.disabled = false;
+  gptExecBtn.innerText = "AIによる抽出開始（GPT 20選）";
+}
 };
+
 // 保存処理（localStorage使用）
 function saveCardsToLocalStorage(cards) {
   localStorage.setItem("extractedCards", JSON.stringify(cards));
@@ -498,6 +500,7 @@ function loadCardsFromLocalStorage() {
     return [];
   }
 }
+
 
       
  } else if (type === "3d") {
