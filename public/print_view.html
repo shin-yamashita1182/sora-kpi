@@ -348,6 +348,11 @@ style="width:100%; max-width:1400px; height:auto; border:1px solid #ccc; box-sha
     const sessionKey = localStorage.getItem("selectedSessionKey");
     const sessionData = sessionKey ? JSON.parse(localStorage.getItem(sessionKey)) : null;
 
+    // ✅ 地域課題と住民の考察を取得
+    const tasks = window.latestExtractedTasks || [];
+    const thoughts = [...document.querySelectorAll(".thinking-block textarea")]
+      .map(t => t.value.trim()).filter(t => t);
+
     const prompt = `
 以下は、地域課題と住民の考察です。これに基づいて、次の条件で最適なカードIDを各視点5枚ずつ抽出してください。
 
