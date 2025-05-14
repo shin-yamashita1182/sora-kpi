@@ -157,6 +157,30 @@ header {
   #detailSections {
     display: none !important;
   }
+  
+  .section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  padding: 0 1rem;
+}
+
+.gpt-button {
+  background-color: #f0ad4e;
+  color: white;
+  padding: 0.6rem 1.2rem;
+  font-size: 1rem;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  white-space: nowrap;
+}
+
+.gpt-button:hover {
+  background-color: #e8960f;
+}
 }
 </style>
 
@@ -311,25 +335,24 @@ style="width:100%; max-width:1400px; height:auto; border:1px solid #ccc; box-sha
 
     
      } else if (type === "cards") {
-  const heading = document.createElement("h2");
-  heading.textContent = "📇 実行策一覧出力（MindTriggerカード）";
+const sectionHeader = document.createElement("div");
+sectionHeader.className = "section-header"; // ✅ CSS定義で横並びにする
 
-  const gptExecBtn = document.createElement("button");
-  gptExecBtn.innerText = "AIによる抽出開始（GPT 20選）";
-  gptExecBtn.style.backgroundColor = "#f0ad4e";
-  gptExecBtn.style.color = "white";
-  gptExecBtn.style.padding = "1rem 2rem";
-  gptExecBtn.style.fontSize = "1.2rem";
-  gptExecBtn.style.border = "none";
-  gptExecBtn.style.borderRadius = "8px";
-  gptExecBtn.style.margin = "1rem 0";
-  gptExecBtn.style.cursor = "pointer";
+const heading = document.createElement("h2");
+heading.textContent = "📇 実行策一覧出力（MindTriggerカード）";
+heading.style.margin = 0; // スペース詰まり防止
 
-  const gptArea = document.createElement("div");
-  gptArea.style.textAlign = "center";
-  gptArea.appendChild(gptExecBtn);
-  content.appendChild(heading);
-  content.appendChild(gptArea);
+const gptExecBtn = document.createElement("button");
+gptExecBtn.innerText = "AIによる抽出開始（GPT 20選）";
+gptExecBtn.className = "gpt-button"; // ✅ CSSで装飾（.gpt-button）
+
+// ✅ DOM構成：見出し＋ボタンを横並びにまとめる
+sectionHeader.appendChild(heading);
+sectionHeader.appendChild(gptExecBtn);
+
+// ✅ contentエリアに追加
+content.appendChild(sectionHeader);
+
 
   const cardContainer = document.createElement("div");
   cardContainer.className = "print-area";
