@@ -5,7 +5,12 @@ import { Input } from "@/components/ui/input";
 
 export default function SoraNaviMobile() {
   const [image, setImage] = useState(null);
-  const [description, setDescription] = useState("AIによる観光案内がここに表示されます。");
+  const [descriptions, setDescriptions] = useState({
+    Japanese: "",
+    English: "",
+    Chinese: "",
+    Korean: ""
+  });
   const [loading, setLoading] = useState(false);
 
   const handleImageChange = (e) => {
@@ -18,7 +23,6 @@ export default function SoraNaviMobile() {
 
   const fetchImageDescription = async (file) => {
     setLoading(true);
-    setDescription("AIが画像を解析しています...");
 
     const reader = new FileReader();
     reader.onloadend = async () => {
@@ -32,10 +36,24 @@ export default function SoraNaviMobile() {
         });
 
         const data = await res.json();
-        setDescription(data.result || "説明を取得できませんでした。");
+        const resultText = data.result || "説明を取得できませんでした。";
+
+        const langTexts = {
+          Japanese: resultText.match(/日本語[:：]\s*(.+)/)?.[1] || "（取得できませんでした）",
+          English: resultText.match(/英語[:：]\s*(.+)/)?.[1] || "（取得できませんでした）",
+          Chinese: resultText.match(/中国語（簡体字）[:：]\s*(.+)/)?.[1] || "（取得できませんでした）",
+          Korean: resultText.match(/韓国語[:：]\s*(.+)/)?.[1] || "（取得できませんでした）",
+        };
+
+        setDescriptions(langTexts);
       } catch (err) {
         console.error(err);
-        setDescription("エラーが発生しました。後ほど再試行してください。");
+        setDescriptions({
+          Japanese: "エラーが発生しました。",
+          English: "An error occurred.",
+          Chinese: "发生错误。",
+          Korean: "오류가 발생했습니다."
+        });
       }
 
       setLoading(false);
@@ -43,6 +61,18 @@ export default function SoraNaviMobile() {
 
     reader.readAsDataURL(file);
   };
+
+  const playTTS = (text) => {
+    const utterance = new SpeechSynthesisUtterance(text);
+    speechSynthesis.speak(utterance);
+  };
+
+  const languages = [
+    { key: "Japanese", label: "日本語" },
+    { key: "English", label: "English" },
+    { key: "Chinese", label: "中文（简体字）" },
+    { key: "Korean", label: "한국어" }
+  ];
 
   return (
     <div className="p-4 max-w-md mx-auto">
@@ -59,13 +89,21 @@ export default function SoraNaviMobile() {
           )}
         </CardContent>
       </Card>
-      <Card className="shadow-sm">
-        <CardContent className="p-4">
-          <p className="whitespace-pre-wrap text-sm text-gray-800">
-            {loading ? "解析中..." : description}
-          </p>
-        </CardContent>
-      </Card>
+      {loading ? (
+        <p className="text-center text-gray-600">解析中...</p>
+      ) : (
+        languages.map((lang) => (
+          <Card key={lang.key} className="mb-2 shadow-sm border-l-4 border-sky-400">
+            <CardContent className="p-3">
+              <div className="flex items-center justify-between">
+                <span className="font-semibold text-sky-700">{lang.label}</span>
+                <Button variant="ghost" size="sm" onClick={() => playTTS(descriptions[lang.key])}>🔊</Button>
+              </div>
+              <p className="text-sm text-gray-800 mt-1 whitespace-pre-wrap">{descriptions[lang.key]}</p>
+            </CardContent>
+          </Card>
+        ))
+      )}
     </div>
   );
 }
