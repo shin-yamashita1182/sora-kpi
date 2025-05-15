@@ -2,91 +2,101 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <title>SORA BSCビューアー</title>
+  <title>SORA KPI ビューア</title>
   <style>
     body {
       font-family: 'Segoe UI', sans-serif;
-      background-color: #f8f9fa;
       padding: 2rem;
+      background: #f4f4f4;
     }
-    h1 {
-      text-align: center;
-      margin-bottom: 2rem;
+    .accordion {
+      background: white;
+      margin-bottom: 1rem;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
     }
-    .tabs {
-      display: flex;
-      gap: 1rem;
-      justify-content: center;
-      margin-bottom: 1.5rem;
-    }
-    .tabs button {
-      padding: 0.5rem 1rem;
-      border: none;
-      background-color: #e0e0e0;
-      cursor: pointer;
-      border-radius: 6px;
-    }
-    .tabs button.active {
-      background-color: #007bff;
+    .accordion-header {
+      background: #007ACC;
       color: white;
+      padding: 1rem;
+      cursor: pointer;
+      font-weight: bold;
     }
-    .panel {
+    .accordion-body {
       display: none;
+      padding: 1rem;
+      background: #fff;
     }
-    .panel.active {
-      display: block;
-    }
-    iframe {
+    table {
+      border-collapse: collapse;
       width: 100%;
-      height: 800px;
-      border: none;
+    }
+    th, td {
+      padding: 0.5rem;
+      border: 1px solid #ccc;
+      text-align: center;
     }
   </style>
 </head>
 <body>
-  <h1>SORA BSCビューアー</h1>
-  <div class="tabs">
-    <button class="tab-button active" data-target="finance">財務</button>
-    <button class="tab-button" data-target="customer">顧客</button>
-    <button class="tab-button" data-target="process">プロセス</button>
-    <button class="tab-button" data-target="learning">学習と成長</button>
-    <button class="tab-button" data-target="dashboard">📊 ダッシュボード</button>
-  </div>
 
-  <div id="finance" class="panel active">
-    <iframe src="https://docs.google.com/spreadsheets/d/e/2PACX-1vQUoOiCCQMFE2yziaEXpShR6eDZjj1-TcqQvn1Uj3iQqKM4_P6N6ZlU989Y_5KzZ-V3FavkUj-TqO9w/pubhtml?gid=1028899952&amp;single=true&amp;widget=true&amp;headers=false"></iframe>
-  </div>
+<h1>📊 SORA KPI ダッシュボード</h1>
+<div id="dashboard"></div>
 
-  <div id="customer" class="panel">
-    <iframe src="https://docs.google.com/spreadsheets/d/e/2PACX-1vQUoOiCCQMFE2yziaEXpShR6eDZjj1-TcqQvn1Uj3iQqKM4_P6N6ZlU989Y_5KzZ-V3FavkUj-TqO9w/pubhtml?gid=438283966&amp;single=true&amp;widget=true&amp;headers=false"></iframe>
-  </div>
+<script>
+const API_URL = "https://script.google.com/macros/s/AKfycby-j3jybje-ufm_IKlLwjV6a2ZRVidM35kOb20K_KBqRE6cNTvRWm5yNermP3bB1kc6/exec";
 
-  <div id="process" class="panel">
-    <iframe src="https://docs.google.com/spreadsheets/d/e/2PACX-1vQUoOiCCQMFE2yziaEXpShR6eDZjj1-TcqQvn1Uj3iQqKM4_P6N6ZlU989Y_5KzZ-V3FavkUj-TqO9w/pubhtml?gid=1864769166&amp;single=true&amp;widget=true&amp;headers=false"></iframe>
-  </div>
+fetch(API_URL)
+  .then(res => res.json())
+  .then(data => {
+    const container = document.getElementById('dashboard');
 
-  <div id="learning" class="panel">
-    <iframe src="https://docs.google.com/spreadsheets/d/e/2PACX-1vQUoOiCCQMFE2yziaEXpShR6eDZjj1-TcqQvn1Uj3iQqKM4_P6N6ZlU989Y_5KzZ-V3FavkUj-TqO9w/pubhtml?gid=978229308&amp;single=true&amp;widget=true&amp;headers=false"></iframe>
-  </div>
+    Object.keys(data).forEach(viewpoint => {
+      const accordion = document.createElement('div');
+      accordion.className = 'accordion';
 
-  <div id="dashboard" class="panel">
-    <iframe src="https://docs.google.com/spreadsheets/d/e/2PACX-1vQUoOiCCQMFE2yziaEXpShR6eDZjj1-TcqQvn1Uj3iQqKM4_P6N6ZlU989Y_5KzZ-V3FavkUj-TqO9w/pubhtml?gid=1075173188&amp;single=true&amp;widget=true&amp;headers=false"></iframe>
-  </div>
+      const header = document.createElement('div');
+      header.className = 'accordion-header';
+      header.textContent = `📁 ${viewpoint}`;
 
-  <script>
-    const buttons = document.querySelectorAll('.tab-button');
-    const panels = document.querySelectorAll('.panel');
+      const body = document.createElement('div');
+      body.className = 'accordion-body';
 
-    buttons.forEach(button => {
-      button.addEventListener('click', () => {
-        buttons.forEach(b => b.classList.remove('active'));
-        panels.forEach(p => p.classList.remove('active'));
+      data[viewpoint].forEach(item => {
+        const table = document.createElement('table');
+        const titleRow = document.createElement('tr');
+        titleRow.innerHTML = `<th colspan="14">${item.middleGoal || "（未設定）"}｜${item.kpi || "KPI未設定"}</th>`;
+        table.appendChild(titleRow);
 
-        button.classList.add('active');
-        const target = document.getElementById(button.dataset.target);
-        if (target) target.classList.add('active');
+        const headerRow = document.createElement('tr');
+        headerRow.innerHTML = `<th>月</th>` + item.monthly.map(m => `<th>${m.month}</th>`).join('');
+        table.appendChild(headerRow);
+
+        const targetRow = document.createElement('tr');
+        targetRow.innerHTML = `<td>目標</td>` + item.monthly.map(m => `<td>${m.target ?? "-"}</td>`).join('');
+        table.appendChild(targetRow);
+
+        const actualRow = document.createElement('tr');
+        actualRow.innerHTML = `<td>実績</td>` + item.monthly.map(m => `<td>${m.actual ?? "-"}</td>`).join('');
+        table.appendChild(actualRow);
+
+        body.appendChild(table);
       });
+
+      header.addEventListener('click', () => {
+        body.style.display = body.style.display === 'block' ? 'none' : 'block';
+      });
+
+      accordion.appendChild(header);
+      accordion.appendChild(body);
+      container.appendChild(accordion);
     });
-  </script>
+  })
+  .catch(err => {
+    document.getElementById('dashboard').innerHTML = `<p style="color:red;">❌ データ取得エラー: ${err.message}</p>`;
+  });
+</script>
+
 </body>
 </html>
