@@ -1,109 +1,105 @@
-import { useState } from "react";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-
-export default function SoraNaviMobile() {
-  const [image, setImage] = useState(null);
-  const [descriptions, setDescriptions] = useState({
-    Japanese: "",
-    English: "",
-    Chinese: "",
-    Korean: ""
-  });
-  const [loading, setLoading] = useState(false);
-
-  const handleImageChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      setImage(file);
-      fetchImageDescription(file);
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>多言語商品説明ツール</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      padding: 2rem;
+      background-color: #f8f9fa;
+      max-width: 800px;
+      margin: auto;
     }
-  };
+    h1 {
+      color: #007bff;
+    }
+    #output {
+      margin-top: 2rem;
+    }
+    .lang-block {
+      background: #fff;
+      border-left: 6px solid #007bff;
+      padding: 1rem;
+      margin-bottom: 1rem;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+    }
+    input[type="file"] {
+      margin-top: 1rem;
+    }
+    button {
+      margin-top: 1rem;
+      padding: 0.5rem 1.5rem;
+      font-size: 1rem;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+  </style>
+</head>
+<body>
+  <h1>🌐 商品説明を多言語で生成</h1>
+  <p>商品の写真をアップロードするだけで、日本語、英語、中国語、韓国語で説明を生成します。</p>
 
-  const fetchImageDescription = async (file) => {
-    setLoading(true);
+  <input type="file" id="imageInput" accept="image/*">
+  <button id="submitBtn">導入開始</button>
 
-    const reader = new FileReader();
-    reader.onloadend = async () => {
-      const base64Image = reader.result;
+  <div id="output"></div>
 
-      try {
-        const res = await fetch("/api/image-to-desc", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ image: base64Image })
-        });
+  <script>
+    const submitBtn = document.getElementById('submitBtn');
+    const imageInput = document.getElementById('imageInput');
+    const output = document.getElementById('output');
 
-        const data = await res.json();
-        const resultText = data.result || "説明を取得できませんでした。";
-
-        const langTexts = {
-          Japanese: resultText.match(/日本語[:：]\s*(.+)/)?.[1] || "（取得できませんでした）",
-          English: resultText.match(/英語[:：]\s*(.+)/)?.[1] || "（取得できませんでした）",
-          Chinese: resultText.match(/中国語（簡体字）[:：]\s*(.+)/)?.[1] || "（取得できませんでした）",
-          Korean: resultText.match(/韓国語[:：]\s*(.+)/)?.[1] || "（取得できませんでした）",
-        };
-
-        setDescriptions(langTexts);
-      } catch (err) {
-        console.error(err);
-        setDescriptions({
-          Japanese: "エラーが発生しました。",
-          English: "An error occurred.",
-          Chinese: "发生错误。",
-          Korean: "오류가 발생했습니다."
-        });
+    submitBtn.addEventListener('click', async () => {
+      if (!imageInput.files[0]) {
+        alert('写真をアップロードしてください');
+        return;
       }
 
-      setLoading(false);
-    };
+      output.innerHTML = '作成中...';
 
-    reader.readAsDataURL(file);
-  };
+      const file = imageInput.files[0];
+      const reader = new FileReader();
+      reader.onloadend = async () => {
+        const base64Image = reader.result;
+        const res = await fetch('/api/image-to-desc', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ image: base64Image })
+        });
+        const data = await res.json();
 
-  const playTTS = (text) => {
-    const utterance = new SpeechSynthesisUtterance(text);
-    speechSynthesis.speak(utterance);
-  };
+        if (data.error) {
+          output.innerHTML = `<p style="color:red;">${data.error}</p>`;
+          return;
+        }
 
-  const languages = [
-    { key: "Japanese", label: "日本語" },
-    { key: "English", label: "English" },
-    { key: "Chinese", label: "中文（简体字）" },
-    { key: "Korean", label: "한국어" }
-  ];
+// ✅ ここを追加
+  console.log("GPTからの出力内容：", data.result);
+        
+const resultText = data.result;
 
-  return (
-    <div className="p-4 max-w-md mx-auto">
-      <h1 className="text-2xl font-bold mb-4 text-center text-sky-600">🛣️ 空ナビ・多言語ガイド</h1>
-      <Card className="mb-4 shadow-md">
-        <CardContent className="flex flex-col items-center gap-4">
-          <Input type="file" accept="image/*" onChange={handleImageChange} className="w-full" />
-          {image && (
-            <img
-              src={URL.createObjectURL(image)}
-              alt="選択された画像"
-              className="rounded-xl w-full object-cover max-h-64 border"
-            />
-          )}
-        </CardContent>
-      </Card>
-      {loading ? (
-        <p className="text-center text-gray-600">解析中...</p>
-      ) : (
-        languages.map((lang) => (
-          <Card key={lang.key} className="mb-2 shadow-sm border-l-4 border-sky-400">
-            <CardContent className="p-3">
-              <div className="flex items-center justify-between">
-                <span className="font-semibold text-sky-700">{lang.label}</span>
-                <Button variant="ghost" size="sm" onClick={() => playTTS(descriptions[lang.key])}>🔊</Button>
-              </div>
-              <p className="text-sm text-gray-800 mt-1 whitespace-pre-wrap">{descriptions[lang.key]}</p>
-            </CardContent>
-          </Card>
-        ))
-      )}
-    </div>
-  );
-}
+const langTexts = {
+  Japanese: resultText.match(/日本語[:：]\s*(.+)/)?.[1] || "（取得できませんでした）",
+  English: resultText.match(/英語[:：]\s*(.+)/)?.[1] || "（取得できませんでした）",
+  Chinese: resultText.match(/中国語（簡体字）[:：]\s*(.+)/)?.[1] || "（取得できませんでした）",
+  Korean: resultText.match(/韓国語[:：]\s*(.+)/)?.[1] || "（取得できませんでした）",
+};
+
+const langs = ["Japanese", "English", "Chinese", "Korean"];
+output.innerHTML = langs.map(lang => {
+  return `<div class="lang-block"><strong>${lang}</strong><br>${langTexts[lang]}</div>`;
+}).join('');
+
+      };
+      reader.readAsDataURL(file);
+    });
+  </script>
+</body>
+</html>
