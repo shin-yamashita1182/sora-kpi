@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>SORA BSCビューアー</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f8f9fa;
+      padding: 2rem;
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+    .tabs {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      margin-bottom: 1.5rem;
+    }
+    .tabs button {
+      padding: 0.5rem 1rem;
+      border: none;
+      background-color: #e0e0e0;
+      cursor: pointer;
+      border-radius: 6px;
+    }
+    .tabs button.active {
+      background-color: #007bff;
+      color: white;
+    }
+    .panel {
+      display: none;
+    }
+    .panel.active {
+      display: block;
+    }
+    .accordion {
+      background-color: #ffffff;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      margin-bottom: 1rem;
+      padding: 1rem;
+    }
+    .accordion summary {
+      font-weight: bold;
+      cursor: pointer;
+    }
+    .kpi-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 1rem;
+    }
+    .kpi-table th, .kpi-table td {
+      border: 1px solid #ccc;
+      padding: 0.5rem;
+      text-align: center;
+    }
+    .dashboard {
+      margin-top: 2rem;
+      background-color: #ffffff;
+      padding: 1rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+  </style>
+</head>
+<body>
+  <h1>SORA BSCビューアー</h1>
+  <div class="tabs">
+    <button class="tab-button active" data-target="finance">財務</button>
+    <button class="tab-button" data-target="customer">顧客</button>
+    <button class="tab-button" data-target="process">プロセス</button>
+    <button class="tab-button" data-target="learning">学習と成長</button>
+    <button class="tab-button" data-target="dashboard">📊 ダッシュボード</button>
+  </div>
+
+  <div id="finance" class="panel active">
+    <details class="accordion">
+      <summary>観光税の導入と安定収益化</summary>
+      <p>📌 実行策: 市議会での法整備、観光事業者への説明会、納税ポータル構築</p>
+      <table class="kpi-table">
+        <thead>
+          <tr>
+            <th>月</th><th>目標値</th><th>実績値</th><th>達成率</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>1月</td><td>100</td><td>90</td><td>90%</td></tr>
+          <tr><td>2月</td><td>150</td><td>140</td><td>93%</td></tr>
+        </tbody>
+      </table>
+    </details>
+  </div>
+
+  <div id="customer" class="panel">
+    <p>（顧客視点のKPIをここに）</p>
+  </div>
+
+  <div id="process" class="panel">
+    <p>（プロセス視点のKPIをここに）</p>
+  </div>
+
+  <div id="learning" class="panel">
+    <p>（学習と成長視点のKPIをここに）</p>
+  </div>
+
+  <div id="dashboard" class="panel">
+    <div class="dashboard">
+      <h3>バランススコアカード ダッシュボード</h3>
+      <p>各視点の達成状況をチャートで表示（ここにグラフ等を追加）</p>
+    </div>
+  </div>
+
+  <script>
+    const buttons = document.querySelectorAll('.tab-button');
+    const panels = document.querySelectorAll('.panel');
+
+    buttons.forEach(button => {
+      button.addEventListener('click', () => {
+        buttons.forEach(b => b.classList.remove('active'));
+        panels.forEach(p => p.classList.remove('active'));
+
+        button.classList.add('active');
+        const target = document.getElementById(button.dataset.target);
+        if (target) target.classList.add('active');
+      });
+    });
+  </script>
+</body>
+</html>
