@@ -36,26 +36,10 @@
     .panel.active {
       display: block;
     }
-    .accordion {
-      background-color: #ffffff;
-      border: 1px solid #ddd;
-      border-radius: 8px;
-      margin-bottom: 1rem;
-      padding: 1rem;
-    }
-    .accordion summary {
-      font-weight: bold;
-      cursor: pointer;
-    }
-    .kpi-table {
+    iframe {
       width: 100%;
-      border-collapse: collapse;
-      margin-top: 1rem;
-    }
-    .kpi-table th, .kpi-table td {
-      border: 1px solid #ccc;
-      padding: 0.5rem;
-      text-align: center;
+      height: 800px;
+      border: none;
     }
     .dashboard {
       margin-top: 2rem;
@@ -77,39 +61,25 @@
   </div>
 
   <div id="finance" class="panel active">
-    <details class="accordion">
-      <summary>観光税の導入と安定収益化</summary>
-      <p>📌 実行策: 市議会での法整備、観光事業者への説明会、納税ポータル構築</p>
-      <table class="kpi-table">
-        <thead>
-          <tr>
-            <th>月</th><th>目標値</th><th>実績値</th><th>達成率</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr><td>1月</td><td>100</td><td>90</td><td>90%</td></tr>
-          <tr><td>2月</td><td>150</td><td>140</td><td>93%</td></tr>
-        </tbody>
-      </table>
-    </details>
+    <iframe src="https://docs.google.com/spreadsheets/d/1TMjevK2eJ1ZhCGUsZ6zPuPavoioYWhbogxF3ygXXaqQ/embed?rm=minimal&single=true&gid=1028899952"></iframe>
   </div>
 
   <div id="customer" class="panel">
-    <p>（顧客視点のKPIをここに）</p>
+    <iframe src="https://docs.google.com/spreadsheets/d/1TMjevK2eJ1ZhCGUsZ6zPuPavoioYWhbogxF3ygXXaqQ/embed?rm=minimal&single=true&gid=1734523876"></iframe>
   </div>
 
   <div id="process" class="panel">
-    <p>（プロセス視点のKPIをここに）</p>
+    <iframe src="https://docs.google.com/spreadsheets/d/1TMjevK2eJ1ZhCGUsZ6zPuPavoioYWhbogxF3ygXXaqQ/embed?rm=minimal&single=true&gid=712658659"></iframe>
   </div>
 
   <div id="learning" class="panel">
-    <p>（学習と成長視点のKPIをここに）</p>
+    <iframe src="https://docs.google.com/spreadsheets/d/1TMjevK2eJ1ZhCGUsZ6zPuPavoioYWhbogxF3ygXXaqQ/embed?rm=minimal&single=true&gid=1204307507"></iframe>
   </div>
 
   <div id="dashboard" class="panel">
     <div class="dashboard">
       <h3>バランススコアカード ダッシュボード</h3>
-      <p>各視点の達成状況をチャートで表示（ここにグラフ等を追加）</p>
+      <p>各視点の達成状況をチャートで表示予定</p>
     </div>
   </div>
 
@@ -128,78 +98,5 @@
       });
     });
   </script>
-  <script>
-  const bscData = {
-    finance: [
-      {
-        title: "観光税の導入と安定収益化",
-        details: [
-          "市議会での法整備",
-          "観光事業者への説明会",
-          "納税ポータル構築"
-        ],
-        kpi: "年間観光税収（百万円）",
-        values: [
-          { month: "1月", target: 100, actual: 90 },
-          { month: "2月", target: 150, actual: 140 }
-        ]
-      },
-      {
-        title: "ふるさと納税の拡大",
-        details: [
-          "返礼品の拡充",
-          "プロモーションの強化"
-        ],
-        kpi: "寄付額（万円）",
-        values: [
-          { month: "1月", target: 300, actual: 280 },
-          { month: "2月", target: 320, actual: 310 }
-        ]
-      }
-    ]
-  };
-
-  function renderFinanceKPI(data) {
-    const container = document.getElementById('finance');
-    container.innerHTML = '';
-
-    data.forEach((item, index) => {
-      const section = document.createElement('details');
-      section.classList.add('accordion');
-      if (index === 0) section.setAttribute('open', true);
-
-      const summary = document.createElement('summary');
-      summary.textContent = item.title;
-      section.appendChild(summary);
-
-      const detailsPara = document.createElement('p');
-      detailsPara.textContent = `📌 実行策: ${item.details.join('、')}`;
-      section.appendChild(detailsPara);
-
-      const table = document.createElement('table');
-      table.classList.add('kpi-table');
-      table.innerHTML = `
-        <thead>
-          <tr><th>月</th><th>目標値</th><th>実績値</th><th>達成率</th></tr>
-        </thead>
-        <tbody>
-          ${item.values.map(v => `
-            <tr>
-              <td>${v.month}</td>
-              <td>${v.target}</td>
-              <td>${v.actual}</td>
-              <td>${Math.round((v.actual / v.target) * 100)}%</td>
-            </tr>
-          `).join('')}
-        </tbody>
-      `;
-      section.appendChild(table);
-      container.appendChild(section);
-    });
-  }
-
-  renderFinanceKPI(bscData.finance);
-</script>
-
 </body>
 </html>
