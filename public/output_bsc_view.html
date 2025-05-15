@@ -2,101 +2,29 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <title>SORA KPI ビューア</title>
+  <title>SORA BSC 出力ビューア</title>
   <style>
     body {
       font-family: 'Segoe UI', sans-serif;
       padding: 2rem;
-      background: #f4f4f4;
+      background: #f8f9fa;
     }
-    .accordion {
-      background: white;
-      margin-bottom: 1rem;
-      border-radius: 8px;
-      overflow: hidden;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-    }
-    .accordion-header {
-      background: #007ACC;
-      color: white;
-      padding: 1rem;
-      cursor: pointer;
-      font-weight: bold;
-    }
-    .accordion-body {
-      display: none;
-      padding: 1rem;
-      background: #fff;
-    }
-    table {
-      border-collapse: collapse;
+    iframe {
       width: 100%;
-    }
-    th, td {
-      padding: 0.5rem;
-      border: 1px solid #ccc;
-      text-align: center;
+      height: 80vh;
+      border: 2px solid #007acc;
+      border-radius: 12px;
+      background: white;
     }
   </style>
 </head>
 <body>
 
-<h1>📊 SORA KPI ダッシュボード</h1>
-<div id="dashboard"></div>
+<h1>📊 SORA KPI JSON 出力ビュー（仮表示）</h1>
 
-<script>
-const API_URL = "https://script.google.com/macros/s/AKfycby-j3jybje-ufm_IKlLwjV6a2ZRVidM35kOb20K_KBqRE6cNTvRWm5yNermP3bB1kc6/exec";
+<iframe src="https://script.google.com/macros/s/AKfycby-j3jybje-ufm_IKlLwjV6a2ZRVidM35kOb20K_KBqRE6cNTvRWm5yNermP3bB1kc6/exec"></iframe>
 
-fetch(API_URL)
-  .then(res => res.json())
-  .then(data => {
-    const container = document.getElementById('dashboard');
-
-    Object.keys(data).forEach(viewpoint => {
-      const accordion = document.createElement('div');
-      accordion.className = 'accordion';
-
-      const header = document.createElement('div');
-      header.className = 'accordion-header';
-      header.textContent = `📁 ${viewpoint}`;
-
-      const body = document.createElement('div');
-      body.className = 'accordion-body';
-
-      data[viewpoint].forEach(item => {
-        const table = document.createElement('table');
-        const titleRow = document.createElement('tr');
-        titleRow.innerHTML = `<th colspan="14">${item.middleGoal || "（未設定）"}｜${item.kpi || "KPI未設定"}</th>`;
-        table.appendChild(titleRow);
-
-        const headerRow = document.createElement('tr');
-        headerRow.innerHTML = `<th>月</th>` + item.monthly.map(m => `<th>${m.month}</th>`).join('');
-        table.appendChild(headerRow);
-
-        const targetRow = document.createElement('tr');
-        targetRow.innerHTML = `<td>目標</td>` + item.monthly.map(m => `<td>${m.target ?? "-"}</td>`).join('');
-        table.appendChild(targetRow);
-
-        const actualRow = document.createElement('tr');
-        actualRow.innerHTML = `<td>実績</td>` + item.monthly.map(m => `<td>${m.actual ?? "-"}</td>`).join('');
-        table.appendChild(actualRow);
-
-        body.appendChild(table);
-      });
-
-      header.addEventListener('click', () => {
-        body.style.display = body.style.display === 'block' ? 'none' : 'block';
-      });
-
-      accordion.appendChild(header);
-      accordion.appendChild(body);
-      container.appendChild(accordion);
-    });
-  })
-  .catch(err => {
-    document.getElementById('dashboard').innerHTML = `<p style="color:red;">❌ データ取得エラー: ${err.message}</p>`;
-  });
-</script>
+<p>※ このビューは簡易表示です。後日、SORAダッシュボードに統合する形で強化していきます。</p>
 
 </body>
 </html>
