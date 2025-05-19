@@ -398,6 +398,10 @@ if (mapDOM) {
     localStorage.setItem(sessionKey, JSON.stringify(sessionData));
     console.log("✅ セッション保存完了:", sessionKey);
 
+    // ✅ ←ここに追加
+const region = sessionData?.region || "未設定地域";
+localStorage.setItem(`sora_${region}`, JSON.stringify(sessionData));
+
     alert("✅ セッションが保存されました。\n履歴に反映するにはページを再読み込みしてください。");
 
     saveMindmapToSession(parsed);
@@ -422,6 +426,10 @@ if (mapDOM) {
 
     localStorage.setItem(sessionKey, JSON.stringify(sessionData));
     console.log("✅ セッション保存完了（地図なし）:", sessionKey);
+
+    // ✅ ←ここに追加
+const region = sessionData?.region || "未設定地域";
+localStorage.setItem(`sora_${region}`, JSON.stringify(sessionData));
 
     saveMindmapToSession(parsed);
 
@@ -449,6 +457,10 @@ if (mapDOM) {
 
   localStorage.setItem(sessionKey, JSON.stringify(sessionData));
   console.log("✅ セッション保存完了（地図DOMなし）:", sessionKey);
+
+  // ✅ ←ここに追加
+const region = sessionData?.region || "未設定地域";
+localStorage.setItem(`sora_${region}`, JSON.stringify(sessionData));
 
   alert("✅ セッションが保存されました（地図画像なし）");
 
