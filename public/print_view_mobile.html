@@ -18,13 +18,19 @@
     <button onclick="window.print()">🖨️ 印刷</button>
   </div>
 
+  <div class="recent-history">
+    <h3>🕒 最近の保存履歴</h3>
+    <ul class="history-list" id="historyList">
+      <!-- JavaScriptで表示されます -->
+    </ul>
+  </div>
+
   <div id="content" class="print-area">
     <p>出力内容を選択してください。</p>
   </div>
 
   <div class="section-container" id="detailSections"></div>
 
-  <!-- モーダルはデスクトップ版と同様に保持 -->
   <div id="detail-modal" class="modal">
     <h2 id="modal-title">詳細タイトル</h2>
     <p><strong>施策：</strong> <span id="modal-content"></span></p>
@@ -32,6 +38,33 @@
     <button onclick="closeModal()" class="modal-close">閉じる</button>
   </div>
 
-  <script src="print_view_logic.js"></script>
+  <script>
+    function loadSection(type, optionalData) {
+      const content = document.getElementById('content');
+      content.innerHTML = `<p>📥 ${type} データを読み込み中...</p>`;
+      // 本来のロジックに置き換えてください
+      setTimeout(() => {
+        content.innerHTML = `<h3>${type.toUpperCase()} 出力（仮表示）</h3><p>ここに内容を表示します。</p>`;
+      }, 600);
+    }
+
+    function closeModal() {
+      document.getElementById("detail-modal").style.display = "none";
+    }
+
+    window.addEventListener("DOMContentLoaded", () => {
+      const historyList = document.getElementById("historyList");
+      const keys = Object.keys(localStorage).filter(k => k.startsWith("sora_"));
+      keys.slice(-10).reverse().forEach(key => {
+        const li = document.createElement("li");
+        li.textContent = key.replace("sora_", "");
+        li.onclick = () => {
+          const data = JSON.parse(localStorage.getItem(key));
+          loadSection("cards", data);
+        };
+        historyList.appendChild(li);
+      });
+    });
+  </script>
 </body>
 </html>
