@@ -34,6 +34,12 @@ document.addEventListener("DOMContentLoaded", () => {
   let isAnalyzing = false;
   let latestMindMapData = null; // スクリプトの上の方に追加しておく
 
+// ✅ 追加：履歴保存用のsora_キーも保存する処理をグローバル関数に定義
+  window.saveSoraHistory = function(sessionData) {
+    const region = sessionData?.region || "未設定地域";
+    localStorage.setItem(`sora_${region}`, JSON.stringify(sessionData));
+    console.log("✅ sora履歴保存完了:", `sora_${region}`);
+  };
 
   // 📁 ファイル選択表示
   if (fileInput) {
