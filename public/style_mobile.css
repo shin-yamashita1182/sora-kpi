@@ -4,7 +4,7 @@ body {
   font-family: 'Segoe UI', sans-serif;
   background-color: #f8f9fa;
   margin: 0;
-  padding: 0 0 56px 0; /* ✅ フッター高さ分余白追加 */
+  padding: 0 0 70px 0; /* ✅ フッター高さ分余白追加 */
 }
 
 header {
@@ -22,7 +22,7 @@ header {
 }
 
 #dashboardLogo {
-  height: 36px;
+  height: 48px;
   max-width: 100%;
   object-fit: contain;
 }
