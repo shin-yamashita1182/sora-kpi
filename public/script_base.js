@@ -408,8 +408,8 @@ if (mapDOM) {
 saveSoraHistory(sessionData);
 
     // ✅ ←ここに追加
-const region = sessionData?.region || "未設定地域";
-localStorage.setItem(`sora_${region}`, JSON.stringify(sessionData));
+const regionNameForKey = sessionData?.region || "未設定地域";
+localStorage.setItem(`sora_${regionNameForKey}`, JSON.stringify(sessionData));
 
     alert("✅ セッションが保存されました。\n履歴に反映するにはページを再読み込みしてください。");
 
@@ -440,8 +440,8 @@ localStorage.setItem(`sora_${region}`, JSON.stringify(sessionData));
 saveSoraHistory(sessionData);
 
     // ✅ ←ここに追加
-const region = sessionData?.region || "未設定地域";
-localStorage.setItem(`sora_${region}`, JSON.stringify(sessionData));
+const regionNameForKey = sessionData?.region || "未設定地域";
+localStorage.setItem(`sora_${regionNameForKey}`, JSON.stringify(sessionData));
 
     saveMindmapToSession(parsed);
 
