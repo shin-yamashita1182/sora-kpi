@@ -467,17 +467,14 @@ localStorage.setItem(`sora_${region}`, JSON.stringify(sessionData));
     timestamp: new Date().toISOString()
   };
 
+  
   localStorage.setItem(sessionKey, JSON.stringify(sessionData));
   console.log("✅ セッション保存完了（地図DOMなし）:", sessionKey);
 
   // ✅ この下に追加
 saveSoraHistory(sessionData);
 
-  // ✅ ←ここに追加
-const region = sessionData?.region || "未設定地域";
-localStorage.setItem(`sora_${region}`, JSON.stringify(sessionData));
-
-  alert("✅ セッションが保存されました（地図画像なし）");
+alert("✅ セッションが保存されました（地図画像なし）");
 
   saveMindmapToSession(parsed);
 
