@@ -387,6 +387,9 @@ const mapDOM = document.getElementById("miniMap");
 
 if (mapDOM) {
   try {
+    const canvas = await html2canvas(mapDOM);
+    const imageData = canvas.toDataURL("image/png");
+    
     const nexcoText = document.getElementById("nexcoInfoList")?.innerText || "";
     const selectedCategory = document.getElementById("categorySelect")?.value || "分類未設定"; // ✅ 追加
 
@@ -397,6 +400,7 @@ if (mapDOM) {
       tasks: window.latestExtractedTasks || [],
       insight: [...document.querySelectorAll(".thinking-block textarea")].map(t => t.value.trim()),
       mindmapData: parsed,
+      mapImageData: imageData, // ✅ ←ここで追加！！
       nexcoInfo: nexcoText, // ← NEXCO情報
       timestamp: new Date().toISOString()
     };
@@ -414,6 +418,7 @@ saveSoraHistory(sessionData);
     setTimeout(() => {
       window.open(`mindmap_viewer.html?sessionKey=${sessionKey}`, "_blank");
     }, 200);
+    
   } catch (mapErr) {
     console.error("❌ 地図のキャプチャに失敗しました:", mapErr);
     alert("⚠️ 地図画像の保存に失敗しました（セッションには他の情報のみ保存）。");
