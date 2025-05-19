@@ -1,0 +1,89 @@
+<!-- ✅ SORA Dashboard スマホ専用ページ（index_mobile.html） -->
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SORA Dashboard（Mobile）</title>
+  <link rel="stylesheet" href="style_mobile.css">
+</head>
+<body>
+  <header>
+    <div class="logo">
+      <img src="images/sora.png" alt="SORA Dashboard ロゴ" id="dashboardLogo" />
+    </div>
+    <div class="user-info">ユーザー情報 ▼</div>
+  </header>
+
+  <div class="container">
+    <main class="main-content">
+      <section class="input-section">
+        <h2>🗺️ 地域情報入力</h2>
+        <div class="input-map-wrapper">
+          <div class="input-fields">
+            <input id="regionName" type="text" placeholder="地域名を入力">
+            <select id="categorySelect">
+              <option>観光型</option>
+              <option>離島型</option>
+              <option>中山間地域型</option>
+              <option>都市型</option>
+              <option>高齢化重点地域型</option>
+              <option>子育て・定住型</option>
+              <option>移住促進重点型</option>
+              <option>観光×農業ハイブリッド型</option>
+              <option>防災・災害対策型</option>
+              <option>デジタル活用先進地域型</option>
+            </select>
+            <textarea id="userNote" placeholder="テーマや自由記述を入力してください"></textarea>
+            <div class="file-upload-wrapper">
+              <input type="file" id="fileInput" accept=".txt,.pdf,.docx">
+              <span id="fileNameDisplay">ファイルを選択してください</span>
+            </div>
+            <div class="button-wrapper">
+              <button id="analyzeBtn">課題抽出（ファイルアップロード）</button>
+              <button id="generateBtn">分析対策（展開/閉じる）</button>
+            </div>
+          </div>
+          <div class="mini-map" id="miniMap">地図表示エリア</div>
+        </div>
+      </section>
+
+      <section class="canvas-section">
+        <h2>📝 SORA CANVAS（課題リスト）</h2>
+        <div id="gptResponse"></div>
+        <div class="canvas-placeholder" id="canvasResult">ここにキャンバス課題リストを展開</div>
+      </section>
+
+      <div class="nexco-toggle-wrapper" style="text-align: right;">
+        <button id="toggleNexcoBtn">NEXCO情報を表示</button>
+        <div id="nexcoStatus" style="margin-top: 4px; font-size: 0.9em; color: #888;"></div>
+      </div>
+
+      <div id="nexcoInfoBox">
+        <h3>NEXCO周辺施設・高速道路情報</h3>
+        <ul id="nexcoInfoList"></ul>
+      </div>
+
+      <section class="thinking-zone" style="margin-top: 40px; padding: 20px; background-color: #f9f9f9; border-top: 2px solid #ccc;">
+        <h2>🧠 課題に対する対策とマインドマップ生成</h2>
+        <div id="thinkingContainer"></div>
+        <button id="generateMindMapGPTBtn" class="generateAllMindMapBtn">
+          🧠 マインドマップの生成
+        </button>
+        <div id="allMindMapResult" class="mindmap-area"></div>
+      </section>
+    </main>
+  </div>
+
+  <footer>
+    <p>&copy; 2025 SORA Project</p>
+  </footer>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/regenerator-runtime@0.13.7/runtime.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mind-elixir@0.9.0/dist/mind-elixir.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+  <script src="script_base.js" defer></script>
+  <script src="map_controller.js" defer></script>
+</body>
+</html>
