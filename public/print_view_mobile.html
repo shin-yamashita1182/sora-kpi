@@ -39,17 +39,38 @@
   </div>
 
   <script>
+    function closeModal() {
+      document.getElementById("detail-modal").style.display = "none";
+    }
+
+    function renderCard(card) {
+      return `
+        <div class="card">
+          <div class="card-title">${card.strategy}</div>
+          <div class="card-kpi">KPI: ${card.kpi}</div>
+          <button onclick="showDetail('${card.id}', '${card.policy}', '${card.kpi}')">詳細</button>
+        </div>
+      `;
+    }
+
+    function showDetail(id, policy, kpi) {
+      document.getElementById("modal-title").innerText = `詳細：${id}`;
+      document.getElementById("modal-content").innerText = policy;
+      document.getElementById("modal-kpi").innerText = kpi;
+      document.getElementById("detail-modal").style.display = "block";
+    }
+
     function loadSection(type, optionalData) {
       const content = document.getElementById('content');
       content.innerHTML = `<p>📥 ${type} データを読み込み中...</p>`;
-      // 本来のロジックに置き換えてください
-      setTimeout(() => {
-        content.innerHTML = `<h3>${type.toUpperCase()} 出力（仮表示）</h3><p>ここに内容を表示します。</p>`;
-      }, 600);
-    }
 
-    function closeModal() {
-      document.getElementById("detail-modal").style.display = "none";
+      setTimeout(() => {
+        if (type === "cards" && optionalData && Array.isArray(optionalData)) {
+          content.innerHTML = `<h3>📇 実行策 出力</h3>` + optionalData.map(renderCard).join('');
+        } else {
+          content.innerHTML = `<h3>${type.toUpperCase()} 出力</h3><p>ここに内容を表示します。</p>`;
+        }
+      }, 400);
     }
 
     window.addEventListener("DOMContentLoaded", () => {
@@ -60,7 +81,9 @@
         li.textContent = key.replace("sora_", "");
         li.onclick = () => {
           const data = JSON.parse(localStorage.getItem(key));
-          loadSection("cards", data);
+          if (data && data.cards) {
+            loadSection("cards", data.cards);
+          }
         };
         historyList.appendChild(li);
       });
