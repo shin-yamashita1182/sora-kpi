@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>印刷ビューア（Mobile版）</title>
+  <link rel="stylesheet" href="print_mobile.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+</head>
+<body>
+  <header class="mobile-header">🖨️ 印刷・出力ビューア</header>
+
+  <div class="mobile-menu">
+    <button onclick="loadSection('mindmap')">🧠 マップ</button>
+    <button onclick="loadSection('summary')">📊 レポート</button>
+    <button onclick="loadSection('cards')">📇 実行策</button>
+    <button onclick="loadSection('3d')">🌐 3D</button>
+    <button onclick="window.print()">🖨️ 印刷</button>
+  </div>
+
+  <div id="content" class="print-area">
+    <p>出力内容を選択してください。</p>
+  </div>
+
+  <div class="section-container" id="detailSections"></div>
+
+  <!-- モーダルはデスクトップ版と同様に保持 -->
+  <div id="detail-modal" class="modal">
+    <h2 id="modal-title">詳細タイトル</h2>
+    <p><strong>施策：</strong> <span id="modal-content"></span></p>
+    <p><strong>KPI：</strong> <span id="modal-kpi"></span></p>
+    <button onclick="closeModal()" class="modal-close">閉じる</button>
+  </div>
+
+  <script src="print_view_logic.js"></script>
+</body>
+</html>
