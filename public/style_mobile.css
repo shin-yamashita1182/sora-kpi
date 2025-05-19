@@ -204,3 +204,11 @@ footer {
   resize: vertical;
   margin-top: 6px;
 }
+
+/* ✅ タイトルを全体的に少し小さく */
+.input-section h2,
+.canvas-section h2,
+.thinking-zone h2 {
+  font-size: 1.1rem;
+  margin-bottom: 12px;
+}
