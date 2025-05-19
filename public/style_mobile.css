@@ -4,7 +4,7 @@ body {
   font-family: 'Segoe UI', sans-serif;
   background-color: #f8f9fa;
   margin: 0;
-  padding: 0;
+  padding: 0 0 56px 0; /* ✅ フッター高さ分余白追加 */
 }
 
 header {
@@ -22,7 +22,7 @@ header {
 }
 
 #dashboardLogo {
-  height: 36px;  /* ✅ タイトルをさらに小さく調整 */
+  height: 36px;
   max-width: 100%;
   object-fit: contain;
 }
@@ -160,7 +160,7 @@ footer {
 }
 
 #nexcoInfoBox {
-  display: block; /* ✅ 表示状態にしておく（開いておく） */
+  display: block;
   background-color: #f8f9fa;
   padding: 10px;
   margin-top: 10px;
@@ -170,7 +170,7 @@ footer {
 }
 
 #toggleNexcoBtn {
-  background-color: #343a40;  /* ✅ ダークグレーで明確に */
+  background-color: #343a40;
   color: white;
   font-size: 14px;
   padding: 10px 16px;
@@ -193,7 +193,6 @@ footer {
   line-height: 1.6em;
 }
 
-/* ✅ 入力欄（考察エリア）の幅拡張 */
 .thinking-block textarea {
   width: 100%;
   font-size: 15px;
@@ -205,10 +204,33 @@ footer {
   margin-top: 6px;
 }
 
-/* ✅ タイトルを全体的に少し小さく */
 .input-section h2,
 .canvas-section h2,
 .thinking-zone h2 {
   font-size: 1.1rem;
   margin-bottom: 12px;
+}
+
+/* ✅ モバイルフッターアイコンナビ */
+.mobile-footer {
+  display: flex;
+  justify-content: space-around;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background-color: #ffffff;
+  border-top: 1px solid #ccc;
+  padding: 6px 0;
+  z-index: 999;
+}
+
+.footer-btn {
+  flex: 1;
+  background: none;
+  border: none;
+  font-size: 14px;
+  font-weight: bold;
+  color: #007bff;
+  cursor: pointer;
 }
