@@ -13,7 +13,6 @@
   <div class="mobile-menu">
     <button onclick="loadSection('mindmap')">🧠 マップ</button>
     <button onclick="loadSection('summary')">📊 レポート</button>
-    <button onclick="loadSection('cards')">📇 実行策</button>
     <button onclick="loadSection('3d')">🌐 3D</button>
     <button onclick="window.print()">🖨️ 印刷</button>
   </div>
@@ -29,61 +28,78 @@
     <p>出力内容を選択してください。</p>
   </div>
 
-  <div class="section-container" id="detailSections"></div>
-
-  <div id="detail-modal" class="modal">
-    <h2 id="modal-title">詳細タイトル</h2>
-    <p><strong>施策：</strong> <span id="modal-content"></span></p>
-    <p><strong>KPI：</strong> <span id="modal-kpi"></span></p>
-    <button onclick="closeModal()" class="modal-close">閉じる</button>
-  </div>
-
   <script>
-    function closeModal() {
-      document.getElementById("detail-modal").style.display = "none";
-    }
-
-    function renderCard(card) {
-      return `
-        <div class="card">
-          <div class="card-title">${card.strategy}</div>
-          <div class="card-kpi">KPI: ${card.kpi}</div>
-          <button onclick="showDetail('${card.id}', '${card.policy}', '${card.kpi}')">詳細</button>
-        </div>
-      `;
-    }
-
-    function showDetail(id, policy, kpi) {
-      document.getElementById("modal-title").innerText = `詳細：${id}`;
-      document.getElementById("modal-content").innerText = policy;
-      document.getElementById("modal-kpi").innerText = kpi;
-      document.getElementById("detail-modal").style.display = "block";
-    }
-
-    function loadSection(type, optionalData) {
+    function loadSection(type, sessionData) {
       const content = document.getElementById('content');
       content.innerHTML = `<p>📥 ${type} データを読み込み中...</p>`;
 
       setTimeout(() => {
-        if (type === "cards" && optionalData && Array.isArray(optionalData)) {
-          content.innerHTML = `<h3>📇 実行策 出力</h3>` + optionalData.map(renderCard).join('');
-        } else {
-          content.innerHTML = `<h3>${type.toUpperCase()} 出力</h3><p>ここに内容を表示します。</p>`;
+        if (type === "mindmap") {
+          if (!sessionData?.mindmapImageData) {
+            content.innerHTML = `<p style='color:red;'>❌ マインドマップ画像が保存されていません。</p>`;
+            return;
+          }
+
+          content.innerHTML = `<h3>🧠 マインドマップ画像</h3><img src="${sessionData.mindmapImageData}" alt="マインドマップ画像" style="width: 100%; max-width: 1400px; height: auto; border: 1px solid #ccc; box-shadow: 0 2px 6px rgba(0,0,0,0.1); display: block; margin: 1rem auto;">`;
+
+        } else if (type === "summary") {
+          const region = sessionData?.region || "地域未設定";
+          const theme = sessionData?.theme || "テーマ未設定";
+          const tasks = sessionData?.tasks || [];
+          const category = sessionData?.category || "分類未設定";
+          const insightRaw = sessionData?.insight || [];
+          const insights = Array.isArray(insightRaw) ? insightRaw.map(line => `・${line}`).join("<br>") : insightRaw || "（未入力）";
+          const imageData = sessionData?.mindmapImageData || "";
+          const nexcoInfo = sessionData?.nexcoInfo || "[NEXCO情報はまだ登録されていません]";
+          const mapImageData = sessionData?.mapImageData || "";
+
+          let printable = `<h3>📊 総合レポート</h3>`;
+          printable += `<p><strong>地域名：</strong>${region}</p>`;
+          printable += `<p><strong>テーマ：</strong>${theme}</p>`;
+          printable += `<p><strong>分類：</strong>${category}</p>`;
+
+          if (Array.isArray(tasks) && tasks.length > 0) {
+            printable += `<h4>課題一覧：</h4><ol>`;
+            tasks.forEach(task => printable += `<li>${task}</li>`);
+            printable += `</ol>`;
+          }
+
+          printable += `<h4>住民の考察：</h4><p>${insights}</p>`;
+
+          if (imageData) {
+            printable += `<h4>マインドマップ画像：</h4><img src="${imageData}" style="width:100%; max-width:1400px; height:auto; border:1px solid #ccc; display:block; margin:1rem auto;">`;
+          }
+
+          printable += `<h4>NEXCO情報：</h4><p>${nexcoInfo}</p>`;
+
+          content.innerHTML = printable;
+
+        } else if (type === "3d") {
+          window.open("3d_viewer.html", "_blank");
         }
-      }, 400);
+      }, 300);
     }
 
     window.addEventListener("DOMContentLoaded", () => {
       const historyList = document.getElementById("historyList");
       const keys = Object.keys(localStorage).filter(k => k.startsWith("sora_"));
+
       keys.slice(-10).reverse().forEach(key => {
         const li = document.createElement("li");
         li.textContent = key.replace("sora_", "");
         li.onclick = () => {
           const data = JSON.parse(localStorage.getItem(key));
-          if (data && data.cards) {
-            loadSection("cards", data.cards);
-          }
+          const menuButtons = document.querySelectorAll(".mobile-menu button");
+
+          menuButtons.forEach(btn => {
+            btn.onclick = () => {
+              const type = btn.textContent.includes("マップ") ? "mindmap" : btn.textContent.includes("レポート") ? "summary" : btn.textContent.includes("3D") ? "3d" : null;
+              if (type) loadSection(type, data);
+            };
+          });
+
+          // 最初はsummaryを表示
+          loadSection("summary", data);
         };
         historyList.appendChild(li);
       });
