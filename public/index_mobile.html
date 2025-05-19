@@ -91,5 +91,13 @@
   <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
   <script src="script_base.js" defer></script>
   <script src="map_controller.js" defer></script>
+
+  <!-- ✅ LINE共有用関数（一番下に自前で追加） -->
+  <script>
+    function shareByLINE() {
+      const url = window.location.href;
+      window.open(`https://line.me/R/msg/text/?${encodeURIComponent(url)}`);
+    }
+  </script>
 </body>
 </html>
