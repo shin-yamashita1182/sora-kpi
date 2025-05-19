@@ -4,7 +4,7 @@ body {
   font-family: 'Segoe UI', sans-serif;
   background-color: #f8f9fa;
   margin: 0;
-  padding: 0 0 80px 0; /* ✅ フッター高さ分余白追加 */
+  padding: 0 0 90px 0; /* ✅ フッター高さ分余白追加 */
 }
 
 header {
