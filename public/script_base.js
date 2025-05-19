@@ -404,6 +404,9 @@ if (mapDOM) {
     localStorage.setItem(sessionKey, JSON.stringify(sessionData));
     console.log("✅ セッション保存完了:", sessionKey);
 
+    // ✅ この下に追加
+saveSoraHistory(sessionData);
+
     // ✅ ←ここに追加
 const region = sessionData?.region || "未設定地域";
 localStorage.setItem(`sora_${region}`, JSON.stringify(sessionData));
@@ -432,6 +435,9 @@ localStorage.setItem(`sora_${region}`, JSON.stringify(sessionData));
 
     localStorage.setItem(sessionKey, JSON.stringify(sessionData));
     console.log("✅ セッション保存完了（地図なし）:", sessionKey);
+
+    // ✅ この下に追加
+saveSoraHistory(sessionData);
 
     // ✅ ←ここに追加
 const region = sessionData?.region || "未設定地域";
@@ -463,6 +469,9 @@ localStorage.setItem(`sora_${region}`, JSON.stringify(sessionData));
 
   localStorage.setItem(sessionKey, JSON.stringify(sessionData));
   console.log("✅ セッション保存完了（地図DOMなし）:", sessionKey);
+
+  // ✅ この下に追加
+saveSoraHistory(sessionData);
 
   // ✅ ←ここに追加
 const region = sessionData?.region || "未設定地域";
@@ -605,5 +614,14 @@ function saveMindmapToSession(mindmapData) {
     console.error("❌ セッション保存失敗:", err);
   }
 }
-
+// ✅ ここに追加してください！（DOMContentLoadedの外！）
+function saveSoraHistory(sessionData) {
+  const region = sessionData?.region || "未設定地域";
+  try {
+    localStorage.setItem(`sora_${region}`, JSON.stringify(sessionData));
+    console.log(`📦 sora_${region} に履歴保存完了`);
+  } catch (e) {
+    console.error("❌ sora履歴の保存に失敗しました:", e);
+  }
+}
 });
