@@ -146,6 +146,10 @@ if (!localStorage.getItem(fixedKey)) {
     sessionData.mindmapImageData = dataUrl;
     localStorage.setItem(fixedKey, JSON.stringify(sessionData));
 
+    // ✅ この1行を追加することで、履歴にもマップ画像が連携！
+  const region = sessionData.region || "未設定地域";
+  localStorage.setItem(`sora_${region}`, JSON.stringify(sessionData));
+
     console.log("✅ PNG保存成功:", fixedKey);
     console.log("🧠 画像データ長さ:", dataUrl.length);
     console.log("🧠 画像データ冒頭:", dataUrl.slice(0, 100));
