@@ -97,11 +97,18 @@
           const menuButtons = document.querySelectorAll(".mobile-menu button");
 
           menuButtons.forEach(btn => {
-            btn.onclick = () => {
-              const type = btn.textContent.includes("マップ") ? "mindmap" : btn.textContent.includes("レポート") ? "summary" : btn.textContent.includes("3D") ? "3d" : null;
-              if (type) loadSection(type, data);
-            };
-          });
+  const text = btn.textContent;
+
+  if (text.includes("印刷")) return;
+
+  btn.onclick = () => {
+    const type = text.includes("マップ") ? "mindmap" :
+                 text.includes("レポート") ? "summary" :
+                 text.includes("3D") ? "3d" : null;
+    if (type) loadSection(type, data);
+  };
+});
+
 
           // 最初はsummaryを表示
           loadSection("summary", data);
