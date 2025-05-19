@@ -22,7 +22,7 @@ header {
 }
 
 #dashboardLogo {
-  height: 42px;  /* ✅ 小さく調整 */
+  height: 36px;  /* ✅ タイトルをさらに小さく調整 */
   max-width: 100%;
   object-fit: contain;
 }
@@ -160,26 +160,28 @@ footer {
 }
 
 #nexcoInfoBox {
-  display: none;
+  display: block; /* ✅ 表示状態にしておく（開いておく） */
   background-color: #f8f9fa;
   padding: 10px;
+  margin-top: 10px;
   margin-bottom: 20px;
   border: 1px solid #ccc;
+  border-radius: 6px;
 }
 
 #toggleNexcoBtn {
-  background-color: #6c757d;
+  background-color: #343a40;  /* ✅ ダークグレーで明確に */
   color: white;
   font-size: 14px;
   padding: 10px 16px;
   border-radius: 8px;
-  margin-top: 12px; /* ✅ 少し下にずらす */
+  margin-top: 12px;
   border: none;
   cursor: pointer;
 }
 
 #toggleNexcoBtn:hover {
-  background-color: #5a6268;
+  background-color: #23272b;
 }
 
 .mindmap-area {
@@ -189,4 +191,16 @@ footer {
   padding: 12px;
   font-size: 0.95em;
   line-height: 1.6em;
+}
+
+/* ✅ 入力欄（考察エリア）の幅拡張 */
+.thinking-block textarea {
+  width: 100%;
+  font-size: 15px;
+  padding: 8px;
+  box-sizing: border-box;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  resize: vertical;
+  margin-top: 6px;
 }
