@@ -22,7 +22,7 @@ header {
 }
 
 #dashboardLogo {
-  height: 48px;
+  height: 42px;  /* ✅ 小さく調整 */
   max-width: 100%;
   object-fit: contain;
 }
@@ -165,6 +165,21 @@ footer {
   padding: 10px;
   margin-bottom: 20px;
   border: 1px solid #ccc;
+}
+
+#toggleNexcoBtn {
+  background-color: #6c757d;
+  color: white;
+  font-size: 14px;
+  padding: 10px 16px;
+  border-radius: 8px;
+  margin-top: 12px; /* ✅ 少し下にずらす */
+  border: none;
+  cursor: pointer;
+}
+
+#toggleNexcoBtn:hover {
+  background-color: #5a6268;
 }
 
 .mindmap-area {
