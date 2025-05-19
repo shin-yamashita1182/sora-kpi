@@ -1,0 +1,177 @@
+/* ====== SORA Dashboard スマホ専用CSS（index_mobile.html用） ====== */
+
+body {
+  font-family: 'Segoe UI', sans-serif;
+  background-color: #f8f9fa;
+  margin: 0;
+  padding: 0;
+}
+
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: white;
+  padding: 10px 20px;
+  border-bottom: 1px solid #dee2e6;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+}
+
+#dashboardLogo {
+  height: 48px;
+  max-width: 100%;
+  object-fit: contain;
+}
+
+.user-info {
+  font-size: 14px;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebar {
+  display: none;
+}
+
+.main-content {
+  padding: 16px;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+.input-map-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.input-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.input-fields input,
+.input-fields select,
+.input-fields textarea {
+  height: 40px;
+  font-size: 16px;
+  padding: 8px;
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.input-fields textarea {
+  height: 100px;
+  resize: vertical;
+}
+
+.file-upload-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.file-upload-wrapper span {
+  font-size: 14px;
+  color: #6c757d;
+}
+
+.mini-map {
+  min-height: 180px;
+  background-color: #e9ecef;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #6c757d;
+  border-radius: 8px;
+  text-align: center;
+}
+
+.button-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.button-wrapper button,
+.generateAllMindMapBtn {
+  width: 100%;
+  font-size: 16px;
+  padding: 12px;
+  font-weight: bold;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+#analyzeBtn {
+  background-color: #28a745;
+  color: white;
+}
+
+#generateBtn {
+  background-color: #007bff;
+  color: white;
+}
+
+#analyzeBtn:hover {
+  background-color: #1e7e34;
+}
+
+#generateBtn:hover {
+  background-color: #0056b3;
+}
+
+.generateAllMindMapBtn {
+  background-color: #e76f51;
+  margin-top: 16px;
+  color: white;
+}
+
+footer {
+  text-align: center;
+  font-size: 12px;
+  color: #6c757d;
+  padding: 15px 0;
+  border-top: 1px solid #dee2e6;
+}
+
+#canvasResult {
+  white-space: pre-wrap;
+  word-break: break-word;
+  padding: 16px;
+  background-color: #f7f7f7;
+  border-radius: 8px;
+  line-height: 1.6;
+  font-size: 16px;
+  overflow-y: auto;
+  color: #000000;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+#nexcoInfoBox {
+  display: none;
+  background-color: #f8f9fa;
+  padding: 10px;
+  margin-bottom: 20px;
+  border: 1px solid #ccc;
+}
+
+.mindmap-area {
+  margin-top: 20px;
+  background-color: #f8f9fa;
+  border-left: 4px solid #2a9d8f;
+  padding: 12px;
+  font-size: 0.95em;
+  line-height: 1.6em;
+}
