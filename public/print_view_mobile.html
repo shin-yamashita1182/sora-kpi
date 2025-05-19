@@ -19,7 +19,7 @@
     <button onclick="loadSection('mindmap')">🧠 マップ</button>
     <button onclick="loadSection('summary')">📊 レポート</button>
     <button onclick="loadSection('3d')">🌐 3D</button>
-    <button onclick="window.print()">🖨️ 印刷</button>
+    <button onclick="confirmBeforePrint()">🖨️ 印刷</button>
   </div>
 
   <div class="recent-history">
@@ -109,6 +109,18 @@
         historyList.appendChild(li);
       });
     });
+  </script>
+  
+    <script>
+  function confirmBeforePrint() {
+    const content = document.getElementById('content');
+    const text = content?.innerText?.trim() || "";
+    if (text.length < 10) {
+      alert("❌ 印刷する内容がありません。まず『マップ』『レポート』などを表示してください！");
+      return;
+    }
+    window.print();
+  }
   </script>
 </body>
 </html>
