@@ -157,4 +157,13 @@ body {
     background: white;
     color: black;
   }
+  .mobile-header {
+  display: flex;
+  align-items: center;
+  padding: 1rem;
+  font-weight: bold;
+  font-size: 1.2rem;
+  background-color: #0077cc;
+  color: white;
+}
 }
