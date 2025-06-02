@@ -14,7 +14,7 @@ export default async function handler(req, res) {
                 'Authorization': `Bearer ${apiKey}`,
             },
             body: JSON.stringify({
-                model: 'gpt-4-1106-preview', // ←ここ重要！！
+                model: 'gpt-3.5-turbo', // ←ここ重要！！
                 messages: [
                     { role: "system", content: "あなたは地域施策の専門家です。" },
                     { role: "user", content: prompt }
