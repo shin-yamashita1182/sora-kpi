@@ -197,6 +197,14 @@ header {
 
 </head>
 <body>
+  <script>
+  const token = localStorage.getItem("sora_token");
+  if (!token) {
+    alert("このページはログイン後に閲覧できます。ログイン画面へ移動します。");
+    window.location.href = "login.html";
+  }
+</script>
+
   <header>🖨️ 印刷・出力ビューア</header>
 
   <!-- ✅ 総合メニュー -->
