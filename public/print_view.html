@@ -662,6 +662,22 @@ function closeModal() {
   ">閉じる</button>
 </div>
 
+  <script>
+  // ✅ ログアウト処理とステータス表示
+  function logout() {
+    localStorage.removeItem("sora_token");
+    alert("ログアウトしました");
+    window.location.href = "login.html";
+  }
+
+  const token = localStorage.getItem("sora_token");
+  const userStatus = document.getElementById("userStatus");
+  if (userStatus) {
+    userStatus.textContent = token ? "🔓 ログイン中" : "🔒 未ログイン";
+  }
+</script>
+</body>
+</html>
 
 </body>
 </html>
