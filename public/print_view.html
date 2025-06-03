@@ -348,165 +348,117 @@ printable.innerHTML += `<h4>地域インフラ・交通・連携構造の分析�
   details.innerHTML = "<p>このエリアには地域全体の課題構造と住民の分析を統合表示します。</p>";
 
     
-     } else if (type === "cards") {
-const sectionHeader = document.createElement("div");
-sectionHeader.className = "section-header"; // ✅ CSS定義で横並びにする
+} else if (type === "cards") {
+  const sectionHeader = document.createElement("div");
+  sectionHeader.className = "section-header";
 
-const heading = document.createElement("h2");
-heading.textContent = "📇 実行策一覧出力（MindTriggerカード）";
-heading.style.margin = 0; // スペース詰まり防止
+  const heading = document.createElement("h2");
+  heading.textContent = "📇 実行策一覧出力（新形式GPT表形式）";
+  heading.style.margin = 0;
 
-const gptExecBtn = document.createElement("button");
-gptExecBtn.innerText = "AIによる抽出開始（GPT 20選）";
-gptExecBtn.className = "gpt-button"; // ✅ CSSで装飾（.gpt-button）
+  const gptExecBtn = document.createElement("button");
+  gptExecBtn.innerText = "AIによる抽出開始（GPT 3.5）";
+  gptExecBtn.className = "gpt-button";
 
-// ✅ DOM構成：見出し＋ボタンを横並びにまとめる
-sectionHeader.appendChild(heading);
-sectionHeader.appendChild(gptExecBtn);
+  sectionHeader.appendChild(heading);
+  sectionHeader.appendChild(gptExecBtn);
+  content.appendChild(sectionHeader);
 
-// ✅ contentエリアに追加
-content.appendChild(sectionHeader);
-
-
-  const cardContainer = document.createElement("div");
-  cardContainer.className = "print-area";
-  cardContainer.style.display = "flex";
-  cardContainer.style.flexWrap = "wrap";
-  cardContainer.style.gap = "1rem";
-  cardContainer.style.justifyContent = "center";
-  cardContainer.style.display = "none"; // 初期は非表示
-  content.appendChild(cardContainer);
+  const outputContainer = document.createElement("div");
+  outputContainer.className = "print-area";
+  outputContainer.style.textAlign = "left";
+  outputContainer.style.marginTop = "1rem";
+  content.appendChild(outputContainer);
 
   gptExecBtn.onclick = async () => {
-  gptExecBtn.disabled = true;
-  gptExecBtn.innerText = "🔄 GPT抽出中...";
+    gptExecBtn.disabled = true;
+    gptExecBtn.innerText = "🔄 GPT抽出中...";
 
-  try {
-    const sessionKey = localStorage.getItem("selectedSessionKey");
-    const sessionData = sessionKey ? JSON.parse(localStorage.getItem(sessionKey)) : null;
+    try {
+      const sessionKey = localStorage.getItem("selectedSessionKey");
+      const sessionData = sessionKey ? JSON.parse(localStorage.getItem(sessionKey)) : null;
+      const tasks = sessionData?.tasks || [];
+      const insights = sessionData?.insight || [];
 
-    // ✅ 地域課題と住民の考察を取得
-    const tasks = window.latestExtractedTasks || [];
-    const thoughts = [...document.querySelectorAll(".thinking-block textarea")]
-      .map(t => t.value.trim()).filter(t => t);
+      const prompt = `
+あなたは地域戦略AIプランナーです。
+以下の【地域課題】と【住民の考察】をもとに、専門家が検討すべき「実行提案」を3つのカテゴリで提示してください。
 
-    const prompt = `
-あなたは地域戦略アドバイザーAIです。  
-以下に示す地域課題と住民の考察をもとに、各視点（finance, customer, process, growth）に対応した実行策カードを意味的に選出してください。
-
-▼出力条件（絶対厳守）：
-- 以下の4つの視点（finance, customer, process, growth）から、それぞれ最も関連するカードを5枚ずつ抽出し、合計20枚とすること
-- 各カードの「strategy」「policy」「kpi」の記述と、課題・考察の内容を**意味ベースで照合し、関連性が強いものを優先**すること
-- 出力されるカードIDは、**必ず "core-001" のような形式**であること
-- **ID順や分類コード順で選んではならない**（意味的に無関係なカードを選ぶのを避ける）
-- 「strategy」に「サンプル」という語が含まれるカードは**絶対に含めないこと**
-- 出力は以下の形式のJSONオブジェクトのみ。**コメント・注釈・文章・コードブロック記号（\`\`\`）は一切含めないこと**
-
-▼出力形式（例）：
-{
-  "finance": ["core-001", "core-015", "core-022", "core-038", "core-043"],
-  "customer": ["core-101", "core-108", "core-109", "core-112", "core-118"],
-  "process": ["core-201", "core-205", "core-209", "core-210", "core-212"],
-  "growth": ["core-301", "core-305", "core-309", "core-310", "core-318"]
-}
+▼出力形式（JSONのみ、コメント不要）：
+[
+  {
+    "分類": "インフラ",
+    "提案タイトル": "地元交通網の維持",
+    "要約内容": "高齢者移動支援のため、地域シャトルバス導入を検討する",
+    "影響度": "中～高"
+  },
+  ...
+]
 
 【地域課題】:
 ${tasks.map((t, i) => `【${i+1}】${t}`).join("\n")}
 
 【住民の考察】:
-${thoughts.map(t => "・" + t).join("\n")}
+${Array.isArray(insights) ? insights.map(i => "・" + i).join("\n") : insights}
 `;
 
-    const res = await fetch("/api/chatgpt", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ prompt }),
-    });
+      const res = await fetch("/api/chatgpt", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ prompt })
+      });
 
- const data = await res.json();
-let result;
+      const data = await res.json();
+      let result;
+      try {
+        result = typeof data.result === "string" ? JSON.parse(data.result) : data.result;
+      } catch (e) {
+        alert("❌ JSON構文エラー：GPT応答の解析に失敗しました。");
+        console.error("JSON parse error:", e);
+        return;
+      }
 
-try {
-  result = typeof data.result === "string" ? JSON.parse(data.result) : data.result;
-} catch (e) {
-  alert("❌ GPTの応答を正しく読み取れませんでした（JSON構文エラー）。");
-  console.error("JSON parse error:", e);
-  return;
+      outputContainer.innerHTML = "";
+      const table = document.createElement("table");
+      table.style.width = "100%";
+      table.style.borderCollapse = "collapse";
+      table.style.marginTop = "1rem";
+
+      const thead = document.createElement("thead");
+      thead.innerHTML = `
+        <tr style="background:#e9ecef;">
+          <th style="border:1px solid #ccc;padding:8px;">分類</th>
+          <th style="border:1px solid #ccc;padding:8px;">提案タイトル</th>
+          <th style="border:1px solid #ccc;padding:8px;">要約内容</th>
+          <th style="border:1px solid #ccc;padding:8px;">影響度</th>
+        </tr>`;
+      table.appendChild(thead);
+
+      const tbody = document.createElement("tbody");
+      result.forEach(row => {
+        const tr = document.createElement("tr");
+        ["分類", "提案タイトル", "要約内容", "影響度"].forEach(key => {
+          const td = document.createElement("td");
+          td.textContent = row[key] || "-";
+          td.style.border = "1px solid #ccc";
+          td.style.padding = "8px";
+          tbody.appendChild(tr);
+          tr.appendChild(td);
+        });
+      });
+
+      table.appendChild(tbody);
+      outputContainer.appendChild(table);
+      details.innerHTML = "<p>🟠 GPTが生成した実行提案一覧を表示中です（表形式）。</p>";
+    } catch (err) {
+      console.error("抽出エラー:", err);
+      alert("❌ GPT連携中にエラーが発生しました。");
+    } finally {
+      gptExecBtn.disabled = false;
+      gptExecBtn.innerText = "AIによる抽出開始（GPT 3.5）";
+    }
+  };
 }
-
-    // 🔍 20枚のIDを抽出（全視点から）
-    const ids = [
-      ...(result.finance || []),
-      ...(result.customer || []),
-      ...(result.process || []),
-      ...(result.growth || [])
-    ];
-
-console.log("✅ GPT抽出結果:", result);
-console.log("🎯 フィルタ対象ID一覧:", ids);
-    
-    
-    // 🎴 全カードJSONの読み込みとフィルタリング
-const resCard = await fetch("test-validation/coremaster_real_401cards.json");
-const allCards = await resCard.json();
-
-console.log("📦 CoreMaster内の全カードID:", allCards.map(c => c.id));
-
-// ✅ 先に let で宣言しておく
-let selectedCards = allCards.filter(card => ids.includes(card.id));
-
-// ✅ 「サンプル」という文字が含まれるカードを除外
-selectedCards = selectedCards.filter(card => {
-  const isSample = card.strategy?.includes("サンプル");
-  return !isSample; // サンプル除外
-});
-
-// ✅ 保存する処理（ここで保存）
-saveCardsToLocalStorage(selectedCards);  // 保存処理
-
-// 🧼 表示前にクリア
-cardContainer.innerHTML = "";
-
-// ✅ ログ出力（ここが追加部分）
-console.log("🧾 選ばれたカードの視点:");
-selectedCards.forEach(card => {
-  console.log(`🟢 ${card.id} | viewpoint: ${card.viewpoint} | classKey: ${convertTagClass(card.viewpoint)}`);
-});
-
-// カードを表示
-selectedCards.forEach(item => {
-  const card = createCard(item);
-  cardContainer.appendChild(card);
-});
-
-// ✅ ここで非表示 → 表示に変更
-cardContainer.style.display = "flex";
-
-details.innerHTML = "<p>🟠 GPTが抽出した<strong>20枚</strong>の実行策カードを表示中です。</p>";
-} catch (err) {
-  console.error("抽出エラー:", err);
-  alert("❌ GPT連携中にエラーが発生しました。");
-} finally {
-  gptExecBtn.disabled = false;
-  gptExecBtn.innerText = "AIによる抽出開始（GPT 20選）";
-}
-};
-
-// 保存処理（localStorage使用）
-function saveCardsToLocalStorage(cards) {
-  localStorage.setItem("extractedCards", JSON.stringify(cards));
-}
-
-// 保存されたカードを読み込む
-function loadCardsFromLocalStorage() {
-  const cards = localStorage.getItem("extractedCards");
-  if (cards) {
-    return JSON.parse(cards);
-  } else {
-    return [];
-  }
-}
- 
       
  } else if (type === "3d") {
     window.open("3d_viewer.html", "_blank");
