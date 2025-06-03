@@ -1,0 +1,86 @@
+---
+<!-- ✅ register.html ｜登録ページ -->
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <title>AI課題レポート 登録フォーム</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body { font-family: sans-serif; padding: 2em; text-align: center; }
+    input, button { font-size: 1.1em; padding: 0.5em; margin: 0.5em; }
+  </style>
+</head>
+<body>
+  <h1>📩 メールアドレスを登録してAIレポートを体験！</h1>
+  <form id="regForm">
+    <input type="email" id="email" placeholder="メールアドレス" required>
+    <button type="submit">体験URLを受け取る</button>
+  </form>
+  <p id="result"></p>
+
+  <script>
+    document.getElementById("regForm").addEventListener("submit", function(e) {
+      e.preventDefault();
+      const email = document.getElementById("email").value;
+      if (!email.includes("@")) return alert("正しいメールを入力してください。");
+
+      // ✅ 本当はメール送信処理（Mailchimp等）
+      const token = "miru2025demo";
+      const accessURL = `https://miruroute.com/tools/task-engine.html?token=${token}`;
+
+      document.getElementById("result").innerHTML = `✅ こちらから体験できます：<br><a href="${accessURL}" target="_blank">${accessURL}</a>`;
+    });
+  </script>
+</body>
+</html>
+
+---
+<!-- ✅ task-engine.html（トークン付きアクセス限定） -->
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>AI地域課題レポート</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style> body { font-family: sans-serif; padding: 1em; } </style>
+</head>
+<body>
+  <div id="content" style="display:none;">
+    <h1>🧠 地域課題AIレポート</h1>
+    <p>このページはAIによって自動生成された地域課題分析を体験できます。</p>
+    <!-- 🔽 ここに既存のレポート内容を埋め込む -->
+    <div id="sora-summary"></div>
+  </div>
+  <div id="block" style="color:red;"></div>
+
+  <script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const token = urlParams.get("token");
+    const validToken = "miru2025demo"; // ✅ 公開用トークン
+
+    if (token === validToken) {
+      document.getElementById("content").style.display = "block";
+      document.getElementById("block").innerHTML = "";
+      // 🔽 既存のSORAロジックを読み込む（例: loadSoraSummary()）
+      loadSoraSummary();
+    } else {
+      document.getElementById("block").innerHTML = "🔒 アクセス権限がありません。このページは登録者専用です。";
+    }
+
+    function loadSoraSummary() {
+      const keys = Object.keys(localStorage).filter(k => k.startsWith("sora_"));
+      if (keys.length === 0) return;
+      const latestSoraKey = keys[0];
+      const data = JSON.parse(localStorage.getItem(latestSoraKey));
+      const el = document.getElementById("sora-summary");
+      el.innerHTML = `
+        <h2>📋 地域課題レポート</h2>
+        <p><strong>地域:</strong> ${data.region || "不明"}</p>
+        <p><strong>課題:</strong> ${data.summary || "未設定"}</p>
+      `;
+    }
+  </script>
+</body>
+</html>
+---
