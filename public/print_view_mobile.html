@@ -55,7 +55,7 @@
           const insightRaw = sessionData?.insight || [];
           const insights = Array.isArray(insightRaw) ? insightRaw.map(line => `・${line}`).join("<br>") : insightRaw || "（未入力）";
           const imageData = sessionData?.mindmapImageData || "";
-          const nexcoInfo = sessionData?.nexcoInfo || "[NEXCO情報はまだ登録されていません]";
+          const nexcoInfo = sessionData?.nexcoInfo || "[地域インフラ・連携分析、はまだ登録されていません]";
           const mapImageData = sessionData?.mapImageData || "";
 
           let printable = `<h3>📊 総合レポート</h3>`;
@@ -75,7 +75,7 @@
             printable += `<h4>マインドマップ画像：</h4><img src="${imageData}" style="width:100%; max-width:1400px; height:auto; border:1px solid #ccc; display:block; margin:1rem auto;">`;
           }
 
-          printable += `<h4>NEXCO情報：</h4><p>${nexcoInfo}</p>`;
+          printable += `<h4>地域インフラ・連携分析</h4><p>${nexcoInfo}</p>`;
 
           content.innerHTML = printable;
 
