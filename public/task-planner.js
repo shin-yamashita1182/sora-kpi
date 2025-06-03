@@ -1,48 +1,86 @@
 let latestSoraKey = "";
+let plans = [];
 
 function loadSoraSummary() {
   const keys = Object.keys(localStorage).filter(k => k.startsWith("sora_"));
   if (keys.length === 0) return;
 
-  const data = JSON.parse(localStorage.getItem(keys[0]));
   latestSoraKey = keys[0];
+  const data = JSON.parse(localStorage.getItem(latestSoraKey));
+  plans = data.plans || [];
 
   const el = document.getElementById("sora-summary");
-  const region = data.region || "（地域名不明）";
-  const summary = data.summary || "（課題サマリー未設定）";
-  const goal = data.goal || "（中間目標未設定）";
-  const kpi = data.kpi || "（KPI未設定）";
-
   el.innerHTML = `
     <h2>📋 地域課題レポート</h2>
-    <p><strong>地域:</strong> ${region}</p>
-    <p><strong>課題:</strong> ${summary}</p>
-    <p><strong>中間目標:</strong> ${goal}</p>
-    <p><strong>KPI:</strong> ${kpi}</p>
+    <p><strong>地域:</strong> ${data.region || "不明"}</p>
+    <p><strong>課題:</strong> ${data.summary || "未設定"}</p>
   `;
+
+  renderPlans();
 }
 
-async function generateWithEssence() {
-  const userThought = document.getElementById("userThought").value || "特になし";
-  const sora = JSON.parse(localStorage.getItem(latestSoraKey) || "{}");
-  const summary = sora.summary || "（未設定の課題）";
+function renderPlans() {
+  const container = document.getElementById("plan-container");
+  container.innerHTML = "";
+  plans.forEach((plan, index) => {
+    const div = document.createElement("div");
+    div.className = "plan-card";
+    div.innerHTML = `
+      <div><strong>📝 考え</strong><br/>
+        <textarea rows="2" oninput="plans[${index}].userThought = this.value">${plan.userThought || ""}</textarea>
+      </div>
+      <div><strong>🎯 中間目標</strong><br/>
+        <textarea rows="2" oninput="plans[${index}].goal = this.value">${plan.goal || ""}</textarea>
+      </div>
+      <div><strong>📈 KPI（カンマ区切り）</strong><br/>
+        <textarea rows="2" oninput="plans[${index}].kpi = this.value">${plan.kpi || ""}</textarea>
+      </div>
+      <button class="btn" onclick="generateGPT(${index})">GPT補完</button>
+      <button class="btn" onclick="savePlans()">保存</button>
+      <button class="btn-delete" onclick="deletePlan(${index})">削除</button>
+    `;
+    container.appendChild(div);
+  });
+}
+
+function addPlan() {
+  plans.push({ userThought: "", goal: "", kpi: "" });
+  renderPlans();
+}
+
+function deletePlan(index) {
+  if (confirm("この実行策を削除しますか？")) {
+    plans.splice(index, 1);
+    renderPlans();
+  }
+}
+
+function savePlans() {
+  const data = JSON.parse(localStorage.getItem(latestSoraKey) || "{}");
+  data.plans = plans;
+  localStorage.setItem(latestSoraKey, JSON.stringify(data));
+  alert("✅ 保存しました！");
+}
+
+async function generateGPT(index) {
+  const summary = JSON.parse(localStorage.getItem(latestSoraKey)).summary || "";
+  const thought = plans[index].userThought || "特になし";
 
   const prompt = `
-あなたは地域課題に対して中間目標とKPIを考えるAIです。
-以下の課題と人の考えをもとに、提案してください。
+あなたは地域課題に対して中間目標とKPIを提案するAIです。
 
 ■課題: ${summary}
-■人の考え: ${userThought}
+■人の考え: ${thought}
 
 【中間目標】◯◯◯
-【KPI】・◯◯◯、・◯◯◯、・◯◯◯
+【KPI】・◯◯◯、・◯◯◯
 `;
 
-  const response = await fetch("https://api.openai.com/v1/chat/completions", {
+  const res = await fetch("https://api.openai.com/v1/chat/completions", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      "Authorization": "Bearer YOUR_API_KEY" // ← APIキー差し替え
+      "Authorization": "Bearer YOUR_API_KEY"
     },
     body: JSON.stringify({
       model: "gpt-3.5-turbo",
@@ -54,27 +92,16 @@ async function generateWithEssence() {
     })
   });
 
-  const data = await response.json();
-  const content = data.choices?.[0]?.message?.content || "";
+  const data = await res.json();
+  const text = data.choices?.[0]?.message?.content || "";
 
-  const goalMatch = content.match(/【中間目標】(.+?)\n/);
-  const kpiMatch = content.match(/【KPI】(.+)/s);
+  const goalMatch = text.match(/【中間目標】(.+?)\n/);
+  const kpiMatch = text.match(/【KPI】(.+)/s);
 
-  document.getElementById("goalOutput").value = goalMatch ? goalMatch[1].trim() : "";
-  document.getElementById("kpiOutput").value = kpiMatch ? kpiMatch[1].replace(/・/g, "").trim() : "";
-}
+  plans[index].goal = goalMatch ? goalMatch[1].trim() : "";
+  plans[index].kpi = kpiMatch ? kpiMatch[1].replace(/・/g, "").trim() : "";
 
-function saveToLocal() {
-  const goal = document.getElementById("goalOutput").value.trim();
-  const kpi = document.getElementById("kpiOutput").value.trim();
-  const data = JSON.parse(localStorage.getItem(latestSoraKey) || "{}");
-
-  data.goal = goal;
-  data.kpi = kpi;
-
-  localStorage.setItem(latestSoraKey, JSON.stringify(data));
-  alert("✅ 保存しました！");
-  loadSoraSummary(); // 右側も再反映
+  renderPlans();
 }
 
 window.onload = loadSoraSummary;
