@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>SORA Task Engine</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body { font-family: sans-serif; margin: 0; padding: 1rem; background: #f4f4f4; }
+    .container { max-width: 900px; margin: auto; background: white; padding: 1rem; border-radius: 12px; }
+    h1 { color: #0066cc; }
+    #sora-summary { background: #eef6ff; padding: 1rem; border-radius: 8px; margin-bottom: 1rem; }
+    #plans-container { margin-top: 1rem; }
+    .plan-card { background: #f9f9f9; border: 1px solid #ddd; padding: 1rem; margin-bottom: 1rem; border-radius: 8px; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>✅ 地域課題タスクプランナー</h1>
+    <div id="sora-summary">
+      <p>ロード中...</p>
+    </div>
+    <div id="plans-container"></div>
+  </div>
+
+  <script>
+    // ✅ トークン認証（簡易）
+    const allowedToken = "miru2025demo";
+    const params = new URLSearchParams(location.search);
+    const token = params.get("token");
+
+    if (token !== allowedToken) {
+      document.body.innerHTML = "<div style='text-align:center; padding:2rem'><h2>🔒 アクセスが許可されていません</h2><p>有効なトークンが必要です。</p></div>";
+      throw new Error("Invalid token");
+    }
+
+    // ✅ ローカルストレージから課題・実行策の読込
+    function loadSoraSummary() {
+      const keys = Object.keys(localStorage).filter(k => k.startsWith("sora_")).sort().reverse();
+      if (keys.length === 0) {
+        document.getElementById("sora-summary").innerHTML = "<p>🔍 データが見つかりません。</p>";
+        return;
+      }
+
+      const latestKey = keys[0];
+      const data = JSON.parse(localStorage.getItem(latestKey));
+      const plans = data.plans || [];
+
+      document.getElementById("sora-summary").innerHTML = `
+        <h2>📋 地域課題レポート</h2>
+        <p><strong>地域:</strong> ${data.region || "不明"}</p>
+        <p><strong>課題:</strong> ${data.summary || "未設定"}</p>
+        <p><strong>考察:</strong> ${data.comment || "―"}</p>
+      `;
+
+      renderPlans(plans);
+    }
+
+    function renderPlans(plans) {
+      const container = document.getElementById("plans-container");
+      if (plans.length === 0) {
+        container.innerHTML = "<p>📭 実行策はまだありません。</p>";
+        return;
+      }
+
+      container.innerHTML = plans.map(p => `
+        <div class="plan-card">
+          <h3>🎯 ${p.title || "未設定"}</h3>
+          <p><strong>担当:</strong> ${p.owner || "―"}</p>
+          <p><strong>期限:</strong> ${p.due || "―"}</p>
+          <p>${p.detail || ""}</p>
+        </div>
+      `).join("");
+    }
+
+    // 初期実行
+    window.onload = loadSoraSummary;
+  </script>
+</body>
+</html>
