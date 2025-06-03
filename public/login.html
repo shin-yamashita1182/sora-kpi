@@ -29,21 +29,25 @@
 
   <script>
     function login() {
-      const email = document.getElementById("email").value;
-      const password = document.getElementById("password").value;
+  const email = document.getElementById("email").value;
+  const password = document.getElementById("password").value;
 
-      // 仮ログイン（なんでもOK）
-      if (email && password) {
-        const token = btoa(email + ":" + password); // 仮トークン（base64）
-        localStorage.setItem("sora_token", token);
-        document.getElementById("message").textContent = "✅ ログイン成功！";
-        setTimeout(() => {
-          window.location.href = "print_view.html"; // 遷移先
-        }, 1000);
-      } else {
-        document.getElementById("message").textContent = "⚠️ メールとパスワードを入力してください";
-      }
-    }
+  // 仮ログイン（なんでもOK）
+  if (email && password) {
+    const token = btoa(email + ":" + password); // 仮トークン（base64）
+    localStorage.setItem("sora_token", token);
+
+    const redirectTo = localStorage.getItem("redirectAfterLogin") || "index.html";
+    localStorage.removeItem("redirectAfterLogin");
+
+    document.getElementById("message").textContent = "✅ ログイン成功！";
+    setTimeout(() => {
+      window.location.href = redirectTo;
+    }, 1000);
+  } else {
+    document.getElementById("message").textContent = "⚠️ メールとパスワードを入力してください";
+  }
+}
   </script>
 </body>
 </html>
