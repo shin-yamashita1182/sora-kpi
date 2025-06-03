@@ -68,9 +68,22 @@ document.addEventListener("DOMContentLoaded", () => {
 
       if (!infoFetched && !isFetching) {
         isFetching = true;
-        toggleNexcoBtn.textContent = "NEXCO情報 取得中…";
+        toggleNexcoBtn.textContent = "📡 分析中…";
 
-const prompt = `あなたは実在する施設名に基づいて正確に答える必要があります。${region}周辺に存在する実在するサービスエリア（SA）、パーキングエリア（PA）、および主なインターチェンジ（IC）を最大5件までリスト形式でまとめてください。施設名は必ず実在するもので、ChatGPTが創作した架空の名称を使わないでください。施設ごとに「名称」と「特徴（例：飲食、トイレ、ガソリン）」を1文で添えてください。例：金流サービスエリア（飲食・トイレ完備）など。`;
+        const prompt = `
+以下の地域名をもとに、AIとして「交通・物流・生活施設・観光導線・地域間連携」の観点から、
+その地域が抱える構造的なインフラ課題と改善ポイントを1〜2文ずつで簡潔に整理してください。
+
+【出力形式（例）】
+- 交通：◯◯◯
+- 物流：◯◯◯
+- 施設：◯◯◯
+- 導線：◯◯◯
+- 連携：◯◯◯
+
+【地域名】：${region}
+`;
+
 
         fetch("/api/chatgpt", {
           method: "POST",
@@ -92,11 +105,11 @@ const prompt = `あなたは実在する施設名に基づいて正確に答え�
             updateNexcoButtonLabel();
           })
           .catch(err => {
-            console.error("NEXCO取得失敗:", err);
+            console.error("インフラ分析取得失敗:", err);
             nexcoInfoList.innerHTML = "<li>情報取得に失敗しました。</li>";
           })
           .finally(() => {
-            toggleNexcoBtn.textContent = "NEXCO情報を表示";
+            toggleNexcoBtn.textContent = "インフラ分析を表示";
             isFetching = false;
           });
       } else {
@@ -108,8 +121,8 @@ const prompt = `あなたは実在する施設名に基づいて正確に答え�
   }
 
   function updateNexcoButtonLabel() {
-    toggleNexcoBtn.textContent = isAccordionOpen ? "NEXCO情報を閉じる" : "NEXCO情報を表示";
-    nexcoStatus.textContent = isAccordionOpen ? "NEXCO情報を表示中" : "NEXCO情報を非表示にしました";
+    toggleNexcoBtn.textContent = isAccordionOpen ? "インフラ分析を閉じる" : "インフラ分析を表示";
+    nexcoStatus.textContent = isAccordionOpen ? "インフラ分析結果を表示中" : "インフラ分析を非表示にしました";
   }
 
   // 💬 ChatGPT連携：課題抽出
