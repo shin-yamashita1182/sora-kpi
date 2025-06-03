@@ -10,10 +10,28 @@ function loadSoraSummary() {
   plans = data.plans || [];
 
   const el = document.getElementById("sora-summary");
+
+  const region = data.region || "（不明）";
+  const comments = data.comments || "（考察コメント未設定）";
+  const issues = data.issues || [];
+
+  const issueListHTML = issues.length
+    ? "<ul>" + issues.map(i => `<li>${i}</li>`).join("") + "</ul>"
+    : "（課題リスト未設定）";
+
   el.innerHTML = `
-    <h2>📋 地域課題レポート</h2>
-    <p><strong>地域:</strong> ${data.region || "不明"}</p>
-    <p><strong>課題:</strong> ${data.summary || "未設定"}</p>
+    <h2>📋 総合レポート（要約）</h2>
+    <p><strong>地域:</strong> ${region}</p>
+
+    <div>
+      <strong>🧠 考察コメント（GPT）:</strong>
+      <p>${comments}</p>
+    </div>
+
+    <div>
+      <strong>📌 抽出された課題10選:</strong>
+      ${issueListHTML}
+    </div>
   `;
 
   renderPlans();
