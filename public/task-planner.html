@@ -29,7 +29,7 @@
 
     .right-panel {
       flex: 1;
-      min-width: 250px;
+      min-width: 280px;
       background: #fff;
       border: 1px solid #ddd;
       border-radius: 8px;
@@ -46,6 +46,13 @@
       box-shadow: 1px 1px 4px rgba(0,0,0,0.08);
     }
 
+    textarea {
+      width: 100%;
+      font-family: sans-serif;
+      font-size: 1rem;
+      margin-bottom: 0.5rem;
+    }
+
     button {
       background: #007bff;
       color: #fff;
@@ -54,10 +61,16 @@
       border-radius: 6px;
       cursor: pointer;
       font-size: 1rem;
+      margin-top: 0.25rem;
     }
 
     button:hover {
       background: #0056b3;
+    }
+
+    .label {
+      margin-top: 0.75rem;
+      font-weight: bold;
     }
   </style>
 </head>
@@ -66,11 +79,26 @@
     <!-- 左：実行策エリア -->
     <div class="left-panel">
       <h1>🧠 実行策プランナー</h1>
+
+      <div class="label">📝 あなたの考え（メモ程度でOK）</div>
+      <textarea id="userThought" rows="3" placeholder="例：観光施設に飲食や写真映えポイントが少ない気がする…"></textarea>
+      <button onclick="generateWithEssence()">GPTで補完 → 中間目標・KPI</button>
+
+      <div id="gptResult" style="margin-top:1rem;">
+        <div class="label">🎯 中間目標（修正可）</div>
+        <textarea id="goalOutput" rows="2"></textarea>
+
+        <div class="label">📈 KPI（修正可・カンマ区切り）</div>
+        <textarea id="kpiOutput" rows="2"></textarea>
+
+        <button onclick="saveToLocal()">💾 保存</button>
+      </div>
+
+      <hr/>
       <div id="task-list"></div>
-      <button onclick="generateTask()">＋ 実行策を生成</button>
     </div>
 
-    <!-- 右：SORAレポートエリア -->
+    <!-- 右：地域課題レポート -->
     <div id="sora-summary" class="right-panel">
       <h2>📋 地域課題レポート</h2>
       <p><em>読み込み中...</em></p>
