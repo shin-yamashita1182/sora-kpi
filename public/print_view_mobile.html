@@ -8,6 +8,15 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 </head>
 <body>
+
+  <script>
+    const token = localStorage.getItem("sora_token");
+    if (!token) {
+      alert("このページはログイン後に閲覧できます。ログイン画面へ移動します。");
+      window.location.href = "login.html";
+    }
+  </script>
+  
   <header class="mobile-header">
   <button onclick="location.href='index_mobile.html'" style="margin-right: 1rem; padding: 0.3rem 0.8rem; font-size: 0.9rem; border: none; background: #ffffff; color: #007bff; border-radius: 6px; box-shadow: 0 1px 3px rgba(0,0,0,0.2);">
     ← 戻る
