@@ -121,6 +121,7 @@
 
   function logout() {
     localStorage.removeItem("sora_token");
+    localStorage.setItem("redirectAfterLogin", window.location.pathname);
     alert("ログアウトしました");
     window.location.href = "login.html";
   }
