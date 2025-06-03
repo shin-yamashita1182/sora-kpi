@@ -4,101 +4,29 @@
   <meta charset="UTF-8" />
   <title>SORA Task Planner</title>
   <style>
-    body {
-      font-family: sans-serif;
-      background: #f8f9fa;
-      margin: 0;
-      padding: 1rem;
-    }
-
-    h1, h2 {
-      margin-top: 0;
-      color: #333;
-    }
-
-    .container {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 1rem;
-    }
-
-    .left-panel {
-      flex: 2;
-      min-width: 300px;
-    }
-
-    .right-panel {
-      flex: 1;
-      min-width: 280px;
-      background: #fff;
-      border: 1px solid #ddd;
-      border-radius: 8px;
-      padding: 1rem;
-      box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.05);
-    }
-
-    .task-card {
-      background: #fff;
-      border: 1px solid #ccc;
-      border-radius: 8px;
-      padding: 1rem;
-      margin-bottom: 0.75rem;
-      box-shadow: 1px 1px 4px rgba(0,0,0,0.08);
-    }
-
-    textarea {
-      width: 100%;
-      font-family: sans-serif;
-      font-size: 1rem;
-      margin-bottom: 0.5rem;
-    }
-
-    button {
-      background: #007bff;
-      color: #fff;
-      padding: 0.5rem 1rem;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-      font-size: 1rem;
-      margin-top: 0.25rem;
-    }
-
-    button:hover {
-      background: #0056b3;
-    }
-
-    .label {
-      margin-top: 0.75rem;
-      font-weight: bold;
-    }
+    body { font-family: sans-serif; background: #f8f9fa; padding: 1rem; margin: 0; }
+    .container { display: flex; flex-wrap: wrap; gap: 1rem; }
+    .left-panel { flex: 2; min-width: 300px; }
+    .right-panel { flex: 1; min-width: 280px; background: #fff; border: 1px solid #ddd; border-radius: 8px; padding: 1rem; box-shadow: 2px 2px 6px rgba(0,0,0,0.05); }
+    .plan-card { background: #fff; border: 1px solid #ccc; border-radius: 8px; padding: 1rem; margin-bottom: 1rem; box-shadow: 1px 1px 4px rgba(0,0,0,0.08); }
+    textarea { width: 100%; font-size: 1rem; font-family: sans-serif; margin-bottom: 0.5rem; }
+    button { margin-right: 0.5rem; margin-top: 0.25rem; padding: 0.5rem 1rem; border: none; border-radius: 6px; font-size: 0.9rem; cursor: pointer; }
+    .btn { background: #007bff; color: white; }
+    .btn:hover { background: #0056b3; }
+    .btn-delete { background: #dc3545; color: white; }
+    .btn-delete:hover { background: #a71d2a; }
   </style>
 </head>
 <body>
   <div class="container">
-    <!-- 左：実行策エリア -->
+    <!-- 左 -->
     <div class="left-panel">
-      <h1>🧠 実行策プランナー</h1>
-
-      <div class="label">📝 あなたの考え（メモ程度でOK）</div>
-      <textarea id="userThought" rows="3" placeholder="例：観光施設に飲食や写真映えポイントが少ない気がする…"></textarea>
-      <button onclick="generateWithEssence()">GPTで補完 → 中間目標・KPI</button>
-
-      <div id="gptResult" style="margin-top:1rem;">
-        <div class="label">🎯 中間目標（修正可）</div>
-        <textarea id="goalOutput" rows="2"></textarea>
-
-        <div class="label">📈 KPI（修正可・カンマ区切り）</div>
-        <textarea id="kpiOutput" rows="2"></textarea>
-
-        <button onclick="saveToLocal()">💾 保存</button>
-      </div>
-
-      <hr/>
-      <div id="task-list"></div>
+      <h1>🧠 実行策プランナー（ループ構成）</h1>
+      <div id="plan-container"></div>
+      <button class="btn" onclick="addPlan()">＋ 実行策を追加</button>
     </div>
 
-    <!-- 右：地域課題レポート -->
+    <!-- 右 -->
     <div id="sora-summary" class="right-panel">
       <h2>📋 地域課題レポート</h2>
       <p><em>読み込み中...</em></p>
