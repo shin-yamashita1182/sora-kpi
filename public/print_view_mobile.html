@@ -191,12 +191,14 @@ printable += `<h4>地域インフラ・連携分析：</h4>${formattedNexco}`;
     window.location.href = "login.html";
   }
 
-  const token = localStorage.getItem("sora_token");
+  // ✅ 修正：ここを let にする
+  let token = localStorage.getItem("sora_token");
   const userStatus = document.getElementById("userStatus");
   if (userStatus) {
     userStatus.textContent = token ? "🔓 ログイン中" : "🔒 未ログイン";
   }
 </script>
+
   
 </body>
 </html>
