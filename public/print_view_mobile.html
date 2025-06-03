@@ -197,7 +197,23 @@ printable += `<h4>地域インフラ・連携分析：</h4>${formattedNexco}`;
     userStatus.textContent = token ? "🔓 ログイン中" : "🔒 未ログイン";
   }
 </script>
+  <script>
+  function isMobileDevice() {
+    return /iPhone|Android.+Mobile|Windows Phone/.test(navigator.userAgent);
+  }
 
+  window.addEventListener('DOMContentLoaded', function () {
+    const currentPage = window.location.pathname;
+
+    if (currentPage.includes("print_view")) {
+      if (isMobileDevice() && !currentPage.includes("mobile")) {
+        window.location.href = "print_view_mobile.html";
+      } else if (!isMobileDevice() && currentPage.includes("mobile")) {
+        window.location.href = "print_view.html";
+      }
+    }
+  });
+</script>
   
 </body>
 </html>
