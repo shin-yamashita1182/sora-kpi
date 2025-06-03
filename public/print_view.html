@@ -207,6 +207,14 @@ header {
 
   <header>🖨️ 印刷・出力ビューア</header>
 
+  <!-- ✅ 🔽 ここに追加！ログインステータス＋ログアウト -->
+  <div style="text-align: right; padding: 0.5rem 1rem;">
+    <span id="userStatus" style="margin-right: 1rem; font-weight: bold;"></span>
+    <button onclick="logout()" style="padding: 0.3rem 0.8rem; font-size: 0.9rem; background: #dc3545; color: white; border: none; border-radius: 6px;">
+      🚪 ログアウト
+    </button>
+  </div>
+
   <!-- ✅ 総合メニュー -->
   <div id="menu">
     <button onclick="loadSection('mindmap')">🧠 マインドマップ単体</button>
