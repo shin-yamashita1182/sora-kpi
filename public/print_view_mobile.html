@@ -75,7 +75,15 @@
             printable += `<h4>マインドマップ画像：</h4><img src="${imageData}" style="width:100%; max-width:1400px; height:auto; border:1px solid #ccc; display:block; margin:1rem auto;">`;
           }
 
-          printable += `<h4>地域インフラ・連携分析</h4><p>${nexcoInfo}</p>`;
+          const formattedNexco = `<ul style="padding-left:1.2rem;">` +
+  nexcoInfo
+    .split(/\n?-\s+/)
+    .filter(item => item.trim() !== "")
+    .map(item => `<li style="margin-bottom:0.5rem;">${item.trim()}</li>`)
+    .join("") +
+  `</ul>`;
+
+printable += `<h4>地域インフラ・連携分析：</h4>${formattedNexco}`;
 
           content.innerHTML = printable;
 
