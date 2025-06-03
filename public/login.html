@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>SORA Dashboard ログイン</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      font-family: sans-serif;
+      text-align: center;
+      padding: 2em;
+    }
+    input, button {
+      margin: 10px;
+      padding: 10px;
+      font-size: 1em;
+    }
+  </style>
+</head>
+<body>
+  <h1>🔐 ログイン</h1>
+  <p>仮のメールとパスワードでログインできます</p>
+  
+  <input type="email" id="email" placeholder="メールアドレス"><br>
+  <input type="password" id="password" placeholder="パスワード"><br>
+  <button onclick="login()">ログインする</button>
+
+  <p id="message"></p>
+
+  <script>
+    function login() {
+      const email = document.getElementById("email").value;
+      const password = document.getElementById("password").value;
+
+      // 仮ログイン（なんでもOK）
+      if (email && password) {
+        const token = btoa(email + ":" + password); // 仮トークン（base64）
+        localStorage.setItem("sora_token", token);
+        document.getElementById("message").textContent = "✅ ログイン成功！";
+        setTimeout(() => {
+          window.location.href = "print_view.html"; // 遷移先
+        }, 1000);
+      } else {
+        document.getElementById("message").textContent = "⚠️ メールとパスワードを入力してください";
+      }
+    }
+  </script>
+</body>
+</html>
