@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <title>SORA Task Planner</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    body {
+      font-family: sans-serif;
+      background: #f9f9f9;
+      padding: 1rem;
+    }
+    h1 {
+      color: #333;
+    }
+    .task-card {
+      background: #fff;
+      border: 1px solid #ccc;
+      padding: 1rem;
+      margin: 0.5rem 0;
+      border-radius: 8px;
+      box-shadow: 2px 2px 5px rgba(0,0,0,0.1);
+    }
+    button {
+      background: #007bff;
+      color: white;
+      padding: 0.5rem 1rem;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #0056b3;
+    }
+  </style>
+</head>
+<body>
+  <h1>🧭 実行策プランナー</h1>
+
+  <div id="task-list"></div>
+
+  <button onclick="generateTask()">＋ 実行策を生成</button>
+
+  <script src="task-planner.js"></script>
+</body>
+</html>
