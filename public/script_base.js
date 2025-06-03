@@ -2,6 +2,31 @@
 window.mindMapGenerated = false;
 // ✅ 最上部（DOMContentLoadedの外）に追記
 window.latestExtractedTasks = [];
+// ✅ PDFファイルからテキストを抽出する関数（外側に書くこと！）
+window.extractTextFromPDF = async function (file) {
+  const reader = new FileReader();
+  return new Promise((resolve, reject) => {
+    reader.onload = async function () {
+      const typedarray = new Uint8Array(reader.result);
+      try {
+        const pdf = await pdfjsLib.getDocument({ data: typedarray }).promise;
+        let text = "";
+        for (let i = 1; i <= pdf.numPages; i++) {
+          const page = await pdf.getPage(i);
+          const content = await page.getTextContent();
+          text += content.items.map(item => item.str).join(" ") + "\n";
+        }
+        resolve(text);
+      } catch (error) {
+        reject("PDFの読み取りに失敗しました");
+      }
+    };
+    reader.onerror = () => reject("ファイル読み取りエラー");
+    reader.readAsArrayBuffer(file);
+  });
+};
+
+
 // ✅ SORA Dashboard Script Base - 統合版（NEXCO連動 + ChatGPT課題抽出 + ThinkingZoneマインドマップ／安定運用構成）
 document.addEventListener("DOMContentLoaded", () => {
   const fileInput = document.getElementById("fileInput");
