@@ -349,116 +349,91 @@ printable.innerHTML += `<h4>地域インフラ・交通・連携構造の分析�
 
     
 } else if (type === "cards") {
+  const section = document.createElement("div");
+  section.className = "print-area";
+  section.id = `section-${type}`;
+
   const sectionHeader = document.createElement("div");
   sectionHeader.className = "section-header";
 
-  const heading = document.createElement("h2");
-  heading.textContent = "📇 実行策一覧出力（新形式GPT表形式）";
-  heading.style.margin = 0;
+  const title = document.createElement("h2");
+  title.textContent = "抽出された戦略一覧";
+  title.className = "section-title";
+  sectionHeader.appendChild(title);
+  section.appendChild(sectionHeader);
 
-  const gptExecBtn = document.createElement("button");
-  gptExecBtn.innerText = "AIによる抽出開始（GPT 3.5）";
-  gptExecBtn.className = "gpt-button";
+  // 🔹 プロンプトの表示
+  const promptBox = document.createElement("div");
+  promptBox.className = "card-prompt-box";
 
-  sectionHeader.appendChild(heading);
-  sectionHeader.appendChild(gptExecBtn);
-  content.appendChild(sectionHeader);
+  const promptTitle = document.createElement("h3");
+  promptTitle.textContent = "🎯 抽出プロンプト";
+  promptTitle.className = "prompt-title";
 
-  const outputContainer = document.createElement("div");
-  outputContainer.className = "print-area";
-  outputContainer.style.textAlign = "left";
-  outputContainer.style.marginTop = "1rem";
-  content.appendChild(outputContainer);
+  const promptContent = document.createElement("p");
+  promptContent.textContent = sessionData.cardsPrompt || "プロンプトが未設定です。";
+  promptContent.className = "prompt-content";
 
-  gptExecBtn.onclick = async () => {
-    gptExecBtn.disabled = true;
-    gptExecBtn.innerText = "🔄 GPT抽出中...";
+  promptBox.appendChild(promptTitle);
+  promptBox.appendChild(promptContent);
+  section.appendChild(promptBox);
 
-    try {
-      const sessionKey = localStorage.getItem("selectedSessionKey");
-      const sessionData = sessionKey ? JSON.parse(localStorage.getItem(sessionKey)) : null;
-      const tasks = sessionData?.tasks || [];
-      const insights = sessionData?.insight || [];
+  // 🔹 抽出ボタン
+  const generateBtn = document.createElement("button");
+  generateBtn.className = "extract-button";
+  generateBtn.textContent = "⚡ 戦略を再抽出";
+  generateBtn.onclick = async () => {
+    generateBtn.disabled = true;
+    generateBtn.textContent = "抽出中...";
 
-      const prompt = `
-あなたは地域戦略AIプランナーです。
-以下の【地域課題】と【住民の考察】をもとに、専門家が検討すべき「実行提案」を3つのカテゴリで提示してください。
+    const response = await fetch("/api/generate-cards", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        prompt: sessionData.cardsPrompt || "",
+      }),
+    });
 
-▼出力形式（JSONのみ、コメント不要）：
-[
-  {
-    "分類": "インフラ",
-    "提案タイトル": "地元交通網の維持",
-    "要約内容": "高齢者移動支援のため、地域シャトルバス導入を検討する",
-    "影響度": "中～高"
-  },
-  ...
-]
-
-【地域課題】:
-${tasks.map((t, i) => `【${i+1}】${t}`).join("\n")}
-
-【住民の考察】:
-${Array.isArray(insights) ? insights.map(i => "・" + i).join("\n") : insights}
-`;
-
-      const res = await fetch("/api/chatgpt", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ prompt })
-      });
-
-      const data = await res.json();
-      let result;
-      try {
-        result = typeof data.result === "string" ? JSON.parse(data.result) : data.result;
-      } catch (e) {
-        alert("❌ JSON構文エラー：GPT応答の解析に失敗しました。");
-        console.error("JSON parse error:", e);
-        return;
-      }
-
-      outputContainer.innerHTML = "";
-      const table = document.createElement("table");
-      table.style.width = "100%";
-      table.style.borderCollapse = "collapse";
-      table.style.marginTop = "1rem";
-
-      const thead = document.createElement("thead");
-      thead.innerHTML = `
-        <tr style="background:#e9ecef;">
-          <th style="border:1px solid #ccc;padding:8px;">分類</th>
-          <th style="border:1px solid #ccc;padding:8px;">提案タイトル</th>
-          <th style="border:1px solid #ccc;padding:8px;">要約内容</th>
-          <th style="border:1px solid #ccc;padding:8px;">影響度</th>
-        </tr>`;
-      table.appendChild(thead);
-
-      const tbody = document.createElement("tbody");
-      result.forEach(row => {
-        const tr = document.createElement("tr");
-        ["分類", "提案タイトル", "要約内容", "影響度"].forEach(key => {
-          const td = document.createElement("td");
-          td.textContent = row[key] || "-";
-          td.style.border = "1px solid #ccc";
-          td.style.padding = "8px";
-          tbody.appendChild(tr);
-          tr.appendChild(td);
-        });
-      });
-
-      table.appendChild(tbody);
-      outputContainer.appendChild(table);
-      details.innerHTML = "<p>🟠 GPTが生成した実行提案一覧を表示中です（表形式）。</p>";
-    } catch (err) {
-      console.error("抽出エラー:", err);
-      alert("❌ GPT連携中にエラーが発生しました。");
-    } finally {
-      gptExecBtn.disabled = false;
-      gptExecBtn.innerText = "AIによる抽出開始（GPT 3.5）";
+    const result = await response.json();
+    if (result?.cards?.length > 0) {
+      localStorage.setItem("sora_cards", JSON.stringify(result.cards));
+      location.reload(); // 再読み込みで反映
+    } else {
+      alert("抽出に失敗しました。");
+      generateBtn.disabled = false;
+      generateBtn.textContent = "⚡ 戦略を再抽出";
     }
   };
+  section.appendChild(generateBtn);
+
+  // 🔹 戦略一覧表示
+  const cards = sessionData.cards;
+  if (Array.isArray(cards)) {
+    cards.forEach((item, index) => {
+      const itemBox = document.createElement("div");
+      itemBox.className = "card-summary-box";
+
+      const itemTitle = document.createElement("h3");
+      itemTitle.textContent = `🧠 戦略 ${index + 1}`;
+      itemTitle.className = "card-title";
+
+      const itemContent = document.createElement("p");
+      itemContent.textContent = item.trim();
+      itemContent.className = "card-description";
+
+      itemBox.appendChild(itemTitle);
+      itemBox.appendChild(itemContent);
+      section.appendChild(itemBox);
+    });
+  } else {
+    const emptyMsg = document.createElement("p");
+    emptyMsg.textContent = "保存された戦略が見つかりませんでした。";
+    section.appendChild(emptyMsg);
+  }
+
+  container.appendChild(section);
 }
+
       
  } else if (type === "3d") {
     window.open("3d_viewer.html", "_blank");
