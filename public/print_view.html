@@ -670,7 +670,6 @@ function closeModal() {
     window.location.href = "login.html";
   }
 
-  const token = localStorage.getItem("sora_token");
   const userStatus = document.getElementById("userStatus");
   if (userStatus) {
     userStatus.textContent = token ? "🔓 ログイン中" : "🔒 未ログイン";
