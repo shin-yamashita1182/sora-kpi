@@ -154,5 +154,29 @@
 <script src="script_base.js" defer></script>
 <script src="map_controller.js" defer></script>
 
+  <script>
+  const token = localStorage.getItem("sora_token");
+  const userStatusArea = document.getElementById("userStatusArea");
+
+  if (userStatusArea) {
+    if (token) {
+      userStatusArea.innerHTML = `
+        🔓 ログイン中 | <a href="#" onclick="logout()">ログアウト</a>
+      `;
+    } else {
+      userStatusArea.innerHTML = `
+        🔒 ゲスト | <a href="register.html">登録</a> / <a href="login.html">ログイン</a>
+      `;
+    }
+  }
+
+  function logout() {
+    localStorage.removeItem("sora_token");
+    alert("ログアウトしました");
+    window.location.href = "login.html";
+  }
+</script>
+
+
 </body>
 </html>
