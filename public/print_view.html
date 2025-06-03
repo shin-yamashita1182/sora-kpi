@@ -287,7 +287,7 @@ img.style.boxShadow = "0 2px 6px rgba(0,0,0,0.1)";
     ? insightRaw.map(line => `・${line}`).join("<br>")
     : insightRaw || "（未入力）";
   const imageData = sessionData?.mindmapImageData || "";
-  const nexcoInfo = sessionData?.nexcoInfo || "[NEXCO情報はまだ登録されていません]";
+  const nexcoInfo = sessionData?.nexcoInfo || "[地域インフラ・交通・連携構造の分析は、まだ登録されていません]";
   const mapImageData = sessionData?.mapImageData || "";
 
   const heading = document.createElement("h2");
@@ -335,7 +335,7 @@ style="width:100%; max-width:1400px; height:auto; border:1px solid #ccc; box-sha
   }
 
   // NEXCO情報
-  printable.innerHTML += `<h4>NEXCO連携情報：</h4><p>${nexcoInfo}</p>`;
+  printable.innerHTML += `<h4地域インフラ・交通・連携構造の分析：</h4><p>${nexcoInfo}</p>`;
 
   content.appendChild(heading);
   content.appendChild(printable);
