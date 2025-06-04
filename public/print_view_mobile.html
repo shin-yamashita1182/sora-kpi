@@ -36,7 +36,7 @@
   <div class="mobile-menu">
     <button onclick="loadSection('mindmap')">🧠 マップ</button>
     <button onclick="loadSection('summary')">📊 レポート</button>
-    <button>🌐 3D</button>
+    <button id="btn-3d">🌐 3D</button>
     <button onclick="confirmBeforePrint()">🖨️ 印刷</button>
   </div>
 
@@ -148,8 +148,6 @@ printable += `<h4>地域インフラ・連携分析：</h4>${formattedNexco}`;
     }
   };
 });
-
-
 
     const delBtn = document.createElement("button");
     delBtn.textContent = "🗑";
