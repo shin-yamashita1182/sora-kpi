@@ -113,7 +113,9 @@ printable += `<h4>地域インフラ・連携分析：</h4>${formattedNexco}`;
 
     window.addEventListener("DOMContentLoaded", () => {
   const historyList = document.getElementById("historyList");
-  const keys = Object.keys(localStorage).filter(k => k.startsWith("sora_"));
+  const keys = Object.keys(localStorage).filter(
+  k => k.startsWith("sora_") && k !== "sora_token"
+);
 
   keys.slice(-10).reverse().forEach(key => {
     const li = document.createElement("li");
