@@ -129,22 +129,23 @@ printable += `<h4>地域インフラ・連携分析：</h4>${formattedNexco}`;
       const data = JSON.parse(localStorage.getItem(key));
       const menuButtons = document.querySelectorAll(".mobile-menu button");
 
-      menuButtons.forEach(btn => {
-        const text = btn.textContent;
-        if (text.includes("印刷")) return;
+menuButtons.forEach(btn => {
+  const text = btn.textContent;
+  if (text.includes("印刷")) return;
 
-        btn.onclick = () => {
-  if (text.includes("3D") || text.includes("ツール")) {
-    window.open("https://taku-city.online/", "_blank");
-    return;
-  }
+  btn.onclick = () => {
+    if (text.includes("3D") || text.includes("ツール")) {
+      window.open("https://taku-city.online/", "_blank");
+      return;
+    }
 
-  const type = text.includes("マップ") ? "mindmap" :
-               text.includes("レポート") ? "summary" :
-               null;
+    const type = text.includes("マップ") ? "mindmap" :
+                 text.includes("レポート") ? "summary" :
+                 null;
 
-  if (type) loadSection(type, data);
-};
+    if (type) loadSection(type, data);
+  };
+});
 
     const delBtn = document.createElement("button");
     delBtn.textContent = "🗑";
