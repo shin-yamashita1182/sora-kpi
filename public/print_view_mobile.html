@@ -125,29 +125,43 @@ printable += `<h4>地域インフラ・連携分析：</h4>${formattedNexco}`;
     nameSpan.style.flexGrow = "1";
     nameSpan.style.cursor = "pointer";
 
-  nameSpan.onclick = () => {
-      const data = JSON.parse(localStorage.getItem(key));
-      const menuButtons = document.querySelectorAll(".mobile-menu button");
+nameSpan.onclick = () => {
+  const data = JSON.parse(localStorage.getItem(key));
+  const menuButtons = document.querySelectorAll(".mobile-menu button");
 
   menuButtons.forEach(btn => {
-  const text = btn.textContent;
-  if (text.includes("印刷")) return;
+    const text = btn.textContent;
 
-  btn.onclick = () => {
+    // 3Dリンク処理
     if (text.includes("3D") || text.includes("ツール")) {
-      window.open("https://taku-city.online/", "_blank");
+      btn.onclick = () => {
+        window.open("https://taku-city.online/", "_blank");
+      };
       return;
     }
 
-    const type = text.includes("マップ") ? "mindmap" :
-                 text.includes("レポート") ? "summary" :
-                 null;
-
-    if (type && typeof loadSection === "function") {
-      loadSection(type, data);
+    // マップ／レポート処理
+    if (text.includes("マップ")) {
+      btn.onclick = () => {
+        if (typeof loadSection === "function") {
+          loadSection("mindmap", data);
+        }
+      };
+    } else if (text.includes("レポート")) {
+      btn.onclick = () => {
+        if (typeof loadSection === "function") {
+          loadSection("summary", data);
+        }
+      };
     }
-  };
-});
+  });
+
+  // 初期状態で summary を自動読み込み
+  if (typeof loadSection === "function") {
+    loadSection("summary", data);
+  }
+};
+
 
     const delBtn = document.createElement("button");
     delBtn.textContent = "🗑";
