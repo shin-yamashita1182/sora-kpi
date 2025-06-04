@@ -36,7 +36,7 @@
   <div class="mobile-menu">
     <button onclick="loadSection('mindmap')">🧠 マップ</button>
     <button onclick="loadSection('summary')">📊 レポート</button>
-    <button>🌐 3D</button>
+    <button onclick="loadSection('3d')">🌐 3D</button>
     <button onclick="confirmBeforePrint()">🖨️ 印刷</button>
   </div>
 
@@ -133,25 +133,13 @@ nameSpan.onclick = () => {
         const text = btn.textContent;
         if (text.includes("印刷")) return;
 
-   btn.onclick = () => {
-  if (text.includes("3D") || text.includes("ツール")) {
-    // ✅ 履歴未選択でも必ず外部リンクへ
-    window.open("https://taku-city.online/", "_blank");
-    return;
-  }
-
-  // ✅ それ以外は currentSession が必要
-  if (!currentSession) {
-    alert("履歴を選択してください");
-    return;
-  }
-
-  const type = text.includes("マップ") ? "mindmap" :
-               text.includes("レポート") ? "summary" :
-               null;
-
-  if (type) loadSection(type, currentSession);
-};
+        btn.onclick = () => {
+          const type = text.includes("マップ") ? "mindmap" :
+                       text.includes("レポート") ? "summary" :
+                       text.includes("3D") || text.includes("ツール") ? "3d" :
+                       null;
+          if (type) loadSection(type, data);
+        };
       });
 
       loadSection("summary", data);
