@@ -134,13 +134,18 @@ printable += `<h4>地域インフラ・連携分析：</h4>${formattedNexco}`;
         if (text.includes("印刷")) return;
 
         btn.onclick = () => {
-          const type = text.includes("マップ") ? "mindmap" :
-                       text.includes("レポート") ? "summary" :
-                       text.includes("3D") || text.includes("ツール") ? "3d" :
-                       null;
-          if (type) loadSection(type, data);
-        };
-      });
+  if (text.includes("3D") || text.includes("ツール")) {
+    window.open("https://taku-city.online/", "_blank");
+    return;
+  }
+
+  const type = text.includes("マップ") ? "mindmap" :
+               text.includes("レポート") ? "summary" :
+               null;
+
+  if (type) loadSection(type, data);
+};
+
 
       loadSection("summary", data);
     };
