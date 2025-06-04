@@ -133,9 +133,16 @@ nameSpan.onclick = () => {
         const text = btn.textContent;
         if (text.includes("印刷")) return;
 
-        btn.onclick = () => {
+   btn.onclick = () => {
   if (text.includes("3D") || text.includes("ツール")) {
+    // ✅ 履歴未選択でも必ず外部リンクへ
     window.open("https://taku-city.online/", "_blank");
+    return;
+  }
+
+  // ✅ それ以外は currentSession が必要
+  if (!currentSession) {
+    alert("履歴を選択してください");
     return;
   }
 
@@ -143,9 +150,8 @@ nameSpan.onclick = () => {
                text.includes("レポート") ? "summary" :
                null;
 
-  if (type) loadSection(type, data);
+  if (type) loadSection(type, currentSession);
 };
-
       });
 
       loadSection("summary", data);
