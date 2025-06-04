@@ -125,11 +125,11 @@ printable += `<h4>地域インフラ・連携分析：</h4>${formattedNexco}`;
     nameSpan.style.flexGrow = "1";
     nameSpan.style.cursor = "pointer";
 
-    nameSpan.onclick = () => {
+  nameSpan.onclick = () => {
       const data = JSON.parse(localStorage.getItem(key));
       const menuButtons = document.querySelectorAll(".mobile-menu button");
 
-　menuButtons.forEach(btn => {
+  menuButtons.forEach(btn => {
   const text = btn.textContent;
   if (text.includes("印刷")) return;
 
