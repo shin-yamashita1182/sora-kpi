@@ -36,7 +36,7 @@
   <div class="mobile-menu">
     <button onclick="loadSection('mindmap')">🧠 マップ</button>
     <button onclick="loadSection('summary')">📊 レポート</button>
-    <button onclick="loadSection('3d')">🌐 3D</button>
+    <button>🌐 3D</button>
     <button onclick="confirmBeforePrint()">🖨️ 印刷</button>
   </div>
 
@@ -129,7 +129,7 @@ printable += `<h4>地域インフラ・連携分析：</h4>${formattedNexco}`;
       const data = JSON.parse(localStorage.getItem(key));
       const menuButtons = document.querySelectorAll(".mobile-menu button");
 
-menuButtons.forEach(btn => {
+　menuButtons.forEach(btn => {
   const text = btn.textContent;
   if (text.includes("印刷")) return;
 
@@ -143,9 +143,12 @@ menuButtons.forEach(btn => {
                  text.includes("レポート") ? "summary" :
                  null;
 
-    if (type) loadSection(type, data);
+    if (type && typeof loadSection === "function") {
+      loadSection(type, data);
+    }
   };
 });
+
 
     const delBtn = document.createElement("button");
     delBtn.textContent = "🗑";
