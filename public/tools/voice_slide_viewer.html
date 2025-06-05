@@ -101,13 +101,21 @@
     }
 
     function speak(text) {
-      const synth = window.speechSynthesis;
-      if (!synth) return;
-      const utter = new SpeechSynthesisUtterance(text);
-      utter.lang = "ja-JP";
-      synth.cancel(); // 前の読み上げ中断
-      synth.speak(utter);
-    }
+  const synth = window.speechSynthesis;
+  if (!synth) return;
+
+  const utter = new SpeechSynthesisUtterance(text);
+
+  // 🔁 スライド番号によって言語を自動設定
+  if (current <= 2) {
+    utter.lang = "ja-JP";  // スライド1〜3 → 日本語
+  } else {
+    utter.lang = "en-US";  // スライド4以降 → 英語（よりネイティブに）
+  }
+
+  synth.cancel(); // 前の読み上げを中断してから再生
+  synth.speak(utter);
+}
 
 function startRecognition() {
   const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
