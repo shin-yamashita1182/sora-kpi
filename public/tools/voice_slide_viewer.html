@@ -58,6 +58,7 @@
     <div>
       <button onclick="startRecognition()">🎤 音声コントロール開始</button>
       <button onclick="toggleLog()">📝 ログ表示/非表示</button>
+      <button onclick="requestFullscreen()">🖥️ フルスクリーン</button>
     </div>
     <div id="log">ログ:</div>
   </div>
@@ -65,11 +66,11 @@
   <script>
     const slides = ["slide1.jpg", "slide2.jpg", "slide3.jpg", "slide4.jpg", "slide5.jpg"];
     const slideDescriptions = [
-      "これはスライド1のAI解析内容です。",
-      "これはスライド2のAI解析内容です。",
-      "これはスライド3のAI解析内容です。",
-      "これはスライド4のAI解析内容です。",
-      "これはスライド5のAI解析内容です。"
+      "これはスライド1のAI解析デモです。吸引器、チューブ、カテーテルなどが確認できます。",
+      "これはスライド2のAI解析デモです。医療機器が並んでいます。",
+      "これはスライド3のAI解析デモです。患者の状態確認と処置を示しています。",
+      "これはスライド4のAI解析デモです。消毒液の注入手順が見られます。",
+      "これはスライド5のAI解析デモです。ジャクソンリース使用例です。"
     ];
     let current = 0;
     const img = document.getElementById("slide");
@@ -92,11 +93,26 @@
     }
 
     function speak(text) {
-      const synth = window.speechSynthesis;
-      if (synth.speaking) synth.cancel();
+      if (!window.speechSynthesis) {
+        appendLog("⚠️ 読み上げ非対応のブラウザです");
+        return;
+      }
       const utter = new SpeechSynthesisUtterance(text);
       utter.lang = "ja-JP";
-      synth.speak(utter);
+      speechSynthesis.cancel(); // 前の読み上げをキャンセル
+      speechSynthesis.speak(utter);
+      appendLog("🔊 読み上げ開始");
+    }
+
+    function requestFullscreen() {
+      const docEl = document.documentElement;
+      if (docEl.requestFullscreen) {
+        docEl.requestFullscreen();
+      } else if (docEl.webkitRequestFullscreen) {
+        docEl.webkitRequestFullscreen();
+      } else if (docEl.msRequestFullscreen) {
+        docEl.msRequestFullscreen();
+      }
     }
 
     function startRecognition() {
@@ -129,8 +145,7 @@
       };
 
       recognition.onend = () => {
-        appendLog("🔁 音声認識を再起動します");
-        recognition.start();
+        appendLog("🔁 音声認識が終了しました（再開はボタン）");
       };
 
       recognition.start();
