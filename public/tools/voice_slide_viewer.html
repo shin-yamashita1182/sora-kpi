@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -63,6 +64,13 @@
 
   <script>
     const slides = ["slide1.jpg", "slide2.jpg", "slide3.jpg", "slide4.jpg", "slide5.jpg"];
+    const slideDescriptions = [
+      "これはスライド1のAI解析内容です。",
+      "これはスライド2のAI解析内容です。",
+      "これはスライド3のAI解析内容です。",
+      "これはスライド4のAI解析内容です。",
+      "これはスライド5のAI解析内容です。"
+    ];
     let current = 0;
     const img = document.getElementById("slide");
     const log = document.getElementById("log");
@@ -81,6 +89,14 @@
         img.src = slides[index];
         appendLog("📸 スライド " + (index + 1) + " を表示");
       }
+    }
+
+    function speak(text) {
+      const synth = window.speechSynthesis;
+      if (synth.speaking) synth.cancel();
+      const utter = new SpeechSynthesisUtterance(text);
+      utter.lang = "ja-JP";
+      synth.speak(utter);
     }
 
     function startRecognition() {
@@ -107,6 +123,8 @@
         } else if (text.includes("スタート") || text.includes("最初")) {
           current = 0;
           showSlide(current);
+        } else if (text.includes("AI解析")) {
+          speak(slideDescriptions[current]);
         }
       };
 
