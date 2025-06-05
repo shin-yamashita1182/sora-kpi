@@ -28,9 +28,9 @@
       box-shadow: 0 0 15px rgba(255,255,255,0.3);
     }
     button {
-      font-size: 1.1em;
-      padding: 0.6em 1.2em;
-      margin: 0.5em;
+      font-size: 1em;
+      padding: 0.5em 1.2em;
+      margin: 0.4em;
       border-radius: 8px;
       border: none;
       background-color: #3498db;
@@ -40,12 +40,13 @@
       background: #222;
       color: #0f0;
       padding: 1em;
-      width: 90%;
+      width: 95%;
       max-height: 30vh;
       overflow-y: auto;
       border-radius: 8px;
-      margin-top: 1em;
-      font-size: 0.9em;
+      margin-top: 0.5em;
+      font-size: 0.85em;
+      display: none;
     }
   </style>
 </head>
@@ -55,27 +56,27 @@
     <img id="slide" src="slide1.jpg" alt="スライド画像" />
     <div>
       <button onclick="startRecognition()">🎤 音声コントロール開始</button>
-      <button onclick="toggleLog()">📝 ログ表示/非表示</button>
-      <button onclick="requestFullscreen()">🖥️ フルスクリーン</button>
+      <button onclick="toggleLog()">📋 ログ表示/非表示</button>
+      <button onclick="goFullscreen()">🖥 フルスクリーン</button>
     </div>
     <div id="log">ログ:</div>
   </div>
 
   <script>
     const slides = ["slide1.jpg", "slide2.jpg", "slide3.jpg", "slide4.jpg", "slide5.jpg"];
-    const slideDescriptions = [
-      "スライド1の説明です：吸引器の準備手順が示されています。",
-      "スライド2の説明です：手袋とカテーテルの配置です。",
-      "スライド3の説明です：患者に対する声掛けの場面です。",
-      "スライド4の説明です：吸引ボトルの消毒水注入です。",
-      "スライド5の説明です：換気装置の接続方法が表示されています。"
+    const descriptions = [
+      "これはスライド1の説明です。",
+      "これはスライド2の説明です。",
+      "これはスライド3の説明です。",
+      "これはスライド4の説明です。",
+      "これはスライド5の説明です。"
     ];
     let current = 0;
     const img = document.getElementById("slide");
     const log = document.getElementById("log");
 
     function appendLog(message) {
-      log.innerHTML += message + "<br>";
+      log.innerHTML += "🟢 " + message + "<br>";
       log.scrollTop = log.scrollHeight;
     }
 
@@ -86,49 +87,35 @@
     function showSlide(index) {
       if (index >= 0 && index < slides.length) {
         img.src = slides[index];
-        appendLog("📸 スライド " + (index + 1) + " を表示");
+        appendLog(`📸 スライド ${index + 1} を表示`);
       }
     }
 
     function speak(text) {
-      if (!window.speechSynthesis) {
-        appendLog("⚠️ 読み上げ非対応です");
-        return;
-      }
+      const synth = window.speechSynthesis;
+      if (!synth) return;
       const utter = new SpeechSynthesisUtterance(text);
       utter.lang = "ja-JP";
-      speechSynthesis.cancel(); // 前の読み上げを中断
-      speechSynthesis.speak(utter);
-      appendLog("🔊 読み上げ中: " + text);
-    }
-
-    function requestFullscreen() {
-      const docEl = document.documentElement;
-      if (docEl.requestFullscreen) {
-        docEl.requestFullscreen();
-      } else if (docEl.webkitRequestFullscreen) {
-        docEl.webkitRequestFullscreen();
-      } else if (docEl.msRequestFullscreen) {
-        docEl.msRequestFullscreen();
-      }
+      synth.cancel(); // 前の読み上げ中断
+      synth.speak(utter);
     }
 
     function startRecognition() {
       const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
       if (!SpeechRecognition) {
-        appendLog("❌ このブラウザは音声認識をサポートしていません");
+        appendLog("❌ このブラウザは音声認識に対応していません");
         return;
       }
       const recognition = new SpeechRecognition();
       recognition.lang = "ja-JP";
-      recognition.continuous = true;
+      recognition.continuous = false;
       recognition.interimResults = false;
 
       recognition.onresult = (event) => {
         const text = event.results[event.results.length - 1][0].transcript.trim();
-        appendLog("🗣️ 「" + text + "」");
+        appendLog("🎙️ 「" + text + "」");
 
-        if (text.includes("次") || text.includes("進めて")) {
+        if (text.includes("次")) {
           current = (current + 1) % slides.length;
           showSlide(current);
         } else if (text.includes("戻") || text.includes("前")) {
@@ -137,22 +124,34 @@
         } else if (text.includes("スタート") || text.includes("最初")) {
           current = 0;
           showSlide(current);
-        } else if (text.includes("AI解析")) {
-          speak(slideDescriptions[current]);
+        } else if (text.includes("AI解析") || text.includes("解析")) {
+          speak(descriptions[current]);
+          appendLog("🧠 AI解析（読み上げ）を実行");
         }
       };
 
       recognition.onend = () => {
-        appendLog("🔁 音声認識が終了しました（再起動します）");
-        recognition.start(); // ← 自動再起動
+        appendLog("🔁 音声認識が終了しました（再開はボタン）");
+      };
+
+      recognition.onerror = (e) => {
+        appendLog("⚠️ 音声認識エラー: " + e.error);
       };
 
       recognition.start();
       appendLog("🎤 音声認識を開始しました");
     }
 
+    function goFullscreen() {
+      const elem = document.documentElement;
+      if (elem.requestFullscreen) elem.requestFullscreen();
+      else if (elem.webkitRequestFullscreen) elem.webkitRequestFullscreen();
+      else if (elem.msRequestFullscreen) elem.msRequestFullscreen();
+      setTimeout(() => showSlide(current), 300); // タイミング調整
+    }
+
     document.addEventListener("fullscreenchange", () => {
-      showSlide(current); // 再描画
+      setTimeout(() => showSlide(current), 200);
     });
   </script>
 </body>
