@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <title>🎤 Voice Control Video Demo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      font-family: sans-serif;
+      padding: 2em;
+      text-align: center;
+      background-color: #f9f9f9;
+    }
+    video {
+      width: 90%;
+      max-width: 720px;
+      border: 2px solid #ccc;
+      border-radius: 12px;
+      margin-bottom: 1em;
+    }
+    button {
+      font-size: 1.1em;
+      padding: 0.5em 1em;
+      margin: 1em;
+    }
+    #log {
+      background: #fff;
+      border: 1px solid #ccc;
+      padding: 1em;
+      max-width: 600px;
+      margin: 1em auto;
+      font-size: 0.9em;
+      text-align: left;
+    }
+  </style>
+</head>
+<body>
+  <h1>🎥 ミルート紹介動画 × 音声コントロール</h1>
+
+  <video id="video" src="miruroute-demo.mp4" controls></video><br>
+
+  <button onclick="startRecognition()">🎤 マイクON</button>
+  <button onclick="stopRecognition()">⛔ マイクOFF</button>
+
+  <div id="log">🎤 認識ログ：<br></div>
+
+  <script>
+    const video = document.getElementById("video");
+    const log = document.getElementById("log");
+
+    const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+    recognition.lang = "ja-JP";
+    recognition.continuous = true;
+
+    recognition.onresult = (event) => {
+      const transcript = event.results[event.results.length - 1][0].transcript.trim();
+      log.innerHTML += `👉 ${transcript}<br>`;
+
+      if (transcript.includes("再生")) video.play();
+      if (transcript.includes("止めて")) video.pause();
+      if (transcript.includes("最初")) video.currentTime = 0;
+      if (transcript.includes("進めて")) video.currentTime += 10;
+      if (transcript.includes("戻して")) video.currentTime -= 10;
+    };
+
+    recognition.onerror = (event) => {
+      log.innerHTML += `❗ エラー: ${event.error}<br>`;
+    };
+
+    function startRecognition() {
+      recognition.start();
+      log.innerHTML += "🎤 マイク起動しました<br>";
+    }
+
+    function stopRecognition() {
+      recognition.stop();
+      log.innerHTML += "⛔ マイク停止しました<br>";
+    }
+  </script>
+</body>
+</html>
