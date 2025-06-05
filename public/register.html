@@ -25,12 +25,12 @@
   const email = document.getElementById("email").value;
   if (!email.includes("@")) return alert("正しいメールを入力してください。");
 
-  // ✅ トークンを含めたリダイレクトURLを保存し、ログインページに誘導
-  const token = "miru2025demo";
+  // ✅ トークン付きで戻るURLを指定（SORA Dashboard用）
+  const token = "sora2025demo";
   const redirectPath = `/tools/task-engine.html?token=${token}`;
   localStorage.setItem("redirectAfterLogin", redirectPath);
 
-  const accessURL = `https://miruroute.com/tools/login.html`;
+  const accessURL = `https://www.sora-dashboard.com/login.html`;
   document.getElementById("result").innerHTML = `
     ✅ こちらから体験できます：<br>
     <a href="${accessURL}" target="_blank">${accessURL}</a>
