@@ -1,65 +1,69 @@
+
 <!DOCTYPE html>
 <html lang="ja">
 <head>
   <meta charset="UTF-8" />
-  <title>🎤 Voice Control Video (スマホ対応)</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>🎤 スマホ音声コントロール動画</title>
   <style>
     body {
-      font-family: sans-serif;
       margin: 0;
-      padding: 1em;
-      text-align: center;
-      background-color: #f4f4f4;
+      background-color: #000;
+      color: #fff;
+      font-family: sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
     }
     video {
       width: 100%;
-      max-width: 800px;
-      height: auto;
-      border-radius: 10px;
-      margin-bottom: 1em;
+      max-width: 640px;
+      border: 4px solid #0f0;
+      border-radius: 12px;
     }
     button {
-      font-size: 1em;
-      padding: 0.6em 1.2em;
-      margin: 0.5em;
+      margin-top: 12px;
+      padding: 12px 24px;
+      font-size: 1.2em;
+      background: #0f0;
+      color: #000;
+      border: none;
       border-radius: 8px;
     }
     #log {
+      margin-top: 10px;
       font-size: 0.9em;
-      background: #fff;
-      border: 1px solid #ccc;
-      border-radius: 8px;
-      padding: 1em;
-      max-width: 800px;
-      margin: 0 auto;
-      text-align: left;
+      max-height: 100px;
+      overflow-y: auto;
+      width: 90%;
     }
   </style>
 </head>
 <body>
-  <h2>📱 ミルート動画 × 音声コントロール（スマホ対応）</h2>
-
-  <video id="video" src="miruroute-demo.mp4" controls playsinline></video><br>
-
-  <button onclick="startRecognition()">🎤 マイクON</button>
-  <button onclick="stopRecognition()">⛔ マイクOFF</button>
-
-  <div id="log">🎤 認識ログ：<br></div>
+  <video id="video" controls>
+    <source src="sample.mp4" type="video/mp4" />
+    お使いのブラウザは video タグをサポートしていません。
+  </video>
+  <button id="startBtn">🎤 音声コントロール開始</button>
+  <div id="log">ログ:</div>
 
   <script>
     const video = document.getElementById("video");
+    const btn = document.getElementById("startBtn");
     const log = document.getElementById("log");
 
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
     const recognition = new SpeechRecognition();
+
     recognition.lang = "ja-JP";
-    recognition.continuous = true;
+    recognition.continuous = false;
+    recognition.interimResults = false;
 
     recognition.onresult = (event) => {
-      const text = event.results[event.results.length - 1][0].transcript.trim();
+      const text = event.results[0][0].transcript.trim();
       log.innerHTML += `👉 ${text}<br>`;
-
       if (text.includes("再生")) video.play();
       if (text.includes("止めて")) video.pause();
       if (text.includes("最初")) video.currentTime = 0;
@@ -67,19 +71,14 @@
       if (text.includes("戻して")) video.currentTime -= 10;
     };
 
-    recognition.onerror = (event) => {
-      log.innerHTML += `❗ エラー: ${event.error}<br>`;
+    recognition.onend = () => {
+      recognition.start(); // 再開（スマホ向け）
     };
 
-    function startRecognition() {
+    btn.onclick = () => {
       recognition.start();
-      log.innerHTML += "🎤 マイク起動しました<br>";
-    }
-
-    function stopRecognition() {
-      recognition.stop();
-      log.innerHTML += "⛔ マイク停止しました<br>";
-    }
+      log.innerHTML += "🎤 音声認識スタート<br>";
+    };
   </script>
 </body>
 </html>
