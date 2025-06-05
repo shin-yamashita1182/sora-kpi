@@ -63,14 +63,32 @@
   </div>
 
   <script>
-    const slides = ["slide1.jpg", "slide2.jpg", "slide3.jpg", "slide4.jpg", "slide5.jpg"];
+  const slides = [
+    "slide1.jpg", "slide2.jpg", "slide3.jpg", "slide4.jpg", "slide5.jpg",
+    "slide6.jpg", "slide7.jpg", "slide8.jpg", "slide9.jpg", "slide10.jpg"
+  ];
     const descriptions = [
-      "これはスライド1の説明です。",
-      "これはスライド2の説明です。",
-      "これはスライド3の説明です。",
-      "これはスライド4の説明です。",
-      "これはスライド5の説明です。"
-    ];
+  // スライド1：日本語
+  "これは口腔・鼻腔吸引に必要な物品一覧です。吸引器、カテーテル、アルコール綿、聴診器、血圧計などを準備します。",
+  
+  // スライド2：日本語
+  "吸引ボトルに水または低濃度の消毒液を注ぎ、200mLのメモリまで入っていることを確認します。",
+
+  // スライド3：クメール語（カンボジア語）
+  "ដាក់គ្រឿងបន្លាស់បូមចូលដល់ស្លាបរហូតដល់ស្ដាប់បានសំឡេង 'កច់'។ សូមបញ្ជាក់ថាវាមិនអាចទាញចេញបានដោយងាយ។",
+
+  // スライド4：クメール語
+  "បិទគម្របបូមឲ្យបានជិតស្និទ្ធ ហើយពិនិត្យឲ្យប្រាកដថាមិនមានចន្លោះ។",
+
+  // スライド5：英語（English）
+  "Set the suction device vertically onto the wall-mounted hanger. Make sure it is firmly attached and stable."
+  "スライド5の説明文（仮）です。",
+  "スライド6の説明文（仮）です。",
+  "スライド7の説明文（仮）です。",
+  "スライド8の説明文（仮）です。",
+  "スライド9の説明文（仮）です。",
+  "スライド10の説明文（仮）です。"
+   ];
     let current = 0;
     const img = document.getElementById("slide");
     const log = document.getElementById("log");
