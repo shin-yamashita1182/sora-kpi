@@ -21,17 +21,22 @@
 
   <script>
     document.getElementById("regForm").addEventListener("submit", function(e) {
-      e.preventDefault();
-      const email = document.getElementById("email").value;
-      if (!email.includes("@")) return alert("正しいメールを入力してください。");
+  e.preventDefault();
+  const email = document.getElementById("email").value;
+  if (!email.includes("@")) return alert("正しいメールを入力してください。");
 
-      // ✅ 本当はメール送信処理（Mailchimp等）
-      const token = "miru2025demo";
-      const accessURL = `https://miruroute.com/tools/task-engine.html?token=${token}`;
+  // ✅ トークンを含めたリダイレクトURLを保存し、ログインページに誘導
+  const token = "miru2025demo";
+  const redirectPath = `/tools/task-engine.html?token=${token}`;
+  localStorage.setItem("redirectAfterLogin", redirectPath);
 
-      document.getElementById("result").innerHTML = `✅ こちらから体験できます：<br><a href="${accessURL}" target="_blank">${accessURL}</a>`;
-    });
-  </script>
+  const accessURL = `https://miruroute.com/tools/login.html`;
+  document.getElementById("result").innerHTML = `
+    ✅ こちらから体験できます：<br>
+    <a href="${accessURL}" target="_blank">${accessURL}</a>
+  `;
+});
+</script>
 </body>
 </html>
 
