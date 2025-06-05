@@ -3,87 +3,99 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Voice Slide Viewer</title>
+  <title>VoiceLight Viewer</title>
   <style>
     body {
       margin: 0;
       background-color: black;
       color: white;
-      text-align: center;
-      font-family: sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
     }
-    #slide-img {
-      width: 100%;
-      max-height: 80vh;
-      object-fit: contain;
+    #slide {
+      max-width: 100vw;
+      max-height: 85vh;
     }
-    #controls {
-      margin-top: 1em;
-    }
-    button {
-      padding: 1em 2em;
-      margin: 0.5em;
-      font-size: 1.2em;
+    #mic {
+      margin-top: 10px;
+      font-size: 24px;
+      padding: 10px 20px;
+      background-color: #333;
+      color: white;
       border: none;
       border-radius: 10px;
-      background-color: #444;
-      color: white;
-      cursor: pointer;
     }
-    button.speaking {
-      background-color: #d64545;
+    #mic.listening {
+      background-color: #2196F3;
     }
   </style>
 </head>
 <body>
-  <h1>音声付きスライドビューアー</h1>
-  <img id="slide-img" src="slide1.jpg" alt="スライド画像" />
-  <div id="controls">
-    <button id="prev">← 前へ</button>
-    <button id="speak">🔊 読み上げ</button>
-    <button id="next">次へ →</button>
-  </div>
+  <img id="slide" src="/tools/slide1.jpg" alt="スライド1" />
+  <button id="mic">🎤 音声コントロール開始</button>
 
   <script>
-    const slides = [
-      { img: "slide1.jpg", text: "これはスライド1です。イントロダクションの内容が表示されています。" },
-      { img: "slide2.jpg", text: "これはスライド2です。説明の第一章になります。" },
-      { img: "slide3.jpg", text: "これはスライド3です。実例やグラフの解説がされています。" },
-      { img: "slide4.jpg", text: "これはスライド4です。考察や要点のまとめが書かれています。" },
-      { img: "slide5.jpg", text: "これはスライド5です。最後に結論と今後の展望が述べられています。" }
-    ];
+    let currentSlide = 1;
+    const maxSlides = 5;
+    const slideEl = document.getElementById("slide");
+    const micBtn = document.getElementById("mic");
 
-    let currentIndex = 0;
-    const imgEl = document.getElementById("slide-img");
-    const speakBtn = document.getElementById("speak");
-
-    function updateSlide() {
-      const slide = slides[currentIndex];
-      imgEl.src = slide.img;
+    function updateSlide(n) {
+      currentSlide = Math.max(1, Math.min(maxSlides, n));
+      slideEl.src = `/tools/slide${currentSlide}.jpg`;
+      slideEl.alt = `スライド${currentSlide}`;
     }
 
-    function speakText() {
-      const text = slides[currentIndex].text;
-      const utterance = new SpeechSynthesisUtterance(text);
-      utterance.lang = "ja-JP";
-      speakBtn.classList.add("speaking");
-      utterance.onend = () => {
-        speakBtn.classList.remove("speaking");
+    function nextSlide() {
+      if (currentSlide < maxSlides) updateSlide(currentSlide + 1);
+    }
+
+    function prevSlide() {
+      if (currentSlide > 1) updateSlide(currentSlide - 1);
+    }
+
+    function startVoiceControl() {
+      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+      if (!SpeechRecognition) {
+        alert("音声認識に非対応のブラウザです。");
+        return;
+      }
+
+      const recognition = new SpeechRecognition();
+      recognition.lang = "ja-JP";
+      recognition.continuous = true;
+
+      recognition.onstart = () => {
+        micBtn.classList.add("listening");
+        micBtn.textContent = "🎙 聞き取り中…「次へ」「戻る」など";
       };
-      speechSynthesis.speak(utterance);
+
+      recognition.onresult = (event) => {
+        const transcript = event.results[event.results.length - 1][0].transcript.trim();
+        console.log("🎧 認識結果:", transcript);
+
+        if (transcript.includes("次") || transcript.includes("すすむ")) nextSlide();
+        else if (transcript.includes("戻") || transcript.includes("もどる")) prevSlide();
+        else if (transcript.includes("最初")) updateSlide(1);
+        else if (transcript.includes("最後")) updateSlide(maxSlides);
+      };
+
+      recognition.onerror = (e) => {
+        console.error("音声認識エラー", e);
+      };
+
+      recognition.onend = () => {
+        micBtn.classList.remove("listening");
+        micBtn.textContent = "🎤 音声コントロール再開";
+      };
+
+      recognition.start();
     }
 
-    document.getElementById("prev").onclick = () => {
-      currentIndex = (currentIndex - 1 + slides.length) % slides.length;
-      updateSlide();
-    };
-    document.getElementById("next").onclick = () => {
-      currentIndex = (currentIndex + 1) % slides.length;
-      updateSlide();
-    };
-    speakBtn.onclick = speakText;
-
-    updateSlide();
+    micBtn.addEventListener("click", startVoiceControl);
   </script>
 </body>
 </html>
