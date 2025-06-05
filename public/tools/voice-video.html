@@ -1,9 +1,8 @@
-
 <!DOCTYPE html>
 <html lang="ja">
 <head>
   <meta charset="UTF-8" />
-  <title>🎤 MiruRoute 音声操作（v4）</title>
+  <title>🎤 MiruRoute 音声操作（v5）</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <style>
     body {
@@ -36,7 +35,7 @@
   </style>
 </head>
 <body>
-  <h1>🎤 音声で動画操作（v4：スマホ継続対応）</h1>
+  <h1>🎤 音声で動画操作（v5：スマホ再生安定化）</h1>
   <video id="video" controls>
     <source src="miruroute-demo.mp4" type="video/mp4" />
     お使いのブラウザは video タグに対応していません。
@@ -73,12 +72,15 @@
         appendLog("🗣️ 「" + text + "」");
 
         if (text.includes("再生") || text.includes("スタート")) {
-          video.currentTime += 0.01;
-          video.play().then(() => {
-            appendLog("▶️ 再生しました");
-          }).catch((e) => {
-            appendLog("⚠️ 再生失敗: " + e.message);
-          });
+          video.pause(); // ← 再生前に一度停止
+          setTimeout(() => {
+            video.currentTime += 0.01;
+            video.play().then(() => {
+              appendLog("▶️ 再生しました");
+            }).catch((e) => {
+              appendLog("⚠️ 再生失敗: " + e.message);
+            });
+          }, 300); // ← スマホ用に少し遅延
         } else if (text.includes("止めて") || text.includes("ストップ") || text.includes("停止")) {
           video.pause();
           appendLog("⏸ 停止しました");
@@ -106,4 +108,3 @@
   </script>
 </body>
 </html>
-
