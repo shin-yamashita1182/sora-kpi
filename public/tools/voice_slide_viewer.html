@@ -100,47 +100,53 @@
       synth.speak(utter);
     }
 
-    function startRecognition() {
-      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-      if (!SpeechRecognition) {
-        appendLog("❌ このブラウザは音声認識に対応していません");
-        return;
-      }
-      const recognition = new SpeechRecognition();
-      recognition.lang = "ja-JP";
-      recognition.continuous = false;
-      recognition.interimResults = false;
+function startRecognition() {
+  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SpeechRecognition) {
+    appendLog("❌ このブラウザは音声認識に対応していません");
+    return;
+  }
 
-      recognition.onresult = (event) => {
-        const text = event.results[event.results.length - 1][0].transcript.trim();
-        appendLog("🎙️ 「" + text + "」");
+  const recognition = new SpeechRecognition();
+  recognition.lang = "ja-JP";
+  recognition.continuous = false;
+  recognition.interimResults = false;
 
-        if (text.includes("次")) {
-          current = (current + 1) % slides.length;
-          showSlide(current);
-        } else if (text.includes("戻") || text.includes("前")) {
-          current = (current - 1 + slides.length) % slides.length;
-          showSlide(current);
-        } else if (text.includes("スタート") || text.includes("最初")) {
-          current = 0;
-          showSlide(current);
-        } else if (text.includes("AI解析") || text.includes("解析")) {
-          speak(descriptions[current]);
-          appendLog("🧠 AI解析（読み上げ）を実行");
-        }
-      };
+  recognition.onresult = (event) => {
+    const text = event.results[event.results.length - 1][0].transcript.trim();
+    appendLog("🎙️ 「" + text + "」");
 
-      recognition.onend = () => {
-        appendLog("🔁 音声認識が終了しました（再開はボタン）");
-      };
-
-      recognition.onerror = (e) => {
-        appendLog("⚠️ 音声認識エラー: " + e.error);
-      };
-
-      recognition.start();
-      appendLog("🎤 音声認識を開始しました");
+    if (text.includes("次")) {
+      current = (current + 1) % slides.length;
+      showSlide(current);
+    } else if (text.includes("戻") || text.includes("前")) {
+      current = (current - 1 + slides.length) % slides.length;
+      showSlide(current);
+    } else if (text.includes("スタート") || text.includes("最初")) {
+      current = 0;
+      showSlide(current);
+    } else if (text.includes("AI解析") || text.includes("解析")) {
+      speak(descriptions[current]);
+      appendLog("🧠 AI解析（読み上げ）を実行");
     }
+
+    // ⏺️ 次の認識を再起動（★これが大事）
+    setTimeout(() => recognition.start(), 800);
+  };
+
+  recognition.onend = () => {
+    appendLog("🔁 音声認識が終了しました（再起動します）");
+    setTimeout(() => recognition.start(), 800);
+  };
+
+  recognition.onerror = (e) => {
+    appendLog("⚠️ 音声認識エラー: " + e.error);
+    setTimeout(() => recognition.start(), 800);
+  };
+
+  recognition.start();
+  appendLog("🎤 音声認識を開始しました");
+}
 
     function goFullscreen() {
       const elem = document.documentElement;
