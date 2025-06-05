@@ -3,81 +3,99 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8" />
+  <title>🎤 MiruRoute 音声操作（v3）</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>🎤 スマホ音声コントロール動画</title>
   <style>
     body {
-      margin: 0;
-      background-color: #000;
-      color: #fff;
       font-family: sans-serif;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
+      padding: 1em;
+      background: #f4f4f4;
     }
     video {
       width: 100%;
-      max-width: 640px;
-      border: 4px solid #0f0;
-      border-radius: 12px;
+      max-width: 600px;
+      display: block;
+      margin: 0 auto 1em;
     }
     button {
-      margin-top: 12px;
-      padding: 12px 24px;
       font-size: 1.2em;
-      background: #0f0;
-      color: #000;
-      border: none;
-      border-radius: 8px;
+      padding: 0.5em 1em;
     }
     #log {
-      margin-top: 10px;
-      font-size: 0.9em;
-      max-height: 100px;
+      background: #fff;
+      padding: 1em;
+      border-radius: 0.5em;
+      height: 150px;
       overflow-y: auto;
-      width: 90%;
+      margin-top: 1em;
     }
   </style>
 </head>
 <body>
+  <h1>🎤 音声で動画操作（v3）</h1>
   <video id="video" controls>
     <source src="miruroute-demo.mp4" type="video/mp4" />
-    お使いのブラウザは video タグをサポートしていません。
+    お使いのブラウザは video タグに対応していません。
   </video>
-  <button id="startBtn">🎤 音声コントロール開始</button>
-  <div id="log">ログ:</div>
+  <button id="startBtn">🎙 音声コントロール開始</button>
+  <div id="log"></div>
 
   <script>
     const video = document.getElementById("video");
-    const btn = document.getElementById("startBtn");
     const log = document.getElementById("log");
+    const startBtn = document.getElementById("startBtn");
 
-    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-    const recognition = new SpeechRecognition();
+    let recognition;
 
-    recognition.lang = "ja-JP";
-    recognition.continuous = false;
-    recognition.interimResults = false;
+    function appendLog(message) {
+      log.innerHTML += message + "<br>";
+      log.scrollTop = log.scrollHeight;
+    }
 
-    recognition.onresult = (event) => {
-      const text = event.results[0][0].transcript.trim();
-      log.innerHTML += `👉 ${text}<br>`;
-      if (text.includes("再生")) video.play();
-      if (text.includes("止めて")) video.pause();
-      if (text.includes("最初")) video.currentTime = 0;
-      if (text.includes("進めて")) video.currentTime += 10;
-      if (text.includes("戻して")) video.currentTime -= 10;
-    };
+    startBtn.onclick = () => {
+      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+      if (!SpeechRecognition) {
+        appendLog("❌ 音声認識はこのブラウザでサポートされていません。");
+        return;
+      }
 
-    recognition.onend = () => {
-      recognition.start(); // 再開（スマホ向け）
-    };
+      recognition = new SpeechRecognition();
+      recognition.lang = "ja-JP";
+      recognition.continuous = true;
 
-    btn.onclick = () => {
+      recognition.onresult = (event) => {
+        const text = event.results[event.results.length - 1][0].transcript.trim();
+        appendLog("🗣️ 「" + text + "」");
+
+        if (text.includes("再生") || text.includes("スタート")) {
+          video.currentTime += 0.01; // スマホ対策で位置補正
+          video.play().then(() => {
+            appendLog("▶️ 再生しました");
+          }).catch((e) => {
+            appendLog("⚠️ 再生失敗: " + e.message);
+          });
+        } else if (text.includes("止めて") || text.includes("ストップ") || text.includes("停止")) {
+          video.pause();
+          appendLog("⏸ 停止しました");
+        } else if (text.includes("進めて") || text.includes("次へ") || text.includes("次")) {
+          video.currentTime += 5;
+          appendLog("⏩ 5秒進めました");
+        } else if (text.includes("戻して") || text.includes("戻る") || text.includes("バック")) {
+          video.currentTime -= 5;
+          appendLog("⏪ 5秒戻しました");
+        }
+      };
+
+      recognition.onerror = (event) => {
+        appendLog("⚠️ 音声認識エラー: " + event.error);
+      };
+
+      recognition.onend = () => {
+        appendLog("🛑 音声認識が終了しました");
+      };
+
       recognition.start();
-      log.innerHTML += "🎤 音声認識スタート<br>";
+      appendLog("🎤 音声認識を開始しました");
     };
   </script>
 </body>
